@@ -9,6 +9,15 @@ table{
 	height: 900px;
 }
 
+a{
+	color: black;
+	text-decoration: none;
+}
+
+a:hover{
+	color: blue;
+}
+
 #main{
 	margin-left: 300px;
   	width: 960px;
