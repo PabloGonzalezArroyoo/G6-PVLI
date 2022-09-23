@@ -6,8 +6,8 @@ Narra la historia de María Pita, la mujer que acabó con la vida de un alférez
 de que los ingleses asesinaran a su marido. Durante el juego, el jugador, encarnado como María Pita, debe acabar con la 
 vida de las tropas inglesas hasta llegar a este alférez.
 
-[Link de GitHub](https://github.com/PabloGonzalezArroyoo/G6-PVLI)
-[Link de Trello](https://trello.com/b/BRKb6DoV/g6-pvli)
-[Link de nuestro Instagram](https://www.instagram.com/pantheonstudios6/)
-[Link de nuestro Twitter](https://twitter.com/pantheonstudio3)
+[GitHub](https://github.com/PabloGonzalezArroyoo/G6-PVLI)
+[Trello](https://trello.com/b/BRKb6DoV/g6-pvli)
+[Instagram](https://www.instagram.com/pantheonstudios6/)
+[Twitter](https://twitter.com/pantheonstudio3)
 Link del juego (No disponible)
