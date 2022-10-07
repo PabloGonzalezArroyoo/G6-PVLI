@@ -1,18 +1,18 @@
 body{
 	background-image: url("img/fotoPortadaMariapita.jpg");
   	background-repeat: no-repeat;
-	background-size: 1900px 1000px;
+	background-size: 100% 100%;
+}
+
+table{
+	margin-top: 2.5%;
+	margin-left: 2%;
 }
 
 header{
 	text-align: center;
 	margin-top: 20px;
 	margin-bottom: 50px;
-}
-
-table{
-	width: 1900px;
-	height: 900px;
 }
 
 a{
@@ -30,21 +30,21 @@ img {
 }
 
 #main{
-	margin-left: 300px;
-  	width: 960px;
+	margin-left: 15%;
+  	width: 50%;
   	padding: 10px;
 }
 
 #links{
-	margin-top: 50px;
+	margin-top: 1.5%;
 	text-align: center;
-	margin-bottom: 50px;
+	margin-bottom: 1.5%;
 	font-size: 25px;
 }
 
 #descripcion{
 	font-size: 20px;
-	margin-bottom: 50px;
+	margin-bottom: 2.5%;
 	text-align: left;
 }
 
@@ -56,17 +56,17 @@ img {
 
 #izquierda{
 	border: solid black 1px;
-	margin-right: 100px;
-	margin-left: 20px;
-	margin-top: 15px;
+	margin-right: 5%;
+	margin-left: 0.6%;
+	margin-top: 0.45%;
 	height: 100% ;
 }
 
 #derecha{
 	border: solid black 1px; 
-	margin-left: 100px;
-	margin-right: 20px;
-	margin-top: 15px;
+	margin-left: 5%;
+	margin-right: 0.6%;
+	margin-top: 0.45%;
 	height: 100%;
 }
 
@@ -75,5 +75,5 @@ img {
 }
 
 .balda{
-	width: 460px;
+	width: 25%;
 }
