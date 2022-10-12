@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="es">
+<!--Cabecera con los metadatos-->
 <head>
 	<meta charset="utf-8">
 	<title>La venganza de Maria Pita</title>
@@ -9,48 +10,67 @@
     <script src="main.js"></script>
 </head>
 
+<!--Cuerpo-->
 <body>
-<table id="pagina">
-	<tr>
-		<td class="balda">
-			<div id="izquierda">
-				<img src="img/MariaPitaCuadro.jpg" />
-			</div>
-		</td>
+	<!--Titulo del juego-->
+	<header>
+		<h1 id="titulo">La venganza de Maria Pita</h1>
+		<h2 id="nomGrupo">Created by Pantheon Studios</h2>
+	</header>
+	
+	<!--Contenido-->
+	<main>
+		<!--Creacion de una tabla (contiene columnas izquierda, central (juego) y derecha)-->
+		<table>
+			<!--Se crea una fila de celdas-->
+			<tr>
+				<!--Se crea 1a celda (barra izquierda)-->
+				<td class="celda">
+					<div id="izquierda">
+						<img src="img/MariaPitaCuadro.jpg" />
+					</div>
+				</td>
 
-		<td id="main">
-			<header>
-				<h1 style="font-size: 50px;">La venganza de Maria Pita</h1>
-				<div id="descripcion">La venganza de María Pita es un Role-Playing Game (RPG) el cual se ubica en La Coruña (Galicia) del siglo XVI. Narra la historia de María Pita, la mujer que acabó con la vida de un alférez inglés con su propia bandera después de que los ingleses asesinaran a su marido. Durante el juego, el jugador, encarnado como María Pita, debe acabar con la vida de las tropas inglesas hasta llegar a este alférez.</div>
-			</header>
+				<!--Se crea 2a celda (principal)-->
+				<td id="main">
+					<div id="descripcion">
+						<p><b>La venganza de María Pita</b> es un Role-Playing Game (RPG) el cual se ubica 
+						en La Coruña (Galicia) del siglo XVI. Narra la historia de María Pita, 
+						la mujer que acabó con la vida de un alférez inglés con su propia bandera 
+						después de que los ingleses asesinaran a su marido. Durante el juego, el jugador, 
+						encarnado como María Pita, debe acabar con la vida de las tropas inglesas hasta 
+						llegar a este alférez.</p>
+					</div>
 			
-			<div id="marcoJuego" style="background-color: black;"></div>
+					<!--Canvas del juego-->
+					<canvas id="marcoJuego" width="640" height="480" style="border:1px solid #000000;"></canvas>
 
-			<footer>
-				<nav id="links">
-					<h3>
-						<a href="https://twitter.com/PantheonStudio3" target="_blank">
-							<img src="img/TwitterLogo.png" style="width: 5%">
-						</a> &nbsp
-						<span class="divisor">-</span> &nbsp
-						<a href="https://github.com/PabloGonzalezArroyoo/G6-PVLI" target="_blank">
-							<img src="img/githubLogo.png" style="width: 5%">
-						</a> &nbsp
-						<span class="divisor">-</span> &nbsp
-						<a href="https://www.instagram.com/pantheonstudios6/" target="_blank">
-							<img src="img/InstagramLogo.png" style="width: 5%">
-						</a>
-					</h3>
-				</nav>
-			</footer>
-		</td>
+				</td>
 
-		<td class="balda">
-			<div id="derecha">
-				<img src="img/MariaPitaEstatua.jpg" />
-			</div>
-		</td>
-	</tr>
-</table>
+				<!--Se crea 3a celda (barra derecha)-->
+				<td class="celda">
+					<div id="derecha">
+						<img src="img/MariaPitaEstatua.jpg" />
+					</div>
+				</td>
+			</tr>
+		</table>
+	</main>
+
+	<!--Pie de pagina-->
+	<footer>
+		<!--Links-->
+		<nav id="links">
+			<a id="twitter" href="https://twitter.com/PantheonStudio3" target="_blank">
+				<img src="img/TwitterLogo.png" style="width:3%;height:3%" hspace="3"></a> 
+
+			<a id="github" href="https://github.com/PabloGonzalezArroyoo/G6-PVLI" target="_blank">
+				<img src="img/githubLogo.png" style="width:3%;height:3%" hspace="3"></a> 
+
+			<a id="instagram" href="https://www.instagram.com/pantheonstudios6/" target="_blank">
+				<img src="img/InstagramLogo.png" style="width:3%;height:3%" hspace="3"></a>
+		</nav>
+	</footer>
 </body>
+<!--Fin delcuerpo-->
 </html>
