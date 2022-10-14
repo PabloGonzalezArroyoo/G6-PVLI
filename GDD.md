@@ -96,7 +96,24 @@ Para ir de combate a combate, el jugador debe navegar a través de un mapa de pu
 ![ImagenDiagramaMapa]()
 
 ## 7. Visual
+Toda la estética será Pixel Art con entidades de juego de tipo Chibi.
+
+Aparecerá un cuadro de texto cada vez que haya una conversación entre los personajes, un monólogo, onomatopeyas, acotaciones… Este cuadro contendrá texto animado al igual que muchos juegos de consola de modo que dé la sensación de que el jugador esté “escuchando” al personaje hablar simultáneamente. Los posibles botones para ir a los diferentes menús o cambiar de escena brillarán cuando pase el cursor por encima de estos.
+
+Finalmente, en momentos críticos del juego habrá animaciones.
 
 ## 8. Menús y flujo del juego
+El jugador podrá acceder a los siguientes menús:
+- Pantalla de título
+![ImagenPantallaTitulo]()
+- Menú de pausa
+![ImagenPausa]()
+- Selección de niveles
+![ImagenSelecciónNiveles]()
+- Inventario (objetos)
+![ImagenInventario]()
+
+La estructura del juego contendrá varias escenas que contribuirán al flujo del juego, y el flujo entre ellas será el siguiente:
+![ImagenIFlujo]()
 
 ## 9. Referencias
