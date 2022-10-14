@@ -12,7 +12,7 @@ window.onload = function()
 	var height = window.screen.height * window.devicePixelRatio;
 	console.log(width,height);
 	//Ajusta el body a la resolucion de la pantalla
-	document.getElementById("pagina").style.width = width + "px";
-	document.getElementById("pagina").style.height = height + "px";
+	document.getElementById("body").style.width = width + "px";
+	document.getElementById("body").style.height = height + "px";
 };
 

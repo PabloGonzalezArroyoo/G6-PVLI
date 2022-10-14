@@ -1,26 +1,63 @@
+/*se alinea el contenido del header en el centro*/
 header{
 	text-align: center;
 }
 
+/* Se especifica solo la altura, se puede cambiar el color o poner una imagen de fondo */
+footer{
+	height: 20%;
+	background-color: grey;
+}
+
+/* Se deja un margin entre los links de las redes */
+a{
+	margin-right: 10%;
+}
+
+/* Aqui va el fondo de la pantalla*/
 body{
+	/* Aqui habria que poner el link de la imagen */
   	background-repeat: no-repeat;
 	background-size: 100%;
 }
 
+/* El cuerpo ocupa como minimo toda la altura de la pantalla y se le pone un ancho (mayor o igual al de la resolucion del juego) 
+	junto con un margin auto para ponerlos en el centro le la pantalla */
 .cuerpo{
 	margin: auto;
-	width: 55%;
+	width: 60%;
 	height: 100%;
 }
 
+/*El ancho y alto de la imagen del titulo*/
 .titulo{
 	width: 20%;
 	height: 10%;
 }
 
+/*Se especifica la resolucion del juego*/
 .canvas{
+	margin: auto;
 	width: 1024px;
 	height: 768px;
-	background-color: black;
+	background-color: black; /*Quitar esta linea cuando ya este el juego implementado*/
+}
+
+/* Margenes para cada particion (canvas, historia, controles...) */
+.particion{
+	margin-top: 50px;
+	border: solid black 3px; /* Quitar esta linea cuando ya esten terminadas las particones*/
+}
+
+/* Se especifica la altura de las imagenes y los margenes entre secciones */
+.seccionFooter{
+	float: left;
+	height: 40%;
+	margin-top: 4%;
+}
+
+/* Se establece que las imagenes de los logos ocupe el 100% de la altura del div y el ancho se escala solo dependiendo de la altura */
+.logos{
+	height: 100%;
 }
 
