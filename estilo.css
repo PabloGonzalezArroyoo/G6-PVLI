@@ -4,7 +4,7 @@ header{
 }
 
 /* Se especifica solo la altura, se puede cambiar el color o poner una imagen de fondo */
-footer{
+footer{margin-top: 20px;
 	height: 20%;
 	background-color: grey;
 }
@@ -26,8 +26,7 @@ body{
 	junto con un margin auto para ponerlos en el centro le la pantalla */
 .cuerpo{
 	margin: auto;
-	width: 60%;
-	height: 100%;
+	width: 1024px;
 }
 
 /*El ancho y alto de la imagen del titulo*/

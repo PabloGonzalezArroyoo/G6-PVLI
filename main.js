@@ -8,8 +8,8 @@
 window.onload = function()
 {
 	//Coge la resolucion de la pantalla del ordenador
-	var width = window.screen.width * window.devicePixelRatio;
-	var height = window.screen.height * window.devicePixelRatio;
+	var width = window.screen.width - 17;
+	var height = window.screen.height;
 	console.log(width,height);
 	//Ajusta el body a la resolucion de la pantalla
 	document.getElementById("body").style.width = width + "px";
