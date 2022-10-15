@@ -19,6 +19,7 @@ body{
 	/* Aqui habria que poner el link de la imagen */
   	background-repeat: no-repeat;
 	background-size: 100%;
+	margin: 0px;
 }
 
 /* El cuerpo ocupa como minimo toda la altura de la pantalla y se le pone un ancho (mayor o igual al de la resolucion del juego) 
