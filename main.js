@@ -7,10 +7,12 @@
 // Realizar la recogida de datos, inicializacion, bucle de juego, etc.
 window.onload = function()
 {
-	/*var width = window.screen.width * window.devicePixelRatio - 100;
-	var height = window.screen.height * window.devicePixelRatio - 200;
+	//Coge la resolucion de la pantalla del ordenador
+	var width = window.screen.width - 17;
+	var height = window.screen.height;
 	console.log(width,height);
-	document.getElementById("pagina").style.width = width + "px";
-	document.getElementById("pagina").style.height = height + "px";*/
+	//Ajusta el body a la resolucion de la pantalla
+	document.getElementById("body").style.width = width + "px";
+	document.getElementById("body").style.height = height + "px";
 };
 

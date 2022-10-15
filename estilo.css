@@ -1,68 +1,63 @@
+/*se alinea el contenido del header en el centro*/
 header{
 	text-align: center;
-	margin-top: 50px;
 }
 
+/* Se especifica solo la altura, se puede cambiar el color o poner una imagen de fondo */
+footer{margin-top: 20px;
+	height: 20%;
+	background-color: grey;
+}
+
+/* Se deja un margin entre los links de las redes */
+a{
+	margin-right: 10%;
+}
+
+/* Aqui va el fondo de la pantalla*/
 body{
-	background-image: url("img/fotoPortadaMariapita.jpg");
+	/* Aqui habria que poner el link de la imagen */
   	background-repeat: no-repeat;
 	background-size: 100%;
+	margin: 0px;
 }
 
-table{
-	margin-top: 2.5%;
-	margin-left: 2%;
+/* El cuerpo ocupa como minimo toda la altura de la pantalla y se le pone un ancho (mayor o igual al de la resolucion del juego) 
+	junto con un margin auto para ponerlos en el centro le la pantalla */
+.cuerpo{
+	margin: auto;
+	width: 1024px;
 }
 
-img { 
- 	width : 100%;
- 	height: 100%; 
-}
-#logo {
-	width:100px;
-	height:60px;
-	object-position:right top;
+/*El ancho y alto de la imagen del titulo*/
+.titulo{
+	width: 20%;
+	height: 10%;
 }
 
-#main{
-	margin-left: 15%;
-  	width: 50%;
-  	padding: 20px;
-  	background-color: rgba(255,255,255,0.3);
+/*Se especifica la resolucion del juego*/
+.canvas{
+	margin: auto;
+	width: 1024px;
+	height: 768px;
+	background-color: black; /*Quitar esta linea cuando ya este el juego implementado*/
 }
 
-#links{
-	margin-top: 1.5%;
-	text-align: center;
-	margin-bottom: 1.5%;
+/* Margenes para cada particion (canvas, historia, controles...) */
+.particion{
+	margin-top: 50px;
+	border: solid black 3px; /* Quitar esta linea cuando ya esten terminadas las particones*/
 }
 
-#descripcion{
-	font-size: 20px;
-	margin-bottom: 2.5%;
-	text-align: justify;
+/* Se especifica la altura de las imagenes y los margenes entre secciones */
+.seccionFooter{
+	float: left;
+	height: 40%;
+	margin-top: 4%;
 }
 
-#izquierda{
-	border: solid black 1px;
-	margin-right: 5%;
-	margin-left: 0.6%;
-	margin-top: 0.45%;
-	height: 100% ;
-}
-
-#derecha{
-	border: solid black 1px; 
-	margin-left: 5%;
-	margin-right: 0.6%;
-	margin-top: 0.45%;
+/* Se establece que las imagenes de los logos ocupe el 100% de la altura del div y el ancho se escala solo dependiendo de la altura */
+.logos{
 	height: 100%;
 }
 
-.divisor{
-	font-size: 40px;
-}
-
-.celda{
-	width: 25%;
-}
