@@ -79,7 +79,22 @@ export default class InventoryScene extends Phaser.Scene {
 
 	    sprite.on('pointerout', () => {
 			// Desdestacar botón
-	    });
+		});
+		//Para seleccionar botones con teclas, creamos el objeto tecla
+		var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
+		var Esc = this.scene.input.keyboard.addKey('ESC,X');
+		var Enter = this.scene.input.keyboard.addKeys('ENTER,Z')
+		//Ejemplo: Al pulsar la flecha izquierda
+		keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
+		//Ejemplo: Al pulsar el enter
+		Enter.on('down', function () {/*Marca el botón*/ });
+		Enter.on('up', function () {
+			 /*Se usa el objeto seleccionado*/
+		});
+		Esc.on('down', function () {
+			this.scene.start('optionsScene');//Se abre el menu de opciones
+		});
+
 
 	}
 }

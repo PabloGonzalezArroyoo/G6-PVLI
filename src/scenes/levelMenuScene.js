@@ -1,3 +1,5 @@
+import { Scene } from "phaser";
+
 /**
  * Escena de Menú de Niveles.
  * @extends Phaser.Scene
@@ -39,6 +41,21 @@ export default class LevelMenuScene extends Phaser.Scene {
 		// ...
 
 		// vv HACER ESTO PARA TODOS LOS BOTONES vv
+		//Para seleccionar botones con teclas, creamos el objeto tecla
+		var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
+		var Esc = this.scene.input.keyboard.addKeys('ESC,X');
+		var Enter = this.scene.input.keyboard.addKeys('ENTER,Z')
+		//Ejemplo: Al pulsar la flecha izquierda
+		keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
+		//Ejemplo: Al pulsar el enter
+		Enter.on('down', function () {/*Marca el botón*/ });
+		Enter.on('up', function () {
+			this.scene.start('battleScene'); //Cambiamos a la escena de combate correspondiente al nivel seleccionado
+		});
+		Esc.on('down', function () {
+			this.scene.start('optionsScene');//Se abre el menu de opciones
+		});
+		
 
 		// Escuchamos los eventos del ratón cuando interactual con nuestro sprite
 	    sprite.on('pointerdown', pointer => {
