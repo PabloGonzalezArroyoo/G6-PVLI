@@ -1,4 +1,4 @@
-/*se alinea el contenido del header en el centro*/
+/* Se alinea el contenido del header en el centro */
 header{
 	text-align: center;
 }
@@ -22,6 +22,11 @@ body{
 	margin: 0px;
 }
 
+/* Centra los titulos */
+h3{
+	text-align: center;
+}
+
 /* El cuerpo ocupa como minimo toda la altura de la pantalla y se le pone un ancho (mayor o igual al de la resolucion del juego) 
 	junto con un margin auto para ponerlos en el centro le la pantalla */
 .cuerpo{
@@ -29,18 +34,18 @@ body{
 	width: 1024px;
 }
 
-/*El ancho y alto de la imagen del titulo*/
+/* El ancho y alto de la imagen del titulo */
 .titulo{
 	width: 20%;
 	height: 10%;
 }
 
-/*Se especifica la resolucion del juego*/
+/* Se especifica la resolucion del juego */
 .canvas{
 	margin: auto;
 	width: 1024px;
 	height: 768px;
-	background-color: black; /*Quitar esta linea cuando ya este el juego implementado*/
+	background-color: black; /* Quitar esta linea cuando ya este el juego implementado */
 }
 
 /* Margenes para cada particion (canvas, historia, controles...) */
