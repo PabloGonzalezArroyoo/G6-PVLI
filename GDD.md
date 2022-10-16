@@ -127,7 +127,7 @@ Imágenes de referencia:
 ![ImagenRefBatalla](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/pokemon.png)
 *Referencia de batalla - Pokemon Diamante y Perla (2007). Nintendo*
 
-![ImagenRefDialogo](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/pokemon.png)
+![ImagenRefDialogo](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/animalCrossing.png)
 *Referencia de dialogos - Animal Crossing New Horizons (2022). Nintendo*
 
 ![ImagenRefBotones](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/finalFantasy.png)
