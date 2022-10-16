@@ -1,6 +1,6 @@
 ![ImagenLogo]()
 
-# Maria Pita's Revenge (A Vinganza de Maria Pita)
+# Maria Pita's Revenge (A Vinganza de Maria Pita) - Pantheon Studios
 
 ## 1. Ficha técnica
 | Ficha | Descripción |
