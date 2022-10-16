@@ -11,8 +11,7 @@
 | **Modo de juego** | 1 jugador |
 
 ## 2. Descripción
-Maria Pita's Revenge trata sobre la historia de María Pita, la mujer que acabó con la vida de un alférez inglés con su propia bandera después de que los ingleses asesinaran a su marido.
-Por eso, el juego trata de ir acabando con la vida de las tropas inglesas hasta llegar a este alférez encarnando a María Pita.
+Maria Pita's Revenge es un RPG de combates por turnos ubicado en La Coruña del siglo XVI. En él encarnas a María Pita, la mujer que acabó con la vida de un alférez inglés con su propia bandera después de que los ingleses asesinaran a su marido. Así pues, el jugador debe ir derrotando a las tropas inglesas hasta llegar a este alférez.
 
 ## 3. **Mecánicas**
 - **Personaje:** María Pita cuenta con unos valores de vida, defensa y ataque. 
@@ -78,6 +77,24 @@ Además existe un arma que se obtiene al final de la aventura y que es necesaria
 | ***Alferez Drake (hermano)*** | 500 | 50 | Probabilidad del 20% de hacer aleatoriamente alguna de las otras tres habilidades especiales que tienen los otros enemigos. |
 
 ### Diseño de niveles
+Los niveles estarán compuestos por un único combate diferente en cada uno, en dificultad creciente hasta llegar al último nivel. La siguiente distribución de los niveles es orientativa y está sujeta a cambios tras el testing.
+| **Enemigo** | **Siglas** |
+| :---: | :---: |
+| *Rufián Embriagado* | RE |
+| *Pirata Maloliente* | PM |
+| *Marinero Escorbutado* | ME |
+| *Bucanero Experimentado* | BE |
+| *Corsario Enajenado* | CE |
+
+- **Nivel 1:** El combate será sencillo, contra un RE nada más en la que el jugador podrá descubrir el combate sin mucho peligro.
+- **Nivel 2:** Este combate será contra 2 RE para que el jugador se acostumbre a combates contra varios enemigos.
+- **Nivel 3:** Este combate será contra un PM y un RE, presentando un nuevo enemigo con la dificultad añadida de uno ya conocido.
+- **Nivel 4:** Este combate será con un PM y dos RE para presentar los combates con hasta 3 enemigos y sirva de prueba al jugador de la dificultad de los combates siguientes.
+- **Nivel 5:** Este combate será contra un ME y un PM
+- **Nivel 6:** Este combate será contra un BE y dos RE para equilibrar la fuerza que el jugador debería tener a este punto (se supone un arma de nivel II)
+- **Nivel 7:** Este combate será contra un ME y un BE, en el que el jugador probará un combate contra dos enemigos con habilidades especiales por primera vez, pero al ser solo dos, todavía no resultará un desafío mayor.
+- **Nivel 8:** En este punto, se entiende que el jugador ya ha ido recolectando varios objetos curativos y armas poderosas, por lo que los combates a partir de este punto serán algo más desafiantes, presentando al CE y enfrentando además a dos ME.
+- **Nivel 9:** Este combate será contra un CE, un ME y un BE, donde el jugador deberá tener en cuenta que ahora son 3 enemigos con habilidades especiales diferentes, con lo que se quiere lograr un aumento del requerimiento de estrategia en un combate.
 
 ### Historia
 En 1589, los ingleses llegan a A Coruña bajo la orden de atacar el reino, durante este periodo, asesinan al marido de María Pita, y esta, por venganza, comienza a enfrentarse contra ellos hasta llegar al hermano del capitán, Francis Drake, que dirigía el ataque, y asesinarlo con una lanza que les había arrebatado.
@@ -102,18 +119,30 @@ Aparecerá un cuadro de texto cada vez que haya una conversación entre los pers
 
 Finalmente, en momentos críticos del juego habrá animaciones.
 
+Imágenes de referencia:
+![ImagenRefBatalla]()
+*Referencia de batalla - Pokemon Diamante y Perla (2007). Nintendo*
+![ImagenRefDialogo]()
+*Referencia de dialogos - Animal Crossing New Horizons (2022). Nintendo*
+![ImagenRefBotones]()
+*Referencia de botones - Final Fantasy 7 (1997). Square Enix*
+
 ## 8. Menús y flujo del juego
 El jugador podrá acceder a los siguientes menús:
 - Pantalla de título
-![ImagenPantallaTitulo]()
 - Menú de pausa
-![ImagenPausa]()
 - Selección de niveles
-![ImagenSelecciónNiveles]()
 - Inventario (objetos)
-![ImagenInventario]()
 
 La estructura del juego contendrá varias escenas que contribuirán al flujo del juego, y el flujo entre ellas será el siguiente:
-![ImagenIFlujo]()
+![ImagenFlujo]()
 
 ## 9. Referencias
+- *Pokemon.* (1996). The Pokemon Company.
+- *Final Fantasy 7.* (1997). Square Enix.
+- *Fireboy & WaterGirl.* (2009). Oslo Albet.
+- *Animal Crossing New Horizons.* (2020). Nintendo.
+- *Bloodborne.* (2015). From Software.
+- *Dark Souls.* (2011). From Software.
+
+### Pantheon Studios ©2022
