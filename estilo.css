@@ -1,17 +1,7 @@
+/* - ESTILOS DE ETIQUETAS HTML - */
 /* Se alinea el contenido del header en el centro */
 header{
 	text-align: center;
-}
-
-/* Se especifica solo la altura, se puede cambiar el color o poner una imagen de fondo */
-footer{margin-top: 20px;
-	height: 20%;
-	background-color: grey;
-}
-
-/* Se deja un margin entre los links de las redes */
-a{
-	margin-right: 10%;
 }
 
 /* Aqui va el fondo de la pantalla*/
@@ -27,11 +17,34 @@ h3{
 	text-align: center;
 }
 
+/* Se deja un margin entre los links de las redes */
+a {
+	margin-right: 10%;
+}
+
+/* Estilo de la etiqueta footer en HTML. Se le da color, márgenes, tamaño y un borde negro superior */
+footer {
+	background: gray;
+	padding: 2em 0;
+	margin-top: 8em;
+	bottom: 0;
+	width: 100%;
+	border-top: 10px solid black;
+}
+
+	/* Estilo de la etiqueta img dentro del footer. Se le da tamaño y un redondeo */
+	footer img {
+		width: 80px;
+		height: 10%;
+		border-radius: 1em;
+	}
+
+/* - ESTILOS PROPIOS - */
 /* El cuerpo ocupa como minimo toda la altura de la pantalla y se le pone un ancho (mayor o igual al de la resolucion del juego) 
 	junto con un margin auto para ponerlos en el centro le la pantalla */
 .cuerpo{
 	margin: auto;
-	width: 1024px;
+	width: auto;
 }
 
 /* El ancho y alto de la imagen del titulo */
@@ -51,18 +64,29 @@ h3{
 /* Margenes para cada particion (canvas, historia, controles...) */
 .particion{
 	margin-top: 50px;
-	border: solid black 3px; /* Quitar esta linea cuando ya esten terminadas las particones*/
+	margin: 50px 50px;
+	border: solid black 3px; /* Quitar esta linea cuando ya esten terminadas las particones */
 }
 
-/* Se especifica la altura de las imagenes y los margenes entre secciones */
-.seccionFooter{
-	float: left;
-	height: 40%;
-	margin-top: 4%;
+/* Footer. Se describe la forma de disposición, tamaño, alineación y diseño responsive */
+.footer-container {
+	width: 100%;
+	display: block;
+	color: gray;
+	line-height: 40%;
+	text-align: center;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	position: relative;
+	justify-content: space-around;
 }
 
-/* Se establece que las imagenes de los logos ocupe el 100% de la altura del div y el ancho se escala solo dependiendo de la altura */
-.logos{
-	height: 100%;
+/* Contenidos del footer. Se usa para determinar distintas secciones en el footer. Diseño responsive y ajustes */
+.footer-content {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	margin: 10px;
+	color: black;	/* Solo se aplica a texto */
 }
-
