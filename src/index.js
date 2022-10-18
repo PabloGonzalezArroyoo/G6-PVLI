@@ -1,12 +1,21 @@
-import Animation from './escenas/animation.js';
-import Title from './escenas/title.js'
-/**
- * Inicio del juego en Phaser. Creamos el archivo de configuración del juego y creamos
- * la clase Game de Phaser, encargada de crear e iniciar el juego.
- */
+// Importación de Librería Phaser
+import Phaser from './lib/phaser.js'
+
+// Importación de Escenas
+import Title from './scenes/titleScene.js'
+import Levels from './scenes/levelMenuScene.js'
+import Battle from './scenes/battleScene.js'
+import Options from './scenes/optionsScene.js'
+import Inventory from './scenes/inventoryScene.js'
+import Cinematic from './scenes/cinematicScene.js'
+
+// Archivo de configuración del juego
 let config = {
     type: Phaser.CANVAS,
+    // Coge el canvas creado en el HTML con id = "juego"
     canvas: document.getElementById("juego"),
+
+    /* CAMBIAR RESOLUCION A LA QUE QUEREMOS*/
     width:  656,
     height: 376,
     pixelArt: true,
@@ -25,7 +34,7 @@ let config = {
         },
 		zoom: 1
     },
-    scene: [Title, Animation],
+    scene: [Title, Levels, Battle, Options, Inventory, Cinematic],
     physics: {
         default: 'arcade',
         arcade: {
@@ -41,4 +50,5 @@ let config = {
     }
 };
 
+// Crea nuevo juego Phaser con la configuración dada
 new Phaser.Game(config);
