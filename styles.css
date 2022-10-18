@@ -1,45 +1,51 @@
-/* - ESTILOS DE ETIQUETAS HTML - */
-/* Se alinea el contenido del header en el centro */
-header{
+/* ------------ ESTILOS DE ETIQUETAS HTML ------------ */
+/* Se alinea el contenido del header en el centro y se le da un fondo */
+header {
 	text-align: center;
+	background-image: url('img/background/top.png');
+	background-repeat: no-repeat;
+	background-size: 100%;
 }
 
-/* Aqui va el fondo de la pantalla*/
-body{
-	/* Aqui habria que poner el link de la imagen */
-  	background-repeat: no-repeat;
+/* Se da el fondo de pantalla, se reducen los márgenes y se establecen la fuente del texto al body */
+body {
+	background-image: url('img/background/body.png');
+	background-repeat: repeat;
 	background-size: 100%;
 	margin: 0px;
+	font-family: Silkscreen;
 }
 
-/* Centra los titulos */
-h3{
+/* Centra los titulos y pone la fuente de color blanco y a un tamaño concreto */
+h2{
 	text-align: center;
+	color: white;
+	font-size: 40px;
 }
 
-/* Se deja un margin entre los links de las redes */
-a {
-	margin-right: 10%;
+/* Pone las lineas de texto de color blanco y a un tamaño concreto */
+p{
+	color: white;
+	font-size: 20px;
 }
 
-/* Estilo de la etiqueta footer en HTML. Se le da color, márgenes, tamaño y un borde negro superior */
+/* Estilo de la etiqueta footer en HTML. Se le da el fondo, color, márgenes y tamaño */
 footer {
-	background: gray;
+	background-image: url('img/background/bottom.png');
+	background-repeat: no-repeat;
+	background-size: 100%;
 	padding: 2em 0;
 	margin-top: 8em;
 	bottom: 0;
-	width: 100%;
-	border-top: 10px solid black;
 }
 
 	/* Estilo de la etiqueta img dentro del footer. Se le da tamaño y un redondeo */
 	footer img {
 		width: 80px;
-		height: 10%;
 		border-radius: 1em;
 	}
 
-/* - ESTILOS PROPIOS - */
+/* ------------ ESTILOS PROPIOS ------------ */
 /* El cuerpo ocupa como minimo toda la altura de la pantalla y se le pone un ancho (mayor o igual al de la resolucion del juego) 
 	junto con un margin auto para ponerlos en el centro le la pantalla */
 .cuerpo{
@@ -47,13 +53,13 @@ footer {
 	width: auto;
 }
 
-/* El ancho y alto de la imagen del titulo */
+/* El ancho y los márgenes de la imagen del titulo */
 .titulo{
-	width: 20%;
-	height: 10%;
+	width: 30%;
+	margin: 0px 0px 80px;
 }
 
-/* Se especifica la resolucion del juego */
+/* Se especifica el tamaño del canvas del juego y los margenes */
 .canvas{
 	margin: auto;
 	width: 1024px;
@@ -64,7 +70,7 @@ footer {
 /* Margenes para cada particion (canvas, historia, controles...) */
 .particion{
 	margin-top: 50px;
-	margin: 50px 50px;
+	margin: 50px 150px;
 	border: solid black 3px; /* Quitar esta linea cuando ya esten terminadas las particones */
 }
 
@@ -87,6 +93,5 @@ footer {
 	display: flex;
 	flex-direction: column;
 	position: relative;
-	margin: 10px;
-	color: black;	/* Solo se aplica a texto */
+	margin: 50px 30px 10px;
 }
