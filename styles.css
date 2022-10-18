@@ -7,7 +7,7 @@ header {
 	background-size: 100%;
 }
 
-/* Se da el fondo de pantalla, se reducen los márgenes y se establecen la fuente del texto al body */
+/* Se da el fondo de pantalla, se reducen los mï¿½rgenes y se establecen la fuente del texto al body */
 body {
 	background-image: url('img/background/body.png');
 	background-repeat: repeat;
@@ -16,20 +16,20 @@ body {
 	font-family: Silkscreen;
 }
 
-/* Centra los titulos y pone la fuente de color blanco y a un tamaño concreto */
+/* Centra los titulos y pone la fuente de color blanco y a un tamaï¿½o concreto */
 h2{
 	text-align: center;
 	color: white;
 	font-size: 40px;
 }
 
-/* Pone las lineas de texto de color blanco y a un tamaño concreto */
+/* Pone las lineas de texto de color blanco y a un tamaï¿½o concreto */
 p{
 	color: white;
 	font-size: 20px;
 }
 
-/* Estilo de la etiqueta footer en HTML. Se le da el fondo, color, márgenes y tamaño */
+/* Estilo de la etiqueta footer en HTML. Se le da el fondo, color, mï¿½rgenes y tamaï¿½o */
 footer {
 	background-image: url('img/background/bottom.png');
 	background-repeat: no-repeat;
@@ -39,7 +39,7 @@ footer {
 	bottom: 0;
 }
 
-	/* Estilo de la etiqueta img dentro del footer. Se le da tamaño y un redondeo */
+	/* Estilo de la etiqueta img dentro del footer. Se le da tamaï¿½o y un redondeo */
 	footer img {
 		width: 80px;
 		border-radius: 1em;
@@ -53,13 +53,18 @@ footer {
 	width: auto;
 }
 
-/* El ancho y los márgenes de la imagen del titulo */
+/* El ancho y los mï¿½rgenes de la imagen del titulo */
 .titulo{
 	width: 30%;
 	margin: 0px 0px 80px;
 }
 
-/* Se especifica el tamaño del canvas del juego y los margenes */
+/* Justifica la descripcion */
+.descripcion{
+	text-align: justify;
+}
+
+/* Se especifica el tamaï¿½o del canvas del juego y los margenes */
 .canvas{
 	margin: auto;
 	width: 1024px;
@@ -70,11 +75,18 @@ footer {
 /* Margenes para cada particion (canvas, historia, controles...) */
 .particion{
 	margin-top: 50px;
-	margin: 50px 150px;
-	border: solid black 3px; /* Quitar esta linea cuando ya esten terminadas las particones */
+	margin: 25px 150px;
+	/*border: solid black 3px; /* Quitar esta linea cuando ya esten terminadas las particones */
 }
 
-/* Footer. Se describe la forma de disposición, tamaño, alineación y diseño responsive */
+/* Centra la imagen de los controles */
+.controles{
+	display: block;
+	margin-left: auto;
+  	margin-right: auto;
+}
+
+/* Footer. Se describe la forma de disposiciï¿½n, tamaï¿½o, alineaciï¿½n y diseï¿½o responsive */
 .footer-container {
 	width: 100%;
 	display: block;
@@ -88,7 +100,7 @@ footer {
 	justify-content: space-around;
 }
 
-/* Contenidos del footer. Se usa para determinar distintas secciones en el footer. Diseño responsive y ajustes */
+/* Contenidos del footer. Se usa para determinar distintas secciones en el footer. Diseï¿½o responsive y ajustes */
 .footer-content {
 	display: flex;
 	flex-direction: column;
