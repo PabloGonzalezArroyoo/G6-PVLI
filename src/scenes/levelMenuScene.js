@@ -1,4 +1,4 @@
-import { Scene } from "phaser";
+
 
 /**
  * Escena de Menú de Niveles.
