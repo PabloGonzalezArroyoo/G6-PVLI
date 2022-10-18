@@ -1,7 +1,7 @@
 // Importaciones
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
-//import Button from '../button.js';
+import { Button } from '../button.js';
 
 /**
  * Escena de Pantalla de Título.
@@ -21,7 +21,7 @@ export default class TitleScene extends Phaser.Scene {
 	 */
 	preload(){
 		//this.load.spritesheet("nombre_spritesheet", "direccion_spritesheet",{ frameWidth: x, frameHeight: y }); Carga la SpriteSheet
-		//this.load.image('start', 'assets/GUI/start.png');
+		this.load.image('start', 'assets/GUI/start.png');
 		//this.load.image('castle', 'assets/castle.gif');
 	}
 
@@ -52,11 +52,13 @@ export default class TitleScene extends Phaser.Scene {
 		const width = this.scale.width
         const height = this.scale.height
 
-		this.add.text(width * 0.5, height * 0.5, 'Title Scene', {})
+		this.add.text(width * 0.5, height * 0.2, 'Title Scene', {})
         .setOrigin(0.5)
 
-		this.input.keyboard.once('keydown-SPACE', () => {
+		/*this.input.keyboard.once('keydown-SPACE', () => {
             this.scene.start('levelMenuScene')
-        })
+        })*/
+		var self = this;
+	var boton=new Button(this, 'start',0,0,0,width/2,height/2,function(){self.scene.start('levelMenuScene')});
 	}
 }

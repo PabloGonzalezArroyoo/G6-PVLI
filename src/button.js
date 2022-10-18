@@ -1,6 +1,6 @@
 
 export class Button extends Phaser.GameObjects.Sprite {
-    constructor(scene,spriteSheet,defaultFrame,frameOnOver,FrameOnDown,x,y,functionToDo) 
+    constructor(scene,spriteSheet,defaultFrame,frameOnOver,FrameOnDown,x,y,laFuncion) 
     {
         super(scene, x, y, spriteSheet,defaultFrame);
         scene.add.existing(this);
@@ -8,7 +8,8 @@ export class Button extends Phaser.GameObjects.Sprite {
         this.on('pointerdown',this.onClick);
         this.on('pointerup',this.onReleaseClick);
         this.on('pointerover',this.onOver);
-        this.on('pointerout',this.onPointerOut);   
+        this.on('pointerout',this.onPointerOut);  
+        this.functionToDo=laFuncion;
     }
     onClick()
     {
@@ -17,7 +18,7 @@ export class Button extends Phaser.GameObjects.Sprite {
     onReleaseClick()
     {
         this.setFrame(this.defaultFrame);
-        functionToDo();
+        this.functionToDo();
     }
     onOver()
     {
