@@ -1,13 +1,13 @@
 // Importación de Librería Phaser
-import Phaser from './lib/phaser.js'
+//import Phaser from './lib/phaser.js'
 
 // Importación de Escenas
-import Title from './scenes/titleScene.js'
-import Levels from './scenes/levelMenuScene.js'
-import Battle from './scenes/battleScene.js'
-import Options from './scenes/optionsScene.js'
-import Inventory from './scenes/inventoryScene.js'
-import Cinematic from './scenes/cinematicScene.js'
+import TitleScene from './scenes/titleScene.js'
+import LevelMenuScene from './scenes/levelMenuScene.js'
+import BattleScene from './scenes/battleScene.js'
+import OptionsScene from './scenes/optionsScene.js'
+import InventoryScene from './scenes/inventoryScene.js'
+import CinematicScene from './scenes/cinematicScene.js'
 
 // Archivo de configuración del juego
 let config = {
@@ -34,7 +34,7 @@ let config = {
         },
 		zoom: 1
     },
-    scene: [Title, Levels, Battle, Options, Inventory, Cinematic],
+    scene: [TitleScene, LevelMenuScene, BattleScene, OptionsScene, InventoryScene, CinematicScene],
     physics: {
         default: 'arcade',
         arcade: {

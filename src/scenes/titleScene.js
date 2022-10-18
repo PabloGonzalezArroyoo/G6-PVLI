@@ -2,7 +2,7 @@
  * Escena de Pantalla de Título.
  * @extends Phaser.Scene
  */
-import { Button } from "../button";
+import { Button } from '../button.js';
 export default class TitleScene extends Phaser.Scene {
 	/**
 	 * Escena principal.
@@ -29,12 +29,12 @@ export default class TitleScene extends Phaser.Scene {
 		//var back = this.add.image(0, 0, 'castle').setOrigin(0, 0);
 
 		//Pintamos un botón de Empezar
-		var button=new Button(this,'start',0,0,0,200,300,this.scene.start('cinematicScene'))
+		var button = new Button(this,'start',0,0,0,200,300,this.scene.start('cinematicScene'));
 		//Para seleccionar botones con teclas, creamos el objeto tecla
 		
 		var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
 		var Esc = this.scene.input.keyboard.addKeys('ESC,X');
-		var Enter = this.scene.input.keyboard.addKeys('ENTER,Z')
+		var Enter = this.scene.input.keyboard.addKeys('ENTER,Z');
 		//En este caso, cualquiera de los objetos destacaria el boton y el enter lanzaria la escena de cinematica
 		keys.on('down', function () {/*Destaca el boton*/ });
 		//Ejemplo: Al pulsar el enter
