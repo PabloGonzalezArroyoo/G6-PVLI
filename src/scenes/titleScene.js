@@ -1,8 +1,12 @@
+// Importaciones
+// Importación de Librería Phaser
+import Phaser from 'phaser.js';
+import Button from '../button.js';
+
 /**
  * Escena de Pantalla de Título.
  * @extends Phaser.Scene
  */
-import { Button } from '../button.js';
 export default class TitleScene extends Phaser.Scene {
 	/**
 	 * Escena principal.

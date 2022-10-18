@@ -1,4 +1,6 @@
-
+// Importaciones
+// Importación de Librería Phaser
+import Phaser from 'phaser.js';
 
 /**
  * Escena de Menú de Niveles.
