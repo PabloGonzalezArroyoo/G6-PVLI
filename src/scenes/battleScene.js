@@ -1,3 +1,7 @@
+// Importaciones
+// Importación de Librería Phaser
+import Phaser from './lib/phaser.js'
+
 /**
  * Escena de Batalla.
  * @extends Phaser.Scene
@@ -12,9 +16,10 @@ export default class BattleScene extends Phaser.Scene {
 	}
 
 	/**
-	 * Cargar nivel seleccionado
+	 * Inicializa variables
+	 * - Cargar nivel seleccionado
 	*/
-	init(){
+	init() {
 
 	}
 
@@ -24,7 +29,7 @@ export default class BattleScene extends Phaser.Scene {
 	 * 		- Hud
 	 * 		- Personajes
 	 */
-	preload(){
+	preload() {
 
 	}
 
@@ -56,7 +61,13 @@ export default class BattleScene extends Phaser.Scene {
 		});
 	}
 
+	update() {
 
+	}
+
+	/**
+	 * @param {Phaser.GameObjects.Sprite} sprite 
+	 */
 	createButtonFromSprite(sprite, pointerdown, pointerup, pointerover, pointerout){
 		// Escuchamos los eventos del ratón cuando interactual con nuestro sprite de "Start"
 	    sprite.on('pointerdown', pointer => {

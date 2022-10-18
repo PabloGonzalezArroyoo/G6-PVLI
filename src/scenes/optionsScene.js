@@ -1,3 +1,7 @@
+// Importaciones
+// Importación de Librería Phaser
+import Phaser from './lib/phaser.js'
+
 /**
  * Escena de Opciones.
  * @extends Phaser.Scene
@@ -9,6 +13,13 @@ export default class OptionsScene extends Phaser.Scene {
 	 */
 	constructor() {
 		super({ key: 'optionsScene' });
+	}
+
+	/**
+	 * Inicializa las variables
+	 */
+	init() {
+
 	}
 
 	/**
@@ -28,6 +39,10 @@ export default class OptionsScene extends Phaser.Scene {
 
 		//Pintar en función a las opciones actuales y hacerlas interactuables
 		//...
+
+	}
+
+	update() {
 
 	}
 }

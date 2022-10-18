@@ -1,8 +1,13 @@
+// Importaciones
+// Importación de Librería Phaser
+import Phaser from './lib/phaser.js'
+import Button from "../button.js";
+
 /**
  * Escena de Pantalla de Título.
  * @extends Phaser.Scene
  */
-import { Button } from "../button";
+
 export default class TitleScene extends Phaser.Scene {
 	/**
 	 * Escena principal.
@@ -10,6 +15,13 @@ export default class TitleScene extends Phaser.Scene {
 	 */
 	constructor() {
 		super({ key: 'titleScene' });
+	}
+
+	/**
+	 * Inicializa las variables
+	 */
+	init() {
+
 	}
 
 	/**
@@ -29,7 +41,7 @@ export default class TitleScene extends Phaser.Scene {
 		//var back = this.add.image(0, 0, 'castle').setOrigin(0, 0);
 
 		//Pintamos un botón de Empezar
-		var button=new Button(this,'start',0,0,0,200,300,this.scene.start('cinematicScene'))
+		var button = new Button(this,'start',0,0,0,200,300,this.scene.start('cinematicScene'))
 		//Para seleccionar botones con teclas, creamos el objeto tecla
 		
 		var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
@@ -45,6 +57,10 @@ export default class TitleScene extends Phaser.Scene {
 		Esc.on('down', function () {
 			this.scene.start('optionsScene');//Se abre el menu de opciones
 		});
+
+	}
+
+	update() {
 
 	}
 }

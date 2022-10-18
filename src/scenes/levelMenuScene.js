@@ -1,4 +1,6 @@
-import { Scene } from "phaser";
+// Importaciones
+// Importación de Librería Phaser
+import Phaser from './lib/phaser.js'
 
 /**
  * Escena de Menú de Niveles.
@@ -14,9 +16,10 @@ export default class LevelMenuScene extends Phaser.Scene {
 	}
 
 	/**
-	 * Actualizar niveles desbloqueados
-	*/
-	init(){
+	 * Inicializa las variables
+	 * - Actualizar niveles desbloqueados
+	 */
+	init() {
 
 	}
 
@@ -74,6 +77,10 @@ export default class LevelMenuScene extends Phaser.Scene {
 	    sprite.on('pointerout', () => {
 			// Desdestacar botón
 	    });
+
+	}
+
+	update() {
 
 	}
 }

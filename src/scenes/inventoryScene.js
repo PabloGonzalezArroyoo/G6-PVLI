@@ -1,3 +1,7 @@
+// Importaciones
+// Importación de Librería Phaser
+import Phaser from './lib/phaser.js'
+
 /**
  * Escena de Inventario.
  * @extends Phaser.Scene
@@ -11,8 +15,10 @@ export default class InventoryScene extends Phaser.Scene {
 		super({ key: 'inventoryScene' });
 	}
 
+	
 	/**
-	 * Asignar si es inventario principal o de batalla
+	 * Inicializa las variables
+	 * - Asignar si es inventario principal o de batalla
 	*/
 	init(){
 
@@ -95,6 +101,10 @@ export default class InventoryScene extends Phaser.Scene {
 			this.scene.start('optionsScene');//Se abre el menu de opciones
 		});
 
+
+	}
+
+	update() {
 
 	}
 }

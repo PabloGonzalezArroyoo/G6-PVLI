@@ -1,3 +1,7 @@
+// Importaciones
+// Importación de Librería Phaser
+import Phaser from './lib/phaser.js'
+
 /**
  * Escena de Cinemática.
  * @extends Phaser.Scene
@@ -9,7 +13,16 @@ export default class Title extends Phaser.Scene {
      */
     constructor() {
         super({ key: 'cinematicScene' });
-    }/**
+    }
+    
+    /**
+	 * Inicializa las variables
+	*/
+	init(){
+
+	}
+    
+    /**
      * Cargamos todos los assets que vamos a necesitar:
      *      - Vídeo de cinemática
      *      - Botón de saltar cinemática
@@ -51,4 +64,8 @@ export default class Title extends Phaser.Scene {
         });
 
     }
+
+    update() {
+
+	}
 }
