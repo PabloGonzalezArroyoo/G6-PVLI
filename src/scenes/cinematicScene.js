@@ -1,6 +1,6 @@
 // Importaciones
 // Importación de Librería Phaser
-import Phaser from './lib/phaser.js'
+import Phaser from '../lib/phaser.js'
 
 /**
  * Escena de Cinemática.
@@ -42,26 +42,36 @@ export default class Title extends Phaser.Scene {
         
 
         //Pintamos el botón de saltar cinemática
-        var sprite = this.add.image(this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, 'skip')
-        sprite.setInteractive(); // Hacemos el sprite interactivo para que lance eventos
+        //var sprite = this.add.image(this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, 'skip')
+        //sprite.setInteractive(); // Hacemos el sprite interactivo para que lance eventos
 
 
         // Escuchamos los eventos del ratón cuando interactual con nuestro sprite de "Skip"
-        sprite.on('pointerdown', pointer => {
+        //sprite.on('pointerdown', pointer => {
             // Marcar botón
-        });
+        //});
 
-        sprite.on('pointerup', pointer => {
-            this.scene.start('levelMenuScene'); //Cambiamos a la escena de la cinemática
-        });
+        //sprite.on('pointerup', pointer => {
+            //this.scene.start('levelMenuScene'); //Cambiamos a la escena de la cinemática
+        //});
 
-        sprite.on('pointerover', () => {
+        //sprite.on('pointerover', () => {
             // Destacar botón
-        });
+        //});
 
-        sprite.on('pointerout', () => {
+        //sprite.on('pointerout', () => {
             // Desdestacar botón
-        });
+        //});
+
+        const width = this.scale.width
+        const height = this.scale.height
+
+		this.add.text(width * 0.5, height * 0.5, 'Options Scene', {})
+        .setOrigin(0.5)
+
+		this.input.keyboard.once('keydown-SPACE', () => {
+            this.scene.start('GameOverScene')
+        })
 
     }
 

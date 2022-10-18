@@ -1,6 +1,6 @@
 // Importaciones
 // Importación de Librería Phaser
-import Phaser from 'phaser.js';
+import Phaser from '../lib/phaser.js';
 
 /**
  * Escena de Menú de Niveles.
@@ -44,38 +44,47 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// vv HACER ESTO PARA TODOS LOS BOTONES vv
 		//Para seleccionar botones con teclas, creamos el objeto tecla
-		var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
-		var Esc = this.scene.input.keyboard.addKeys('ESC,X');
-		var Enter = this.scene.input.keyboard.addKeys('ENTER,Z')
+		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
+		//var Esc = this.scene.input.keyboard.addKeys('ESC,X');
+		//var Enter = this.scene.input.keyboard.addKeys('ENTER,Z')
 		//Ejemplo: Al pulsar la flecha izquierda
-		keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
+		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
 		//Ejemplo: Al pulsar el enter
-		Enter.on('down', function () {/*Marca el botón*/ });
-		Enter.on('up', function () {
-			this.scene.start('battleScene'); //Cambiamos a la escena de combate correspondiente al nivel seleccionado
-		});
-		Esc.on('down', function () {
-			this.scene.start('optionsScene');//Se abre el menu de opciones
-		});
+		//Enter.on('down', function () {/*Marca el botón*/ });
+		//Enter.on('up', function () {
+			//this.scene.start('battleScene'); //Cambiamos a la escena de combate correspondiente al nivel seleccionado
+		//});
+		//Esc.on('down', function () {
+			//this.scene.start('optionsScene');//Se abre el menu de opciones
+		//});
 		
 
 		// Escuchamos los eventos del ratón cuando interactual con nuestro sprite
-	    sprite.on('pointerdown', pointer => {
+	    //sprite.on('pointerdown', pointer => {
 	    	// Marcar botón
-	    });
+	    //});
 
-	    sprite.on('pointerup', pointer => {
+	    //sprite.on('pointerup', pointer => {
 	    	// ajustar para asignar el nivel cargado
-			this.scene.start('battleScene'); //Cambiamos a la escena de combate correspondiente al nivel seleccionado
-	    });
+			//this.scene.start('battleScene'); //Cambiamos a la escena de combate correspondiente al nivel seleccionado
+	    //});
 
-		sprite.on('pointerover', () => {
+		//sprite.on('pointerover', () => {
 			// Destacar botón
-	    });
+	    //});
 
-	    sprite.on('pointerout', () => {
+	    //sprite.on('pointerout', () => {
 			// Desdestacar botón
-	    });
+	    //});
 
+		const width = this.scale.width
+        const height = this.scale.height
+
+		this.add.text(width * 0.5, height * 0.5, 'Level Menu Scene', {})
+        .setOrigin(0.5)
+
+		this.input.keyboard.once('keydown-SPACE', () => {
+            this.scene.start('battleScene')
+        })
 	}
 }

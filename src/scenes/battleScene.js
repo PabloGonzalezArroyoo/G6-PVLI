@@ -1,6 +1,6 @@
 // Importaciones
 // Importación de Librería Phaser
-import Phaser from './lib/phaser.js'
+import Phaser from '../lib/phaser.js'
 
 /**
  * Escena de Batalla.
@@ -46,19 +46,29 @@ export default class BattleScene extends Phaser.Scene {
 		// Pintar HUD y hacer botones interactivos
 		// ...
 		//Para seleccionar botones con teclas, creamos el objeto tecla
-		var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
-		var Esc = this.scene.input.keyboard.addKey('ESC,X');
-		var Enter = this.scene.input.keyboard.addKey('ENTER,Z')
+		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
+		//var Esc = this.scene.input.keyboard.addKey('ESC,X');
+		//var Enter = this.scene.input.keyboard.addKey('ENTER,Z')
 		//Ejemplo: Al pulsar la flecha izquierda
-		keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
+		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
 		//Ejemplo: Al pulsar el enter
-		Enter.on('down', function () {/*Marca el botón*/ });
-		Enter.on('up', function () {
+		//Enter.on('down', function () {/*Marca el botón*/ });
+		//Enter.on('up', function () {
 			 //Se selecciona la accion deseada (if/else para saber qué boton hace qué cosas)
-		});
-		Esc.on('down', function () {
-			this.scene.start('optionsScene');//Se abre el menu de opciones
-		});
+		//});
+		//Esc.on('down', function () {
+			//this.scene.start('optionsScene');//Se abre el menu de opciones
+		//});
+
+		const width = this.scale.width
+        const height = this.scale.height
+
+		this.add.text(width * 0.5, height * 0.5, 'Battle Scene', {})
+        .setOrigin(0.5)
+
+		this.input.keyboard.once('keydown-SPACE', () => {
+            this.scene.start('optionsScene')
+        })
 	}
 
 	update() {
