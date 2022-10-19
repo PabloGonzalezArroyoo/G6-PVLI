@@ -1,5 +1,6 @@
 //import HealthController from "./healthController.js"
 
+//Demomento solo necesita su posicion y en animator, luego se puede añadir mas propiedades si son necesarias
 export default class Character{
     constructor(x, y, animator) {
         this.x = x;

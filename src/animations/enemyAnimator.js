@@ -6,7 +6,7 @@ export default class EnemyAnimator extends Phaser.GameObjects.Sprite{
 		this.scene.add.existing(this);
 		this.setScale(3,3);
 
-		//animacion jump
+		//animacion idle
 		this.scene.anims.create({
 		key: 'enemy_idle',
 		frames: this.scene.anims.generateFrameNumbers('enemy', {start: 0, end: 2}),
