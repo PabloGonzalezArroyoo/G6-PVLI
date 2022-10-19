@@ -49,16 +49,16 @@ export default class TitleScene extends Phaser.Scene {
 		//Esc.on('down', function () {
 			//this.scene.start('optionsScene');//Se abre el menu de opciones
 		//});
-		const width = this.scale.width
-        const height = this.scale.height
+		const width = this.scale.width;
+        const height = this.scale.height;
 
 		this.add.text(width * 0.5, height * 0.2, 'Title Scene', {})
-        .setOrigin(0.5)
+        .setOrigin(0.5);
 
 		/*this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('levelMenuScene')
-        })*/
+            this.scene.start('levelMenuScene');
+        });*/
 		var self = this;
-	var boton=new Button(this, 'start',0,0,0,width/2,height/2,function(){self.scene.start('levelMenuScene')});
+		var boton = new Button(this, width/2, height/2, 'start', 0, 0, 0, function(){self.scene.start('levelMenuScene')});
 	}
 }

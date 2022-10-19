@@ -1,6 +1,7 @@
 // Importaciones
 // Importación de Librería Phaser
-import Phaser from '../lib/phaser.js'
+import Phaser from '../lib/phaser.js';
+import { Button } from '../button.js';
 
 /**
  * Escena de Opciones.
@@ -39,15 +40,15 @@ export default class OptionsScene extends Phaser.Scene {
 
 		//Pintar en función a las opciones actuales y hacerlas interactuables
 		//...
-		const width = this.scale.width
-        const height = this.scale.height
+		const width = this.scale.width;
+        const height = this.scale.height;
 
 		this.add.text(width * 0.5, height * 0.5, 'Options Scene', {})
-        .setOrigin(0.5)
+        .setOrigin(0.5);
 
 		this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('inventoryScene')
-        })
+            this.scene.start('inventoryScene');
+        });
 	}
 	
 
