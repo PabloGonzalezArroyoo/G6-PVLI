@@ -1,4 +1,4 @@
-export class HealthController {
+export default class HealthController {
     constructor(maxHP) {
         this._maxHealth = maxHP;
         this._currentHealth = maxHP;

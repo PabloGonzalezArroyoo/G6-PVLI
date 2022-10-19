@@ -1,7 +1,8 @@
 // Importaciones
-// Importación de Librería Phaser
+//import { Character } from '../character.js';
 import Phaser from '../lib/phaser.js';
-import { Button } from '../button.js';
+import Player from '../player.js';
+//import Button from '../button.js';
 
 /**
  * Escena de Batalla.
@@ -31,45 +32,39 @@ export default class BattleScene extends Phaser.Scene {
 	 * 		- Personajes
 	 */
 	preload() {
-
+		// Fondo
+		this.load.image('battleBackground', 'assets/Escenas/EscenaCombate/EscenaCombate.png');
+		// Maria Pita (Animaciones)
+		this.load.spritesheet('MariaPita_idle', 'assets/MariaPita/MariaPita_Idle.png', {frameWidth: 32, frameHeight: 32});
+		this.load.spritesheet('MariaPita_idleBack', 'assets/MariaPita/MariaPita_IdleBack.png', {frameWidth: 32, frameHeight: 32});
+		this.load.spritesheet('MariaPita_jump', 'assets/MariaPita/MariaPita_Jump.png', {frameWidth: 32, frameHeight: 32});
+		// Descripcion
+		this.load.image('description', 'assets/Escenas/EscenaCombate/Descripcion.png');
+		// Acciones
+		this.load.image('cuadroAcciones', 'assets/Escenas/EscenaCombate/CuadroAcciones.png');
+		this.load.image('textoAcciones', 'assets/Escenas/EscenaCombate/Capas/textoAcciones.png');
+		this.load.image('botones', 'assets/Escenas/EscenaCombate/Capas/Botones.png');
 	}
 
 	/**
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-		//Pintar el fondo
-		// var back = this.add.image(0, 0, 'background').setOrigin(0, 0);
+		// Fondo
+		var background = this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
-		// Pintar personajes
-		// ...
+		// Maria Pita
+		var player = new Player(this, 250, 475);
 
-		// Pintar HUD y hacer botones interactivos
-		// ...
+		// Descripcion
+		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);
 
-		//Para seleccionar botones con teclas, creamos el objeto tecla
-		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
-		//var Esc = this.scene.input.keyboard.addKey('ESC,X');
-		//var Enter = this.scene.input.keyboard.addKey('ENTER,Z');
+		// Acciones
+		var cuadroAcciones = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
+		var botones = this.add.image(0, 0, 'botones').setOrigin(0, 0);
+		var textoAcciones = this.add.image(0, 0, 'textoAcciones').setOrigin(0, 0);
 
-		//Ejemplo: Al pulsar la flecha izquierda
-		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
-		
-		//Ejemplo: Al pulsar el enter
-		//Enter.on('down', function () {/*Marca el botón*/ });
-		//Enter.on('up', function () {
-			 //Se selecciona la accion deseada (if/else para saber qué boton hace qué cosas)
-		//});
-		//Esc.on('down', function () {
-			//this.scene.start('optionsScene');//Se abre el menu de opciones
-		//});
-
-		const width = this.scale.width;
-        const height = this.scale.height;
-
-		this.add.text(width * 0.5, height * 0.5, 'Battle Scene', {})
-        .setOrigin(0.5);
-
+		// Transicion escena
 		this.input.keyboard.once('keydown-SPACE', () => {
             this.scene.start('optionsScene');
         });

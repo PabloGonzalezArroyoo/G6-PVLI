@@ -1,12 +1,13 @@
-import Entity from "./entity";
-import HealthController from "./healthController.js"
+//import HealthController from "./healthController.js"
 
-export class Character extends Entity {
-    constructor(name, position, scale, rotation, color, imgId, health, damage) {
-        super(name, position, scale, rotation, color, imgId);
-        this._healthController = new HealthController(health);
-        this._damage = damage;
+export class Character extends Phaser.GameObjects.Sprite {
+    constructor(scene, x, y, objName) {
+        super(scene, x, y, objName);
+        
+        this.scene.add.existing(this);
+        //this._healthController = new HealthController(health);
+        //this._damage = damage;
     }
 
-    getCurrentHealth() {return this._healthController.getCurrentHealth();}
+    //getCurrentHealth() {return this._healthController.getCurrentHealth();}
 }
