@@ -2,6 +2,7 @@
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
 import { Button } from '../button.js';
+import PlayerAnimator from '../animations/playerAnimator.js';
 
 /**
  * Escena de Pantalla de Título.
@@ -24,6 +25,8 @@ export default class TitleScene extends Phaser.Scene {
 		this.load.image('start', 'assets/GUI/start.png');
 		this.load.image('background', 'assets/Title_background.png');
 		this.load.image('title','assets/MariaPitasRevenge.png');
+		this.load.spritesheet('player_1', 'assets/MariaPita/MariaPita_Idle.png', {frameWidth: 32, frameHeight: 32});
+		this.load.spritesheet('player_2', 'assets/MariaPita/MariaPita_Jump.png', {frameWidth: 32, frameHeight: 32});
 	}
 
 	/**
@@ -33,7 +36,8 @@ export default class TitleScene extends Phaser.Scene {
 		//Pintamos un fondo
 		var back = this.add.image(0, 0, 'background').setOrigin(0, 0).setS;
 		//Para seleccionar botones con teclas, creamos el objeto tecla
-		
+		this.player = new PlayerAnimator(this, 50,50);
+		this.s = this.input.keyboard.addKey('S');
 		//var Enter = this.scene.input.keyboard.addKeys('ENTER,Z');
 		//En este caso, cualquiera de los objetos destacaria el boton y el enter lanzaria la escena de cinematica
 		//keys.on('down', function () {/*Destaca el boton*/ });
