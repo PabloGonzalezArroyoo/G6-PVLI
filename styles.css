@@ -30,7 +30,7 @@ p{
 	font-size: 20px;
 }
 
-/* Estilo de la etiqueta footer en HTML. Se le da el fondo, color, m�rgenes y tama�o */
+/* Estilo de la etiqueta footer en HTML. Se le da el fondo, color, margenes y tamaño */
 footer {
 	background-image: url('img/background/bottom.png');
 	background-repeat: no-repeat;
@@ -45,6 +45,11 @@ footer {
 		width: 80px;
 		border-radius: 1em;
 	}
+		/* Añade un filtro de color al pasar el ratón por enicma de una imagen del footer */
+		footer img:hover {
+			filter: brightness(75%);
+			-webkit-filter: brightness(75%);
+		}
 
 /* ------------ ESTILOS PROPIOS ------------ */
 /* El cuerpo ocupa como minimo toda la altura de la pantalla y se le pone un ancho (mayor o igual al de la resolucion del juego) 
