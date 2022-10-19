@@ -48,7 +48,7 @@ export class Entity{
 		this._scale = scale;
     this._rotation = rotation;
 		this._color = color;
-		this._imgId = imgId
+		this._imgId = imgId;
 	}
 
   // Otros metodos

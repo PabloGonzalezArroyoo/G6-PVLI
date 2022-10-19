@@ -1,6 +1,7 @@
 // Importaciones
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
+import { Button } from '../button.js';
 
 /**
  * Escena de Menú de Niveles.
@@ -39,16 +40,17 @@ export default class LevelMenuScene extends Phaser.Scene {
 		//Pintar el mapa de fondo
 		// var back = this.add.image(0, 0, /*'map'*/).setOrigin(0, 0);
 
-		// Pintar botónes correspondientes a los niveles desbloqueados y hacer sprites interactivos
+		// Pintar botones correspondientes a los niveles desbloqueados
 		// ...
 
-		// vv HACER ESTO PARA TODOS LOS BOTONES vv
 		//Para seleccionar botones con teclas, creamos el objeto tecla
 		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
 		//var Esc = this.scene.input.keyboard.addKeys('ESC,X');
 		//var Enter = this.scene.input.keyboard.addKeys('ENTER,Z')
+		
 		//Ejemplo: Al pulsar la flecha izquierda
 		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
+		
 		//Ejemplo: Al pulsar el enter
 		//Enter.on('down', function () {/*Marca el botón*/ });
 		//Enter.on('up', function () {
@@ -57,34 +59,15 @@ export default class LevelMenuScene extends Phaser.Scene {
 		//Esc.on('down', function () {
 			//this.scene.start('optionsScene');//Se abre el menu de opciones
 		//});
-		
 
-		// Escuchamos los eventos del ratón cuando interactual con nuestro sprite
-	    //sprite.on('pointerdown', pointer => {
-	    	// Marcar botón
-	    //});
-
-	    //sprite.on('pointerup', pointer => {
-	    	// ajustar para asignar el nivel cargado
-			//this.scene.start('battleScene'); //Cambiamos a la escena de combate correspondiente al nivel seleccionado
-	    //});
-
-		//sprite.on('pointerover', () => {
-			// Destacar botón
-	    //});
-
-	    //sprite.on('pointerout', () => {
-			// Desdestacar botón
-	    //});
-
-		const width = this.scale.width
-        const height = this.scale.height
+		const width = this.scale.width;
+        const height = this.scale.height;
 
 		this.add.text(width * 0.5, height * 0.5, 'Level Menu Scene', {})
-        .setOrigin(0.5)
+        .setOrigin(0.5);
 
 		this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('battleScene')
-        })
+            this.scene.start('battleScene');
+        });
 	}
 }

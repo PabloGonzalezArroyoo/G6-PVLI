@@ -1,6 +1,7 @@
 // Importaciones
 // Importación de Librería Phaser
-import Phaser from '../lib/phaser.js'
+import Phaser from '../lib/phaser.js';
+import { Button } from '../button.js';
 
 /**
  * Escena de Batalla.
@@ -38,19 +39,22 @@ export default class BattleScene extends Phaser.Scene {
 	*/
 	create() {
 		//Pintar el fondo
-		// var back = this.add.image(0, 0, 'background').setOrigin(0, 0
+		// var back = this.add.image(0, 0, 'background').setOrigin(0, 0);
 
 		// Pintar personajes
 		// ...
 
 		// Pintar HUD y hacer botones interactivos
 		// ...
+
 		//Para seleccionar botones con teclas, creamos el objeto tecla
 		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
 		//var Esc = this.scene.input.keyboard.addKey('ESC,X');
-		//var Enter = this.scene.input.keyboard.addKey('ENTER,Z')
+		//var Enter = this.scene.input.keyboard.addKey('ENTER,Z');
+
 		//Ejemplo: Al pulsar la flecha izquierda
 		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
+		
 		//Ejemplo: Al pulsar el enter
 		//Enter.on('down', function () {/*Marca el botón*/ });
 		//Enter.on('up', function () {
@@ -60,41 +64,18 @@ export default class BattleScene extends Phaser.Scene {
 			//this.scene.start('optionsScene');//Se abre el menu de opciones
 		//});
 
-		const width = this.scale.width
-        const height = this.scale.height
+		const width = this.scale.width;
+        const height = this.scale.height;
 
 		this.add.text(width * 0.5, height * 0.5, 'Battle Scene', {})
-        .setOrigin(0.5)
+        .setOrigin(0.5);
 
 		this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('optionsScene')
-        })
+            this.scene.start('optionsScene');
+        });
 	}
 
 	update() {
 
 	}
-
-	/**
-	 * @param {Phaser.GameObjects.Sprite} sprite 
-	 */
-	createButtonFromSprite(sprite, pointerdown, pointerup, pointerover, pointerout){
-		// Escuchamos los eventos del ratón cuando interactual con nuestro sprite de "Start"
-	    sprite.on('pointerdown', pointer => {
-	    	pointerdown(); // Marcar botón
-	    });
-
-	    sprite.on('pointerup', pointer => {
-			pointerup(); //Cambiamos a la escena de la cinemática
-	    });
-
-		sprite.on('pointerover', () => {
-			pointerover(); // Destacar botón
-	    });
-
-	    sprite.on('pointerout', () => {
-			pointerout(); // Desdestacar botón
-	    });
-	}
-
 }
