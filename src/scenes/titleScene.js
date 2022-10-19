@@ -22,7 +22,8 @@ export default class TitleScene extends Phaser.Scene {
 	preload(){
 		//this.load.spritesheet("nombre_spritesheet", "direccion_spritesheet",{ frameWidth: x, frameHeight: y }); Carga la SpriteSheet
 		this.load.image('start', 'assets/GUI/start.png');
-		//this.load.image('castle', 'assets/castle.gif');
+		this.load.image('background', 'assets/Title_background.png');
+		this.load.image('title','assets/MariaPitasRevenge.png');
 	}
 
 	/**
@@ -30,19 +31,14 @@ export default class TitleScene extends Phaser.Scene {
 	*/
 	create() {
 		//Pintamos un fondo
-		//var back = this.add.image(0, 0, 'castle').setOrigin(0, 0);
-
-		//Pintamos un botón de Empezar
-		//var button = new Button(this,'start',0,0,0,200,300,this.scene.start('cinematicScene'));
+		var back = this.add.image(0, 0, 'background').setOrigin(0, 0).setS;
 		//Para seleccionar botones con teclas, creamos el objeto tecla
 		
-		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
-		//var Esc = this.scene.input.keyboard.addKeys('ESC,X');
 		//var Enter = this.scene.input.keyboard.addKeys('ENTER,Z');
 		//En este caso, cualquiera de los objetos destacaria el boton y el enter lanzaria la escena de cinematica
 		//keys.on('down', function () {/*Destaca el boton*/ });
 		//Ejemplo: Al pulsar el enter
-		//Enter.on('down', function () {/*Marca el botón*/ });
+		//Enter.on('down', function () {self.scene.start('levelMenuScene')});
 		//Enter.on('up', function () {
 			//this.scene.start('cinematicScene'); /*Se cambia a la escena de batalla*/
 		//});
@@ -52,13 +48,15 @@ export default class TitleScene extends Phaser.Scene {
 		const width = this.scale.width
         const height = this.scale.height
 
-		this.add.text(width * 0.5, height * 0.2, 'Title Scene', {})
-        .setOrigin(0.5)
+		/*this.add.text(width * 0.5, height * 0.2, 'Title Scene', {})
+        .setOrigin(0.5)*/
+		var title=this.add.image(width*0.5,height*0.1,'title').setScale(0.15,0.1);
 
 		/*this.input.keyboard.once('keydown-SPACE', () => {
             this.scene.start('levelMenuScene')
         })*/
 		var self = this;
-	var boton=new Button(this, 'start',0,0,0,width/2,height/2,function(){self.scene.start('levelMenuScene')});
+	var boton=new Button(this, 'start',0,0,0,width/2,3*height/4,function(){self.scene.start('levelMenuScene')});
+	boton.setScale(0.5,0.5);
 	}
 }
