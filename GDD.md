@@ -28,7 +28,7 @@ La vida siempre será de 100 puntos, mientras que la defensa y el ataque depende
 - **Equipamiento:** En el mapa de selección de niveles habrá un botón desde el cual el jugador podrá ver los objetos que tenga y el arma que tenga equipada.
 
 ## 4. Dinámica
-El objetivo del juego es obligar al jugador a pensar en cada movimiento que haga para poder avanzar, desarrollando una estrategia que le permita llegar al final y pasarse el juego. 
+El objetivo del juego es animar al jugador a pensar en cada movimiento que haga para poder avanzar, desarrollando una estrategia que le permita llegar al final y pasarse el juego. 
 También se busca un grado de acción y tensión al poner al jugador frente a combates de dificultad moderada.
 
 ![ImagenDinamica](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/dinamica.png)
@@ -58,11 +58,11 @@ Habrá dos tipos de objetos:
 Adicionalmente, contará con una habilidad llamada "**¡Qué locura!**" con las siguientes características:
 | **Característica** | **Descripción** | **NI** | **NII** | **NIII** |
 | :---: | :--- | :---: | :---: | :---: |
-| ***Ataque en área*** | Divide el daño base entre el número de enemigos y le suma un porcentaje de ataque según el nivel del arma. | 10% | 20% | 30% |
-| ***Sangrado*** | Resta vida al enemigo equivalente a cierto porcentaje de la vida durante 3 turnos según el nivel del arma. | 2% | 3% | 4% |
-| ***Aturdimiento*** | Impide al enemigo atacar en su siguiente turno y podrá no hacerlo durante 2 turnos más dependiendo del nivel del arma del jugador. | 100% | 100-70% | 100-70-30% |
-| ***Ataque múltiple*** | Ataca a un enemigo concreto un número de veces con el 60% del daño base según el nivel del arma. | 2 | 3 | 4 |
-| ***Robo de vida*** | Recupera en forma de vida un porcentaje del daño infligido al enemigo. | 30% | 40% | 50% |
+| ***Ataque en área*** | Divide el daño base entre el número de enemigos y le suma un porcentaje de ataque según el nivel del arma | 10% | 20% | 30% |
+| ***Sangrado*** | Resta vida al enemigo equivalente a cierto porcentaje de la vida durante 3 turnos según el nivel del arma | 2% | 3% | 4% |
+| ***Aturdimiento*** | Impide al enemigo atacar en su siguiente turno y podrá no hacerlo durante 2 turnos más dependiendo del nivel del arma del jugador | 100% | 100-70% | 100-70-30% |
+| ***Ataque múltiple*** | Ataca a un enemigo concreto un número de veces con el 60% del daño base según el nivel del arma | 2 | 3 | 4 |
+| ***Robo de vida*** | Recupera en forma de vida un porcentaje del daño infligido al enemigo | 30% | 40% | 50% |
 
 Además existe un arma que se obtiene al final de la aventura y que es necesaria para el último combate: **El asta de bandera** (una bandera inglesa con una punta de lanza). Se usará para poder acabar con el **Hermano de Drake** y cuyo “**¡Qué locura!**” será un ataque del 200% y que aumenta un 30% el ataque durante el resto del combate.
 
@@ -71,10 +71,10 @@ Además existe un arma que se obtiene al final de la aventura y que es necesaria
 | :---: | :---: | :---: | :--- |
 | ***Rufián embriagado*** | 100 | 15 | - |
 | ***Pirata maloliente*** | 150 | 25 | - |
-| ***Marinero escorbutado*** | 200 | 35 | Tiene una probabilidad del 15% de envenenar en cada ataque (ver sangrado de tier I). |
-| ***Bucanero experimentado*** | 250 | 45 | Probabilidad del 15% de golpear con daño crítico, aumentado un 40% el daño. |
-| ***Corsario enajenado*** | 300 | 55 | Probabilidad del 15% de robar un 50% del daño infligido. |
-| ***Alferez Drake (hermano)*** | 500 | 50 | Probabilidad del 20% de hacer aleatoriamente alguna de las otras tres habilidades especiales que tienen los otros enemigos. |
+| ***Marinero escorbutado*** | 200 | 35 | Tiene una probabilidad del 15% de envenenar en cada ataque (ver sangrado de tier I) |
+| ***Bucanero experimentado*** | 250 | 45 | Probabilidad del 15% de golpear con daño crítico, aumentado un 40% el daño |
+| ***Corsario enajenado*** | 300 | 55 | Probabilidad del 15% de robar un 50% del daño infligido |
+| ***Alférez Drake (hermano)*** | 500 | 50 | Probabilidad del 20% de hacer aleatoriamente alguna de las otras tres habilidades especiales que tienen los otros enemigos |
 
 ### Diseño de niveles
 Los niveles estarán compuestos por un único combate diferente en cada uno, en dificultad creciente hasta llegar al último nivel. La siguiente distribución de los niveles es orientativa y está sujeta a cambios tras el testing.
@@ -90,14 +90,14 @@ Los niveles estarán compuestos por un único combate diferente en cada uno, en 
 - **Nivel 2:** Este combate será contra 2 RE para que el jugador se acostumbre a combates contra varios enemigos.
 - **Nivel 3:** Este combate será contra un PM y un RE, presentando un nuevo enemigo con la dificultad añadida de uno ya conocido.
 - **Nivel 4:** Este combate será con un PM y dos RE para presentar los combates con hasta 3 enemigos y sirva de prueba al jugador de la dificultad de los combates siguientes.
-- **Nivel 5:** Este combate será contra un ME y un PM
-- **Nivel 6:** Este combate será contra un BE y dos RE para equilibrar la fuerza que el jugador debería tener a este punto (se supone un arma de nivel II)
+- **Nivel 5:** Este combate será contra un ME y un PM.
+- **Nivel 6:** Este combate será contra un BE y dos RE para equilibrar la fuerza que el jugador debería tener a este punto (se supone un arma de nivel II).
 - **Nivel 7:** Este combate será contra un ME y un BE, en el que el jugador probará un combate contra dos enemigos con habilidades especiales por primera vez, pero al ser solo dos, todavía no resultará un desafío mayor.
 - **Nivel 8:** En este punto, se entiende que el jugador ya ha ido recolectando varios objetos curativos y armas poderosas, por lo que los combates a partir de este punto serán algo más desafiantes, presentando al CE y enfrentando además a dos ME.
 - **Nivel 9:** Este combate será contra un CE, un ME y un BE, donde el jugador deberá tener en cuenta que ahora son 3 enemigos con habilidades especiales diferentes, con lo que se quiere lograr un aumento del requerimiento de estrategia en un combate.
 
 ### Historia
-En 1589, los ingleses llegan a A Coruña bajo la orden de atacar el reino, durante este periodo, asesinan al marido de María Pita, y esta, por venganza, comienza a enfrentarse contra ellos hasta llegar al hermano del capitán, Francis Drake, que dirigía el ataque, y asesinarlo con una lanza que les había arrebatado.
+En 1589, los ingleses llegan a A Coruña bajo la orden de atacar el reino. Durante este periodo, asesinan al marido de María Pita, y esta, por venganza, comienza a enfrentarse contra ellos hasta llegar al hermano del capitán que dirigía el ataque, Francis Drake, y asesinarlo con una lanza que les había arrebatado.
 
 ## 6. HUD
 ### En combate
@@ -122,16 +122,16 @@ Finalmente, en momentos críticos del juego habrá animaciones.
 Imágenes de referencia:
 
 ![ImagenMariaPita](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/mariaPita.png)
-*Referencia de sprites, María Pita - Maria Pita's Revenge (2022). Pantheon Studios*
+*Referencia de sprites, María Pita - Maria Pita's Revenge (2022). Pantheon Studios.*
 
 ![ImagenRefBatalla](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/pokemon.png)
-*Referencia de batalla - Pokemon Diamante y Perla (2007). Nintendo*
+*Referencia de batalla - Pokemon Diamante y Perla (2007). Nintendo.*
 
 ![ImagenRefDialogo](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/animalCrossing.png)
-*Referencia de dialogos - Animal Crossing New Horizons (2022). Nintendo*
+*Referencia de diálogos - Animal Crossing New Horizons (2022). Nintendo.*
 
 ![ImagenRefBotones](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/finalFantasy.png)
-*Referencia de botones - Final Fantasy 7 (1997). Square Enix*
+*Referencia de botones - Final Fantasy 7 (1997). Square Enix.*
 
 ## 8. Menús y flujo del juego
 El jugador podrá acceder a los siguientes menús:
