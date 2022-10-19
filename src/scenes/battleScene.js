@@ -1,5 +1,6 @@
 // Importaciones
 //import { Character } from '../character.js';
+import { Button } from '../button.js';
 import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
 //import Button from '../button.js';
@@ -44,6 +45,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.image('cuadroAcciones', 'assets/Escenas/EscenaCombate/CuadroAcciones.png');
 		this.load.image('textoAcciones', 'assets/Escenas/EscenaCombate/Capas/textoAcciones.png');
 		this.load.image('botones', 'assets/Escenas/EscenaCombate/Capas/Botones.png');
+
+		this.load.image('pruebaBoton', 'assets/Escenas/EscenaCombate/Capas/Boton.png');
 	}
 
 	/**
@@ -63,6 +66,14 @@ export default class BattleScene extends Phaser.Scene {
 		var cuadroAcciones = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
 		var botones = this.add.image(0, 0, 'botones').setOrigin(0, 0);
 		var textoAcciones = this.add.image(0, 0, 'textoAcciones').setOrigin(0, 0);
+		
+		// Interactivo
+		//new Button(this, 500, 50, 'pruebaBoton', 0, 0, 0, 'pointerup');
+
+		//var button = this.add.image(50, 50, 'pruebaBoton').setOrigin(0, 0).setInteractive();
+		/*button.on('pointerdown', pointer => {
+	    	console.log("pulsando");
+	    });*/
 
 		// Transicion escena
 		this.input.keyboard.once('keydown-SPACE', () => {
