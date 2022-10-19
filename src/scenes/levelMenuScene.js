@@ -30,7 +30,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 	 * 		- Botón de nivel seleccionar completado/sin completar
 	 */
 	preload(){
-
+		
 	}
 
 	/**
@@ -39,7 +39,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 	create() {
 		//Pintar el mapa de fondo
 		// var back = this.add.image(0, 0, /*'map'*/).setOrigin(0, 0);
-
 		// Pintar botones correspondientes a los niveles desbloqueados
 		// ...
 
