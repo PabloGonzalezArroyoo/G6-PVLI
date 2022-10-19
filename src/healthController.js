@@ -9,4 +9,6 @@ export class HealthController {
         if (this._currentHealth > this._maxHealth) this._currentHealth = this._maxHealth;
         else if (this._currentHealth < 0) this._currentHealth = 0; 
     }
+
+    getCurrentHealth(){return this._currentHealth; }
 }
