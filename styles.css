@@ -59,7 +59,7 @@ footer {
 	width: auto;
 }
 
-/* El ancho y los m�rgenes de la imagen del titulo */
+/* El ancho y los margenes de la imagen del titulo */
 .titulo{
 	width: 30%;
 	margin: 0px 0px 80px;
@@ -82,7 +82,7 @@ footer {
 .particion{
 	margin-top: 50px;
 	margin: 25px 150px;
-	/*border: solid black 3px; /* Quitar esta linea cuando ya esten terminadas las particones */
+	/* border: solid black 3px; /* Quitar esta linea cuando ya esten terminadas las particones */
 }
 
 /* Centra la imagen de los controles */
@@ -92,7 +92,7 @@ footer {
   	margin-right: auto;
 }
 
-/* Footer. Se describe la forma de disposici�n, tama�o, alineaci�n y dise�o responsive */
+/* Footer. Se describe la forma de disposicion, tama�o, alineacion y dise�o responsive */
 .footer-container {
 	width: 100%;
 	display: block;
