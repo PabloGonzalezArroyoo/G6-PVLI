@@ -2,6 +2,7 @@
 //import { Character } from '../character.js';
 import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
+import {Enemy1} from '../enemy.js';
 //import Button from '../button.js';
 
 /**
@@ -38,6 +39,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('MariaPita_idle', 'assets/MariaPita/MariaPita_Idle.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('MariaPita_idleBack', 'assets/MariaPita/MariaPita_IdleBack.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('MariaPita_jump', 'assets/MariaPita/MariaPita_Jump.png', {frameWidth: 32, frameHeight: 32});
+		this.load.spritesheet('enemy', 'assets/enemy.png', {frameWidth: 97, frameHeight: 97})
 		// Descripcion
 		this.load.image('description', 'assets/Escenas/EscenaCombate/Descripcion.png');
 		// Acciones
@@ -55,6 +57,8 @@ export default class BattleScene extends Phaser.Scene {
 
 		// Maria Pita
 		var player = new Player(this, 250, 475);
+
+		var enemy = new Enemy1(this,750,200);
 
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);

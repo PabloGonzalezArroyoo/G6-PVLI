@@ -1,24 +1,25 @@
-import Character from '/character.js'
+import Character from './character.js'
+import EnemyAnimator from './animations/enemyAnimator.js'
 
 // Clase base Enemy
 export class Enemy extends Character {
-    constructor(name, position, scale, rotation, color, imgId, health, damage) {
-        super(name, position, scale, rotation, color, imgId, health, damage);
+    constructor(x,y,animator) {
+        super(x,y,animator);
     }
 }
 
 // Enemigo 1
-export class enemy1 extends Enemy {
-    constructor(name, position, scale, rotation, color, imgId, health, damage) {
-        super(name, position, scale, rotation, color, imgId, health, damage);
+export class Enemy1 extends Enemy {
+    constructor(scene,x,y) {
+        super(x,y,new EnemyAnimator(scene,x,y));
     }
     //ability1()
 }
 
 // Enemigo 2
-export class enemy2 extends Enemy {
-    constructor(name, position, scale, rotation, color, imgId, health, damage) {
-        super(name, position, scale, rotation, color, imgId, health, damage);
+ export class Enemy2 extends Enemy {
+    constructor(scene,x,y) {
+        super(x,y,animator);
     }
     //ability2()
 }

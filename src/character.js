@@ -1,10 +1,11 @@
 //import HealthController from "./healthController.js"
 
-export class Character extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, objName) {
-        super(scene, x, y, objName);
+export default class Character{
+    constructor(x, y, animator) {
+        this.x = x;
+        this.y = y;
+        this.animator = animator;
         
-        this.scene.add.existing(this);
         //this._healthController = new HealthController(health);
         //this._damage = damage;
     }
