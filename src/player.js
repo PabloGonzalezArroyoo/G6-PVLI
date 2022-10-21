@@ -7,4 +7,11 @@ export default class Player extends Character {
         this._defense;
         this._defenseBoost;
     }
+
+    attack(){
+        console.log("HOLA");
+        this.animator.playIdle();
+    }
+
+    
 }

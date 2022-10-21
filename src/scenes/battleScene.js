@@ -75,7 +75,7 @@ export default class BattleScene extends Phaser.Scene {
 		
 		// Interactivo
 		
-		new Button(this, 500, 50, 'pruebaBoton', 0, 0, 0, function() {console.log("HOLA")});
+		new Button(this, 500, 50, 'pruebaBoton', 0, 0, 0, function() {player.attack()});
 
 		//var button = this.add.image(50, 50, 'pruebaBoton').setOrigin(0, 0).setInteractive();
 		/*button.on('pointerdown', pointer => {
