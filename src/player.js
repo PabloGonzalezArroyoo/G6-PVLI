@@ -10,12 +10,12 @@ export default class Player extends Character {
 
     attack(){
         console.log("ATAQUE");
-
+        this.animator.playAttack();
     }
 
     defense(){
         console.log("DEFENSA");
-
+        
     }
 
     objects(){
@@ -25,6 +25,6 @@ export default class Player extends Character {
 
     quelocura(){
         console.log("QUELOCURA");
-        
+
     }
 }

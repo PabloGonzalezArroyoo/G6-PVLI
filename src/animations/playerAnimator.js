@@ -2,7 +2,7 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 	// Name es el nombre del spritesheet
 	constructor(scene, x, y){
 		super(scene, x, y, 'player');
-		this.defaultAnimation = 'idle';
+		this.defaultAnimation = 'idleBack';
 		this.scene.add.existing(this);
 
 		//animacion jump
@@ -24,9 +24,15 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 		this.scene.anims.create({
             key: 'idleBack',
             frames: scene.anims.generateFrameNumbers('player_idleBack', {start: 0, end: 5}),
-            framesRate: 5,
+            framesRate: 7,
             repeat: -1 });
-			
+		
+		this.scene.anims.create({
+			key: 'attack',
+			frames: scene.anims.generateFrameNumbers('player_attack', {start: 0, end: 5}),
+			framesRate: 7,
+			repeat: 0 });
+
 		// inicia con la animacion idle
 		this.play('idleBack');
 		this.setScale(10,10);
@@ -42,8 +48,14 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 		this.play('idle');
 	}
 
+	//cambia a la animacion IdleBack
 	playIdleBack(){
 		this.play('idleBack');
+	}
+
+	//cambia a la animacion Attack
+	playAttack(){
+		this.play('attack');
 	}
 
 	//pre-update que gestiona los posibles problemas de las animaciones
