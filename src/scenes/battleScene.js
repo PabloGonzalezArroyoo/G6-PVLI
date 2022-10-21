@@ -50,6 +50,9 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.image('botones', 'assets/Escenas/EscenaCombate/Capas/Botones.png');
 
 		this.load.image('pruebaBoton', 'assets/Escenas/EscenaCombate/Capas/Boton.png');
+
+		// Barra de vida
+		this.load.image('lifeBar', 'assets/GUI/lifeBar38x8.png');
 	}
 
 	/**
@@ -61,7 +64,8 @@ export default class BattleScene extends Phaser.Scene {
 
 		// Maria Pita
 		var player = new Player(this, 250, 475);
-
+			// Barra de vida de Maria Pita
+			var player_lifeBar = this.add.image(player.x, player.y - 150, 'lifeBar').setScale(5, 5);
 		//Enemy1
 		var enemy = new Enemy1(this,750,200);
 
@@ -74,13 +78,8 @@ export default class BattleScene extends Phaser.Scene {
 		var textoAcciones = this.add.image(0, 0, 'textoAcciones').setOrigin(0, 0);
 		
 		// Interactivo
-		
 		new Button(this, 500, 50, 'pruebaBoton', 0, 0, 0, function() {player.attack()});
 
-		//var button = this.add.image(50, 50, 'pruebaBoton').setOrigin(0, 0).setInteractive();
-		/*button.on('pointerdown', pointer => {
-	    	console.log("pulsando");
-	    });*/
 
 		// Transicion escena
 		this.input.keyboard.once('keydown-SPACE', () => {

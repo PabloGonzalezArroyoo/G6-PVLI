@@ -12,6 +12,4 @@ export default class Player extends Character {
         console.log("HOLA");
         this.animator.playIdle();
     }
-
-    
 }
