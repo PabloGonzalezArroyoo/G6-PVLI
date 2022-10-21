@@ -8,7 +8,7 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 		//animacion jump
 		this.scene.anims.create({
 		key: 'jump',
-		frames: this.scene.anims.generateFrameNumbers('player_2', {start: 0, end: 5}),
+		frames: this.scene.anims.generateFrameNumbers('player_jump', {start: 0, end: 5}),
 		frameRate: 7,
 		repeat: 0
 		});
@@ -16,13 +16,20 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 		//animacion idle
 		this.scene.anims.create({
 		key: 'idle',
-		frames: this.scene.anims.generateFrameNumbers('player_1', {start: 0, end: 5}),
+		frames: this.scene.anims.generateFrameNumbers('player_idle', {start: 0, end: 5}),
 		frameRate: 7,
 		repeat: -1
 		});
+
+		this.scene.anims.create({
+            key: 'idleBack',
+            frames: scene.anims.generateFrameNumbers('player_idleBack', {start: 0, end: 5}),
+            framesRate: 5,
+            repeat: -1 });
 			
 		// inicia con la animacion idle
-		this.play('idle');
+		this.play('idleBack');
+		this.setScale(10,10);
 	}
 
 	//cambia a la animacion Jump
@@ -33,6 +40,10 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 	//cambia a la animacion Idle
 	playIdle(){
 		this.play('idle');
+	}
+
+	playIdleBack(){
+		this.play('idleBack');
 	}
 
 	//pre-update que gestiona los posibles problemas de las animaciones

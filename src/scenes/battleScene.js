@@ -37,9 +37,9 @@ export default class BattleScene extends Phaser.Scene {
 		// Fondo
 		this.load.image('battleBackground', 'assets/Escenas/EscenaCombate/EscenaCombate.png');
 		// Maria Pita (Animaciones)
-		this.load.spritesheet('MariaPita_idle', 'assets/MariaPita/MariaPita_Idle.png', {frameWidth: 32, frameHeight: 32});
-		this.load.spritesheet('MariaPita_idleBack', 'assets/MariaPita/MariaPita_IdleBack.png', {frameWidth: 32, frameHeight: 32});
-		this.load.spritesheet('MariaPita_jump', 'assets/MariaPita/MariaPita_Jump.png', {frameWidth: 32, frameHeight: 32});
+		this.load.spritesheet('player_idle', 'assets/MariaPita/MariaPita_Idle.png', {frameWidth: 32, frameHeight: 32});
+		this.load.spritesheet('player_idleBack', 'assets/MariaPita/MariaPita_IdleBack.png', {frameWidth: 32, frameHeight: 32});
+		this.load.spritesheet('player_jump', 'assets/MariaPita/MariaPita_Jump.png', {frameWidth: 32, frameHeight: 32});
 		// Enemy (Animaciones)
 		this.load.spritesheet('enemy', 'assets/enemy.png', {frameWidth: 97, frameHeight: 97})
 		// Descripcion
@@ -74,7 +74,8 @@ export default class BattleScene extends Phaser.Scene {
 		var textoAcciones = this.add.image(0, 0, 'textoAcciones').setOrigin(0, 0);
 		
 		// Interactivo
-		//new Button(this, 500, 50, 'pruebaBoton', 0, 0, 0, 'pointerup');
+		
+		new Button(this, 500, 50, 'pruebaBoton', 0, 0, 0, function() {console.log("HOLA")});
 
 		//var button = this.add.image(50, 50, 'pruebaBoton').setOrigin(0, 0).setInteractive();
 		/*button.on('pointerdown', pointer => {
