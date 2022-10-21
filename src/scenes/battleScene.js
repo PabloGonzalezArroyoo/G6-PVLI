@@ -47,10 +47,8 @@ export default class BattleScene extends Phaser.Scene {
 		// Acciones
 		this.load.image('cuadroAcciones', 'assets/Escenas/EscenaCombate/CuadroAcciones.png');
 		this.load.image('textoAcciones', 'assets/Escenas/EscenaCombate/Capas/textoAcciones.png');
-		this.load.image('botones', 'assets/Escenas/EscenaCombate/Capas/Botones.png');
-
-		this.load.image('pruebaBoton', 'assets/Escenas/EscenaCombate/Capas/Boton.png');
-
+		this.load.image('boton', 'assets/Escenas/EscenaCombate/Capas/Boton.png');
+		
 		// Barra de vida
 		this.load.image('lifeBar', 'assets/GUI/lifeBar38x8.png');
 	}
@@ -74,12 +72,14 @@ export default class BattleScene extends Phaser.Scene {
 
 		// Acciones
 		var cuadroAcciones = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
-		var botones = this.add.image(0, 0, 'botones').setOrigin(0, 0);
-		var textoAcciones = this.add.image(0, 0, 'textoAcciones').setOrigin(0, 0);
 		
 		// Interactivo
-		new Button(this, 500, 50, 'pruebaBoton', 0, 0, 0, function() {player.attack()});
+		var botonAtaque = new Button(this, 135, 617, 'boton', 0, 0, 0, function() {player.attack()});
+		var botonDefensa = new Button(this, 135, 697, 'boton', 0, 0, 0, function() {player.defense()});
+		var botonObjetos = new Button(this, 375, 617, 'boton', 0, 0, 0, function() {player.objects()});
+		var botonQueLocura = new Button(this, 375, 697, 'boton', 0, 0, 0, function() {player.quelocura()});
 
+		var textoAcciones = this.add.image(0, 0, 'textoAcciones').setOrigin(0, 0);
 
 		// Transicion escena
 		this.input.keyboard.once('keydown-SPACE', () => {

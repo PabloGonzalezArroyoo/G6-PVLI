@@ -9,7 +9,22 @@ export default class Player extends Character {
     }
 
     attack(){
-        console.log("HOLA");
-        this.animator.playIdle();
+        console.log("ATAQUE");
+
+    }
+
+    defense(){
+        console.log("DEFENSA");
+
+    }
+
+    objects(){
+        console.log("OBJECTS");
+
+    }
+
+    quelocura(){
+        console.log("QUELOCURA");
+        
     }
 }
