@@ -1,7 +1,7 @@
-// Importaciones
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
-import { Button } from '../button.js';
+import { Level } from '../level.js';
+//import { Scene } from 'phaser';
 
 /**
  * Escena de Menú de Niveles.
@@ -12,6 +12,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 	 * Escena principal.
 	 * @extends Phaser.Scene
 	 */
+
 	constructor() {
 		super({ key: 'levelMenuScene' });
 	}
@@ -30,7 +31,11 @@ export default class LevelMenuScene extends Phaser.Scene {
 	 * 		- Botón de nivel seleccionar completado/sin completar
 	 */
 	preload(){
+		// Fondo
+		this.load.image('levelMap', 'assets/Escenas/escenaLevelMenu/mapa.png');
 		
+		// Imagen de botones
+		this.load.spritesheet('level', 'assets/Escenas/escenaLevelMenu/nivel.png', {frameWidth: 51, frameHeight: 51});
 	}
 
 	/**
@@ -38,9 +43,35 @@ export default class LevelMenuScene extends Phaser.Scene {
 	*/
 	create() {
 		//Pintar el mapa de fondo
-		// var back = this.add.image(0, 0, /*'map'*/).setOrigin(0, 0);
-		// Pintar botones correspondientes a los niveles desbloqueados
-		// ...
+		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
+		
+		const levels = [new Level(this, 272, 527.5, 'level', 0, 1, 2, 1, 0, 0),		// Nivel 0
+				new Level(this, 354, 455.5, 'level',  0, 0, 0, 0, 0, 0),			// Nivel 1
+				new Level(this, 292, 363.5, 'level',  0, 0, 0, 0, 0, 0),			// ... 2
+				new Level(this, 405, 363.5, 'level',  0, 0, 0, 0, 0, 0),			// 3
+				new Level(this, 354, 271.5, 'level',  0, 0, 0, 0, 0, 0),			// 4
+				new Level(this, 507, 302, 'level',  0, 0, 0, 0, 0, 0),				// 5
+				new Level(this, 548, 394.5, 'level',  0, 0, 0, 0, 0, 0),			// 6
+				new Level(this, 589, 486.5, 'level',  0, 0, 0, 0, 0, 0),			// 7
+				new Level(this, 630, 353.5, 'level', 0, 0, 0, 0, 0, 0),				// 8
+				new Level(this, 610, 240.5, 'level', 0, 0, 0, 0, 0, 0),				// 9
+				new Level(this, 702, 261, 'level', 0, 0, 0, 0, 0, 0),				// 10
+				new Level(this, 814, 261, 'level',  0, 0, 0, 0, 0, 0)];				// 11
+
+		// Especificar los niveles que se desbloquean tras completarlo de cada nivel
+		levels[0].setNextLevels([levels[1]]);
+		levels[1].setNextLevels([levels[2], levels[3]]);
+		levels[2].setNextLevels(null);
+		levels[3].setNextLevels([levels[4], levels[5], levels[6]]);
+		levels[4].setNextLevels(null);
+		levels[5].setNextLevels(null);
+		levels[6].setNextLevels(levels[7], levels[8]);
+		levels[7].setNextLevels(null);
+		levels[8].setNextLevels([levels[9], levels[10]]);
+		levels[9].setNextLevels(null);
+		levels[10].setNextLevels(levels[11]);
+		levels[11].setNextLevels(null);
+
 
 		//Para seleccionar botones con teclas, creamos el objeto tecla
 		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
@@ -62,8 +93,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 		const width = this.scale.width;
         const height = this.scale.height;
 
-		this.add.text(width * 0.5, height * 0.5, 'Level Menu Scene', {})
-        .setOrigin(0.5);
+		// this.add.text(width * 0.5, height * 0.5, 'Level Menu Scene', {})
+        // .setOrigin(0.5);
 
 		this.input.keyboard.once('keydown-SPACE', () => {
             this.scene.start('battleScene');

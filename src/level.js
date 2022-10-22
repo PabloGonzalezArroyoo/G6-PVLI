@@ -1,4 +1,4 @@
-import Entity from "./entity";
+import { Button } from "./button.js";
 
 // Objeto State usado como un enum
 const State = {
@@ -7,14 +7,23 @@ const State = {
     complete: 2
 }
 
-export class Level extends Entity {
-    constructor(name, position, scale, rotation, color, imgId, state, loot, enemies) {
-        super(name, position, scale, rotation, color, imgId);
+export class Level extends Button {
+    constructor(scene, x, y, spriteSheet, defaultFrame, frameOnOver, frameOnDown, state, loot, enemies) {
+        super(scene, x, y, spriteSheet, defaultFrame + state * 3, frameOnOver + state * 3, frameOnDown + state * 3, function(){scene.scene.start('battleScene')});
         this._state = state; // valor que indica si el nivel está bloqueado, desbloqueado o completado
         this._loot = loot; // array con todos los posibles items que dar al jugador al completar el nivel
         this._enemies = enemies; // array con todos los enemigos del nivel
     }
 
+    setNextLevels(levels){
+        this._nextLevels = levels;
+    }
+
+    unlockNextLevels(){
+        for(let i = 0; i < this._nextLevels.length; i++){
+            this._nextLevels[i].setUnlocked();
+        }
+    }
 
     // devuelve el estado actual del nivel
     getState(){return this._state;}
@@ -30,10 +39,29 @@ export class Level extends Entity {
             if (_this.enemies[i].getCurrentHealth() > 0) complete = false;
             i++;
         }
-        if (complete) this._state = State.complete;
+        if (complete) this.setCompleted();
         return complete;
     }
 
+    // Marca el nivel como desbloqueado y cambia el sprite
+    setUnlocked() {
+        this._state = State.unlocked;
+        this.changeSpriteState(this._state);
+    }
+
+    // Marca el nivel como completado y cambia el sprite
+    setCompleted() {
+        this._state = State.complete;
+        this.changeSpriteState(this._state);
+        this.unlockNextLevels();
+    }
+
+    // Cambia el sprite según el estado del nivel
+    changeSpriteState(state) {
+        this._defaultFrame += state * 3;
+        this._frameOnDown += state * 3;
+        this._frameOnOver += state * 3;
+    }
 
     // No sé si funciona este método pero sería graciosísimo que sí
     /*
