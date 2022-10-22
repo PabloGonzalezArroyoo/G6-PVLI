@@ -2,10 +2,10 @@ export default class DialogBox extends Phaser.GameObjects.Text {
 	constructor(scene, x, y, width){
 		super(scene,x,y);
 		this.scene.add.existing(this);
-		this.textToDisplay = '';
-		this.timePerLetter = 40;
-		this.isWritting = false;
-		this.letterPos = 0;
+		this.textToDisplay = ''; // El texto que va a escribir
+		this.timePerLetter = 40; // Tiempo entre letras en milisegundos
+		this.isWritting = false; // Indica si actualmente esta escribiendo
+		this.letterPos = 0; // Indica la posicion actual de la letra que va a escribir
 
 		this.setWordWrapWidth(width); //Indica cuando hace el salto de linea
 		this.setLineSpacing(15); // Indica el espaciado entre lineas
