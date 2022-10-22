@@ -10,20 +10,15 @@ export default class DialogBox extends Phaser.GameObjects.Text {
 		this.setWordWrapWidth(width); //Indica cuando hace el salto de linea
 		this.setLineSpacing(15); // Indica el espaciado entre lineas
 
-		//Carga la fuente del texto
-    	var newFont = new FontFace('Silkscreen', `url(assets/Silkscreen-Regular.ttf)`);
-    	newFont.load().then(function (loaded) {
-        document.fonts.add(loaded); })
-
     	//Cambia la fuente del texto
 		this.setFontFamily('Silkscreen');
 
 		/*Si quiereis cambiar el tamaño de la letra usar esta instruccion, 
 		volver a contar los caracteres por linea y actualizar el comentario de setTextToDisplay*/
-		//this.setFontSize(size);
+		this.setFontSize(20);
 	}
 
-	//Este metodo sirve para pasarle el texto que se quiere escribir, el maximo de caracteres es de 210
+	//Este metodo sirve para pasarle el texto que se quiere escribir, el maximo de caracteres es de 160
 	setTextToDisplay(text){
 	//En caso de que se este escribiendo algo sale un error e impide que se pise el texto actual
 		if(this.isWritting === false){

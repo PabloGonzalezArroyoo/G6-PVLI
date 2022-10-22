@@ -87,9 +87,7 @@ export default class BattleScene extends Phaser.Scene {
 		var textoAcciones = this.add.image(0, 0, 'textoAcciones').setOrigin(0, 0);
 
 		// Cuadro de dialogo
-		/* Si cambiais el scale volved a contar los caracteres y actualizarlo en la clase BoxDialog en el metodo setTextToDisplay 
-		Si quereis cambiar solo el tamaño de letra hacedlo en la clase DialogBox*/
-		this.dialogBox = new DialogBox(this, 545, 567, 380).setScale(1.2, 1.2); 
+		this.dialogBox = new DialogBox(this, 545, 565, 450); 
 		this.dialogBox.setTextToDisplay('Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo');
 
 		// Transicion escena
