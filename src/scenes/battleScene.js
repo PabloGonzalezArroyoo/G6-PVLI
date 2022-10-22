@@ -3,7 +3,8 @@
 import { Button } from '../button.js';
 import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
-import {Enemy1} from '../enemy.js';
+import {Enemy1} from '../enemy.js'
+import DialogBox from '../dialogBox.js';;
 //import Button from '../button.js';
 
 /**
@@ -17,6 +18,8 @@ export default class BattleScene extends Phaser.Scene {
 	 */
 	constructor() {
 		super({ key: 'battleScene' });
+		this.dialogBox;
+		this.previousLetterTime = 0;
 	}
 
 	/**
@@ -83,13 +86,24 @@ export default class BattleScene extends Phaser.Scene {
 
 		var textoAcciones = this.add.image(0, 0, 'textoAcciones').setOrigin(0, 0);
 
+		// Cuadro de dialogo
+		this.dialogBox = new DialogBox(this, 550, 575, 350).setScale(1.2, 1.2); // Si cambiais el scale volved a contar los caracteres y actualizarlo en la clase BoxDialog en el metodo setTextToDisplay
+		this.dialogBox.setTextToDisplay('Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo');
+
 		// Transicion escena
 		this.input.keyboard.once('keydown-SPACE', () => {
             this.scene.start('optionsScene');
         });
 	}
 
-	update() {
+	update(t,dt) {
+		super.update(t,dt);
+		this.previousLetterTime += dt; //Contador del tiempo transcurrido desde la ultima letra
 
+		//Si apasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
+		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){
+			this.dialogBox.write();
+			this.previousLetterTime = 0;
+		}
 	}
 }
