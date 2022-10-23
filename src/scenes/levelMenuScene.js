@@ -45,6 +45,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 		//Pintar el mapa de fondo
 		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 		
+		// Array con todos los niveles del juego
 		const levels = [new Level(this, 272, 527.5, 'level', 0, 1, 2, 1, 0, 0),		// Nivel 0
 				new Level(this, 354, 455.5, 'level',  0, 0, 0, 0, 0, 0),			// Nivel 1
 				new Level(this, 292, 363.5, 'level',  0, 0, 0, 0, 0, 0),			// ... 2
@@ -65,13 +66,12 @@ export default class LevelMenuScene extends Phaser.Scene {
 		levels[3].setNextLevels([levels[4], levels[5], levels[6]]);
 		levels[4].setNextLevels(null);
 		levels[5].setNextLevels(null);
-		levels[6].setNextLevels(levels[7], levels[8]);
+		levels[6].setNextLevels([levels[7], levels[8]]);
 		levels[7].setNextLevels(null);
 		levels[8].setNextLevels([levels[9], levels[10]]);
 		levels[9].setNextLevels(null);
-		levels[10].setNextLevels(levels[11]);
+		levels[10].setNextLevels([levels[11]]);
 		levels[11].setNextLevels(null);
-
 
 		//Para seleccionar botones con teclas, creamos el objeto tecla
 		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
