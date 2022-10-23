@@ -23,16 +23,16 @@ export class Button extends Phaser.GameObjects.Sprite {
         this._functionToDo = functionToDo;
     }
     onClick() {
-        this.setFrame(this.FrameOnDown);
+        this.setFrame(this._frameOnDown);
     }
     onReleaseClick() {
-        this.setFrame(this.defaultFrame);
+        this.setFrame(this._defaultFrame);
         this._functionToDo();
     }
     onOver() {
-        this.setFrame(this.frameOnOver);
+        this.setFrame(this._frameOnOver);
     }
     onPointerOut() {
-        this.setFrame(this.defaultFrame);
+        this.setFrame(this._defaultFrame);
     }
 }
