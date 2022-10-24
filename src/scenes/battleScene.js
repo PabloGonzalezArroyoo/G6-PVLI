@@ -3,7 +3,8 @@
 import { Button } from '../button.js';
 import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
-import {Enemy1} from '../enemy.js';
+import {Enemy1} from '../enemy.js'
+import DialogBox from '../dialogBox.js';;
 //import Button from '../button.js';
 
 /**
@@ -17,6 +18,8 @@ export default class BattleScene extends Phaser.Scene {
 	 */
 	constructor() {
 		super({ key: 'battleScene' });
+		this.dialogBox;
+		this.previousLetterTime = 0;
 	}
 
 	/**
@@ -53,6 +56,7 @@ export default class BattleScene extends Phaser.Scene {
 		
 		// Barra de vida
 		this.load.image('lifeBar', 'assets/GUI/lifeBar38x8.png');
+		this.load.spritesheet('lifeBarColors', 'assets/GUI/lifeBarColors16x4.png', {frameWidth: 4, frameHeight: 4});
 	}
 
 	/**
@@ -68,7 +72,8 @@ export default class BattleScene extends Phaser.Scene {
 			var player_lifeBar = this.add.image(player.x, player.y - 150, 'lifeBar').setScale(5, 5);
 		//Enemy1
 		var enemy = new Enemy1(this,750,200);
-
+			// Barra de vida del Enemigo
+			var enemy_lifeBar = this.add.image(enemy.x, enemy.y - 150, 'lifeBar').setScale(5, 5);
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);
 
@@ -83,13 +88,24 @@ export default class BattleScene extends Phaser.Scene {
 
 		var textoAcciones = this.add.image(0, 0, 'textoAcciones').setOrigin(0, 0);
 
+		// Cuadro de dialogo
+		this.dialogBox = new DialogBox(this, 545, 565, 450); 
+		this.dialogBox.setTextToDisplay('Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo');
+
 		// Transicion escena
 		this.input.keyboard.once('keydown-SPACE', () => {
             this.scene.start('optionsScene');
         });
 	}
 
-	update() {
+	update(t,dt) {
+		super.update(t,dt);
+		this.previousLetterTime += dt; //Contador del tiempo transcurrido desde la ultima letra
 
+		//Si apasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
+		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){
+			this.dialogBox.write();
+			this.previousLetterTime = 0;
+		}
 	}
 }
