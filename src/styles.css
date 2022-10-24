@@ -14,7 +14,7 @@ body {
 	background-size: 100%;
 	margin: 0px;
 	font-family: Silkscreen;
-	cursor: url('../assets/webImg/Cursor.png'), auto;
+	cursor: url('../assets/webImg/cursor.png'), auto;
 }
 
 /* Centra los titulos y pone la fuente de color blanco y a un tama�o concreto */
