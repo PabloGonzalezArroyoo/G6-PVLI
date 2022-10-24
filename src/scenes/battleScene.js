@@ -51,8 +51,10 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.image('description', 'assets/Escenas/EscenaCombate/Descripcion.png');
 		// Acciones
 		this.load.image('cuadroAcciones', 'assets/Escenas/EscenaCombate/CuadroAcciones.png');
-		this.load.image('textoAcciones', 'assets/Escenas/EscenaCombate/Capas/textoAcciones.png');
-		this.load.image('boton', 'assets/Escenas/EscenaCombate/Capas/Boton.png');
+		this.load.spritesheet('botonAtaque', 'assets/Escenas/EscenaCombate/botonAtaque.png', {frameWidth: 241, frameHeight: 67});
+		this.load.spritesheet('botonDefensa', 'assets/Escenas/EscenaCombate/botonDefensa.png', {frameWidth: 241, frameHeight: 67});
+		this.load.spritesheet('botonObjetos', 'assets/Escenas/EscenaCombate/botonObjetos.png', {frameWidth: 241, frameHeight: 67});
+		this.load.spritesheet('botonQueLocura', 'assets/Escenas/EscenaCombate/botonQueLocura.png', {frameWidth: 241, frameHeight: 67});
 		
 		// Barra de vida
 		this.load.image('lifeBar', 'assets/GUI/lifeBar38x8.png');
@@ -81,12 +83,10 @@ export default class BattleScene extends Phaser.Scene {
 		var cuadroAcciones = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
 		
 		// Interactivo
-		var botonAtaque = new Button(this, 135, 617, 'boton', 0, 0, 0, function() {player.attack()});
-		var botonDefensa = new Button(this, 135, 697, 'boton', 0, 0, 0, function() {player.defense()});
-		var botonObjetos = new Button(this, 375, 617, 'boton', 0, 0, 0, function() {player.objects()});
-		var botonQueLocura = new Button(this, 375, 697, 'boton', 0, 0, 0, function() {player.quelocura()});
-
-		var textoAcciones = this.add.image(0, 0, 'textoAcciones').setOrigin(0, 0);
+		var botonAtaque = new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, function() {player.attack()});
+		var botonDefensa = new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, function() {player.defense()});
+		var botonObjetos = new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, function() {player.objects()});
+		var botonQueLocura = new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, function() {player.quelocura()});
 
 		// Cuadro de dialogo
 		this.dialogBox = new DialogBox(this, 545, 565, 450); 
