@@ -19,6 +19,8 @@ export default class BattleScene extends Phaser.Scene {
 		super({ key: 'battleScene' });
 		this.dialogBox;
 		this.previousLetterTime = 0;
+		this.state = 0;
+		this.isBusy = false;
 	}
 
 	/**
@@ -68,26 +70,27 @@ export default class BattleScene extends Phaser.Scene {
 		var background = this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
 		// Maria Pita
-		var player = new Player(this, 250, 475);
+		this.player = new Player(this, 250, 475);
 			
 		//Enemy1
-		var enemy = new Enemy1(this, 750, 200);
+		this.enemy = new Enemy1(this, 750, 200);
 			
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);
+
+		// Cuadro de dialogo
+		this.dialogBox = new DialogBox(this, 545, 565, 450); 
+		//this.dialogBox.setTextToDisplay('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,');
 
 		// Acciones
 		var cuadroAcciones = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
 		
 		// Interactivo
-		var botonAtaque = new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, function() {player.attack(enemy)});
-		var botonDefensa = new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, function() {player.defense()});
-		var botonObjetos = new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, function() {player.objects()});
-		var botonQueLocura = new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, function() {player.quelocura()});
+		var botonAtaque = new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {this.state = 1});
+		var botonDefensa = new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, function() {this.player.defense()});
+		var botonObjetos = new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, function() {this.player.objects()});
+		var botonQueLocura = new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, function() {this.player.quelocura()});
 
-		// Cuadro de dialogo
-		this.dialogBox = new DialogBox(this, 545, 565, 450); 
-		this.dialogBox.setTextToDisplay('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,');
 
 		// Transicion escena
 		this.input.keyboard.once('keydown-SPACE', () => {
@@ -103,6 +106,35 @@ export default class BattleScene extends Phaser.Scene {
 		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){
 			this.dialogBox.write();
 			this.previousLetterTime = 0;
+		}
+
+		if(this.state >= 0){
+			if(!this.dialogBox.isWritting){
+				if(this.state === 1){
+					this.dialogBox.clearText();
+					this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');
+					this.state = 2;
+				}
+				else if(this.state === 2){
+					if(!this.isBusy){
+						this.player.attack(this.enemy);
+						this.isBusy = true;
+						this.time.delayedCall(1000, ()=> {this.state = 3; this.isBusy = false;});
+					}
+				}
+				else if(this.state === 3){
+					this.dialogBox.clearText();
+					this.dialogBox.setTextToDisplay('Enemigo ataca a Maria Pita');
+					this.state = 4;
+				}
+				else if(this.state === 4){
+					if(!this.isBusy){
+						this.enemy.attack(this.player);
+						this.isBusy = true;
+						this.time.delayedCall(1000, ()=> {this.state = 0; this.isBusy = false;});
+					}
+				}
+			}
 		}
 	}
 }

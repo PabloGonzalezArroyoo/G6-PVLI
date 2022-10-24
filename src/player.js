@@ -10,7 +10,7 @@ export default class Player extends Character {
     }
 
     attack(enemy){
-        console.log("ATAQUE");
+        //console.log("ATAQUE");
         // Le baja vida al enemigo
         enemy.healthController.changeHealth(-25);
         // Animacion de ataque

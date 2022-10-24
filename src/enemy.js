@@ -17,6 +17,12 @@ export class Enemy1 extends Enemy {
         super(scene, x, y, new EnemyAnimator(scene, x, y));
     }
     //ability1()
+    attack(player){
+        // Le baja vida al enemigo
+        player.healthController.changeHealth(-25);
+        // Animacion de ataque
+        //this.animator.playAttack();
+    }
 }
 
 // Enemigo 2

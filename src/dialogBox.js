@@ -46,6 +46,9 @@ export default class DialogBox extends Phaser.GameObjects.Text {
 		this.text += letter;
 		this.updateText();
 		this.letterPos++;
+		if(this.textToDisplay.length <= this.letterPos){
+			this.timePerLetter = 1500;
+		}
 	}
 
 	//Este metodo imprime directamente todo el texto en pantalla
@@ -61,6 +64,7 @@ export default class DialogBox extends Phaser.GameObjects.Text {
 		this.textToDisplay = '';
 		this.letterPos = 0;
 		this.isWritting = false;
+		this.timePerLetter = 40;
 		this.updateText();
 	}
 }
