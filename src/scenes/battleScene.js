@@ -1,11 +1,10 @@
 // Importaciones
 //import { Character } from '../character.js';
-import { Button } from '../button.js';
+import {Button} from '../button.js';
 import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
 import {Enemy1} from '../enemy.js'
 import DialogBox from '../dialogBox.js';;
-//import Button from '../button.js';
 
 /**
  * Escena de Batalla.
@@ -70,12 +69,10 @@ export default class BattleScene extends Phaser.Scene {
 
 		// Maria Pita
 		var player = new Player(this, 250, 475);
-			// Barra de vida de Maria Pita
-			var player_lifeBar = this.add.image(player.x, player.y - 150, 'lifeBar').setScale(5, 5);
+			
 		//Enemy1
-		var enemy = new Enemy1(this,750,200);
-			// Barra de vida del Enemigo
-			var enemy_lifeBar = this.add.image(enemy.x, enemy.y - 150, 'lifeBar').setScale(5, 5);
+		var enemy = new Enemy1(this, 750, 200);
+			
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);
 
@@ -83,14 +80,14 @@ export default class BattleScene extends Phaser.Scene {
 		var cuadroAcciones = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
 		
 		// Interactivo
-		var botonAtaque = new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, function() {player.attack()});
+		var botonAtaque = new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, function() {player.attack(enemy)});
 		var botonDefensa = new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, function() {player.defense()});
 		var botonObjetos = new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, function() {player.objects()});
 		var botonQueLocura = new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, function() {player.quelocura()});
 
 		// Cuadro de dialogo
 		this.dialogBox = new DialogBox(this, 545, 565, 450); 
-		this.dialogBox.setTextToDisplay('Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo');
+		this.dialogBox.setTextToDisplay('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,');
 
 		// Transicion escena
 		this.input.keyboard.once('keydown-SPACE', () => {
