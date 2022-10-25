@@ -4,21 +4,19 @@ import { Level } from '../level.js';
 import {DrunkRuffian, StinkyPirate} from '../enemy.js'
 //import { Scene } from 'phaser';
 
-var levels;
-
 // Array con todos los niveles del juego
-levels = [new Level(this, 272, 527.5, 0, 1, 2, 1, [new DrunkRuffian(null, 720, 200)], []),	// Nivel 0
-new Level(this, 354, 455.5, 0, 0, 0, 0, [], []),			// Nivel 1
-new Level(this, 292, 363.5, 0, 0, 0, 0, [], []),			// ... 2
-new Level(this, 405, 363.5, 0, 0, 0, 0, [], []),			// 3
-new Level(this, 354, 271.5, 0, 0, 0, 0, [], []),			// 4
-new Level(this, 507, 302, 0, 0, 0, 0, [], []),				// 5
-new Level(this, 548, 394.5, 0, 0, 0, 0, [], []),			// 6
-new Level(this, 589, 486.5, 0, 0, 0, 0, [], []),			// 7
-new Level(this, 630, 353.5, 0, 0, 0, 0, [], []),			// 8
-new Level(this, 610, 240.5, 0, 0, 0, 0, [], []),			// 9
-new Level(this, 702, 261, 0, 0, 0, 0, [], []),				// 10
-new Level(this, 814, 261, 0, 0, 0, 0, [], [])];				// 11
+const levels = [new Level(null, 272, 527.5, 0, 1, 2, 1, [new DrunkRuffian(null, 720, 200)], []),	// Nivel 0
+new Level(null, 354, 455.5, 0, 0, 0, 0, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], []),			// Nivel 1
+new Level(null, 292, 363.5, 0, 0, 0, 0, [], []),			// ... 2
+new Level(null, 405, 363.5, 0, 0, 0, 0, [], []),			// 3
+new Level(null, 354, 271.5, 0, 0, 0, 0, [], []),			// 4
+new Level(null, 507, 302, 0, 0, 0, 0, [], []),				// 5
+new Level(null, 548, 394.5, 0, 0, 0, 0, [], []),			// 6
+new Level(null, 589, 486.5, 0, 0, 0, 0, [], []),			// 7
+new Level(null, 630, 353.5, 0, 0, 0, 0, [], []),			// 8
+new Level(null, 610, 240.5, 0, 0, 0, 0, [], []),			// 9
+new Level(null, 702, 261, 0, 0, 0, 0, [], []),				// 10
+new Level(null, 814, 261, 0, 0, 0, 0, [], [])];				// 11
 
 // Especificar los niveles que se desbloquean tras completarlo de cada nivel
 levels[0].setNextLevels([levels[1]]);
@@ -78,7 +76,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 		//Pintar el mapa de fondo
 		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 		
-		levels.array.forEach(level => {
+		levels.forEach(level => {
 			level.setScene(this);
 		});
 

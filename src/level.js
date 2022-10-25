@@ -7,11 +7,15 @@ const State = {
     complete: 2
 }
 
-export class Level extends Button {
+export class Level/* extends Button */{
     constructor(scene, x, y, defaultFrame, frameOnOver, frameOnDown, state, enemies, loot) {
-        if (scene !== null) super(scene, x, y, 'level', defaultFrame + state * 3, frameOnOver + state * 3, frameOnDown + state * 3, function(){scene.scene.start('battleScene', enemies, loot)});
+        if (scene !== null) this.button = new Button(scene, x, y, 'level', defaultFrame + state * 3, frameOnOver + state * 3, frameOnDown + state * 3, function(){scene.scene.start('battleScene', enemies, loot)});
         else {
-            this.x = x; this.y = y; this.defaultFrame; this.frameOnOver; this.frameOnDown;
+            this.button = null;
+            this.x = x; this.y = y;
+            this.defaultFrame = defaultFrame + state * 3;
+            this.frameOnOver = frameOnOver + state * 3;
+            this.frameOnDown = frameOnDown + state * 3;
         }
         this.state = state; // valor que indica si el nivel está bloqueado, desbloqueado o completado
         this.loot = loot; // array con todos los posibles items que dar al jugador al completar el nivel
@@ -19,7 +23,8 @@ export class Level extends Button {
     }
 
     setScene(scene) {
-        super(scene, this.x, this.y, 'level', this.defaultFrame + this.state * 3, this.frameOnOver + this.state * 3, this.frameOnDown + this.state * 3, function(){scene.scene.start('battleScene', this.enemies, this.loot)});
+        let self = this;
+        this.button = new Button(scene, this.x, this.y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){scene.scene.start('battleScene', self.enemies, self.loot);});
     }
 
     setNextLevels(levels){
@@ -33,20 +38,20 @@ export class Level extends Button {
     }
 
     // devuelve el estado actual del nivel
-    getState(){return this._state;}
+    getState(){return this.state;}
 
     // devuelve el enemigo pedido
-    getEnemy(i){return this._enemies[i];}
+    getEnemy(i){return this.enemies[i];}
 
     // devuelve los siguientes niveles del nivel pedido
-    getNextLevels(){return this._nextLevels};
+    getNextLevels(){return this.nextLevels};
 
     // método que determina si el nivel actual se ha completado o no y que cambia su state si se ha completado
     completed(){
         let complete = true;
         let i = 0;
-        while (i < this._enemies.length && complete){
-            if (_this.enemies[i].getCurrentHealth() > 0) complete = false;
+        while (i < this.enemies.length && complete){
+            if (this.enemies[i].getCurrentHealth() > 0) complete = false;
             i++;
         }
         if (complete) this.setCompleted();
@@ -55,22 +60,22 @@ export class Level extends Button {
 
     // Marca el nivel como desbloqueado y cambia el sprite
     setUnlocked() {
-        this._state = State.unlocked;
-        this.changeSpriteState(this._state);
+        this.state = State.unlocked;
+        this.changeSpriteState(this.state);
     }
 
     // Marca el nivel como completado y cambia el sprite
     setCompleted() {
-        this._state = State.complete;
-        this.changeSpriteState(this._state);
+        this.state = State.complete;
+        this.changeSpriteState(this.state);
         this.unlockNextLevels();
     }
 
     // Cambia el sprite según el estado del nivel
     changeSpriteState(state) {
-        this._defaultFrame += state * 3;
-        this._frameOnDown += state * 3;
-        this._frameOnOver += state * 3;
+        this.button._defaultFrame = state * 3;
+        this.button._frameOnDown = state * 3;
+        this.button._frameOnOver = state * 3;
     }
 
     // No sé si funciona este método pero sería graciosísimo que sí
