@@ -28,12 +28,12 @@ export class Level/* extends Button */{
     }
 
     setNextLevels(levels){
-        this._nextLevels = levels;
+        this.nextLevels = levels;
     }
 
     unlockNextLevels(){
-        for(let i = 0; i < this._nextLevels.length; i++){
-            this._nextLevels[i].setUnlocked();
+        for(let i = 0; i < this.nextLevels.length; i++){
+            this.nextLevels[i].setUnlocked();
         }
     }
 

@@ -5,32 +5,32 @@ import {DrunkRuffian, StinkyPirate} from '../enemy.js'
 //import { Scene } from 'phaser';
 
 // Array con todos los niveles del juego
-const levels = [new Level(null, 272, 527.5, 0, 1, 2, 1, [new DrunkRuffian(null, 720, 200)], []),	// Nivel 0
-new Level(null, 354, 455.5, 0, 0, 0, 0, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], []),			// Nivel 1
-new Level(null, 292, 363.5, 0, 0, 0, 0, [], []),			// ... 2
-new Level(null, 405, 363.5, 0, 0, 0, 0, [], []),			// 3
-new Level(null, 354, 271.5, 0, 0, 0, 0, [], []),			// 4
-new Level(null, 507, 302, 0, 0, 0, 0, [], []),				// 5
-new Level(null, 548, 394.5, 0, 0, 0, 0, [], []),			// 6
-new Level(null, 589, 486.5, 0, 0, 0, 0, [], []),			// 7
-new Level(null, 630, 353.5, 0, 0, 0, 0, [], []),			// 8
-new Level(null, 610, 240.5, 0, 0, 0, 0, [], []),			// 9
-new Level(null, 702, 261, 0, 0, 0, 0, [], []),				// 10
-new Level(null, 814, 261, 0, 0, 0, 0, [], [])];				// 11
+const levels = [new Level(null, 272, 527.5, 0, 1, 2, 1, [new DrunkRuffian(null, 720, 200)], []), // Nivel 0
+				new Level(null, 354, 455.5, 0, 0, 0, 0, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], []), // Nivel 1
+				new Level(null, 292, 363.5, 0, 0, 0, 0, [], []),			// ... 2
+				new Level(null, 405, 363.5, 0, 0, 0, 0, [], []),			// 3
+				new Level(null, 354, 271.5, 0, 0, 0, 0, [], []),			// 4
+				new Level(null, 507, 302, 0, 0, 0, 0, [], []),				// 5
+				new Level(null, 548, 394.5, 0, 0, 0, 0, [], []),			// 6
+				new Level(null, 589, 486.5, 0, 0, 0, 0, [], []),			// 7
+				new Level(null, 630, 353.5, 0, 0, 0, 0, [], []),			// 8
+				new Level(null, 610, 240.5, 0, 0, 0, 0, [], []),			// 9
+				new Level(null, 702, 261, 0, 0, 0, 0, [], []),				// 10
+				new Level(null, 814, 261, 0, 0, 0, 0, [], [])];				// 11
 
-// Especificar los niveles que se desbloquean tras completarlo de cada nivel
-levels[0].setNextLevels([levels[1]]);
-levels[1].setNextLevels([levels[2], levels[3]]);
-levels[2].setNextLevels(null);
-levels[3].setNextLevels([levels[4], levels[5], levels[6]]);
-levels[4].setNextLevels(null);
-levels[5].setNextLevels(null);
-levels[6].setNextLevels([levels[7], levels[8]]);
-levels[7].setNextLevels(null);
-levels[8].setNextLevels([levels[9], levels[10]]);
-levels[9].setNextLevels(null);
-levels[10].setNextLevels([levels[11]]);
-levels[11].setNextLevels(null);
+				// Especificar los niveles que se desbloquean tras completarlo de cada nivel
+				levels[0].setNextLevels([levels[1]]);
+				levels[1].setNextLevels([levels[2], levels[3]]);
+				levels[2].setNextLevels(null);
+				levels[3].setNextLevels([levels[4], levels[5], levels[6]]);
+				levels[4].setNextLevels(null);
+				levels[5].setNextLevels(null);
+				levels[6].setNextLevels([levels[7], levels[8]]);
+				levels[7].setNextLevels(null);
+				levels[8].setNextLevels([levels[9], levels[10]]);
+				levels[9].setNextLevels(null);
+				levels[10].setNextLevels([levels[11]]);
+				levels[11].setNextLevels(null);
 
 /**
  * Escena de Menú de Niveles.
@@ -50,11 +50,13 @@ export default class LevelMenuScene extends Phaser.Scene {
 	 * Actualizar niveles desbloqueados
 	*/
 	init(updateLevels, pos) {
+		// updateLevels = true;
+		// pos = 3;
 		if(updateLevels && pos !== undefined) {
-			if(this.levels[pos].getNextLevels() != null) this.levels[pos].setCompleted();
+			// console.log(levels[pos].getNextLevels());
+			if(levels[pos].getNextLevels() !== null) levels[pos].setCompleted();
 		}
 	}
-
 
 	/**
 	 * Cargamos todos los assets que vamos a necesitar
