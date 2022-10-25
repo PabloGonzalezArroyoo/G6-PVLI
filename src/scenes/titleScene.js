@@ -58,7 +58,7 @@ export default class TitleScene extends Phaser.Scene {
 		//});
 
 		this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('battleScene');
+            this.scene.start('levelMenuScene');
         });
 	}
 }
