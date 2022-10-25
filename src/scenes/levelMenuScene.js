@@ -4,6 +4,36 @@ import { Level } from '../level.js';
 import {DrunkRuffian, StinkyPirate} from '../enemy.js'
 //import { Scene } from 'phaser';
 
+var levels;
+
+// Array con todos los niveles del juego
+levels = [new Level(this, 272, 527.5, 0, 1, 2, 1, [new DrunkRuffian(null, 720, 200)], []),	// Nivel 0
+new Level(this, 354, 455.5, 0, 0, 0, 0, [], []),			// Nivel 1
+new Level(this, 292, 363.5, 0, 0, 0, 0, [], []),			// ... 2
+new Level(this, 405, 363.5, 0, 0, 0, 0, [], []),			// 3
+new Level(this, 354, 271.5, 0, 0, 0, 0, [], []),			// 4
+new Level(this, 507, 302, 0, 0, 0, 0, [], []),				// 5
+new Level(this, 548, 394.5, 0, 0, 0, 0, [], []),			// 6
+new Level(this, 589, 486.5, 0, 0, 0, 0, [], []),			// 7
+new Level(this, 630, 353.5, 0, 0, 0, 0, [], []),			// 8
+new Level(this, 610, 240.5, 0, 0, 0, 0, [], []),			// 9
+new Level(this, 702, 261, 0, 0, 0, 0, [], []),				// 10
+new Level(this, 814, 261, 0, 0, 0, 0, [], [])];				// 11
+
+// Especificar los niveles que se desbloquean tras completarlo de cada nivel
+levels[0].setNextLevels([levels[1]]);
+levels[1].setNextLevels([levels[2], levels[3]]);
+levels[2].setNextLevels(null);
+levels[3].setNextLevels([levels[4], levels[5], levels[6]]);
+levels[4].setNextLevels(null);
+levels[5].setNextLevels(null);
+levels[6].setNextLevels([levels[7], levels[8]]);
+levels[7].setNextLevels(null);
+levels[8].setNextLevels([levels[9], levels[10]]);
+levels[9].setNextLevels(null);
+levels[10].setNextLevels([levels[11]]);
+levels[11].setNextLevels(null);
+
 /**
  * Escena de Menú de Niveles.
  * @extends Phaser.Scene
@@ -21,8 +51,10 @@ export default class LevelMenuScene extends Phaser.Scene {
 	/**
 	 * Actualizar niveles desbloqueados
 	*/
-	init(){
-
+	init(updateLevels, pos) {
+		if(updateLevels && pos !== undefined) {
+			if(this.levels[pos].getNextLevels() != null) this.levels[pos].setCompleted();
+		}
 	}
 
 
@@ -46,33 +78,9 @@ export default class LevelMenuScene extends Phaser.Scene {
 		//Pintar el mapa de fondo
 		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 		
-		// Array con todos los niveles del juego
-		const levels = [new Level(this, 272, 527.5, 0, 1, 2, 1, [new DrunkRuffian(null, 720, 200)], []),	// Nivel 0
-				new Level(this, 354, 455.5, 0, 0, 0, 0, [], []),			// Nivel 1
-				new Level(this, 292, 363.5, 0, 0, 0, 0, [], []),			// ... 2
-				new Level(this, 405, 363.5, 0, 0, 0, 0, [], []),			// 3
-				new Level(this, 354, 271.5, 0, 0, 0, 0, [], []),			// 4
-				new Level(this, 507, 302, 0, 0, 0, 0, [], []),				// 5
-				new Level(this, 548, 394.5, 0, 0, 0, 0, [], []),			// 6
-				new Level(this, 589, 486.5, 0, 0, 0, 0, [], []),			// 7
-				new Level(this, 630, 353.5, 0, 0, 0, 0, [], []),			// 8
-				new Level(this, 610, 240.5, 0, 0, 0, 0, [], []),			// 9
-				new Level(this, 702, 261, 0, 0, 0, 0, [], []),				// 10
-				new Level(this, 814, 261, 0, 0, 0, 0, [], [])];				// 11
-
-		// Especificar los niveles que se desbloquean tras completarlo de cada nivel
-		levels[0].setNextLevels([levels[1]]);
-		levels[1].setNextLevels([levels[2], levels[3]]);
-		levels[2].setNextLevels(null);
-		levels[3].setNextLevels([levels[4], levels[5], levels[6]]);
-		levels[4].setNextLevels(null);
-		levels[5].setNextLevels(null);
-		levels[6].setNextLevels([levels[7], levels[8]]);
-		levels[7].setNextLevels(null);
-		levels[8].setNextLevels([levels[9], levels[10]]);
-		levels[9].setNextLevels(null);
-		levels[10].setNextLevels([levels[11]]);
-		levels[11].setNextLevels(null);
+		levels.array.forEach(level => {
+			level.setScene(this);
+		});
 
 		//Para seleccionar botones con teclas, creamos el objeto tecla
 		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
