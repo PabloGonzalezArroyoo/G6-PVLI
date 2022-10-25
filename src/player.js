@@ -3,8 +3,8 @@ import PlayerAnimator from './animations/playerAnimator.js';
 import HealthController from './healthController.js';
 
 export default class Player extends Character {
-    constructor(scene, x, y) {
-        super(x, y, new PlayerAnimator(scene, x, y), new HealthController(scene, x, y - 150, 100));
+    constructor(scene, x, y, damage) {
+        super(x, y, new PlayerAnimator(scene, x, y), new HealthController(scene, x, y - 150, 100), damage);
         this._defense;
         this._defenseBoost;
     }
@@ -12,7 +12,7 @@ export default class Player extends Character {
     attack(enemy){
         //console.log("ATAQUE");
         // Le baja vida al enemigo
-        enemy.healthController.changeHealth(-25);
+        enemy.healthController.changeHealth(-this.damage);
         // Animacion de ataque
         this.animator.playAttack();
     }

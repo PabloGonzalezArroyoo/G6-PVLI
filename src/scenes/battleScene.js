@@ -3,7 +3,7 @@
 import {Button} from '../button.js';
 import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
-import {Enemy1} from '../enemy.js'
+import {DrunkRuffian, StinkyPirate} from '../enemy.js'
 import DialogBox from '../dialogBox.js';;
 
 /**
@@ -47,7 +47,9 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('player_attack', 'assets/MariaPita/MariaPita_Attack.png', {frameWidth: 50, frameHeight: 32});
 
 		// Enemy (Animaciones)
-		this.load.spritesheet('enemy', 'assets/enemy.png', {frameWidth: 97, frameHeight: 97})
+		//this.load.spritesheet('enemy', 'assets/enemy.png', {frameWidth: 97, frameHeight: 97});
+		this.load.spritesheet('drunkRuffian', 'assets/enemies/rufianEmbriagado.png', {frameWidth: 32, frameHeight:32});
+		this.load.spritesheet('stinkyPirate', 'assets/enemies/pirataMaloliente.png', {frameWidth: 32, frameHeight:32});
 		// Descripcion
 		this.load.image('description', 'assets/Escenas/EscenaCombate/Descripcion.png');
 		// Acciones
@@ -70,10 +72,10 @@ export default class BattleScene extends Phaser.Scene {
 		var background = this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
 		// Maria Pita
-		this.player = new Player(this, 250, 475);
+		this.player = new Player(this, 250, 475, 25);
 			
 		//Enemy1
-		this.enemy = new Enemy1(this, 750, 200);
+		this.enemy = new DrunkRuffian(this, 750, 200);
 			
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);

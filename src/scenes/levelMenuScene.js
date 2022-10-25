@@ -46,18 +46,18 @@ export default class LevelMenuScene extends Phaser.Scene {
 		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 		
 		// Array con todos los niveles del juego
-		const levels = [new Level(this, 272, 527.5, 'level', 0, 1, 2, 1, 0, 0),		// Nivel 0
-				new Level(this, 354, 455.5, 'level',  0, 0, 0, 0, 0, 0),			// Nivel 1
-				new Level(this, 292, 363.5, 'level',  0, 0, 0, 0, 0, 0),			// ... 2
-				new Level(this, 405, 363.5, 'level',  0, 0, 0, 0, 0, 0),			// 3
-				new Level(this, 354, 271.5, 'level',  0, 0, 0, 0, 0, 0),			// 4
-				new Level(this, 507, 302, 'level',  0, 0, 0, 0, 0, 0),				// 5
-				new Level(this, 548, 394.5, 'level',  0, 0, 0, 0, 0, 0),			// 6
-				new Level(this, 589, 486.5, 'level',  0, 0, 0, 0, 0, 0),			// 7
-				new Level(this, 630, 353.5, 'level', 0, 0, 0, 0, 0, 0),				// 8
-				new Level(this, 610, 240.5, 'level', 0, 0, 0, 0, 0, 0),				// 9
-				new Level(this, 702, 261, 'level', 0, 0, 0, 0, 0, 0),				// 10
-				new Level(this, 814, 261, 'level',  0, 0, 0, 0, 0, 0)];				// 11
+		const levels = [new Level(this, 272, 527.5, 0, 1, 2, 1, [], []),	// Nivel 0
+				new Level(this, 354, 455.5, 0, 0, 0, 0, [], []),			// Nivel 1
+				new Level(this, 292, 363.5, 0, 0, 0, 0, [], []),			// ... 2
+				new Level(this, 405, 363.5, 0, 0, 0, 0, [], []),			// 3
+				new Level(this, 354, 271.5, 0, 0, 0, 0, [], []),			// 4
+				new Level(this, 507, 302, 0, 0, 0, 0, [], []),				// 5
+				new Level(this, 548, 394.5, 0, 0, 0, 0, [], []),			// 6
+				new Level(this, 589, 486.5, 0, 0, 0, 0, [], []),			// 7
+				new Level(this, 630, 353.5, 0, 0, 0, 0, [], []),			// 8
+				new Level(this, 610, 240.5, 0, 0, 0, 0, [], []),			// 9
+				new Level(this, 702, 261, 0, 0, 0, 0, [], []),				// 10
+				new Level(this, 814, 261, 0, 0, 0, 0, [], [])];				// 11
 
 		// Especificar los niveles que se desbloquean tras completarlo de cada nivel
 		levels[0].setNextLevels([levels[1]]);

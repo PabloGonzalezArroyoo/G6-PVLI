@@ -1,10 +1,12 @@
 export default class HealthController extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, maxHP) {
+        // Sprite en la UI
         super(scene, x, y, 'lifeBar');
-        this._maxHealth = maxHP;
-        this._currentHealth = maxHP;
         this.color = this.scene.add.image(x + 10, y, 'lifeBarColors', 3).setScale(40, 5);
         this.scene.add.existing(this).setScale(5, 5);
+        // Vida
+        this._maxHealth = maxHP;
+        this._currentHealth = maxHP;
     }
     
     changeHealth(value) {
@@ -18,6 +20,7 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             this.color.destroy();
             this._currentHealth = 0;
         }
+        // Ajustar sprite de barra de vida
         else {
             var cambio = false; var offsetX = 0; var frameNumber = 3; var scaleNumber = 40;
             switch (true) {
