@@ -74,8 +74,8 @@ export class Level/* extends Button */{
     // Cambia el sprite según el estado del nivel
     changeSpriteState(state) {
         this.defaultFrame = state * 3;
-        this.frameOnDown = state * 3;
-        this.frameOnOver = state * 3;
+        this.frameOnOver = state * 3 + 1;
+        this.frameOnDown = state * 3 + 2;
     }
 
     // No sé si funciona este método pero sería graciosísimo que sí
