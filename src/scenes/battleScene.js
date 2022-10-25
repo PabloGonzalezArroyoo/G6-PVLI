@@ -6,6 +6,15 @@ import Player from '../player.js';
 import {DrunkRuffian, StinkyPirate} from '../enemy.js'
 import DialogBox from '../dialogBox.js';;
 
+const levelCompleted = function(enemies){
+	let completado = true;
+	let i = 0;
+	while (i < enemies.length){
+		if (enemies[i].healthController.getCurrentHealth() > 0) completado = false;
+		i++;
+	}
+	return completado;
+}
 /**
  * Escena de Batalla.
  * @extends Phaser.Scene
@@ -22,6 +31,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.state = 0;
 		this.isBusy = false;
 
+		this.level;
 		this.enemies;
 		this.loot;
 	}
@@ -30,9 +40,10 @@ export default class BattleScene extends Phaser.Scene {
 	 * Inicializa variables
 	 * - Cargar nivel seleccionado
 	*/
-	init(enemies, loot) {
-		this.enemies = enemies;
-		this.loot = loot;
+	init(level) {
+		this.level = level;
+		this.enemies = level.enemies;
+		this.loot = level.loot;
 	}
 
 	/**
@@ -127,6 +138,7 @@ export default class BattleScene extends Phaser.Scene {
 						this.player.attack(this.enemies[0]);
 						this.isBusy = true;
 						this.time.delayedCall(1000, ()=> {this.state = 3; this.isBusy = false;});
+						if (levelCompleted(this.enemies)) this.scene.start('levelMenuScene', this.level);
 					}
 				}
 				else if(this.state === 3){

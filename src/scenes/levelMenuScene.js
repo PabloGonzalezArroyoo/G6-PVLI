@@ -49,14 +49,9 @@ export default class LevelMenuScene extends Phaser.Scene {
 	/**
 	 * Actualizar niveles desbloqueados
 	*/
-	init(updateLevels, pos) {
-		// updateLevels = true;
-		// pos = 3;
-		levels[0].setCompleted();
-		levels[1].setCompleted();
-		if(updateLevels && pos !== undefined) {
-			// console.log(levels[pos].getNextLevels());
-			if(levels[pos].getNextLevels() !== null) levels[pos].setCompleted();
+	init(level) {
+		if(typeof(level) === 'object') {
+			level.setCompleted();
 		}
 	}
 

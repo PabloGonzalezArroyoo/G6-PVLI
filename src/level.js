@@ -31,7 +31,7 @@ export class Level/* extends Button */{
     }
 
     loadLevel(scene){
-        if (this.state !== State.locked) scene.scene.start('battleScene', this.enemies, this.loot);
+        if (this.state !== State.locked) scene.scene.start('battleScene', this);
     }
 
     setNextLevels(levels){
@@ -53,18 +53,6 @@ export class Level/* extends Button */{
     // devuelve los siguientes niveles del nivel pedido
     getNextLevels(){return this.nextLevels};
 
-    // método que determina si el nivel actual se ha completado o no y que cambia su state si se ha completado
-    completed(){
-        let complete = true;
-        let i = 0;
-        while (i < this.enemies.length && complete){
-            if (this.enemies[i].getCurrentHealth() > 0) complete = false;
-            i++;
-        }
-        if (complete) this.setCompleted();
-        return complete;
-    }
-
     // Marca el nivel como desbloqueado y cambia el sprite
     setUnlocked() {
         this.state = State.unlocked;
@@ -75,7 +63,7 @@ export class Level/* extends Button */{
     setCompleted() {
         this.state = State.complete;
         this.changeSpriteState(this.state);
-        this.unlockNextLevels();
+        if (this.getNextLevels() !== null) this.unlockNextLevels();
     }
 
     // Cambia el sprite según el estado del nivel

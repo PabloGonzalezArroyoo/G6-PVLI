@@ -41,7 +41,7 @@ export default class TitleScene extends Phaser.Scene {
 
 		// Botón "JUGAR"
 		var self = this;
-		var boton = new Button(this, 514, 690,'play', 0, 1, 2, function(){self.scene.start('levelMenuScene')});
+		var boton = new Button(this, 514, 690,'play', 0, 1, 2, function(){self.scene.start('levelMenuScene', -1)});
 		boton.setScale(5, 5);
 
 		//Para seleccionar botones con teclas, creamos el objeto tecla
