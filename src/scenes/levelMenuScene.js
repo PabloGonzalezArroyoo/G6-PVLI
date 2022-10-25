@@ -5,18 +5,18 @@ import {DrunkRuffian, StinkyPirate} from '../enemy.js'
 //import { Scene } from 'phaser';
 
 // Array con todos los niveles del juego
-const levels = [new Level(null, 272, 527.5, 0, 1, 2, 1, [new DrunkRuffian(null, 720, 200)], []), // Nivel 0
-				new Level(null, 354, 455.5, 0, 0, 0, 0, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], []), // Nivel 1
-				new Level(null, 292, 363.5, 0, 0, 0, 0, [], []),			// ... 2
-				new Level(null, 405, 363.5, 0, 0, 0, 0, [], []),			// 3
-				new Level(null, 354, 271.5, 0, 0, 0, 0, [], []),			// 4
-				new Level(null, 507, 302, 0, 0, 0, 0, [], []),				// 5
-				new Level(null, 548, 394.5, 0, 0, 0, 0, [], []),			// 6
-				new Level(null, 589, 486.5, 0, 0, 0, 0, [], []),			// 7
-				new Level(null, 630, 353.5, 0, 0, 0, 0, [], []),			// 8
-				new Level(null, 610, 240.5, 0, 0, 0, 0, [], []),			// 9
-				new Level(null, 702, 261, 0, 0, 0, 0, [], []),				// 10
-				new Level(null, 814, 261, 0, 0, 0, 0, [], [])];				// 11
+const levels = [new Level(null, 272, 527.5, 1, [new DrunkRuffian(null, 720, 200)], []), // Nivel 0
+				new Level(null, 354, 455.5, 0, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], []), // Nivel 1
+				new Level(null, 292, 363.5, 0, [], []),			// ... 2
+				new Level(null, 405, 363.5, 0, [], []),			// 3
+				new Level(null, 354, 271.5, 0, [], []),			// 4
+				new Level(null, 507, 302, 0, [], []),				// 5
+				new Level(null, 548, 394.5, 0, [], []),			// 6
+				new Level(null, 589, 486.5, 0, [], []),			// 7
+				new Level(null, 630, 353.5, 0, [], []),			// 8
+				new Level(null, 610, 240.5, 0, [], []),			// 9
+				new Level(null, 702, 261, 0, [], []),				// 10
+				new Level(null, 814, 261, 0, [], [])];				// 11
 
 				// Especificar los niveles que se desbloquean tras completarlo de cada nivel
 				levels[0].setNextLevels([levels[1]]);
@@ -52,6 +52,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 	init(updateLevels, pos) {
 		// updateLevels = true;
 		// pos = 3;
+		levels[0].setCompleted();
+		levels[1].setCompleted();
 		if(updateLevels && pos !== undefined) {
 			// console.log(levels[pos].getNextLevels());
 			if(levels[pos].getNextLevels() !== null) levels[pos].setCompleted();

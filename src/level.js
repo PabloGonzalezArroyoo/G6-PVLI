@@ -8,14 +8,17 @@ const State = {
 }
 
 export class Level/* extends Button */{
-    constructor(scene, x, y, defaultFrame, frameOnOver, frameOnDown, state, enemies, loot) {
-        if (scene !== null) this.button = new Button(scene, x, y, 'level', defaultFrame + state * 3, frameOnOver + state * 3, frameOnDown + state * 3, function(){scene.scene.start('battleScene', enemies, loot)});
+    constructor(scene, x, y, state, enemies, loot) {
+        this.defaultFrame = 0 + state * 3;
+        this.frameOnOver = 1 + state * 3;
+        this.frameOnDown = 2 + state * 3;
+        if (scene !== null){
+            let self = this;
+            this.button = new Button(scene, x, y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){self.loadLevel(scene)});
+        } 
         else {
             this.button = null;
             this.x = x; this.y = y;
-            this.defaultFrame = defaultFrame + state * 3;
-            this.frameOnOver = frameOnOver + state * 3;
-            this.frameOnDown = frameOnDown + state * 3;
         }
         this.state = state; // valor que indica si el nivel está bloqueado, desbloqueado o completado
         this.loot = loot; // array con todos los posibles items que dar al jugador al completar el nivel
@@ -24,7 +27,11 @@ export class Level/* extends Button */{
 
     setScene(scene) {
         let self = this;
-        this.button = new Button(scene, this.x, this.y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){scene.scene.start('battleScene', self.enemies, self.loot);});
+        this.button = new Button(scene, this.x, this.y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){self.loadLevel(scene)});
+    }
+
+    loadLevel(scene){
+        if (this.state !== State.locked) scene.scene.start('battleScene', this.enemies, this.loot);
     }
 
     setNextLevels(levels){
@@ -73,9 +80,9 @@ export class Level/* extends Button */{
 
     // Cambia el sprite según el estado del nivel
     changeSpriteState(state) {
-        this.defaultFrame = state * 3;
-        this.frameOnOver = state * 3 + 1;
-        this.frameOnDown = state * 3 + 2;
+        this.defaultFrame = this.defaultFrame % 3 + state * 3;
+        this.frameOnOver = this.frameOnOver % 3 + state * 3;
+        this.frameOnDown = this.frameOnDown % 3 + state * 3;
     }
 
     // No sé si funciona este método pero sería graciosísimo que sí
