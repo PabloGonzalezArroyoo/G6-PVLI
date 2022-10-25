@@ -14,6 +14,7 @@ export class Enemy extends Character {
         // Animacion de ataque
         //this.animator.playAttack();
     }
+    getAnimator(){return this.animator;}
 }
 
 // Enemigo 1

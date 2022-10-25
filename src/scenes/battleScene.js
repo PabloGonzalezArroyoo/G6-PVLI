@@ -21,14 +21,18 @@ export default class BattleScene extends Phaser.Scene {
 		this.previousLetterTime = 0;
 		this.state = 0;
 		this.isBusy = false;
+
+		this.enemies;
+		this.loot;
 	}
 
 	/**
 	 * Inicializa variables
 	 * - Cargar nivel seleccionado
 	*/
-	init() {
-
+	init(enemies, loot) {
+		this.enemies = enemies;
+		this.loot = loot;
 	}
 
 	/**
@@ -76,6 +80,7 @@ export default class BattleScene extends Phaser.Scene {
 			
 		//Enemy1
 		this.enemy = new DrunkRuffian(this, 750, 200);
+		//for (let i = 0; i < this.enemies.length; i++) this.scene.add.existing(this.enemies[i].getAnimator())
 			
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);
