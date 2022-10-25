@@ -5,6 +5,7 @@ import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
 import {DrunkRuffian, StinkyPirate} from '../enemy.js'
 import DialogBox from '../dialogBox.js';;
+import { keyboard } from '../keyboard_input.js';
 
 /**
  * Escena de Batalla.
@@ -88,10 +89,11 @@ export default class BattleScene extends Phaser.Scene {
 		var cuadroAcciones = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
 		
 		// Interactivo
-		var botonAtaque = new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {this.state = 1});
-		var botonDefensa = new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, function() {this.player.defense()});
-		var botonObjetos = new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, function() {this.player.objects()});
-		var botonQueLocura = new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, function() {this.player.quelocura()});
+		this.botones=[new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {this.state = 1}),
+		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, function() {this.player.objects()}),
+		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, function() {this.player.defense()}),
+		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, function() {this.player.quelocura()})];
+		 this._keyboard=new keyboard(this,this.botones);
 
 
 		// Transicion escena
@@ -103,6 +105,7 @@ export default class BattleScene extends Phaser.Scene {
 	update(t,dt) {
 		super.update(t,dt);
 		this.previousLetterTime += dt; //Contador del tiempo transcurrido desde la ultima letra
+		this._keyboard.processInput();
 
 		//Si apasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
 		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){

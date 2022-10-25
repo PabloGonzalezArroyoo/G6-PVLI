@@ -1,6 +1,7 @@
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
 import { Level } from '../level.js';
+import { keyboard } from '../keyboard_input.js';
 //import { Scene } from 'phaser';
 
 /**
@@ -46,37 +47,36 @@ export default class LevelMenuScene extends Phaser.Scene {
 		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 		
 		// Array con todos los niveles del juego
-		const levels = [new Level(this, 272, 527.5, 0, 1, 2, 1, [], []),	// Nivel 0
-				new Level(this, 354, 455.5, 0, 0, 0, 0, [], []),			// Nivel 1
-				new Level(this, 292, 363.5, 0, 0, 0, 0, [], []),			// ... 2
-				new Level(this, 405, 363.5, 0, 0, 0, 0, [], []),			// 3
-				new Level(this, 354, 271.5, 0, 0, 0, 0, [], []),			// 4
-				new Level(this, 507, 302, 0, 0, 0, 0, [], []),				// 5
-				new Level(this, 548, 394.5, 0, 0, 0, 0, [], []),			// 6
-				new Level(this, 589, 486.5, 0, 0, 0, 0, [], []),			// 7
-				new Level(this, 630, 353.5, 0, 0, 0, 0, [], []),			// 8
-				new Level(this, 610, 240.5, 0, 0, 0, 0, [], []),			// 9
-				new Level(this, 702, 261, 0, 0, 0, 0, [], []),				// 10
-				new Level(this, 814, 261, 0, 0, 0, 0, [], [])];				// 11
+		this. levels = [new Level(this, 272, 527.5, 'level', 0, 1, 2, 1, 0, 0),		// Nivel 0
+				new Level(this, 354, 455.5, 'level',  0, 0, 0, 0, 0, 0),			// Nivel 1
+				new Level(this, 292, 363.5, 'level',  0, 0, 0, 0, 0, 0),			// ... 2
+				new Level(this, 405, 363.5, 'level',  0, 0, 0, 0, 0, 0),			// 3
+				new Level(this, 354, 271.5, 'level',  0, 0, 0, 0, 0, 0),			// 4
+				new Level(this, 507, 302, 'level',  0, 0, 0, 0, 0, 0),				// 5
+				new Level(this, 548, 394.5, 'level',  0, 0, 0, 0, 0, 0),			// 6
+				new Level(this, 589, 486.5, 'level',  0, 0, 0, 0, 0, 0),			// 7
+				new Level(this, 630, 353.5, 'level', 0, 0, 0, 0, 0, 0),				// 8
+				new Level(this, 610, 240.5, 'level', 0, 0, 0, 0, 0, 0),				// 9
+				new Level(this, 702, 261, 'level', 0, 0, 0, 0, 0, 0),				// 10
+				new Level(this, 814, 261, 'level',  0, 0, 0, 0, 0, 0)];				// 11
 
 		// Especificar los niveles que se desbloquean tras completarlo de cada nivel
-		levels[0].setNextLevels([levels[1]]);
-		levels[1].setNextLevels([levels[2], levels[3]]);
-		levels[2].setNextLevels(null);
-		levels[3].setNextLevels([levels[4], levels[5], levels[6]]);
-		levels[4].setNextLevels(null);
-		levels[5].setNextLevels(null);
-		levels[6].setNextLevels([levels[7], levels[8]]);
-		levels[7].setNextLevels(null);
-		levels[8].setNextLevels([levels[9], levels[10]]);
-		levels[9].setNextLevels(null);
-		levels[10].setNextLevels([levels[11]]);
-		levels[11].setNextLevels(null);
+		this.levels[0].setNextLevels([this.levels[1]]);
+		this.levels[1].setNextLevels([this.levels[2], this.levels[3]]);
+		this.levels[2].setNextLevels(null);
+		this.levels[3].setNextLevels([this.levels[4], this.levels[5], this.levels[6]]);
+		this.levels[4].setNextLevels(null);
+		this.levels[5].setNextLevels(null);
+		this.levels[6].setNextLevels([this.levels[7], this.levels[8]]);
+		this.levels[7].setNextLevels(null);
+		this.levels[8].setNextLevels([this.levels[9], this.levels[10]]);
+		this.levels[9].setNextLevels(null);
+		this.levels[10].setNextLevels([this.levels[11]]);
+		this.levels[11].setNextLevels(null);
+		this._keyboard=new keyboard(this,this.levels);
 
-		//Para seleccionar botones con teclas, creamos el objeto tecla
-		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
-		//var Esc = this.scene.input.keyboard.addKeys('ESC,X');
-		//var Enter = this.scene.input.keyboard.addKeys('ENTER,Z')
+		//Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
+
 		
 		//Ejemplo: Al pulsar la flecha izquierda
 		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
@@ -95,9 +95,11 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// this.add.text(width * 0.5, height * 0.5, 'Level Menu Scene', {})
         // .setOrigin(0.5);
-
 		this.input.keyboard.once('keydown-SPACE', () => {
             this.scene.start('battleScene');
         });
+	}
+	update() {
+		this._keyboard.processInput();
 	}
 }
