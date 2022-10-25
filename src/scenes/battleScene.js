@@ -79,8 +79,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.player = new Player(this, 250, 475, 25);
 			
 		//Enemy1
-		this.enemy = new DrunkRuffian(this, 750, 200);
-		//for (let i = 0; i < this.enemies.length; i++) this.scene.add.existing(this.enemies[i].getAnimator())
+		//this.enemy = new DrunkRuffian(this, 750, 200);
+		this.enemies.forEach(enemy => enemy.setScene(this));
 			
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);
@@ -124,7 +124,7 @@ export default class BattleScene extends Phaser.Scene {
 				}
 				else if(this.state === 2){
 					if(!this.isBusy){
-						this.player.attack(this.enemy);
+						this.player.attack(this.enemies[0]);
 						this.isBusy = true;
 						this.time.delayedCall(1000, ()=> {this.state = 3; this.isBusy = false;});
 					}
@@ -136,7 +136,7 @@ export default class BattleScene extends Phaser.Scene {
 				}
 				else if(this.state === 4){
 					if(!this.isBusy){
-						this.enemy.attack(this.player);
+						this.enemies[0].attack(this.player);
 						this.isBusy = true;
 						this.time.delayedCall(1000, ()=> {this.state = 0; this.isBusy = false;});
 					}

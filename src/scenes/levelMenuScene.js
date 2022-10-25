@@ -47,7 +47,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 		
 		// Array con todos los niveles del juego
-		const levels = [new Level(this, 272, 527.5, 0, 1, 2, 1, [/*new DrunkRuffian(Phaser.Scene.getScene('battleScene'), 750, 200)*/], []),	// Nivel 0
+		const levels = [new Level(this, 272, 527.5, 0, 1, 2, 1, [new DrunkRuffian(null, 720, 200)], []),	// Nivel 0
 				new Level(this, 354, 455.5, 0, 0, 0, 0, [], []),			// Nivel 1
 				new Level(this, 292, 363.5, 0, 0, 0, 0, [], []),			// ... 2
 				new Level(this, 405, 363.5, 0, 0, 0, 0, [], []),			// 3
