@@ -4,6 +4,8 @@ import { Button } from '../button.js';
 import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
 import {Enemy1} from '../enemy.js';
+import { keyboard } from '../keyboard_input.js';
+import phaser from '../lib/phaser.js';
 //import Button from '../button.js';
 
 /**
@@ -82,9 +84,10 @@ export default class BattleScene extends Phaser.Scene {
 		new Button(this, 375, 697, 'boton', 0, 0, 0, function() {player.quelocura()})]; //boton ¡QUE LOCURA!
 		/*this.lastMousePositionX= game.input.mousePointer.x;
 		this.lastMousePositionY=game.input.mousePointer.y;*/
-		this.beingUsed=0;
+		/*this.beingUsed=0;
 	    this.inputTeclas=false;
-	    this.flechas = this.input.keyboard.addKeys('left, up, right, down, enter');
+	    this.flechas = this.input.keyboard.addKeys('left, up, right, down, enter');*/
+		this._keyboardInput= new keyboard(this,this.botones);
 
 		var textoAcciones = this.add.image(0, 0, 'textoAcciones').setOrigin(0, 0);
 
@@ -96,55 +99,6 @@ export default class BattleScene extends Phaser.Scene {
 
 	update() { 
 
-
-		if(this.flechas.left.isDown&&(this.beingUsed===1||this.beingUsed===3))
-		{
-			this.inputTeclas=true;
-			this.botones[this.beingUsed].onPointerOut();
-			this.beingUsed-=1;
-			this.botones[this.beingUsed].onOver();
-			console.log('funciona izquierda');
-		}
-		
-		else if(this.flechas.right.isDown&&(this.beingUsed===0||this.beingUsed===2))
-		{
-			this.inputTeclas=true;
-			this.botones[this.beingUsed].onPointerOut();
-			this.beingUsed+=1;
-			this.botones[this.beingUsed].onOver();
-			console.log('funciona derecha');
-		}
-		else if(this.flechas.down.isDown&&this.beingUsed+2<=3)
-		{
-			this.inputTeclas=true;
-			this.botones[this.beingUsed].onPointerOut();
-			this.beingUsed+=2;
-			this.botones[this.beingUsed].onOver();
-			console.log('funciona abajo');
-		}
-		else if(this.flechas.up.isDown&&this.beingUsed-2>=0)
-		{
-			this.inputTeclas=true;
-			this.botones[this.beingUsed].onPointerOut();
-			this.beingUsed-=2;
-			this.botones[this.beingUsed].onOver();
-			console.log('funciona arriba');
-		}
-		else if(this.flechas.enter.isDown)
-		{
-			this.botones[this.beingUsed].onReleaseClick();
-			console.log('Funciona enter');
-		}
-
-		/*if(inputTeclas===true && (game.input.mousePointer.x!=lastMousePositionX||game.input.mousePointer.y!=lastMousePositionY))
-		{
-			inputTeclas=false;
-			for(var i=0;i<4;i++)
-			{
-				botones[i].OnPointerOut();
-			}
-		}*/
-		console.log(this.beingUsed);
-
+		this._keyboardInput.procesInput();
 	}
 }

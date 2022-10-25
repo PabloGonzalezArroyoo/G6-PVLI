@@ -1,6 +1,7 @@
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
 import { Level } from '../level.js';
+import { keyboard } from '../keyboard_input.js';
 //import { Scene } from 'phaser';
 
 /**
@@ -74,9 +75,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.levels[11].setNextLevels(null);
 
 		//Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
-		this.beingUsed=0;
-	    this.inputTeclas=false;
-	    this.flechas = this.input.keyboard.addKeys('left, right, enter');
 
 		
 		//Ejemplo: Al pulsar la flecha izquierda
@@ -96,43 +94,12 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// this.add.text(width * 0.5, height * 0.5, 'Level Menu Scene', {})
         // .setOrigin(0.5);
-
+		this._keyboard=new keyboard (this,this.levels)
 		this.input.keyboard.once('keydown-SPACE', () => {
             this.scene.start('battleScene');
         });
 	}
 	update() {
-		if(Phaser.Input.Keyboard.JustDown(this.flechas.left)&& this.beingUsed-1>=0)
-		{
-			this.inputTeclas=true;
-			this.levels[this.beingUsed].onPointerOut();
-			this.beingUsed-=1;
-			this.levels[this.beingUsed].onOver();
-			console.log('funciona izquierda');
-		}
-		
-		else if(Phaser.Input.Keyboard.JustDown(this.flechas.right)&&this.beingUsed+1<this.levels.length)
-		{
-			this.inputTeclas=true;
-			this.levels[this.beingUsed].onPointerOut();
-			this.beingUsed+=1;
-			this.levels[this.beingUsed].onOver();
-			console.log('funciona derecha');
-		}
-		else if(this.flechas.enter.isDown)
-		{
-			this.levels[this.beingUsed].onReleaseClick();
-			console.log('Funciona enter');
-		}
-		//Cuando se mueva el raton, todo lo hecho por teclas se deshace (no funciona)
-		/*if(inputTeclas===true && (game.input.mousePointer.x!=lastMousePositionX||game.input.mousePointer.y!=lastMousePositionY))
-		{
-			inputTeclas=false;
-			for(var i=0;i<4;i++)
-			{
-				botones[i].OnPointerOut();
-			}
-		}*/
-		console.log(this.beingUsed);
+		this._keyboard.procesInput();
 	}
 }
