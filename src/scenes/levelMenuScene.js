@@ -2,21 +2,22 @@
 import Phaser from '../lib/phaser.js';
 import { Level } from '../level.js';
 import {DrunkRuffian, StinkyPirate} from '../enemy.js'
+import { keyboard } from '../keyboard_input.js';
 //import { Scene } from 'phaser';
 
 // Array con todos los niveles del juego
-const levels = [new Level(null, 272, 527.5, 1, [new DrunkRuffian(null, 720, 200)], []), // Nivel 0
-				new Level(null, 354, 455.5, 0, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], []), // Nivel 1
-				new Level(null, 292, 363.5, 0, [], []),			// ... 2
-				new Level(null, 405, 363.5, 0, [], []),			// 3
-				new Level(null, 354, 271.5, 0, [], []),			// 4
-				new Level(null, 507, 302, 0, [], []),				// 5
-				new Level(null, 548, 394.5, 0, [], []),			// 6
-				new Level(null, 589, 486.5, 0, [], []),			// 7
-				new Level(null, 630, 353.5, 0, [], []),			// 8
-				new Level(null, 610, 240.5, 0, [], []),			// 9
-				new Level(null, 702, 261, 0, [], []),				// 10
-				new Level(null, 814, 261, 0, [], [])];				// 11
+const levels = [new Level(null, 272, 527.5, 1, [new DrunkRuffian(null, 720, 200)], [], function(){}), // Nivel 0
+				new Level(null, 354, 455.5, 0, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], [], function(){}), // Nivel 1
+				new Level(null, 292, 363.5, 0, [], [], function(){}),			// ... 2
+				new Level(null, 405, 363.5, 0, [], [], function(){}),			// 3
+				new Level(null, 354, 271.5, 0, [], [], function(){}),			// 4
+				new Level(null, 507, 302, 0, [], [], function(){}),				// 5
+				new Level(null, 548, 394.5, 0, [], [], function(){}),			// 6
+				new Level(null, 589, 486.5, 0, [], [], function(){}),			// 7
+				new Level(null, 630, 353.5, 0, [], [], function(){}),			// 8
+				new Level(null, 610, 240.5, 0, [], [], function(){}),			// 9
+				new Level(null, 702, 261, 0, [], [], function(){}),				// 10
+				new Level(null, 814, 261, 0, [], [], function(){})];				// 11
 
 				// Especificar los niveles que se desbloquean tras completarlo de cada nivel
 				levels[0].setNextLevels([levels[1]]);
@@ -75,14 +76,16 @@ export default class LevelMenuScene extends Phaser.Scene {
 		//Pintar el mapa de fondo
 		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 		
+		this._keyboard=new keyboard(this);
+		//Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
+		this._keyboard.loadButtonArray(levels);
+		var self=this;
+    let i = 0;
 		levels.forEach(level => {
-			level.setScene(this);
+			level.setScene(this, function(){self._keyboard.setBeingUsed(i)});
+      i++;
 		});
 
-		//Para seleccionar botones con teclas, creamos el objeto tecla
-		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
-		//var Esc = this.scene.input.keyboard.addKeys('ESC,X');
-		//var Enter = this.scene.input.keyboard.addKeys('ENTER,Z')
 		
 		//Ejemplo: Al pulsar la flecha izquierda
 		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
@@ -98,12 +101,14 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		const width = this.scale.width;
         const height = this.scale.height;
-
+		 
 		// this.add.text(width * 0.5, height * 0.5, 'Level Menu Scene', {})
         // .setOrigin(0.5);
-
 		this.input.keyboard.once('keydown-SPACE', () => {
             this.scene.start('battleScene');
         });
+	}
+	update() {
+		this._keyboard.processInput();  
 	}
 }

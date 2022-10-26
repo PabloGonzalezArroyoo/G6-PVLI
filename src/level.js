@@ -8,13 +8,13 @@ const State = {
 }
 
 export class Level/* extends Button */{
-    constructor(scene, x, y, state, enemies, loot) {
+    constructor(scene, x, y, state, enemies, loot, functionOnOver) {
         this.defaultFrame = 0 + state * 3;
         this.frameOnOver = 1 + state * 3;
         this.frameOnDown = 2 + state * 3;
         if (scene !== null){
             let self = this;
-            this.button = new Button(scene, x, y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){self.loadLevel(scene)});
+            this.button = new Button(scene, x, y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){self.loadLevel(scene)}, functionOnOver);
         } 
         else {
             this.button = null;
@@ -25,9 +25,9 @@ export class Level/* extends Button */{
         this.enemies = enemies; // array con todos los enemigos del nivel
     }
 
-    setScene(scene) {
+    setScene(scene, functionOnOver) {
         let self = this;
-        this.button = new Button(scene, this.x, this.y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){self.loadLevel(scene)});
+        this.button = new Button(scene, this.x, this.y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){self.loadLevel(scene)}, functionOnOver);
     }
 
     loadLevel(scene){
