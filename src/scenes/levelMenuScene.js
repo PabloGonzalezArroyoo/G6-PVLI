@@ -46,20 +46,22 @@ export default class LevelMenuScene extends Phaser.Scene {
 		//Pintar el mapa de fondo
 		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 		
+		this._keyboard=new keyboard(this);
+		var self=this;
 		// Array con todos los niveles del juego
-		this. levels = [new Level(this, 272, 527.5, 'level', 0, 1, 2, 1, 0, 0),		// Nivel 0
-				new Level(this, 354, 455.5, 'level',  0, 0, 0, 0, 0, 0),			// Nivel 1
-				new Level(this, 292, 363.5, 'level',  0, 0, 0, 0, 0, 0),			// ... 2
-				new Level(this, 405, 363.5, 'level',  0, 0, 0, 0, 0, 0),			// 3
-				new Level(this, 354, 271.5, 'level',  0, 0, 0, 0, 0, 0),			// 4
-				new Level(this, 507, 302, 'level',  0, 0, 0, 0, 0, 0),				// 5
-				new Level(this, 548, 394.5, 'level',  0, 0, 0, 0, 0, 0),			// 6
-				new Level(this, 589, 486.5, 'level',  0, 0, 0, 0, 0, 0),			// 7
-				new Level(this, 630, 353.5, 'level', 0, 0, 0, 0, 0, 0),				// 8
-				new Level(this, 610, 240.5, 'level', 0, 0, 0, 0, 0, 0),				// 9
-				new Level(this, 702, 261, 'level', 0, 0, 0, 0, 0, 0),				// 10
-				new Level(this, 814, 261, 'level',  0, 0, 0, 0, 0, 0)];				// 11
-
+		this. levels = [new Level(this, 272, 527.5, 'level', 0, 1, 2, 1, 0,function(){self._keyboard.setBeingUsed(0)}),		// Nivel 0
+				new Level(this, 354, 455.5, 'level',  0, 0, 0, 0, 0, 0,function(){self._keyboard.setBeingUsed(1)}),			// Nivel 1
+				new Level(this, 292, 363.5, 'level',  0, 0, 0, 0, 0, 0,function(){self._keyboard.setBeingUsed(2)}),			// ... 2
+				new Level(this, 405, 363.5, 'level',  0, 0, 0, 0, 0, 0,function(){self._keyboard.setBeingUsed(3)}),			// 3
+				new Level(this, 354, 271.5, 'level',  0, 0, 0, 0, 0, 0,function(){self._keyboard.setBeingUsed(4)}),			// 4
+				new Level(this, 507, 302, 'level',  0, 0, 0, 0, 0, 0,function(){self._keyboard.setBeingUsed(5)}),				// 5
+				new Level(this, 548, 394.5, 'level',  0, 0, 0, 0, 0, 0,function(){self._keyboard.setBeingUsed(6)}),			// 6
+				new Level(this, 589, 486.5, 'level',  0, 0, 0, 0, 0, 0,function(){self._keyboard.setBeingUsed(7)}),			// 7
+				new Level(this, 630, 353.5, 'level', 0, 0, 0, 0, 0, 0,function(){self._keyboard.setBeingUsed(8)}),				// 8
+				new Level(this, 610, 240.5, 'level', 0, 0, 0, 0, 0, 0,function(){self._keyboard.setBeingUsed(9)}),				// 9
+				new Level(this, 702, 261, 'level', 0, 0, 0, 0, 0, 0,function(){self._keyboard.setBeingUsed(10)}),				// 10
+				new Level(this, 814, 261, 'level',  0, 0, 0, 0, 0, 0,function(){self._keyboard.setBeingUsed(11)})];				// 11
+		this._keyboard.loadButtonArray(this.levels);
 		// Especificar los niveles que se desbloquean tras completarlo de cada nivel
 		this.levels[0].setNextLevels([this.levels[1]]);
 		this.levels[1].setNextLevels([this.levels[2], this.levels[3]]);
@@ -73,8 +75,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.levels[9].setNextLevels(null);
 		this.levels[10].setNextLevels([this.levels[11]]);
 		this.levels[11].setNextLevels(null);
-		this._keyboard=new keyboard(this,this.levels);
-
 		//Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
 
 		
@@ -92,7 +92,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		const width = this.scale.width;
         const height = this.scale.height;
-
+		 
 		// this.add.text(width * 0.5, height * 0.5, 'Level Menu Scene', {})
         // .setOrigin(0.5);
 		this.input.keyboard.once('keydown-SPACE', () => {
@@ -100,6 +100,6 @@ export default class LevelMenuScene extends Phaser.Scene {
         });
 	}
 	update() {
-		this._keyboard.processInput();
+		this._keyboard.processInput();  
 	}
 }
