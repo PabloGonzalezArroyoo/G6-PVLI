@@ -89,13 +89,13 @@ export default class BattleScene extends Phaser.Scene {
 		var cuadroAcciones = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
 		
 		// Interactivo
-		this.botones=[new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {this.state = 1}),
-		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, function() {this.player.objects()}),
-		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, function() {this.player.defense()}),
-		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, function() {this.player.quelocura()})];
-		 this._keyboard=new keyboard(this,this.botones);
-
-
+		var self= this;
+		this._keyboard=new keyboard(this);
+		this.botones=[new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {this.state = 1},function(){self._keyboard.setBeingUsed(0)}),
+		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, function() {this.player.objects()},function(){self._keyboard.setBeingUsed(1)}),
+		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, function() {this.player.defense()},function(){self._keyboard.setBeingUsed(2)}),
+		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, function() {this.player.quelocura()},function(){self._keyboard.setBeingUsed(3)})];
+		this._keyboard.loadButtonArray(this.botones);
 		// Transicion escena
 		this.input.keyboard.once('keydown-SPACE', () => {
             this.scene.start('optionsScene');

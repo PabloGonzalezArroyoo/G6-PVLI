@@ -8,8 +8,8 @@ const State = {
 }
 
 export class Level extends Button {
-    constructor(scene, x, y, defaultFrame, frameOnOver, frameOnDown, state, loot, enemies) {
-        super(scene, x, y, 'level', defaultFrame + state * 3, frameOnOver + state * 3, frameOnDown + state * 3, function(){scene.scene.start('battleScene')});
+    constructor(scene, x, y, defaultFrame, frameOnOver, frameOnDown, state, loot, enemies,functionOnOver) {
+        super(scene, x, y, 'level', defaultFrame + state * 3, frameOnOver + state * 3, frameOnDown + state * 3, function(){scene.scene.start('battleScene')},functionOnOver);
         this._state = state; // valor que indica si el nivel está bloqueado, desbloqueado o completado
         this._loot = loot; // array con todos los posibles items que dar al jugador al completar el nivel
         this._enemies = enemies; // array con todos los enemigos del nivel
