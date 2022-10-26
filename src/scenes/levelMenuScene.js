@@ -92,7 +92,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		const width = this.scale.width;
         const height = this.scale.height;
-
+		 
 		// this.add.text(width * 0.5, height * 0.5, 'Level Menu Scene', {})
         // .setOrigin(0.5);
 		this.input.keyboard.once('keydown-SPACE', () => {
@@ -100,6 +100,6 @@ export default class LevelMenuScene extends Phaser.Scene {
         });
 	}
 	update() {
-		this._keyboard.processInput();
+		this._keyboard.processInput();  
 	}
 }

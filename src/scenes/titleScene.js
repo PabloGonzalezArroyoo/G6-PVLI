@@ -43,7 +43,6 @@ export default class TitleScene extends Phaser.Scene {
 		var self = this;
 		var boton = new Button(this, 514, 690,'play', 0, 1, 2, function(){self.scene.start('levelMenuScene')});
 		boton.setScale(5, 5);
-
 		//Para seleccionar botones con teclas, creamos el objeto tecla
 		//var Enter = this.scene.input.keyboard.addKeys('ENTER,Z');
 		//En este caso, cualquiera de los objetos destacaria el boton y el enter lanzaria la escena de cinematica
