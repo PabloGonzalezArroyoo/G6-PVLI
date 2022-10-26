@@ -7,6 +7,15 @@ import {DrunkRuffian, StinkyPirate} from '../enemy.js'
 import DialogBox from '../dialogBox.js';;
 import { keyboard } from '../keyboard_input.js';
 
+const levelCompleted = function(enemies){
+	let completado = true;
+	let i = 0;
+	while (i < enemies.length){
+		if (enemies[i].healthController.getCurrentHealth() > 0) completado = false;
+		i++;
+	}
+	return completado;
+}
 /**
  * Escena de Batalla.
  * @extends Phaser.Scene
@@ -22,14 +31,22 @@ export default class BattleScene extends Phaser.Scene {
 		this.previousLetterTime = 0;
 		this.state = 0;
 		this.isBusy = false;
+
+		this.level;
+		this.enemies;
+		this.loot;
 	}
 
 	/**
 	 * Inicializa variables
 	 * - Cargar nivel seleccionado
 	*/
-	init() {
-
+	init(level) {
+		this.level = level;
+		this.enemies = level.enemies;
+		this.loot = level.loot;
+		this.state  = 0;
+		this.isBusy = false;
 	}
 
 	/**
@@ -76,7 +93,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.player = new Player(this, 250, 475, 25);
 			
 		//Enemy1
-		this.enemy = new DrunkRuffian(this, 750, 200);
+		//this.enemy = new DrunkRuffian(this, 750, 200);
+		this.enemies.forEach(enemy => enemy.setScene(this));
 			
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);
@@ -114,6 +132,8 @@ export default class BattleScene extends Phaser.Scene {
 		}
 
 		if(this.state >= 0){
+			// console.log(this.state);
+			// console.log(this.isBusy);
 			if(!this.dialogBox.isWritting){
 				if(this.state === 1){
 					this.dialogBox.clearText();
@@ -122,9 +142,10 @@ export default class BattleScene extends Phaser.Scene {
 				}
 				else if(this.state === 2){
 					if(!this.isBusy){
-						this.player.attack(this.enemy);
+						this.player.attack(this.enemies[0]);
 						this.isBusy = true;
 						this.time.delayedCall(1000, ()=> {this.state = 3; this.isBusy = false;});
+						if (levelCompleted(this.enemies)) this.scene.start('levelMenuScene', this.level);
 					}
 				}
 				else if(this.state === 3){
@@ -134,7 +155,7 @@ export default class BattleScene extends Phaser.Scene {
 				}
 				else if(this.state === 4){
 					if(!this.isBusy){
-						this.enemy.attack(this.player);
+						this.enemies[0].attack(this.player);
 						this.isBusy = true;
 						this.time.delayedCall(1000, ()=> {this.state = 0; this.isBusy = false;});
 					}

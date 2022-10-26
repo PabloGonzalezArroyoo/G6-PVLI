@@ -7,60 +7,70 @@ const State = {
     complete: 2
 }
 
-export class Level extends Button {
-    constructor(scene, x, y, defaultFrame, frameOnOver, frameOnDown, state, loot, enemies,functionOnOver) {
-        super(scene, x, y, 'level', defaultFrame + state * 3, frameOnOver + state * 3, frameOnDown + state * 3, function(){scene.scene.start('battleScene')},functionOnOver);
-        this._state = state; // valor que indica si el nivel está bloqueado, desbloqueado o completado
-        this._loot = loot; // array con todos los posibles items que dar al jugador al completar el nivel
-        this._enemies = enemies; // array con todos los enemigos del nivel
+export class Level/* extends Button */{
+    constructor(scene, x, y, state, enemies, loot, functionOnOver) {
+        this.defaultFrame = 0 + state * 3;
+        this.frameOnOver = 1 + state * 3;
+        this.frameOnDown = 2 + state * 3;
+        if (scene !== null){
+            let self = this;
+            this.button = new Button(scene, x, y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){self.loadLevel(scene)}, functionOnOver);
+        } 
+        else {
+            this.button = null;
+            this.x = x; this.y = y;
+        }
+        this.state = state; // valor que indica si el nivel está bloqueado, desbloqueado o completado
+        this.loot = loot; // array con todos los posibles items que dar al jugador al completar el nivel
+        this.enemies = enemies; // array con todos los enemigos del nivel
+    }
+
+    setScene(scene, functionOnOver) {
+        let self = this;
+        this.button = new Button(scene, this.x, this.y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){self.loadLevel(scene)}, functionOnOver);
+    }
+
+    loadLevel(scene){
+        if (this.state !== State.locked) scene.scene.start('battleScene', this);
     }
 
     setNextLevels(levels){
-        this._nextLevels = levels;
+        this.nextLevels = levels;
     }
 
     unlockNextLevels(){
-        for(let i = 0; i < this._nextLevels.length; i++){
-            this._nextLevels[i].setUnlocked();
+        for(let i = 0; i < this.nextLevels.length; i++){
+            this.nextLevels[i].setUnlocked();
         }
     }
 
     // devuelve el estado actual del nivel
-    getState(){return this._state;}
+    getState(){return this.state;}
 
     // devuelve el enemigo pedido
-    getEnemy(i){return this._enemies[i];}
+    getEnemy(i){return this.enemies[i];}
 
-    // método que determina si el nivel actual se ha completado o no y que cambia su state si se ha completado
-    completed(){
-        let complete = true;
-        let i = 0;
-        while (i < this._enemies.length && complete){
-            if (_this.enemies[i].getCurrentHealth() > 0) complete = false;
-            i++;
-        }
-        if (complete) this.setCompleted();
-        return complete;
-    }
+    // devuelve los siguientes niveles del nivel pedido
+    getNextLevels(){return this.nextLevels};
 
     // Marca el nivel como desbloqueado y cambia el sprite
     setUnlocked() {
-        this._state = State.unlocked;
-        this.changeSpriteState(this._state);
+        this.state = State.unlocked;
+        this.changeSpriteState(this.state);
     }
 
     // Marca el nivel como completado y cambia el sprite
     setCompleted() {
-        this._state = State.complete;
-        this.changeSpriteState(this._state);
-        this.unlockNextLevels();
+        this.state = State.complete;
+        this.changeSpriteState(this.state);
+        if (this.getNextLevels() !== null) this.unlockNextLevels();
     }
 
     // Cambia el sprite según el estado del nivel
     changeSpriteState(state) {
-        this._defaultFrame += state * 3;
-        this._frameOnDown += state * 3;
-        this._frameOnOver += state * 3;
+        this.defaultFrame = this.defaultFrame % 3 + state * 3;
+        this.frameOnOver = this.frameOnOver % 3 + state * 3;
+        this.frameOnDown = this.frameOnDown % 3 + state * 3;
     }
 
     // No sé si funciona este método pero sería graciosísimo que sí
