@@ -1,4 +1,4 @@
-![ImagenLogo](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/logo.png)
+![ImagenLogo](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/logo.png)
 
 # Maria Pita's Revenge (A Vinganza de Maria Pita) - Pantheon Studios
 
@@ -31,7 +31,7 @@ La vida siempre será de 100 puntos, mientras que la defensa y el ataque depende
 El objetivo del juego es animar al jugador a pensar en cada movimiento que haga para poder avanzar, desarrollando una estrategia que le permita llegar al final y pasarse el juego. 
 También se busca un grado de acción y tensión al poner al jugador frente a combates de dificultad moderada.
 
-![ImagenDinamica](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/dinamica.png)
+![ImagenDinamica](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/dinamica.png)
 
 Al jugador se le dará la oportunidad de rejugar niveles que ya haya pasado para obtener más objetos y armás que se adapten más a su estilo de combate. Junto a esto, los enemigos formarán parte fundamental de la experiencia de juego, ya que habrá enemigos variados con habilidades diferentes y que serán reconocibles por el jugador, permitiendo a este formar una estrategia teniendo en cuenta estos enemigos y formar una lista de prioridades a la hora de atacar y defender.
 
@@ -103,14 +103,19 @@ En 1589, los ingleses llegan a A Coruña bajo la orden de atacar el reino. Duran
 ### En combate
 Los combates serán en un entorno estático. Se verá de la siguiente forma:
 
-![ImagenDiagramaCombate](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/combate.jpg)
+![ImagenDiagramaCombate](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/combate.jpg)
 
 El HUD mostrará la vida restante de los enemigos y del jugador, así como un cuadro con diálogos, un botón de ataque, un botón para la acción de defensa, un botón para la acción de ¡Qué locura! (el cual se activará cuando esta esté disponible) y un botón para acceder al menú de objetos (donde se podrá elegir qué objeto usar).
 
 ### Entre combates
 Para ir de combate a combate, el jugador debe navegar a través de un mapa de puntos (estilo árbol). Cada punto del mapa se desbloquea de forma progresiva según se vaya avanzando en los combates, habiendo bifurcaciones por el camino con más combates.
 
-![ImagenDiagramaMapa](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/mapa.jpg)
+![ImagenDiagramaMapa](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/mapa.jpg)
+
+### Inventario
+Para ver el inventario de objetos, se hará click en un botón predeterminado para desplegarlo de forma que el jugador podrá ver el arma actual que está usando (cuadro columna izquierda), otras armas (cuadro superior columna derecha), la comida (cuadro inferior columna derecha) y la información del objeto seleccionado (cuadro inferior).
+
+![ImagenDiagramaMapa](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/inventario.jpeg)
 
 ## 7. Visual
 Toda la estética será Pixel Art con entidades de juego de tipo Chibi.
@@ -121,16 +126,16 @@ Finalmente, en momentos críticos del juego habrá animaciones.
 
 Imágenes de referencia:
 
-![ImagenMariaPita](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/mariaPita.png)
+![ImagenMariaPita](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/mariaPita.png)
 *Referencia de sprites, María Pita - Maria Pita's Revenge (2022). Pantheon Studios.*
 
-![ImagenRefBatalla](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/pokemon.png)
+![ImagenRefBatalla](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/pokemon.png)
 *Referencia de batalla - Pokemon Diamante y Perla (2007). Nintendo.*
 
-![ImagenRefDialogo](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/animalCrossing.png)
+![ImagenRefDialogo](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/animalCrossing.png)
 *Referencia de diálogos - Animal Crossing New Horizons (2022). Nintendo.*
 
-![ImagenRefBotones](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/finalFantasy.png)
+![ImagenRefBotones](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/finalFantasy.png)
 *Referencia de botones - Final Fantasy 7 (1997). Square Enix.*
 
 ## 8. Menús y flujo del juego
@@ -141,7 +146,7 @@ El jugador podrá acceder a los siguientes menús:
 - Inventario (objetos)
 
 La estructura del juego contendrá varias escenas que contribuirán al flujo del juego, y el flujo entre ellas será el siguiente:
-![ImagenFlujo](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/GDD/assets/gdd/escenas.png)
+![ImagenFlujo](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/escenas.png)
 
 ## 9. Referencias
 - *Pokemon.* (1996). The Pokemon Company.
