@@ -29,7 +29,7 @@ export class Level/* extends Button */{
         let self = this;
         this.button = new Button(scene, this.x, this.y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){self.loadLevel(scene)}, functionOnOver);
     }
-
+ 
     loadLevel(scene){
         if (this.state !== State.locked) scene.scene.start('battleScene', this);
     }

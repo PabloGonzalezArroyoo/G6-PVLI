@@ -14,6 +14,7 @@ export class keyboard
     loadButtonArray(arrayBotones)
     {
         this._buttonArray=arrayBotones;
+        console.log(this._buttonArray);
     }
     setBeingUsed(position)
     {

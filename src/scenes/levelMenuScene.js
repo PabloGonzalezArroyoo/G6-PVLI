@@ -17,7 +17,7 @@ const levels = [new Level(null, 272, 527.5, 1, [new DrunkRuffian(null, 720, 200)
 				new Level(null, 630, 353.5, 0, [], [], function(){}),			// 8
 				new Level(null, 610, 240.5, 0, [], [], function(){}),			// 9
 				new Level(null, 702, 261, 0, [], [], function(){}),				// 10
-				new Level(null, 814, 261, 0, [], [], function(){})];				// 11
+				new Level(null, 814, 261, 0, [], [], function(){})];			// 11
 
 				// Especificar los niveles que se desbloquean tras completarlo de cada nivel
 				levels[0].setNextLevels([levels[1]]);
@@ -77,14 +77,21 @@ export default class LevelMenuScene extends Phaser.Scene {
 		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 		
 		this._keyboard=new keyboard(this);
+			
 		//Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
-		this._keyboard.loadButtonArray(levels);
 		var self=this;
     let i = 0;
+	var buttons = [];
 		levels.forEach(level => {
 			level.setScene(this, function(){self._keyboard.setBeingUsed(i)});
-      i++;
+			buttons[i] = level.button;
+      		i++;
 		});
+		
+		//console.log(this.buttons);
+		
+		this._keyboard.loadButtonArray(buttons);
+		
 
 		
 		//Ejemplo: Al pulsar la flecha izquierda
