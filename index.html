@@ -8,13 +8,15 @@
 	<!-- Título de la web e icono -->
 	<title>La venganza de María Pita</title>
 	<link rel="icon" type="image/x-icon" href="assets/webImg/flagIcon.ico">
+	<script 
+        src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js">
+    </script>
 
 	<!-- Fuentes -->
 	<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 
 	<!-- Referencias a otros archivos de código -->
 	<link rel="stylesheet" href="src/styles.css">
-	<script type="module" src="./src/index.js" ></script>
 </head>
 
 <!-- Cuerpo -->
@@ -29,7 +31,8 @@
 
 		<!-- Canvas del juego -->
 		<div class="canvas">
-			<canvas id="canvas"></canvas>/>
+			<script type="module" src="src/index.js" ></script>
+			<canvas id="juego"></canvas>
 		</div>
 
 		<div><br><br></div>
