@@ -14,7 +14,7 @@ vida de las tropas inglesas hasta llegar a este alférez.
 [Insertar capturas del juego]
 
 
-[Click aquí para ver nuestro juego en proceso](http://mariapitasrevenge.github.io.com/)
+[Click aquí para ver nuestro juego en proceso](https://pablogonzalezarroyoo.github.io/G6-PVLI/)
 
 - [GitHub](https://github.com/PabloGonzalezArroyoo/G6-PVLI)
 - [Trello](https://trello.com/b/BRKb6DoV/g6-pvli)
