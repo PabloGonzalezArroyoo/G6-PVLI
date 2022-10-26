@@ -44,6 +44,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.level = level;
 		this.enemies = level.enemies;
 		this.loot = level.loot;
+		this.state  = 0;
+		this.isBusy = false;
 	}
 
 	/**
@@ -127,6 +129,8 @@ export default class BattleScene extends Phaser.Scene {
 		}
 
 		if(this.state >= 0){
+			// console.log(this.state);
+			// console.log(this.isBusy);
 			if(!this.dialogBox.isWritting){
 				if(this.state === 1){
 					this.dialogBox.clearText();
