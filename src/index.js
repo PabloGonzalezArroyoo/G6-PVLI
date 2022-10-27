@@ -43,6 +43,6 @@ let config = {
 new Phaser.Game(config);
 
 //Carga la fuente de texto
-var newFont = new FontFace('Silkscreen', `url(assets/Silkscreen-Regular.ttf)`);
+var newFont = new FontFace('Silkscreen', 'url(assets/Silkscreen-Regular.ttf)');
 newFont.load().then(function (loaded) {
 document.fonts.add(loaded); })

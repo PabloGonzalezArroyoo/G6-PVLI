@@ -22,11 +22,11 @@ export default class TitleScene extends Phaser.Scene {
 	 */
 	preload(){
 		// Imagen fondo y logo
-		this.load.image('background', 'assets/Escenas/escenaTitleScreen/titleBackground.png');
+		this.load.image('background', 'assets/scenes/title/titleBackground.png');
 		this.load.image('title','assets/MariaPitasRevenge.png');
 
 		// Imagen de botones
-		this.load.spritesheet('play', 'assets/Escenas/escenaTitleScreen/botonJugar.png', {frameWidth: 37, frameHeight: 14});
+		this.load.spritesheet('play', 'assets/scenes/title/playButton.png', {frameWidth: 37, frameHeight: 14});
 	}
 
 	/**

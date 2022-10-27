@@ -1,9 +1,8 @@
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
 import { Level } from '../level.js';
-import {DrunkRuffian, StinkyPirate} from '../enemy.js'
-import { keyboard } from '../keyboard_input.js';
-//import { Scene } from 'phaser';
+import { DrunkRuffian, StinkyPirate } from '../enemy.js'
+import { keyboard } from '../keyboardInput.js';
 
 // Array con todos los niveles del juego
 const levels = [new Level(null, 272, 527.5, 1, [new DrunkRuffian(null, 720, 200)], [], function(){}), // Nivel 0
@@ -19,7 +18,7 @@ const levels = [new Level(null, 272, 527.5, 1, [new DrunkRuffian(null, 720, 200)
 				new Level(null, 702, 261, 0, [], [], function(){}),				// 10
 				new Level(null, 814, 261, 0, [], [], function(){})];			// 11
 
-				// Especificar los niveles que se desbloquean tras completarlo de cada nivel
+				// Especificar los niveles que se desbloquean tras completar cada nivel
 				levels[0].setNextLevels([levels[1]]);
 				levels[1].setNextLevels([levels[2], levels[3]]);
 				levels[2].setNextLevels(null);
@@ -63,10 +62,10 @@ export default class LevelMenuScene extends Phaser.Scene {
 	 */
 	preload(){
 		// Fondo
-		this.load.image('levelMap', 'assets/Escenas/escenaLevelMenu/mapa.png');
+		this.load.image('levelMap', 'assets/scenes/levelsMenu/emptyMap.png');
 		
 		// Imagen de botones
-		this.load.spritesheet('level', 'assets/Escenas/escenaLevelMenu/nivel.png', {frameWidth: 51, frameHeight: 51});
+		this.load.spritesheet('level', 'assets/scenes/levelsMenu/levelsButtons.png', {frameWidth: 51, frameHeight: 51});
 	}
 
 	/**
@@ -76,23 +75,20 @@ export default class LevelMenuScene extends Phaser.Scene {
 		//Pintar el mapa de fondo
 		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 		
-		this._keyboard=new keyboard(this);
-			
-		//Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
+		this._keyboard = new keyboard(this);
+
+		// Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
 		var self=this;
-    let i = 0;
-	var buttons = [];
+    	let i = 0;
+		var buttons = [];
 		levels.forEach(level => {
 			level.setScene(this, function(){self._keyboard.setBeingUsed(i)});
 			buttons[i] = level.button;
       		i++;
 		});
-		
 		//console.log(this.buttons);
 		
 		this._keyboard.loadButtonArray(buttons);
-		
-
 		
 		//Ejemplo: Al pulsar la flecha izquierda
 		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });

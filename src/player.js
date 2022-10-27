@@ -10,7 +10,7 @@ export default class Player extends Character {
     }
 
     attack(enemy){
-        //console.log("ATAQUE");
+        console.log("ATAQUE");
         // Le baja vida al enemigo
         enemy.healthController.changeHealth(-this.damage);
         // Animacion de ataque
@@ -19,16 +19,13 @@ export default class Player extends Character {
 
     defense(){
         console.log("DEFENSA");
-        
     }
 
     objects(){
         console.log("OBJECTS");
-
     }
 
     quelocura(){
         console.log("QUELOCURA");
-
     }
 }

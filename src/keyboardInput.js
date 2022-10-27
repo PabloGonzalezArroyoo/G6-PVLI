@@ -11,15 +11,21 @@ export class keyboard
         this._cursorPositionX=scene.input.mousePointer.x;
         this._cursorPositionY=scene.input.mousePointer.y;
     }
+
+    // Asigna el array de botones que habrá en la escena
     loadButtonArray(arrayBotones)
     {
         this._buttonArray=arrayBotones;
         console.log(this._buttonArray);
     }
+
+    // Marca qué botón de qué posición está siendo usado
     setBeingUsed(position)
     {
         this.beingUsed=position;
     }
+
+    // Procesa el input
     processInput()
     {
         var self=this;
@@ -38,12 +44,11 @@ export class keyboard
             self._cursorPositionX=self._scene.input.mousePointer.x;
             self._cursorPositionY=self._scene.input.mousePointer.y;
         })
+
         if(this.inputKeyboard&&(this._cursorPositionX!=this._scene.input.mousePointer.x||this._cursorPositionY!=this._scene.input.mousePointer.y))
         {
             for(var i=0;i<self._buttonArray.length;i++)self._buttonArray[i].onPointerOut();
             this.inputKeyboard=false;
         }
     }
-		
-
 }

@@ -115,7 +115,7 @@ Para ir de combate a combate, el jugador debe navegar a través de un mapa de pu
 ### Inventario
 Para ver el inventario de objetos, se hará click en un botón predeterminado para desplegarlo de forma que el jugador podrá ver el arma actual que está usando (cuadro columna izquierda), otras armas (cuadro superior columna derecha), la comida (cuadro inferior columna derecha) y la información del objeto seleccionado (cuadro inferior).
 
-![ImagenDiagramaMapa](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/inventario.jpeg)
+![ImagenDiagramaInventario](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/inventario.jpeg)
 
 ## 7. Visual
 Toda la estética será Pixel Art con entidades de juego de tipo Chibi.

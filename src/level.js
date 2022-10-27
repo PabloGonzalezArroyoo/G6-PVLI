@@ -25,19 +25,23 @@ export class Level/* extends Button */{
         this.enemies = enemies; // array con todos los enemigos del nivel
     }
 
+    // Da los valores necesarios al objeto para poder funcionar siendo incializados antes de crear la escena
     setScene(scene, functionOnOver) {
         let self = this;
         this.button = new Button(scene, this.x, this.y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){self.loadLevel(scene)}, functionOnOver);
     }
- 
+    
+    // Carga el nivel si no está bloqueado
     loadLevel(scene){
         if (this.state !== State.locked) scene.scene.start('battleScene', this);
     }
 
+    // Asigna al array de siguientes niveles los correspondientes
     setNextLevels(levels){
         this.nextLevels = levels;
     }
 
+    // Desbloquea los siguientes niveles
     unlockNextLevels(){
         for(let i = 0; i < this.nextLevels.length; i++){
             this.nextLevels[i].setUnlocked();

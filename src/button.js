@@ -1,4 +1,4 @@
-import { keyboard } from "./keyboard_input.js";
+import { keyboard } from "./keyboardInput.js";
 export class Button extends Phaser.GameObjects.Sprite {
     // Recibe escena y posicion en ella, spritesheet y posiciones dentro del archivo de cada estado, y la funcion que se hace al click
     constructor(scene, x, y, spriteSheet, defaultFrame, frameOnOver, frameOnDown, functionToDo,functiononOver) {
