@@ -11,8 +11,9 @@ vida de las tropas inglesas hasta llegar a este alférez.
 
 #### Capturas del juego
 
-[Insertar capturas del juego]
-
+![PantallaDeTitulo](https://cdn.discordapp.com/attachments/403552979589791746/1035166109646725140/Pantalla_de_titulo.png)
+![MenuNiveles](https://cdn.discordapp.com/attachments/403552979589791746/1035166109315371098/Escena_mapa.png)
+![EscenaBatalla](https://cdn.discordapp.com/attachments/403552979589791746/1035166108975644774/Escena_de_batalla.png)
 
 [Click aquí para ver nuestro juego en proceso](https://pablogonzalezarroyoo.github.io/G6-PVLI/)
 
