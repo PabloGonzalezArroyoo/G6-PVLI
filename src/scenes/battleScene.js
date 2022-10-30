@@ -80,7 +80,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('botonQueLocura', 'assets/scenes/battle/queLocuraButton.png', {frameWidth: 241, frameHeight: 67});
 		
 		// Barra de vida
-		this.load.image('lifeBar', 'assets/ui/lifeBar38x8.png');
+		this.load.image('lifeBar', 'assets/ui/lifeBar38x8sinCorazon.png');
 		this.load.spritesheet('lifeBarColors', 'assets/ui/lifeBarColors16x4.png', {frameWidth: 4, frameHeight: 4});
 	}
 

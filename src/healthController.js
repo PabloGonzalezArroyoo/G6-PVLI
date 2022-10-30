@@ -1,46 +1,60 @@
 export default class HealthController extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, maxHP) {
+        /* Animación */
         // Sprite en la UI
         super(scene, x, y, 'lifeBar');
-        this.color = this.scene.add.image(x + 10, y, 'lifeBarColors', 3).setScale(40, 5);
+        // Escala inicial de la barra de color
+        this._scaleBar = 45;
+        // Divisiones de la barra de vida
+        this._healthDivider = maxHP / this._scaleBar;
+        // Añade barra de color escalada
+        this.color = this.scene.add.image(x, y, 'lifeBarColors', 3).setScale(this._scaleBar, 5);
+        // Añade cuadro de la barra
         this.scene.add.existing(this).setScale(5, 5);
-        // Vida
+
+        /* Lógica */
         this._maxHealth = maxHP;
         this._currentHealth = maxHP;
     }
     
     changeHealth(value) {
 
-        this._currentHealth += value;
-        
-        // MAXIMO
-        if (this._currentHealth > this._maxHealth) this._currentHealth = this._maxHealth; 
-        // MINIMO
-        else if (this._currentHealth <= 0) {
-            this.color.destroy();
-            this._currentHealth = 0;
-        }
-        // Ajustar sprite de barra de vida
-        else {
-            var cambio = false; var offsetX = 0; var frameNumber = 3; var scaleNumber = 40;
+        if (value != 0) {
+            /* Lógica */
+            this._currentHealth += value;
+            // MAXIMO
+            if (this._currentHealth > this._maxHealth) this._currentHealth = this._maxHealth; 
+            // MINIMO
+            else if (this._currentHealth <= 0) {
+                this.color.destroy();
+                this._currentHealth = 0;
+            }
+
+            /* Animación */
+            var frameNumber = 3;
             switch (true) {
+                // Colores
                 case this._currentHealth <= 75 && this._currentHealth > 50: {
-                    cambio = true; frameNumber = 2; scaleNumber = 30; break;
+                    frameNumber = 2; break;
                 } 
                 case this._currentHealth <= 50 && this._currentHealth > 25: {
-                    cambio = true; offsetX = 25; frameNumber = 1; scaleNumber = 20; break;
+                    frameNumber = 1; break;
                 }
                 case this._currentHealth <= 25 && this._currentHealth > 0: {
-                    cambio = true; offsetX = 45; frameNumber = 0; scaleNumber = 10; break;
+                    frameNumber = 0; break;
                 }
             }
-        
-            if (cambio) {
-                this.color.destroy();
-                this.color = this.scene.add.image(this.x - offsetX, this.y, 'lifeBarColors', frameNumber).setScale(scaleNumber, 5);
-                this.scene.add.image(this.x, this.y, 'lifeBar').setScale(5, 5);
-                cambio = false;
-            }
+            // Destruye la barra de color anterior
+            this.color.destroy();
+            // Calcula la nueva escala de la barra de color
+            this._scaleBar += value / this._healthDivider;
+            // Añade la barra de color
+            this.color = this.scene.add.image(this.x, this.y, 'lifeBarColors', frameNumber).setScale(this._scaleBar, 5);
+            // Añade el cuadro de la barra
+            this.scene.add.image(this.x, this.y, 'lifeBar').setScale(5, 5);
+        }
+        else {
+            console.log("NO HA CAMBIADO LA VIDA")
         }
     }
 
