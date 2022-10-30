@@ -3,14 +3,21 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
         /* Animación */
         // Sprite en la UI
         super(scene, x, y, 'lifeBar');
+
+        // Escala inicial del cuadro de la barra
+        // **Cambiar este valor para aumentar/disminuir la escala de la barra de vida
+        this._scaleBarX = this._scaleBarY = 5;
         // Escala inicial de la barra de color
-        this._scaleBar = 45;
+        this._scaleColorBarX = this._scaleBarX * 9;
+        this._scaleColorBarY = this._scaleBarY;
+
         // Divisiones de la barra de vida
-        this._healthDivider = maxHP / this._scaleBar;
+        this._healthDivider = maxHP / this._scaleColorBarX;
+
         // Añade barra de color escalada
-        this.color = this.scene.add.image(x, y, 'lifeBarColors', 3).setScale(this._scaleBar, 5);
+        this.color = this.scene.add.image(x, y, 'lifeBarColors', 3).setScale(this._scaleColorBarX, this._scaleColorBarY);
         // Añade cuadro de la barra
-        this.scene.add.existing(this).setScale(5, 5);
+        this.scene.add.existing(this).setScale(this._scaleBarX, this._scaleBarY);
 
         /* Lógica */
         this._maxHealth = maxHP;
@@ -47,11 +54,11 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             // Destruye la barra de color anterior
             this.color.destroy();
             // Calcula la nueva escala de la barra de color
-            this._scaleBar += value / this._healthDivider;
+            this._scaleColorBarX += value / this._healthDivider;
             // Añade la barra de color
-            this.color = this.scene.add.image(this.x, this.y, 'lifeBarColors', frameNumber).setScale(this._scaleBar, 5);
+            this.color = this.scene.add.image(this.x, this.y, 'lifeBarColors', frameNumber).setScale(this._scaleColorBarX, this._scaleColorBarY);
             // Añade el cuadro de la barra
-            this.scene.add.image(this.x, this.y, 'lifeBar').setScale(5, 5);
+            this.scene.add.image(this.x, this.y, 'lifeBar').setScale(this._scaleBarX, this._scaleBarY);
         }
         else {
             console.log("NO HA CAMBIADO LA VIDA")
