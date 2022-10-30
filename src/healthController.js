@@ -14,8 +14,11 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
         // Divisiones de la barra de vida
         this._healthDivider = maxHP / this._scaleColorBarX;
 
+        // Offset para la barra de color
+        this._offsetX = 0;
+
         // Añade barra de color escalada
-        this.color = this.scene.add.image(x, y, 'lifeBarColors', 3).setScale(this._scaleColorBarX, this._scaleColorBarY);
+        this.color = this.scene.add.image(x + this._offsetX, y, 'lifeBarColors', 3).setScale(this._scaleColorBarX, this._scaleColorBarY);
         // Añade cuadro de la barra
         this.scene.add.existing(this).setScale(this._scaleBarX, this._scaleBarY);
 
@@ -53,10 +56,14 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             }
             // Destruye la barra de color anterior
             this.color.destroy();
+
+            // Calcula la nueva posición X de la barra de color
+            this._offsetX += value / this._scaleColorBarX;
             // Calcula la nueva escala de la barra de color
             this._scaleColorBarX += value / this._healthDivider;
+            
             // Añade la barra de color
-            this.color = this.scene.add.image(this.x, this.y, 'lifeBarColors', frameNumber).setScale(this._scaleColorBarX, this._scaleColorBarY);
+            this.color = this.scene.add.image(this.x + this._offsetX, this.y, 'lifeBarColors', frameNumber).setScale(this._scaleColorBarX, this._scaleColorBarY);
             // Añade el cuadro de la barra
             this.scene.add.image(this.x, this.y, 'lifeBar').setScale(this._scaleBarX, this._scaleBarY);
         }
