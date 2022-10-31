@@ -6,21 +6,22 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
 
         // Escala inicial del cuadro de la barra
         // **Cambiar este valor para aumentar/disminuir la escala de la barra de vida
-        this._scaleBarX = this._scaleBarY = 5;
+        this._barDisplaySizeX = 120;
+        this._barDisplaySizeY = 25;
         // Escala inicial de la barra de color
-        this._scaleColorBarX = this._scaleBarX * 9;
-        this._scaleColorBarY = this._scaleBarY;
+        this._colorBarDisplaySizeX = this._barDisplaySizeX - 6;
+        this._colorBarDisplaySizeY = this._barDisplaySizeY - 12;
 
         // Divisiones de la barra de vida
-        this._healthDivider = maxHP / this._scaleColorBarX;
+        this._healthDivider = maxHP / this._colorBarDisplaySizeX;
 
         // Offset para la barra de color
         this._offsetX = 0;
 
         // Añade barra de color escalada
-        this.color = this.scene.add.image(x + this._offsetX, y, 'lifeBarColors', 3).setScale(this._scaleColorBarX, this._scaleColorBarY);
+        this.color = this.scene.add.image(x + this._offsetX, y, 'lifeBarColors', 3).setDisplaySize(this._colorBarDisplaySizeX, this._colorBarDisplaySizeY);
         // Añade cuadro de la barra
-        this.scene.add.existing(this).setScale(this._scaleBarX, this._scaleBarY);
+        this.scene.add.existing(this).setDisplaySize(this._barDisplaySizeX, this._barDisplaySizeY);
 
         /* Lógica */
         this._maxHealth = maxHP;
@@ -57,15 +58,18 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             // Destruye la barra de color anterior
             this.color.destroy();
 
-            // Calcula la nueva posición X de la barra de color
-            this._offsetX += value / this._scaleColorBarX;
-            // Calcula la nueva escala de la barra de color
-            this._scaleColorBarX += value / this._healthDivider;
+            /* CALCULOS */
+            // Calcula cuantos pixeles se deben quitar/poner
+            var pix = value / this._healthDivider;
+            // La posicion X para la barra de color debe ir acumulando esos pixeles/2 ya que se quita por ambos lados
+            this._offsetX += pix / 2;
+            // El tamaño X para la barra de color debe ir acumulando esos pixeles
+            this._colorBarDisplaySizeX += pix;
             
             // Añade la barra de color
-            this.color = this.scene.add.image(this.x + this._offsetX, this.y, 'lifeBarColors', frameNumber).setScale(this._scaleColorBarX, this._scaleColorBarY);
+            this.color = this.scene.add.image(this.x + this._offsetX, this.y, 'lifeBarColors', frameNumber).setDisplaySize(this._colorBarDisplaySizeX, this._colorBarDisplaySizeY);
             // Añade el cuadro de la barra
-            this.scene.add.image(this.x, this.y, 'lifeBar').setScale(this._scaleBarX, this._scaleBarY);
+            this.scene.add.image(this.x, this.y, 'lifeBar').setDisplaySize(this._barDisplaySizeX, this._barDisplaySizeY);
         }
         else {
             console.log("NO HA CAMBIADO LA VIDA")
