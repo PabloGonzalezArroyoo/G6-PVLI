@@ -47,7 +47,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.level = level;
 		this.enemies = level.enemies;
 		this.loot = level.loot;
-		this.state  = 0;
+		this.state  = 'Waitting';
 		this.isBusy = false;
 	}
 
@@ -111,7 +111,7 @@ export default class BattleScene extends Phaser.Scene {
 		// Interactivo
 		var self = this;
 		this._keyboard = new keyboard(this);
-		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {this.state = 1},function(){self._keyboard.setBeingUsed(0)}),
+		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {if(this.state === 'Waitting')this.state = 'PlayerDescription'},function(){self._keyboard.setBeingUsed(0)}),
 		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, function() {self.player.objects()},function(){self._keyboard.setBeingUsed(1)}),
 		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, function() {self.player.defense()},function(){self._keyboard.setBeingUsed(2)}),
 		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, function() {self.player.quelocura()},function(){self._keyboard.setBeingUsed(3)})];
@@ -134,35 +134,31 @@ export default class BattleScene extends Phaser.Scene {
 			this.previousLetterTime = 0;
 		}
 
-		// Si está en el estado de empezar un turno
-		if(this.state >= 0){
+		// Si no está esperando a que el jugador seleccione una opción
+		if(this.state !== 'Waitting'){
 			// console.log(this.state);
 			// console.log(this.isBusy);
-			if(!this.dialogBox.isWritting){ 											// Si no se está escribiendo en el cuadro de texto
-				if(this.state === 1){ 													// Si Maria Pita decide atacar
-					this.dialogBox.clearText();											// Borrar texto previo
-					this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');		// Enviar el nuevo texto
-					this.state = 2;														// Pasar al estado de ataque de Maria Pita
+			if(!this.dialogBox.isWritting && !this.isBusy){ 														// Si no se está escribiendo en el cuadro de texto
+				if(this.state === 'PlayerDescription'){ 															// Si Maria Pita decide atacar
+					this.dialogBox.clearText();																		// Borrar texto previo
+					this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');									// Enviar el nuevo texto
+					this.state = 'PlayerTurn';																		// Pasar al estado de ataque de Maria Pita
 				}
-				else if(this.state === 2){												// Si Maria Pita ha empezado a atacar
-					if(!this.isBusy){													// Si no se está realizando el ataque ya
-						this.player.attack(this.enemies[0]);							// Atacar al enemigo correspondiente	
-						this.isBusy = true;												// Marcar que se está realizando el ataque
-						this.time.delayedCall(1000, ()=> {this.state = 3; this.isBusy = false;}); // Después de un tiempo, cambiar de estado al ataque enemigo
-						if (levelCompleted(this.enemies)) this.scene.start('levelMenuScene', this.level); // Comprobar si se completa el nivel
+				else if(this.state === 'PlayerTurn'){																// Si Maria Pita ha empezado a atacar
+						this.player.attack(this.enemies[0]);														// Atacar al enemigo correspondiente	
+						this.isBusy = true;																			// Marcar que se está realizando el ataque
+						this.time.delayedCall(1000, ()=> {this.state = 'EnemyDescription'; this.isBusy = false;}); 	// Después de un tiempo, cambiar de estado al ataque enemigo
+						if (levelCompleted(this.enemies)) this.scene.start('levelMenuScene', this.level); 			// Comprobar si se completa el nivel
 					}
+				else if(this.state === 'EnemyDescription'){															// Si el enemigo va a tacar
+					this.dialogBox.clearText();																		// Borrar texto previo
+					this.dialogBox.setTextToDisplay('Enemigo ataca a Maria Pita');									// Enviar el nuevo texto
+					this.state = 'EnemyTurn';																		// Pasar al estado de ataque de Enemigo
 				}
-				else if(this.state === 3){												// Si el enemigo va a tacar
-					this.dialogBox.clearText();											// Borrar texto previo
-					this.dialogBox.setTextToDisplay('Enemigo ataca a Maria Pita');		// Enviar el nuevo texto
-					this.state = 4;														// Pasar al estado de ataque de Enemigo
-				}
-				else if(this.state === 4){												// Si el enemigo ha empezado a atacar
-					if(!this.isBusy){													// Si no se está realizando el ataque ya
-						this.enemies[0].attack(this.player);							// Enemigo correspondiente ataca a Maria Pita
-						this.isBusy = true;												// Marcar que se está realizando el ataque 
-						this.time.delayedCall(1000, ()=> {this.state = 0; this.isBusy = false;}); // Después de un tiempo, cambiar de estado al siguiente turno
-					}
+				else if(this.state === 'EnemyTurn'){																// Si el enemigo ha empezado a atacar
+						this.enemies[0].attack(this.player);														// Enemigo correspondiente ataca a Maria Pita
+						this.isBusy = true;																			// Marcar que se está realizando el ataque 
+						this.time.delayedCall(1000, ()=> {this.state = 'Waitting'; this.isBusy = false;}); 			// Después de un tiempo, cambiar de estado al siguiente turno
 				}
 			}
 		}
