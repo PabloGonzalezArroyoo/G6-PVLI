@@ -3,6 +3,7 @@ import Phaser from '../lib/phaser.js';
 import { Level } from '../level.js';
 import { DrunkRuffian, StinkyPirate } from '../enemy.js'
 import { keyboard } from '../keyboardInput.js';
+import { Button } from '../button.js';
 
 // Array con todos los niveles del juego
 const levels = [new Level(null, 272, 527.5, 1, [new DrunkRuffian(null, 720, 200)], [], function(){}), // Nivel 0
@@ -66,6 +67,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 		
 		// Imagen de botones
 		this.load.spritesheet('level', 'assets/scenes/levelsMenu/levelsButtons.png', {frameWidth: 51, frameHeight: 51});
+		this.load.spritesheet('inventory', 'assets/scenes/levelsMenu/inventoryButtons.png', {frameWidth: 30, frameHeight: 18});
 	}
 
 	/**
@@ -74,7 +76,12 @@ export default class LevelMenuScene extends Phaser.Scene {
 	create() {
 		//Pintar el mapa de fondo
 		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
-		
+
+		// Botón de inventario
+		var self = this;
+		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, function(){self.scene.start('inventoryScene', -1)}, function(){});
+		inventoryButton.setScale(3, 3);
+
 		this._keyboard = new keyboard(this);
 
 		// Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
