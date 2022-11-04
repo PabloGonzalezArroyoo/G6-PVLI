@@ -18,6 +18,10 @@ const levelCompleted = function(enemies){
 	return completado;
 }
 
+const levelFailed = function(player) {
+	if (player.healthController.getCurrentHealth() < 0) // TERMINAR
+}
+
 /**
  * Escena de Batalla.
  * @extends Phaser.Scene
