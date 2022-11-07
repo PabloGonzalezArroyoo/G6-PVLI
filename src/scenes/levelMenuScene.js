@@ -79,7 +79,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// Botón de inventario
 		var self = this;
-		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, function(){self.scene.start('inventoryScene', -1)}, function(){});
+		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, function(){self.scene.pause('levelMenuScene');self.scene.launch('inventoryScene', 'levelMenuScene')}, function(){});
 		inventoryButton.setScale(3, 3);
 
 		this._keyboard = new keyboard(this);

@@ -20,8 +20,8 @@ export default class InventoryScene extends Phaser.Scene {
 	 * Inicializa las variables
 	 * - Asignar si es inventario principal o de batalla
 	*/
-	init(){
-
+	init(previousSceneName){
+		this.previousSceneName = previousSceneName;
 	}
 
 	/**
@@ -30,7 +30,8 @@ export default class InventoryScene extends Phaser.Scene {
 	 * 		- Items
 	 */
 	preload(){
-		
+		// Fondo
+		this.load.image('inventoryBackground', 'assets/scenes/inventory/inventoryBackground.png');
 	}
 
 	/**
@@ -68,16 +69,16 @@ export default class InventoryScene extends Phaser.Scene {
 		const width = this.scale.width;
         const height = this.scale.height;
 
-		this.add.text(width * 0.5, height * 0.5, 'Inventory Scene', {})
-        .setOrigin(0.5);
+		var bg = this.add.image(0,0, 'inventoryBackground').setOrigin(0, 0);
+		bg.setDisplaySize(1024,768);
 
 		this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('cinematicScene');
+			this.scene.stop('inventoryScene');			//Para la escena de inventario
+            this.scene.resume(this.previousSceneName);	//Reanuda la escena anterior
         });
 
 	}
 
 	update() {
-
 	}
 }
