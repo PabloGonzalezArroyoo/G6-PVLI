@@ -3,7 +3,7 @@
 import {Button} from '../button.js';
 import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
-import {DrunkRuffian, StinkyPirate} from '../enemy.js'
+import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake }  from '../enemy.js'
 import DialogBox from '../dialogBox.js';;
 import { keyboard } from '../keyboardInput.js';
 
@@ -70,6 +70,10 @@ export default class BattleScene extends Phaser.Scene {
 		//this.load.spritesheet('enemy', 'assets/enemy.png', {frameWidth: 97, frameHeight: 97});
 		this.load.spritesheet('drunkRuffian', 'assets/characters/enemies/drunkRuffian.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('stinkyPirate', 'assets/characters/enemies/stinkyPirate.png', {frameWidth: 32, frameHeight:32});
+		this.load.spritesheet('scurviedSailor', 'assets/characters/enemies/scurviedSailor.png', {frameWidth: 32, frameHeight:32});
+		this.load.spritesheet('experiencedBuccaneer', 'assets/characters/enemies/experiencedBuccaneer.png', {frameWidth: 32, frameHeight:32});
+		this.load.spritesheet('alienatedCosair', 'assets/characters/enemies/alienatedCosair.png', {frameWidth: 32, frameHeight:32});
+		this.load.spritesheet('ensignDrake', 'assets/characters/enemies/ensignDrake.png', {frameWidth: 32, frameHeight:32});
 		// Descripcion
 		this.load.image('description', 'assets/scenes/battle/dialogBox.png');
 		// Acciones
@@ -159,8 +163,14 @@ export default class BattleScene extends Phaser.Scene {
 						this.enemies[0].attack(this.player);														// Enemigo correspondiente ataca a Maria Pita
 						this.isBusy = true;																			// Marcar que se está realizando el ataque 
 						this.time.delayedCall(1000, ()=> {this.state = 'Waitting'; this.isBusy = false;}); 			// Después de un tiempo, cambiar de estado al siguiente turno
+						this.updateTurn();
 				}
 			}
 		}
+	}
+
+	updateTurn(){
+		this.player.updateTurn();
+		this.enemies.forEach(enemy => enemy.updateTurn());
 	}
 }

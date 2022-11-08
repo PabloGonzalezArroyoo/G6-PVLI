@@ -28,4 +28,11 @@ export default class Player extends Character {
     quelocura(){
         console.log("QUELOCURA");
     }
+
+    receiveAttack(damage){
+        // guardar en esta variable el calculo del daño
+        let receivedDamage = damage;
+        this.healthController.changeHealth(-receivedDamage);
+        return receivedDamage;
+    }
 }
