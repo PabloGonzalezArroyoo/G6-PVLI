@@ -53,20 +53,31 @@ export default class InventoryScene extends Phaser.Scene {
 		this.inventory.addItem(1);
 		this.inventory.addItem(2);
 		this.inventory.addItem(3);
+		this.inventory.addItem(2);
+		this.inventory.addItem(2);
+		this.inventory.addItem(2);
+		this.inventory.addItem(2);
+		this.inventory.addItem(2);
 		// OBJETOS
+		this.inventory.addItem(4);
 		this.inventory.addItem(4);
 		this.inventory.addItem(5);
 		this.inventory.addItem(6);
 		this.inventory.addItem(7);
+		this.inventory.addItem(7);
+		this.inventory.addItem(7);
+		this.inventory.addItem(7);
 		this.inventory.addItem(8);
 		this.inventory.addItem(9);
 		this.inventory.addItem(10);
-		this.inventory.addItem(11);
+		this.inventory.addItem(11); // <-- NO SE PUEDE AÑADIR MAS ARMAS/OBJETOS (max. = 15)
 		// COMIDA
 		this.inventory.addItem(12);
 		this.inventory.addItem(13);
 		this.inventory.addItem(14);
-		this.inventory.addItem(15);
+		this.inventory.addItem(14);
+		this.inventory.addItem(14);
+		this.inventory.addItem(15); // <-- NO SE PUEDE AÑADIR MAS COMIDA (max. = 3)
 
 		// SEPARACION ENTRE ARMAS/OBJETOS Y COMIDA
 		let inventoryItems = this.inventory.getItems();
@@ -93,20 +104,28 @@ export default class InventoryScene extends Phaser.Scene {
 		// ARMAS Y OBJETOS
 		for (let i = 0; i < armasYobjetos.length; i++) {
 			let itemID = armasYobjetos[i].imgID;
-			let x = i % 5;
+			let itemQuantity = armasYobjetos[i].quantity;
+			let x = i % 5 * 102 + width / 2 - 35;
 			let y;
 			switch (true) {
 				case i >= 5 && i < 10: y = 1; break;
 				case i >= 10: y = 2; break;
 				default: y = 0; break;
 			}
-			new Button(this, x * 105 + width / 2 - 45, y * 60 + 140, itemID, 0, 0, 0, usar, mostrarDescripcion);
+			y = y * 60 + 140;
+
+			new Button(this, x , y, itemID, 0, 0, 0, usar, mostrarDescripcion).setScale(1.5,1.5);
+			if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(1.5,1.5);
 		}
 
 		// COMIDA
 		for (let i = 0; i < comida.length; i++) {
 			let itemID = comida[i].imgID;
-			new Button(this, i * 165 + width / 2, 475, itemID, 0, 0, 0, usar, mostrarDescripcion).setScale(3,3);
+			let itemQuantity = comida[i].quantity;
+			
+			let x = i * 165 + width / 2; let y = 475;
+			new Button(this, x, y, itemID, 0, 0, 0, usar, mostrarDescripcion).setScale(3,3);
+			if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
 		}
 
 		// TECLAS

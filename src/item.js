@@ -6,7 +6,7 @@ export default class Item{
 		this.type = type;
 		this.value = value;
 		this.description = description;
-		this.cuantity = 0;
+		this.quantity = 0;
 	}
 
 	getName(){return this.name};
@@ -19,9 +19,9 @@ export default class Item{
 
 	getDesc() { return this.description; }
 
-	getCuantity(){return this.cuantity};
+	getQuantity(){return this.quantity};
 
-	setCuantity(cuantity){this.cuantity=cuantity};
+	setQuantity(quantity){this.quantity=quantity};
 
-	addCuantity(number){this.cuantity+=number};
+	addQuantity(number){this.quantity+=number};
 }

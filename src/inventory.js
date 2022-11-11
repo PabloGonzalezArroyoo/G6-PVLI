@@ -20,39 +20,37 @@ export default class Inventory{
 		let itemName = item.getName();
 		let itemType = item.getType();
 		
-		if (this.weaponAndObjectSize < 15 && this.foodSize < 3) {
-			// Si es un arma directamente se añade al inventario
-			if (itemType === 'Arma') {
-				this.weaponAndObjectSize++;
-				item.setCuantity(1);
+		// Si es un arma se añade al inventario si se puede
+		if (itemType === 'Arma' && this.weaponAndObjectSize < 15) {
+			this.weaponAndObjectSize++;
+			item.setQuantity(1);
+			this.allItems.push(item);
+		}
+		// Si es un objeto o comida...
+		else if (itemType === 'Objeto' ||  itemType === 'Comida') {
+			let i = 0; let e = false;
+			while (i < this.allItems.length && !e) {
+				if (itemName == this.allItems[i].name) e = true;
+				i++;
+			}
+			// Si está en el array de items se stackea
+			if (e) {
+				let quantity = this.allItems[i - 1].getQuantity();
+				this.allItems[i - 1].setQuantity(quantity + 1);
+			}
+			// Si no, se añade si se puede
+			else if ((itemType === 'Objeto' && this.weaponAndObjectSize < 15) || (itemType === 'Comida' && this.foodSize < 3)) {
+				if (itemType === 'Objeto') this.weaponAndObjectSize++;
+				else if (itemType === 'Comida') this.foodSize++;
+				item.setQuantity(1);
 				this.allItems.push(item);
 			}
-			// Si es un objeto o comida...
-			else if (itemType === 'Objeto' ||  itemType === 'Comida') {
-				let i = 0; let e = false;
-				while (i < this.allItems.length && !e) {
-					if (itemName == this.allItems[i].name) e = true;
-					i++;
-				}
-				// Si está en el array de items se stackea
-				if (e) {
-					let quantity = this.allItems[i - 1].getCuantity();
-					this.allItems[i - 1].setCuantity(quantity + 1);
-				}
-				// Si no, se añade
-				else {
-					if (itemType === 'Objeto') this.weaponAndObjectSize++;
-					else if (itemType === 'Comida') this.foodSize++;
-					item.setCuantity(1);
-					this.allItems.push(item);
-				}
+			else {
+				console.log("No se puede añadir \"" + itemName + "\"");
 			}
 		}
-		else if (this.weaponAndObjectSize == 15) {
-			console.log("NO SE PUEDE AÑADIR MAS ARMAS/OBJETOS");
-		}
-		else if (this.foodSize == 3) {
-			console.log("NO SE PUEDE AÑADIR MAS COMIDA");
+		else {
+			console.log("No se puede añadir el arma \"" + itemName + "\"");
 		}
 	}
 
@@ -68,13 +66,13 @@ export default class Inventory{
 		}
 		// Si está en el array de items se elimina
 		if (e) {
-			let quantity = this.allItems[i - 1].getCuantity() - 1;
+			let quantity = this.allItems[i - 1].getQuantity() - 1;
 			// Se elimina el item del array
 			if (quantity == 0) {
 				this.allItems.splice(i-1, 1);
 			}
 			else {
-				this.allItems[i - 1].setCuantity(quantity);
+				this.allItems[i - 1].setQuantity(quantity);
 			}
 		}
 		else {
