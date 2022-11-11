@@ -1,23 +1,27 @@
-export class Item {
+export default class Item {
 	//type puede ser arma o objeto y valor es el valor de ataque(arma) o de curacion(objeto) 
-	constructor(name, imgFile, type, value, description){
+	constructor(name, imgID, type, value, description){
 		this.name = name;
 		this.imgID = imgFile;
 		this.type = type;
 		this.value = value;
 		this.description = description;
-		this.cuantity = 0;
+		this.quantity = 0;
 	}
 
+  getName() { return this.name; }
+  
 	getDesc() { return this.description; }
 
 	getType() { return this.type; }
 
 	getValue() { return this.value; }
 
-	addCuantity(number) { this.cuantity += number; }
+	addQuantity(number) { this.quantity += number; }
+  
+  setQuantity(quantity) { this.quantity=quantity; }
 
-	getCuantity() { return this.cuantity; }
+	getQuantity() { return this.quantity; }
 }
 
 

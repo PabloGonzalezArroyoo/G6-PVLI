@@ -3,7 +3,7 @@
 import {Button} from '../button.js';
 import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
-import {DrunkRuffian, StinkyPirate} from '../enemy.js'
+import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake }  from '../enemy.js'
 import DialogBox from '../dialogBox.js';;
 import { keyboard } from '../keyboardInput.js';
 
@@ -54,7 +54,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.level = level;
 		this.enemies = level.enemies;
 		this.loot = level.loot;
-		this.state  = 'Waitting';
+		this.state  = 'Waiting';
 		this.isBusy = false;
 	}
 
@@ -77,6 +77,10 @@ export default class BattleScene extends Phaser.Scene {
 		//this.load.spritesheet('enemy', 'assets/enemy.png', {frameWidth: 97, frameHeight: 97});
 		this.load.spritesheet('drunkRuffian', 'assets/characters/enemies/drunkRuffian.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('stinkyPirate', 'assets/characters/enemies/stinkyPirate.png', {frameWidth: 32, frameHeight:32});
+		this.load.spritesheet('scurviedSailor', 'assets/characters/enemies/scurviedSailor.png', {frameWidth: 32, frameHeight:32});
+		this.load.spritesheet('experiencedBuccaneer', 'assets/characters/enemies/experiencedBuccaneer.png', {frameWidth: 32, frameHeight:32});
+		this.load.spritesheet('alienatedCosair', 'assets/characters/enemies/alienatedCosair.png', {frameWidth: 32, frameHeight:32});
+		this.load.spritesheet('ensignDrake', 'assets/characters/enemies/ensignDrake.png', {frameWidth: 32, frameHeight:32});
 		// Descripcion
 		this.load.image('description', 'assets/scenes/battle/dialogBox.png');
 		// Acciones
@@ -118,8 +122,8 @@ export default class BattleScene extends Phaser.Scene {
 		// Interactivo
 		var self = this;
 		this._keyboard = new keyboard(this);
-		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {if(this.state === 'Waitting')this.state = 'PlayerDescription'},function(){self._keyboard.setBeingUsed(0)}),
-		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, function() {self.player.objects()},function(){self._keyboard.setBeingUsed(1)}),
+		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {if(this.state === 'Waiting')this.state = 'PlayerDescription'},function(){self._keyboard.setBeingUsed(0)}),
+		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, () => {if(this.state === 'Waiting'){this.scene.pause();this.scene.launch('inventoryScene', 'battleScene')}},function(){self._keyboard.setBeingUsed(1)}),
 		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, function() {self.player.defense()},function(){self._keyboard.setBeingUsed(2)}),
 		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, function() {self.player.quelocura()},function(){self._keyboard.setBeingUsed(3)})];
 		this._keyboard.loadButtonArray(this.botones);
@@ -142,7 +146,7 @@ export default class BattleScene extends Phaser.Scene {
 		}
 
 		// Si no está esperando a que el jugador seleccione una opción
-		if(this.state !== 'Waitting'){
+		if(this.state !== 'Waiting'){
 			// console.log(this.state);
 			// console.log(this.isBusy);
 			if(!this.dialogBox.isWritting && !this.isBusy){ 														// Si no se está escribiendo en el cuadro de texto
@@ -165,7 +169,7 @@ export default class BattleScene extends Phaser.Scene {
 				else if(this.state === 'EnemyTurn'){																// Si el enemigo ha empezado a atacar
 						this.enemies[0].attack(this.player);														// Enemigo correspondiente ataca a Maria Pita
 						this.isBusy = true;																			// Marcar que se está realizando el ataque 
-						this.time.delayedCall(1000, ()=> {this.state = 'Waitting'; this.isBusy = false;}); 			// Después de un tiempo, cambiar de estado al siguiente turno
+						this.time.delayedCall(1000, ()=> {this.state = 'Waiting'; this.isBusy = false;}); 			// Después de un tiempo, cambiar de estado al siguiente turno
 				}
 			}
 		}

@@ -1,7 +1,7 @@
-import Item from 'item.js'
+import Item from './item.js'
 import { HealthItem, WeaponItem } from './item';
 
-//de momento solo esta un item que indica que no hay item
+// Array de items al que acceder para saber a qué item se hace referencia
 export var listOfItems = [
 	// Items de curación (curativos)
 	new HealthItem("Polbo á feira", 			"*archivo*", 60, "*descripcion*"),

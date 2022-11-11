@@ -1,10 +1,12 @@
 import Character from './character.js'
 import PlayerAnimator from './animations/playerAnimator.js';
 import HealthController from './healthController.js';
+import Inventory from './inventory.js';
 
 export default class Player extends Character {
     constructor(scene, x, y, damage) {
         super(x, y, new PlayerAnimator(scene, x, y), new HealthController(scene, x, y - 150, 100), damage);
+        this.inventory = new Inventory();
         this._defense;
         this._defenseBoost;
     }
@@ -21,11 +23,25 @@ export default class Player extends Character {
         console.log("DEFENSA");
     }
 
-    objects(){
-        console.log("OBJECTS");
+    useItem(item){
+        //Cambia de arma equipada si el item es un arma
+        if(item.getType()==='arma')
+            this.inventory.setEquipedWeapon(item);
+        //Se cura si el item es un objeto de curacion
+        else if(item.getType()==='curacion'){
+            this.healthController.changeHealth(item.getValue());
+            this.inventory.subtractItem(item);
+        }
     }
 
     quelocura(){
         console.log("QUELOCURA");
+    }
+
+    receiveAttack(damage){
+        // guardar en esta variable el calculo del daño
+        let receivedDamage = damage;
+        this.healthController.changeHealth(-receivedDamage);
+        return receivedDamage;
     }
 }

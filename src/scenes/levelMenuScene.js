@@ -1,7 +1,7 @@
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
 import { Level } from '../level.js';
-import { DrunkRuffian, StinkyPirate } from '../enemy.js'
+import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake } from '../enemy.js'
 import { keyboard } from '../keyboardInput.js';
 import { Button } from '../button.js';
 
@@ -79,7 +79,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// Botón de inventario
 		var self = this;
-		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, function(){self.scene.start('inventoryScene', -1)}, function(){});
+		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, function(){self.scene.pause('levelMenuScene');self.scene.launch('inventoryScene', 'levelMenuScene')}, function(){});
 		inventoryButton.setScale(3, 3);
 
 		this._keyboard = new keyboard(this);
