@@ -11,6 +11,8 @@ export default class Item{
 
 	getName(){return this.name};
 
+	getImgID(){return this.imgID;}
+
 	getType(){return this.type};
 
 	getValue(){return this.value};
