@@ -80,6 +80,15 @@ export default class InventoryScene extends Phaser.Scene {
 				comida.push(inventoryItems[i]);
 			}
 		}
+		
+		function usar() {
+			// ACCION PARA USAR EL ITEM YA SEA PARA EQUIPAR ARMA, UTILIZAR OBJETO O COMER
+			console.log("USAR");
+		}
+		function mostrarDescripcion() {
+			// ACCION PARA MOSTRAR LA DESCRIPCION DEL ITEM
+			console.log("MOSTRAR DESCRIPCION");
+		}
 
 		// ARMAS Y OBJETOS
 		for (let i = 0; i < armasYobjetos.length; i++) {
@@ -91,15 +100,16 @@ export default class InventoryScene extends Phaser.Scene {
 				case i >= 10: y = 2; break;
 				default: y = 0; break;
 			}
-			this.add.image(x * 105 + width / 2 - 45, y * 60 + 140, itemID);
+			new Button(this, x * 105 + width / 2 - 45, y * 60 + 140, itemID, 0, 0, 0, usar, mostrarDescripcion);
 		}
 
 		// COMIDA
 		for (let i = 0; i < comida.length; i++) {
 			let itemID = comida[i].imgID;
-			this.add.image(i * 165 + width / 2, 475, itemID).setScale(3,3);
+			new Button(this, i * 165 + width / 2, 475, itemID, 0, 0, 0, usar, mostrarDescripcion).setScale(3,3);
 		}
 
+		// TECLAS
 		//Para seleccionar botones con teclas, creamos el objeto tecla
 		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
 		//var Esc = this.scene.input.keyboard.addKey('ESC,X');
