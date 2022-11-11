@@ -1,7 +1,7 @@
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
 import { Level } from '../level.js';
-import { DrunkRuffian, StinkyPirate } from '../enemy.js'
+import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake } from '../enemy.js'
 import { keyboard } from '../keyboardInput.js';
 import { Button } from '../button.js';
 

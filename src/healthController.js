@@ -77,4 +77,5 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
     }
 
     getCurrentHealth(){ return this._currentHealth; }
+    getMaxHealth(){ return this._maxHealth; }
 }
