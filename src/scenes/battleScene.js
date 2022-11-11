@@ -18,8 +18,11 @@ const levelCompleted = function(enemies){
 	return completado;
 }
 
+// Comprueba si el jugador ha muerto
 const levelFailed = function(player) {
-	if (player.healthController.getCurrentHealth() < 0) // TERMINAR
+	let muerto = false;
+	if (player.healthController.getCurrentHealth() < 0) muerto = true;
+	return muerto;
 }
 
 /**

@@ -19,3 +19,16 @@ export class Item {
 
 	getCuantity() { return this.cuantity; }
 }
+
+
+export class HealthItem extends Item {
+	constructor(name, imgFile, value, description) {
+		super(name, imgFile, "HEALTH", value, description);		
+	}
+}
+
+export class WeaponItem extends Item {
+	constructor(name, imgFile, value, description) {
+		super(name, imgFile, "WEAPON", value, description);
+	}
+}
