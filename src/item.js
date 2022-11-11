@@ -9,7 +9,7 @@ export default class Item {
 		this.quantity = 0;
 	}
 
-  getName() { return this.name; }
+  	getName() { return this.name; }
   
 	getDesc() { return this.description; }
 
@@ -21,7 +21,7 @@ export default class Item {
 
 	addQuantity(number) { this.quantity += number; }
   
-  setQuantity(quantity) { this.quantity=quantity; }
+  	setQuantity(quantity) { this.quantity=quantity; }
   
 	getQuantity() { return this.quantity; }
 }

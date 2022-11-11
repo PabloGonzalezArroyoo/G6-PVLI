@@ -21,13 +21,13 @@ export default class Inventory{
 		let itemType = item.getType();
 		
 		// Si es un arma se añade al inventario si se puede
-		if (itemType === 'Arma' && this.weaponAndObjectSize < 15) {
+		if (itemType === 'WEAPON' && this.weaponAndObjectSize < 15) {
 			this.weaponAndObjectSize++;
 			item.setQuantity(1);
 			this.allItems.push(item);
 		}
 		// Si es un objeto o comida...
-		else if (itemType === 'Objeto' ||  itemType === 'Comida') {
+		else if (itemType === 'OBJECT' ||  itemType === 'HEALTH') {
 			let i = 0; let e = false;
 			while (i < this.allItems.length && !e) {
 				if (itemName == this.allItems[i].name) e = true;
@@ -39,9 +39,9 @@ export default class Inventory{
 				this.allItems[i - 1].setQuantity(quantity + 1);
 			}
 			// Si no, se añade si se puede
-			else if ((itemType === 'Objeto' && this.weaponAndObjectSize < 15) || (itemType === 'Comida' && this.foodSize < 3)) {
-				if (itemType === 'Objeto') this.weaponAndObjectSize++;
-				else if (itemType === 'Comida') this.foodSize++;
+			else if ((itemType === 'OBJECT' && this.weaponAndObjectSize < 15) || (itemType === 'HEALTH' && this.foodSize < 3)) {
+				if (itemType === 'OBJECT') this.weaponAndObjectSize++;
+				else if (itemType === 'HEALTH') this.foodSize++;
 				item.setQuantity(1);
 				this.allItems.push(item);
 			}

@@ -48,50 +48,30 @@ export default class InventoryScene extends Phaser.Scene {
 		let bg = this.add.image(0,0, 'inventoryBackground').setOrigin(0, 0).setDisplaySize(width, height);
 
 	    // Pintar botones correspondientes a los objetos del inventario y hacer sprites interactivos
-		// ESTO ES UNA PRUEBA DE AÑADO DE OBJETOS EN EL INVENTARIO PARA QUE SE VEAN
-		// ARMAS
+		// ESTO ES UNA PRUEBA PARA MOSTRAR LOS OBJETOS EN PANTALLA
 		this.inventory.addItem(1);
-		this.inventory.addItem(2);
-		this.inventory.addItem(3);
-		this.inventory.addItem(2);
-		this.inventory.addItem(2);
-		this.inventory.addItem(2);
-		this.inventory.addItem(2);
-		this.inventory.addItem(2);
-		// OBJETOS
-		this.inventory.addItem(4);
+		this.inventory.addItem(1);
 		this.inventory.addItem(4);
 		this.inventory.addItem(5);
 		this.inventory.addItem(6);
-		this.inventory.addItem(7);
-		this.inventory.addItem(7);
-		this.inventory.addItem(7);
-		this.inventory.addItem(7);
-		this.inventory.addItem(8);
-		this.inventory.addItem(9);
-		this.inventory.addItem(10);
-		this.inventory.addItem(11); // <-- NO SE PUEDE AÑADIR MAS ARMAS/OBJETOS (max. = 15)
-		// COMIDA
-		this.inventory.addItem(12);
-		this.inventory.addItem(13);
-		this.inventory.addItem(14);
-		this.inventory.addItem(14);
-		this.inventory.addItem(14);
-		this.inventory.addItem(15); // <-- NO SE PUEDE AÑADIR MAS COMIDA (max. = 3)
+		this.inventory.addItem(6);
+		this.inventory.addItem(6);
+		this.inventory.addItem(6);
 
 		// SEPARACION ENTRE ARMAS/OBJETOS Y COMIDA
 		let inventoryItems = this.inventory.getItems();
 		let armasYobjetos = [];
 		let comida = [];
+		
 		for (let i = 0; i < inventoryItems.length; i++) {
-			if (inventoryItems[i].getType() === 'Arma' || inventoryItems[i].getType() === 'Objeto') {
+			if (inventoryItems[i].type === 'WEAPON' || inventoryItems[i].type === 'OBJECT') {
 				armasYobjetos.push(inventoryItems[i]);
 			}
-			else if (inventoryItems[i].getType() === 'Comida') {
+			else if (inventoryItems[i].type === 'HEALTH') {
 				comida.push(inventoryItems[i]);
 			}
 		}
-		
+
 		function usar() {
 			// ACCION PARA USAR EL ITEM YA SEA PARA EQUIPAR ARMA, UTILIZAR OBJETO O COMER
 			console.log("USAR");
