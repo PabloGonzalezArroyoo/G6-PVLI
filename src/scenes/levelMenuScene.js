@@ -20,17 +20,17 @@ const levels = [new Level(null, 272, 527.5, 1, [new DrunkRuffian(null, 720, 200)
 				new Level(null, 814, 261, 0, [], [], null)];			// 11
 
 				// Especificar los niveles que se desbloquean tras completar cada nivel
-				levels[0].setNextLevels([levels[1]]);
-				levels[1].setNextLevels([levels[2], levels[3]]);
+				levels[0].setNextLevels([levels[1]], [["right", "down"]]);
+				levels[1].setNextLevels([levels[2], levels[3]], [["left", "down"],["right", "down"]]);
 				levels[2].setNextLevels(null);
-				levels[3].setNextLevels([levels[4], levels[5], levels[6]]);
+				levels[3].setNextLevels([levels[4], levels[5], levels[6]], [["left", "down"], ["up", "left"], ["right", "left"]]);
 				levels[4].setNextLevels(null);
 				levels[5].setNextLevels(null);
-				levels[6].setNextLevels([levels[7], levels[8]]);
+				levels[6].setNextLevels([levels[7], levels[8]], [["down", "left"], ["right", "down"]]);
 				levels[7].setNextLevels(null);
-				levels[8].setNextLevels([levels[9], levels[10]]);
+				levels[8].setNextLevels([levels[9], levels[10]], [["up", "down"], ["right", "down"]]);
 				levels[9].setNextLevels(null);
-				levels[10].setNextLevels([levels[11]]);
+				levels[10].setNextLevels([levels[11]], [["right", "left"]]);
 				levels[11].setNextLevels(null);
 
 /**
@@ -93,9 +93,14 @@ export default class LevelMenuScene extends Phaser.Scene {
 			buttons[i] = level.button;
       		i++;
 		});
+		levels.forEach(level => {
+			level.initializeAdjacentButtons();
+		})
 		this._keyboard.setStartButton(levels[0].button);
 		//console.log(this.buttons);
-		
+
+
+
 		//this._keyboard.loadButtonArray(buttons);
 		
 		//Ejemplo: Al pulsar la flecha izquierda
@@ -120,6 +125,6 @@ export default class LevelMenuScene extends Phaser.Scene {
         });
 	}
 	update() {
-		//this._keyboard.processInput();  
+		this._keyboard.processInput();  
 	}
 }

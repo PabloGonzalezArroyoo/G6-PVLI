@@ -38,8 +38,22 @@ export class Level/* extends Button */{
     }
 
     // Asigna al array de siguientes niveles los correspondientes
-    setNextLevels(levels){
-        this.nextLevels = levels;
+    setNextLevels(levels, directions){
+        if (levels){
+            this.nextLevels = levels;
+            this.adjacentDirections = directions;
+        }
+    }
+
+    initializeAdjacentButtons() {
+        if (this.nextLevels){
+            let i = 0;
+            this.nextLevels.forEach(level => {
+                this.button.setAdjacent(level.button, this.adjacentDirections[i][0]);
+                level.button.setAdjacent(this.button, this.adjacentDirections[i][1]);
+                i++;
+            });
+        }
     }
 
     // Desbloquea los siguientes niveles

@@ -13,6 +13,7 @@ export class keyboard
 
     setStartButton(button) {
         this.button = button;
+        //this.button.selectButton();
     }
 
     unselectButton() {
@@ -28,14 +29,14 @@ export class keyboard
     // Procesa el input
     processInput() {
         this._scene.input.keyboard.on('keydown',() => {
-            if (phaser.Input.Keyboard.JustDown(this.arrows.up) && this.button.adjacent[0]) 
-                this.changeButton(this.button.adjacent[0]);
-            else if (phaser.Input.Keyboard.JustDown(this.arrows.down) && this.button.adjacent[1]) 
-                this.changeButton(this.button.adjacent[1]);
-            else if (phaser.Input.Keyboard.JustDown(this.arrows.left) && this.button.adjacent[2]) 
-                this.changeButton(this.button.adjacent[2]);
-            else if (phaser.Input.Keyboard.JustDown(this.arrows.right) && this.button.adjacent[3]) 
-                this.changeButton(this.button.adjacent[3]);
+            if (phaser.Input.Keyboard.JustDown(this.arrows.up) && this.button.adjacent.up) 
+                this.changeButton(this.button.adjacent.up);
+            else if (phaser.Input.Keyboard.JustDown(this.arrows.down) && this.button.adjacent.down) 
+                this.changeButton(this.button.adjacent.down);
+            else if (phaser.Input.Keyboard.JustDown(this.arrows.left) && this.button.adjacent.left) 
+                this.changeButton(this.button.adjacent.left);
+            else if (phaser.Input.Keyboard.JustDown(this.arrows.right) && this.button.adjacent.right) 
+                this.changeButton(this.button.adjacent.right);
             else if (phaser.Input.Keyboard.JustDown(this.arrows.enter)) 
                 this.button.onReleaseClick();
         });

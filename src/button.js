@@ -1,4 +1,9 @@
 import { keyboard } from "./keyboardInput.js";
+
+const Direction = {
+    up: 0, down: 1, left: 2, right: 3
+}
+
 export class Button extends Phaser.GameObjects.Sprite {
     // Recibe escena y posicion en ella, spritesheet y posiciones dentro del archivo de cada estado, y la funcion que se hace al click
     constructor(scene, x, y, spriteSheet, defaultFrame, frameOnOver, frameOnDown, keyboard, functionToDo) {
@@ -45,8 +50,17 @@ export class Button extends Phaser.GameObjects.Sprite {
     }
 
     setAdjacents(up, down, left, right) {
-        this.adjacent = [];
-        for (let i = 0; i < arguments.length; i++)
-            if (!this.adjacent[i]) this.adjacent[i] = arguments[i];
+        if (!this.adjacent) this.adjacent = {};
+        this.setAdjacent(up, "up");
+        this.setAdjacent(down, "down");
+        this.setAdjacent(left, "left");
+        this.setAdjacent(right, "right");
+    }
+
+    setAdjacent(button, direction){
+        if (!this.adjacent) this.adjacent = {};
+        Object.defineProperty(this.adjacent, direction, {
+            value: button
+        });
     }
 }
