@@ -18,6 +18,13 @@ const levelCompleted = function(enemies){
 	return completado;
 }
 
+// Comprueba si el jugador ha muerto
+const levelFailed = function(player) {
+	let muerto = false;
+	if (player.healthController.getCurrentHealth() < 0) muerto = true;
+	return muerto;
+}
+
 /**
  * Escena de Batalla.
  * @extends Phaser.Scene
