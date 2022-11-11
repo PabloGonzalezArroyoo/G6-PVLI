@@ -15,8 +15,7 @@ export default class TurnEffectController{
 
 	activateStun(turns){
 		if (this.stunTurns <= 0){
-			this.stunTurns = turns;
-			this.bleedDamage = (this.character.healthController.getMaxHealth() / 100) * damagePercentage;			
+			this.stunTurns = turns;	
 		}
 	}
 

@@ -163,14 +163,8 @@ export default class BattleScene extends Phaser.Scene {
 						this.enemies[0].attack(this.player);														// Enemigo correspondiente ataca a Maria Pita
 						this.isBusy = true;																			// Marcar que se está realizando el ataque 
 						this.time.delayedCall(1000, ()=> {this.state = 'Waitting'; this.isBusy = false;}); 			// Después de un tiempo, cambiar de estado al siguiente turno
-						this.updateTurn();
 				}
 			}
 		}
-	}
-
-	updateTurn(){
-		this.player.updateTurn();
-		this.enemies.forEach(enemy => enemy.updateTurn());
 	}
 }

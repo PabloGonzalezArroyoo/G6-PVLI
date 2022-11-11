@@ -6,7 +6,7 @@ import { keyboard } from '../keyboardInput.js';
 import { Button } from '../button.js';
 
 // Array con todos los niveles del juego
-const levels = [new Level(null, 272, 527.5, 1, [new EnsignDrake(null, 720, 200)], [], function(){}), // Nivel 0
+const levels = [new Level(null, 272, 527.5, 1, [new DrunkRuffian(null, 720, 200)], [], function(){}), // Nivel 0
 				new Level(null, 354, 455.5, 0, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], [], function(){}), // Nivel 1
 				new Level(null, 292, 363.5, 0, [], [], function(){}),			// ... 2
 				new Level(null, 405, 363.5, 0, [], [], function(){}),			// 3
