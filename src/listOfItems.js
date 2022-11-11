@@ -1,5 +1,5 @@
 import Item from './item.js'
-import { HealthItem, WeaponItem } from './item';
+import { HealthItem, WeaponItem } from './item.js';
 
 // Array de items al que acceder para saber a qué item se hace referencia
 export var listOfItems = [
