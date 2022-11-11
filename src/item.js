@@ -13,6 +13,8 @@ export default class Item {
   
 	getDesc() { return this.description; }
 
+	getImgID() { return this.imgID; }
+
 	getType() { return this.type; }
 
 	getValue() { return this.value; }
@@ -20,17 +22,18 @@ export default class Item {
 	addQuantity(number) { this.quantity += number; }
   
   setQuantity(quantity) { this.quantity=quantity; }
-
+  
 	getQuantity() { return this.quantity; }
 }
 
-
+// Items de curación
 export class HealthItem extends Item {
 	constructor(name, imgID, value, description) {
 		super(name, imgID, "HEALTH", value, description);		
 	}
 }
 
+// Items de daño (armas)
 export class WeaponItem extends Item {
 	constructor(name, imgID, value, description) {
 		super(name, imgID, "WEAPON", value, description);

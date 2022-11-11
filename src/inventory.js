@@ -1,31 +1,82 @@
 import {listOfItems} from './listOfItems.js'
 
 export default class Inventory{
-	constructor(equipedWeapon = listOfItems[0], items = []){
-		this.equipedWeapon = equipedWeapon;
-		this.items = items;
+	constructor(equippedWeapon = listOfItems[0], allItems = []){
+		this.equippedWeapon = equippedWeapon;
+		this.allItems = allItems;
+		this.weaponAndObjectSize = 0;
+		this.foodSize = 0;
 	}
 
-	getEquipedWeapon(){return epipedWeapon;}
+	getEquipedWeapon(){return equippedWeapon;}
 
-	setEquipedWeapon(item){this.equipedWeapon = item;}
+	setEquipedWeapon(item){this.equippedWeapon = item;}
 
-	//Suma 1 a la cantidad del objeto si existe y si no lo añade al array
-	addItem(item){
-		let itemIndex = this.items.findIndex(element => element === item.getName());
-		if(itemIndex === -1)
-			this.items.push(item);
-		else
-			this.items[itemIndex].addCuantity(1);
+	getItems(){return this.allItems;}
+
+	// Añade armas y objetos (si no existen) al array y suma 1 a la cantidad de objetos si existen
+	addItem(itemIndex){
+		let item = listOfItems[itemIndex];
+		let itemName = item.getName();
+		let itemType = item.getType();
+		
+		// Si es un arma se añade al inventario si se puede
+		if (itemType === 'Arma' && this.weaponAndObjectSize < 15) {
+			this.weaponAndObjectSize++;
+			item.setQuantity(1);
+			this.allItems.push(item);
+		}
+		// Si es un objeto o comida...
+		else if (itemType === 'Objeto' ||  itemType === 'Comida') {
+			let i = 0; let e = false;
+			while (i < this.allItems.length && !e) {
+				if (itemName == this.allItems[i].name) e = true;
+				i++;
+			}
+			// Si está en el array de items se stackea
+			if (e) {
+				let quantity = this.allItems[i - 1].getQuantity();
+				this.allItems[i - 1].setQuantity(quantity + 1);
+			}
+			// Si no, se añade si se puede
+			else if ((itemType === 'Objeto' && this.weaponAndObjectSize < 15) || (itemType === 'Comida' && this.foodSize < 3)) {
+				if (itemType === 'Objeto') this.weaponAndObjectSize++;
+				else if (itemType === 'Comida') this.foodSize++;
+				item.setQuantity(1);
+				this.allItems.push(item);
+			}
+			else {
+				console.log("No se puede añadir \"" + itemName + "\"");
+			}
+		}
+		else {
+			console.log("No se puede añadir el arma \"" + itemName + "\"");
+		}
 	}
 
-	//Resta 1 a la cantidad del objeto si existe y lo elimina del array si la cantidad es 0
-	subtractItem(item){
-		let itemIndex = this.items.findIndex(element => element === item.getType());
-		if(itemIndex !== -1){
-				this.items[itemIndex].addCuantity(-1);
-			if(this.items[itemIndex].getCuantity() === 0)
-				this.items.splice(itemIndex,1);
+	// Resta 1 a la cantidad del item si existe y lo elimina del array si la cantidad es 0
+	subtractItem(itemIndex){
+		let item = listOfItems[itemIndex];
+		let itemName = item.getName();
+		
+		let i = 0; let e = false;
+		while (i < this.allItems.length && !e) {
+			if (itemName == this.allItems[i].name) e = true;
+			i++;
+		}
+		// Si está en el array de items se elimina
+		if (e) {
+			let quantity = this.allItems[i - 1].getQuantity() - 1;
+			// Se elimina el item del array
+			if (quantity == 0) {
+				this.allItems.splice(i-1, 1);
+			}
+			else {
+				this.allItems[i - 1].setQuantity(quantity);
+			}
+		}
+		else {
+			console.log("El item " + itemName + " no se encuentra en el inventario y, por tanto, no se puede eliminar");
 		}
 	}
 }
