@@ -1,3 +1,5 @@
+import EventDispatcher from './eventDispatcher.js'
+
 export default class DialogBox extends Phaser.GameObjects.Text {
 	constructor(scene, x, y, width){
 		super(scene,x,y);
@@ -16,6 +18,7 @@ export default class DialogBox extends Phaser.GameObjects.Text {
 		/*Si quiereis cambiar el tamaño de la letra usar esta instruccion, 
 		volver a contar los caracteres por linea y actualizar el comentario de setTextToDisplay*/
 		this.setFontSize(20);
+		this.emitter = EventDispatcher.getInstance();
 	}
 
 	//Este metodo sirve para pasarle el texto que se quiere escribir, el maximo de caracteres es de 160
@@ -47,7 +50,7 @@ export default class DialogBox extends Phaser.GameObjects.Text {
 		this.updateText();
 		this.letterPos++;
 		if(this.textToDisplay.length <= this.letterPos){
-			this.timePerLetter = 1500;
+			this.scene.time.delayedCall(1500, () => {this.emitter.emit('finishTexting')});
 		}
 	}
 

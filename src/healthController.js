@@ -1,3 +1,5 @@
+import EventDispatcher from './eventDispatcher.js';
+
 export default class HealthController extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, maxHP) {
         /* Animación */
@@ -26,6 +28,7 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
         /* Lógica */
         this._maxHealth = maxHP;
         this._currentHealth = maxHP;
+        this.emitter = EventDispatcher.getInstance();
     }
     
     changeHealth(value) {
@@ -74,7 +77,10 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
         else {
             console.log("NO HA CAMBIADO LA VIDA")
         }
+
+        this.scene.time.delayedCall(1000, () => {this.emitter.emit("finishTurn")});
     }
 
     getCurrentHealth(){ return this._currentHealth; }
+    getMaxHealth(){ return this._maxHealth; }
 }

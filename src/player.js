@@ -13,10 +13,10 @@ export default class Player extends Character {
 
     attack(enemy){
         console.log("ATAQUE");
-        // Le baja vida al enemigo
-        enemy.healthController.changeHealth(-this.damage);
         // Animacion de ataque
         this.animator.playAttack();
+        // Le baja vida al enemigo
+        this.animator.once("animationcomplete-attack",() => {enemy.healthController.changeHealth(-this.damage)});
     }
 
     defense(){
@@ -36,5 +36,12 @@ export default class Player extends Character {
 
     quelocura(){
         console.log("QUELOCURA");
+    }
+
+    receiveAttack(damage){
+        // guardar en esta variable el calculo del daño
+        let receivedDamage = damage;
+        this.healthController.changeHealth(-receivedDamage);
+        return receivedDamage;
     }
 }
