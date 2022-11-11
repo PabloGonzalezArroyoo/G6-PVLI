@@ -2,7 +2,7 @@ export default class Item {
 	//type puede ser arma o objeto y valor es el valor de ataque(arma) o de curacion(objeto) 
 	constructor(name, imgID, type, value, description){
 		this.name = name;
-		this.imgID = imgFile;
+		this.imgID = imgID;
 		this.type = type;
 		this.value = value;
 		this.description = description;
@@ -26,13 +26,13 @@ export default class Item {
 
 
 export class HealthItem extends Item {
-	constructor(name, imgFile, value, description) {
-		super(name, imgFile, "HEALTH", value, description);		
+	constructor(name, imgID, value, description) {
+		super(name, imgID, "HEALTH", value, description);		
 	}
 }
 
 export class WeaponItem extends Item {
-	constructor(name, imgFile, value, description) {
-		super(name, imgFile, "WEAPON", value, description);
+	constructor(name, imgID, value, description) {
+		super(name, imgID, "WEAPON", value, description);
 	}
 }
