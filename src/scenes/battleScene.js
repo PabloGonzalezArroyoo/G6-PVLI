@@ -111,16 +111,17 @@ export default class BattleScene extends Phaser.Scene {
 		// Interactivo
 		var self = this;
 		this._keyboard = new keyboard(this);
-		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {if(this.state === 'Waiting')this.state = 'PlayerDescription'},function(){self._keyboard.setBeingUsed(0)}),
-		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, () => {if(this.state === 'Waiting'){this.scene.pause();this.scene.launch('inventoryScene', 'battleScene')}},function(){self._keyboard.setBeingUsed(1)}),
-		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, function() {self.player.defense()},function(){self._keyboard.setBeingUsed(2)}),
-		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, function() {self.player.quelocura()},function(){self._keyboard.setBeingUsed(3)})];
-		this._keyboard.loadButtonArray(this.botones);
-		
-		// Transicion escena
-		this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('optionsScene');
-        });
+		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this._keyboard, () => {if(this.state === 'Waiting')this.state = 'PlayerDescription'}),
+		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this._keyboard, () => {if(this.state === 'Waiting'){this.scene.pause();this.scene.launch('inventoryScene', 'battleScene');}}),
+		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, this._keyboard, () => {this.player.defense()}),
+		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, this._keyboard, () => {this.player.quelocura()})];
+		//this._keyboard.loadButtonArray(this.botones);
+
+		this.botones[0].setAdjacents(null, this.botones[2], null, this.botones[1]);
+		this.botones[1].setAdjacents(null, this.botones[3], this.botones[0], null);
+		this.botones[2].setAdjacents(this.botones[0], null, null, this.botones[3]);
+		this.botones[3].setAdjacents(this.botones[1], null, this.botones[2], null);
+		this._keyboard.setStartButton(this.botones[0]);
 	}
 
 	update(t,dt) {

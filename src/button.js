@@ -1,7 +1,7 @@
 import { keyboard } from "./keyboardInput.js";
 export class Button extends Phaser.GameObjects.Sprite {
     // Recibe escena y posicion en ella, spritesheet y posiciones dentro del archivo de cada estado, y la funcion que se hace al click
-    constructor(scene, x, y, spriteSheet, defaultFrame, frameOnOver, frameOnDown, functionToDo,functiononOver) {
+    constructor(scene, x, y, spriteSheet, defaultFrame, frameOnOver, frameOnDown, keyboard, functionToDo) {
         super(scene, x, y, spriteSheet,defaultFrame);
 
         // Añadir el botón a la escena y hacer interactivo
@@ -22,7 +22,8 @@ export class Button extends Phaser.GameObjects.Sprite {
         // Funcion al clickar
         this._functionToDo = functionToDo;
         //Keyboard para modificar
-        this._functionOnOver=functiononOver;
+        //this._functionOnOver=functiononOver;
+        this.keyboard = keyboard;
     }
     onClick() {
         this.setFrame(this._frameOnDown);
@@ -32,10 +33,20 @@ export class Button extends Phaser.GameObjects.Sprite {
         this._functionToDo();
     }
     onOver() {
-        this.setFrame(this._frameOnOver);
-        this._functionOnOver();
+        if (this.keyboard) this.keyboard.changeButton(this);
+        else this.selectButton();
     }
     onPointerOut() {
         this.setFrame(this._defaultFrame);
+    }
+
+    selectButton(){
+        this.setFrame(this._frameOnOver);
+    }
+
+    setAdjacents(up, down, left, right) {
+        this.adjacent = [];
+        for (let i = 0; i < arguments.length; i++)
+            if (!this.adjacent[i]) this.adjacent[i] = arguments[i];
     }
 }

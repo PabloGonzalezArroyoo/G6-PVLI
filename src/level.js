@@ -8,16 +8,17 @@ const State = {
 }
 
 export class Level/* extends Button */{
-    constructor(scene, x, y, state, enemies, loot, functionOnOver) {
+    constructor(scene, x, y, state, enemies, loot, keyboard) {
         this.defaultFrame = 0 + state * 3;
         this.frameOnOver = 1 + state * 3;
         this.frameOnDown = 2 + state * 3;
         if (scene !== null){
             let self = this;
-            this.button = new Button(scene, x, y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){self.loadLevel(scene)}, functionOnOver);
+            this.button = new Button(scene, x, y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, keyboard, function(){self.loadLevel(scene)});
         } 
         else {
             this.button = null;
+            this.keyboard = null;
             this.x = x; this.y = y;
         }
         this.state = state; // valor que indica si el nivel está bloqueado, desbloqueado o completado
@@ -26,9 +27,9 @@ export class Level/* extends Button */{
     }
 
     // Da los valores necesarios al objeto para poder funcionar siendo incializados antes de crear la escena
-    setScene(scene, functionOnOver) {
+    setScene(scene, keyboard) {
         let self = this;
-        this.button = new Button(scene, this.x, this.y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){self.loadLevel(scene)}, functionOnOver);
+        this.button = new Button(scene, this.x, this.y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, keyboard, function(){self.loadLevel(scene)});
     }
     
     // Carga el nivel si no está bloqueado
