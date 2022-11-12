@@ -104,7 +104,7 @@ export default class BattleScene extends Phaser.Scene {
 		var background = this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
 		// Maria Pita
-		this.player = new Player(this, 250, 475, 25);
+		this.player = new Player(this, 250, 475, 50);
 			
 		// Enemy1
 		// this.enemy = new DrunkRuffian(this, 750, 200);
@@ -147,6 +147,10 @@ export default class BattleScene extends Phaser.Scene {
 			this.dialogBox.write();
 			this.previousLetterTime = 0;
 		}
+		if (levelCompleted(this.enemies)){
+			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
+			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', this.level);});
+		} 
 	}
 
 	PlayerTurn(){
@@ -154,14 +158,22 @@ export default class BattleScene extends Phaser.Scene {
 		this.dialogBox.clearText();																	// Borrar texto previo
 		this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');								// Si Maria Pita ha empezado a atacar
 		this.emitter.once('finishTexting', () => {this.player.attack(this.enemies[0]);				// Crea un evento para que el jugador ataque y crea otro evento
-			this.emitter.once('finishTurn', () => {this.EnemyTurn()})});							// Evento para que el enemygo ataque
+			this.emitter.once('finishTurn', () => {this.EnemyTurn(0)})});
+										// Evento para que el enemygo ataque
 	}
 
-	EnemyTurn(){
+	EnemyTurn(index){
+		if(!index)index=0;
+		console.log("Empezando la accion "+index);
 		this.dialogBox.clearText();																		// Borrar texto previo
 		this.dialogBox.setTextToDisplay('Enemigo ataca a Maria Pita');									// Enviar el nuevo texto
-		this.emitter.once('finishTexting', () => {this.enemies[0].attack(this.player);					// Crea un evento para que el enemigo ataque y crea otro evento
-				this.emitter.once('finishTurn', () => {this.EnableButtons()})});						// Evento que vuelve a crear los botones
+		this.emitter.once('finishTexting', () => {this.enemies[index].attack(this.player);					// Crea un evento para que el enemigo ataque y crea otro evento
+				console.log("Realizando la accion "+index);
+				index++;
+				if(index<this.enemies.length) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)}); console.log("queda otro");}
+				else this.emitter.once('finishTurn', () => {this.EnableButtons();})
+				console.log("Acabando la accion "+index);});						// Evento que vuelve a crear los botones
+		
 	}
 
 	// Desactiva y vuelve invisible los botones
