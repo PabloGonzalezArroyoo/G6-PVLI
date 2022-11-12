@@ -158,21 +158,18 @@ export default class BattleScene extends Phaser.Scene {
 		this.dialogBox.clearText();																	// Borrar texto previo
 		this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');								// Si Maria Pita ha empezado a atacar
 		this.emitter.once('finishTexting', () => {this.player.attack(this.enemies[0]);				// Crea un evento para que el jugador ataque y crea otro evento
-			this.emitter.once('finishTurn', () => {this.EnemyTurn(0)})});
+			this.emitter.once('finishTurn', () => {if(!levelCompleted(this.enemies))this.EnemyTurn(0)})});
 										// Evento para que el enemygo ataque
 	}
 
 	EnemyTurn(index){
 		if(!index)index=0;
-		console.log("Empezando la accion "+index);
 		this.dialogBox.clearText();																		// Borrar texto previo
 		this.dialogBox.setTextToDisplay('Enemigo ataca a Maria Pita');									// Enviar el nuevo texto
 		this.emitter.once('finishTexting', () => {this.enemies[index].attack(this.player);					// Crea un evento para que el enemigo ataque y crea otro evento
-				console.log("Realizando la accion "+index);
 				index++;
 				if(index<this.enemies.length) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)}); console.log("queda otro");}
-				else this.emitter.once('finishTurn', () => {this.EnableButtons();})
-				console.log("Acabando la accion "+index);});						// Evento que vuelve a crear los botones
+				else this.emitter.once('finishTurn', () => {this.EnableButtons();})});						// Evento que vuelve a crear los botones
 		
 	}
 
