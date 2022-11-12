@@ -27,12 +27,28 @@ export default class TitleScene extends Phaser.Scene {
 
 		// Imagen de botones
 		this.load.spritesheet('play', 'assets/scenes/title/playButton.png', {frameWidth: 37, frameHeight: 14});
+
+		// Musica
+		this.load.audio('Pirates of the Atlantic', ['assets/scenes/title/Pirates of the Atlantic - Vivu.mp3']);
 	}
 
 	/**
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
+		// Musica
+		var musicConfig = {
+			mute: false,
+			volume: 1,
+			detune: 0,
+			seek: 0,
+			loop: true,
+			delay: 0
+		}
+		
+		var music = this.sound.add('Pirates of the Atlantic');
+    	music.play(musicConfig);
+
 		//Pintamos el fondo
 		var back = this.add.image(0, 0, 'background').setOrigin(0, 0);
 
@@ -41,8 +57,14 @@ export default class TitleScene extends Phaser.Scene {
 
 		// Botón "JUGAR"
 		var self = this;
-		var button = new Button(this, 514, 690,'play', 0, 1, 2, function(){self.scene.start('levelMenuScene', -1)}, function(){});
+		var button = new Button(this, 514, 690,'play', 0, 1, 2, jumpToLevelMenuScene, function(){});
 		button.setScale(5, 5);
+
+		function jumpToLevelMenuScene() {
+			music.stop();
+			self.scene.start('levelMenuScene', -1)
+		}
+
 		//Para seleccionar botones con teclas, creamos el objeto tecla
 		//var Enter = this.scene.input.keyboard.addKeys('ENTER,Z');
 		//En este caso, cualquiera de los objetos destacaria el boton y el enter lanzaria la escena de cinematica
@@ -56,8 +78,6 @@ export default class TitleScene extends Phaser.Scene {
 			//this.scene.start('optionsScene');//Se abre el menu de opciones
 		//});
 
-		this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('battleScene');
-        });
+		
 	}
 }

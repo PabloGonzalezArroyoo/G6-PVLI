@@ -4,6 +4,7 @@ import { Level } from '../level.js';
 import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake } from '../enemy.js'
 import { keyboard } from '../keyboardInput.js';
 import { Button } from '../button.js';
+import Player from '../player.js';
 
 // Array con todos los niveles del juego
 const levels = [new Level(null, 272, 527.5, 1, [new DrunkRuffian(null, 720, 200)], [], function(){}), // Nivel 0
@@ -63,7 +64,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 	 */
 	preload(){
 		// Fondo
-		this.load.image('levelMap', 'assets/scenes/levelsMenu/emptyMap.png');
+		this.load.spritesheet('levelMap', 'assets/scenes/levelsMenu/wavesMap_anim.png', { frameWidth: 1024, frameHeight: 768 });
 		
 		// Imagen de botones
 		this.load.spritesheet('level', 'assets/scenes/levelsMenu/levelsButtons.png', {frameWidth: 51, frameHeight: 51});
@@ -74,8 +75,14 @@ export default class LevelMenuScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-		//Pintar el mapa de fondo
-		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
+		// Pintar el mapa de fondo
+		this.anims.create({
+			key: 'levelMap',
+			frames: this.anims.generateFrameNumbers('levelMap', {start: 0, end: 9}),
+			frameRate: 10,
+			repeat: -1
+		});
+		this.add.sprite(1024, 768).setOrigin(1,1).play('levelMap');
 
 		// Botón de inventario
 		var self = this;
@@ -118,6 +125,11 @@ export default class LevelMenuScene extends Phaser.Scene {
             this.scene.start('battleScene');
         });
 	}
+
+	preUpdate(t, dt){
+		super.preUpdate(t, dt);
+	}
+
 	update() {
 		this._keyboard.processInput();  
 	}
