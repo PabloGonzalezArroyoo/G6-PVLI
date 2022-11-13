@@ -168,7 +168,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.dialogBox.setTextToDisplay('Enemigo ataca a Maria Pita');// Enviar el nuevo texto
 		this.emitter.once('finishTexting', () => {if(!levelFailed(this.enemies[index]))this.enemies[index].attack(this.player);// Crea un evento para que el enemigo ataque y crea otro evento si el enemigo no esta muerto
 				index++;
-				if(index<this.enemies.length&& !levelFailed(this.player)&&!levelFailed(this.enemies[index])) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} //Se llama al ataque de los demas enemigos si estosno estan muertos
+				if(index<this.enemies.length&& !levelFailed(this.player)) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} //Se llama al ataque de los demas enemigos si estosno estan muertos
 				else this.emitter.once('finishTurn', () => {this.EnableButtons();})});						// Evento que vuelve a crear los botones                           Tampoco si lo está Maria Pita y tampoco si no hya más enemigos
 		
 	}
