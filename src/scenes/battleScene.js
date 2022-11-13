@@ -158,7 +158,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.dialogBox.clearText();																	// Borrar texto previo
 		this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');								// Si Maria Pita ha empezado a atacar
 		this.emitter.once('finishTexting', () => {this.player.attack(this.enemies[0]);				// Crea un evento para que el jugador ataque y crea otro evento
-			this.emitter.once('finishTurn', () => {if(!levelCompleted(this.enemies)&&!levelFailed(this.player))this.EnemyTurn(0)})});
+			this.emitter.once('finishTurn', () => {if(!levelCompleted(this.enemies)&&!levelFailed(this.player)) this.EnemyTurn()})});
 										// Evento para que el enemygo ataque
 	}
 
@@ -167,10 +167,24 @@ export default class BattleScene extends Phaser.Scene {
 		if (!levelFailed(this.enemies[index])) {
 			this.dialogBox.clearText();// Borrar texto previo
 			this.dialogBox.setTextToDisplay('Enemigo ataca a Maria Pita');// Enviar el nuevo texto
-			this.emitter.once('finishTexting', () => {this.enemies[index].attack(this.player);// Crea un evento para que el enemigo ataque y crea otro evento si el enemigo no esta muerto
-				index++;
-				if(index<this.enemies.length) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} //Se llama al ataque de los demas enemigos si estosno estan muertos
-				else this.emitter.once('finishTurn', () => {this.UpdatePlayerEffects();})});						// Evento que vuelve a crear los botones                           Tampoco si lo está Maria Pita y tampoco si no hya más enemigos
+			this.emitter.once('finishTexting', () => {// Crea un evento para que el enemigo ataque y crea otro evento si el enemigo no esta muerto
+				let attack = this.enemies[index].attack(this.player);
+				// Si el ataque no ha sido con habilidad pasar al siguiente turno
+				if (typeof attack == 'number'){
+					index++;
+					if(index < this.enemies.length) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} //Se llama al ataque de los demas enemigos si estosno estan muertos
+					else this.emitter.once('finishTurn', () => {this.UpdatePlayerEffects();})						// Evento que vuelve a crear los botones                           Tampoco si lo está Maria Pita y tampoco si no hya más enemigos
+				}
+				// Si el ataque ha sido con habilidad dar feedback y pasar al siguiente turno
+				else {
+					this.dialogBox.clearText();
+					this.dialogBox.setTextToDisplay('Enemigo ' + attack[1] + ' a Maria Pita');
+					this.emitter.once('finishTexting', () => {
+						index++;
+						if(index < this.enemies.length) this.EnemyTurn(index); //Se llama al ataque de los demas enemigos si estosno estan muertos
+						else this.UpdatePlayerEffects();						// Evento que vuelve a crear los botones                           Tampoco si lo está Maria Pita y tampoco si no hya más enemigos
+					});
+				}});
 		}
 		else {
 			index++;

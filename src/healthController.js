@@ -43,7 +43,7 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
                 this.color.destroy();
                 this._currentHealth = 0;
             }
-
+            else {
             /* Animación */
             var frameNumber = 3;
             switch (true) {
@@ -73,6 +73,8 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             this.color = this.scene.add.image(this.x + this._offsetX, this.y, 'lifeBarColors', frameNumber).setDisplaySize(this._colorBarDisplaySizeX, this._colorBarDisplaySizeY);
             // Añade el cuadro de la barra
             this.scene.add.image(this.x, this.y, 'lifeBar').setDisplaySize(this._barDisplaySizeX, this._barDisplaySizeY);
+                
+            }
         }
         else {
             console.log("NO HA CAMBIADO LA VIDA")
