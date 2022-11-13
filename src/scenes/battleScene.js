@@ -12,7 +12,7 @@ import EventDispatcher from '../eventDispatcher.js';
 const levelCompleted = function(enemies){
 	let completado = true;
 	let i = 0;
-	while (i < enemies.length){
+	while (i < enemies.length && completado){
 		if (enemies[i].healthController.getCurrentHealth() > 0) completado = false;
 		i++;
 	}
@@ -22,7 +22,7 @@ const levelCompleted = function(enemies){
 // Comprueba si el jugador ha muerto
 const levelFailed = function(player) {
 	let muerto = false;
-	if (player.healthController.getCurrentHealth() < 0) muerto = true;
+	if (player.healthController.getCurrentHealth() <= 0) muerto = true;
 	return muerto;
 }
 
@@ -164,13 +164,51 @@ export default class BattleScene extends Phaser.Scene {
 
 	EnemyTurn(index){
 		if(!index)index=0;
-		this.dialogBox.clearText();// Borrar texto previo
-		this.dialogBox.setTextToDisplay('Enemigo ataca a Maria Pita');// Enviar el nuevo texto
-		this.emitter.once('finishTexting', () => {if(!levelFailed(this.enemies[index]))this.enemies[index].attack(this.player);// Crea un evento para que el enemigo ataque y crea otro evento si el enemigo no esta muerto
+		if (!levelFailed(this.enemies[index])) {
+			this.dialogBox.clearText();// Borrar texto previo
+			this.dialogBox.setTextToDisplay('Enemigo ataca a Maria Pita');// Enviar el nuevo texto
+			this.emitter.once('finishTexting', () => {this.enemies[index].attack(this.player);// Crea un evento para que el enemigo ataque y crea otro evento si el enemigo no esta muerto
 				index++;
-				if(index<this.enemies.length&& !levelFailed(this.player)) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} //Se llama al ataque de los demas enemigos si estosno estan muertos
-				else this.emitter.once('finishTurn', () => {this.EnableButtons();})});						// Evento que vuelve a crear los botones                           Tampoco si lo está Maria Pita y tampoco si no hya más enemigos
+				if(index<this.enemies.length) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} //Se llama al ataque de los demas enemigos si estosno estan muertos
+				else this.emitter.once('finishTurn', () => {this.UpdatePlayerEffects();})});						// Evento que vuelve a crear los botones                           Tampoco si lo está Maria Pita y tampoco si no hya más enemigos
+		}
+		else {
+			index++;
+			if (index < this.enemies.length) this.EnemyTurn(index);
+			else this.UpdatePlayerEffects();
+		}
 		
+	}
+
+	UpdatePlayerEffects(){
+		if (this.player.isBleeding()){
+			this.dialogBox.clearText();
+			this.dialogBox.setTextToDisplay('Maria Pita pierde vida por el veneno');
+			this.emitter.once('finishTexting', () => {this.player.updateTurn();
+				this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects()})});
+		}
+		else {
+			this.player.updateTurn();
+			this.UpdateEnemyEffects();
+		}
+	}
+
+	UpdateEnemyEffects(index){
+		if (!index) index = 0;
+		if (!levelFailed(this.enemies[index]) && this.enemies[index].isBleeding()){
+			this.dialogBox.clearText();
+			this.dialogBox.setTextToDisplay('Enemigo pierde vida por el sangrado');
+			this.emitter.once('finishTexting', () => {this.enemies[index].updateTurn();
+				index++;
+				if (index > this.enemies.length) this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects(index)})
+				else this.emitter.once('finishTurn', () => {this.EnableButtons();});});
+		}
+		else {
+			this.enemies[index].updateTurn();
+			index++;
+			if (index < this.enemies.length) this.UpdateEnemyEffects(index);
+			else this.EnableButtons();
+		}
 	}
 
 	// Desactiva y vuelve invisible los botones

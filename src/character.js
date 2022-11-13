@@ -15,4 +15,6 @@ export default class Character{
     updateTurn(){
         this.turnEffectController.updateTurn();
     }
+
+    isBleeding(){ return this.turnEffectController.bleedTurns > 0; }
 }
