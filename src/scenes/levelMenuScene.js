@@ -75,7 +75,14 @@ export default class LevelMenuScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-		// Pintar el mapa de fondo
+
+		const self = this;
+		const camera = this.cameras.main;
+
+		// Fade In
+		camera.fadeIn(1000, 0, 0, 0);
+
+		// Fondo
 		this.anims.create({
 			key: 'levelMap',
 			frames: this.anims.generateFrameNumbers('levelMap', {start: 0, end: 9}),
@@ -85,14 +92,13 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.add.sprite(1024, 768).setOrigin(1,1).play('levelMap');
 
 		// Botón de inventario
-		var self = this;
 		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 2, 1, function(){self.scene.pause('levelMenuScene');self.scene.launch('inventoryScene', 'levelMenuScene')}, function(){});
 		inventoryButton.setScale(3, 3);
 
+		// Teclado
 		this._keyboard = new keyboard(this);
 
 		// Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
-		var self=this;
     	let i = 0;
 		var buttons = [];
 		levels.forEach(level => {
@@ -100,8 +106,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 			buttons[i] = level.button;
       		i++;
 		});
-		//console.log(this.buttons);
-		
 		this._keyboard.loadButtonArray(buttons);
 		
 		//Ejemplo: Al pulsar la flecha izquierda
@@ -115,15 +119,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		//Esc.on('down', function () {
 			//this.scene.start('optionsScene');//Se abre el menu de opciones
 		//});
-
-		const width = this.scale.width;
-        const height = this.scale.height;
-		 
-		// this.add.text(width * 0.5, height * 0.5, 'Level Menu Scene', {})
-        // .setOrigin(0.5);
-		this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('battleScene');
-        });
 	}
 
 	preUpdate(t, dt){
