@@ -4,6 +4,7 @@ export default class TurnEffectController{
 		this.bleedTurns = 0;
 		this.bleedDamage = 0;
 		this.stunTurns = 0;
+		this.defenseTurns=0;
 	}
 
 	activateBleed(turns, damagePercentage){

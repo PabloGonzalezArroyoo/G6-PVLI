@@ -103,7 +103,7 @@ export default class BattleScene extends Phaser.Scene {
 		var background = this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
 		// Maria Pita
-		this.player = new Player(this, 250, 475, 50);
+		this.player = new Player(this, 250, 475, 30);
 			
 		// Enemy1
 		// this.enemy = new DrunkRuffian(this, 750, 200);
@@ -221,6 +221,8 @@ export default class BattleScene extends Phaser.Scene {
 			this.player.updateTurn();
 			this.UpdateEnemyEffects();
 		}
+		if(this.player._defenseTurns>0)this.player._defenseTurns--; //Reduce los turnos de defensa restantes
+		else if(this.player._defenseTurns===0)this.player._defenseBoost=0;//Si no tiene turnos de defensa, su acumulable es 0
 	}
 
 	// Metodo que actualiza los efectos por turnos de los enemigos

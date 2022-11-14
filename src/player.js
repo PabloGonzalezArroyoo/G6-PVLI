@@ -7,8 +7,8 @@ export default class Player extends Character {
     constructor(scene, x, y, damage) {
         super(x, y, new PlayerAnimator(scene, x, y), new HealthController(scene, x, y - 150, 100), damage);
         this.inventory = new Inventory();
-        this._defense;
-        this._defenseBoost;
+        this._defenseTurns=0;
+        this._defenseBoost=0;
     }
 
     attack(enemy){
@@ -21,6 +21,8 @@ export default class Player extends Character {
 
     defense(){
         console.log("DEFENSA");
+        this._defenseTurns=3;
+        if(this._defenseBoost<4)this._defenseBoost++;
         this.healthController.scene.time.delayedCall(1000, () => {this.healthController.emitter.emit("finishTurn")});
     }
 
@@ -44,7 +46,12 @@ export default class Player extends Character {
     receiveAttack(damage){
         // guardar en esta variable el calculo del daño
         let receivedDamage = damage;
+        if(this._defenseTurns>0)//Si quedan turnos de defensa
+        {
+            receivedDamage-=receivedDamage*(0.15*this._defenseBoost); //Reduce el daño segun los turnos de defensa que se tengan
+        }
         this.healthController.changeHealth(-receivedDamage);
+        console.log(receivedDamage+" "+this._defenseTurns);
         return receivedDamage;
     }
 }
