@@ -73,6 +73,7 @@ footer {
 /* Se especifica el tama�o del canvas del juego y los margenes */
 .canvas{
 	margin: auto;
+	margin-bottom: 90px;
 	/* NO DESCOMENTAR LO DE ABAJO -> CONLFICTO CON EL CANVAS DEL .JS */
 	/* width: 1024px;
 	height: 768px;
@@ -81,8 +82,7 @@ footer {
 
 /* Margenes para cada particion (canvas, historia, controles...) */
 .particion{
-	margin-top: 50px;
-	margin: 25px 150px;
+	margin: 25px 150px 50px;
 	/* border: solid black 3px; /* Quitar esta linea cuando ya esten terminadas las particones */
 }
 
