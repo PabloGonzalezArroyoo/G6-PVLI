@@ -3,7 +3,6 @@
 import {Button} from '../button.js';
 import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
-import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake }  from '../enemy.js'
 import DialogBox from '../dialogBox.js';;
 import { keyboard } from '../keyboardInput.js';
 import EventDispatcher from '../eventDispatcher.js';
@@ -12,7 +11,7 @@ import EventDispatcher from '../eventDispatcher.js';
 const levelCompleted = function(enemies){
 	let completado = true;
 	let i = 0;
-	while (i < enemies.length){
+	while (i < enemies.length && completado){
 		if (enemies[i].healthController.getCurrentHealth() > 0) completado = false;
 		i++;
 	}
@@ -22,7 +21,7 @@ const levelCompleted = function(enemies){
 // Comprueba si el jugador ha muerto
 const levelFailed = function(player) {
 	let muerto = false;
-	if (player.healthController.getCurrentHealth() < 0) muerto = true;
+	if (player.healthController.getCurrentHealth() <= 0) muerto = true;
 	return muerto;
 }
 
@@ -123,10 +122,10 @@ export default class BattleScene extends Phaser.Scene {
 		// Interactivo
 		var self = this;
 		this._keyboard = new keyboard(this);
-		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {this.PlayerTurn()},function(){self._keyboard.setBeingUsed(0)}),
+		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {this.PlayerTurn('attack')},function(){self._keyboard.setBeingUsed(0)}),
 		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, () => {if(this.state === 'Waiting'){this.scene.pause();this.scene.launch('inventoryScene', 'battleScene')}},function(){self._keyboard.setBeingUsed(1)}),
-		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, function() {self.player.defense()},function(){self._keyboard.setBeingUsed(2)}),
-		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, function() {self.player.quelocura()},function(){self._keyboard.setBeingUsed(3)})];
+		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, () => {this.PlayerTurn('defense')},function(){self._keyboard.setBeingUsed(2)}),
+		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, () => {this.PlayerTurn('queLocura')},function(){self._keyboard.setBeingUsed(3)})];
 		this._keyboard.loadButtonArray(this.botones);
 		
 		// Transicion escena
@@ -151,26 +150,99 @@ export default class BattleScene extends Phaser.Scene {
 			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
 			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', this.level);});
 		} 
+		if (levelFailed(this.player)){
+			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
+			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene');});
+		} 
 	}
 
-	PlayerTurn(){
-		this.DisableButtons();																		//Desactiva los botones
-		this.dialogBox.clearText();																	// Borrar texto previo
-		this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');								// Si Maria Pita ha empezado a atacar
-		this.emitter.once('finishTexting', () => {this.player.attack(this.enemies[0]);				// Crea un evento para que el jugador ataque y crea otro evento
-			this.emitter.once('finishTurn', () => {if(!levelCompleted(this.enemies)&&!levelFailed(this.player))this.EnemyTurn(0)})});
-										// Evento para que el enemygo ataque
+	// Metodo que efectua la accion del jugador cada turno
+	PlayerTurn(action){
+		this.DisableButtons();															// Desactiva los botones
+		this.dialogBox.clearText();														// Borrar texto previo
+		this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');
+		this.emitter.once('finishTexting', () => {										// Crea un evento para que el jugador actue y crea otro evento
+			if (action === 'attack') this.player.attack(this.enemies[0]);				
+			else if (action === 'defense') this.player.defense();
+			else if (action === 'object') this.player.useItem();
+			else if (action === 'queLocura') this.player.quelocura(this.enemies[0]);
+			this.emitter.once('finishTurn', () => {if (!levelCompleted(this.enemies) && !levelFailed(this.player)) this.EnemyTurn()})}); // Evento para que el enemigo ataque
+										
 	}
 
+	// Metodo que efectua la accion de los enemigos cada turno
 	EnemyTurn(index){
-		if(!index)index=0;
-		this.dialogBox.clearText();// Borrar texto previo
-		this.dialogBox.setTextToDisplay('Enemigo ataca a Maria Pita');// Enviar el nuevo texto
-		this.emitter.once('finishTexting', () => {if(!levelFailed(this.enemies[index]))this.enemies[index].attack(this.player);// Crea un evento para que el enemigo ataque y crea otro evento si el enemigo no esta muerto
+		if (!index) index = 0;
+		// Si el enemigo sigue vivo hace su acción
+		if (!levelFailed(this.enemies[index])) {
+			this.dialogBox.clearText();// Borrar texto previo
+			this.dialogBox.setTextToDisplay('Enemigo ataca a Maria Pita');	// Enviar el nuevo texto
+			this.emitter.once('finishTexting', () => {						// Crea un evento para que el enemigo ataque
+				
+				// Guarda el daño hecho o el daño y un texto si se ha usado una habilidad
+				let attack = this.enemies[index].attack(this.player);
+				
+				// Si el ataque no ha sido con habilidad pasar al siguiente turno
+				if (typeof attack == 'number'){
+					index++;
+					if(index < this.enemies.length) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} 	//Se llama al ataque de los demas enemigos
+					else this.emitter.once('finishTurn', () => {this.UpdatePlayerEffects();})							// Evento que actualiza los estados del jugador en el turno
+				}
+				
+				// Si el ataque ha sido con habilidad dar feedback y pasar al siguiente turno
+				else {
+					this.dialogBox.clearText();
+					this.dialogBox.setTextToDisplay('Enemigo ' + attack[1] + ' a Maria Pita');
+					this.emitter.once('finishTexting', () => {
+						index++;
+						if(index < this.enemies.length) this.EnemyTurn(index); 	//Se llama al ataque de los demas enemigos
+						else this.UpdatePlayerEffects();						// Evento que actualiza los estados del jugador en el turno
+					});
+				}});
+		}
+		// Si el enemigo no está vivo pasa al siguiente turno
+		else {
+			index++;
+			if (index < this.enemies.length) this.EnemyTurn(index);
+			else this.UpdatePlayerEffects();
+		}
+	}
+
+	// Metodo que actualiza los efectos por turnos del jugador
+	UpdatePlayerEffects(){
+		// Si el jugador esta envenenado da feedback
+		if (this.player.isBleeding()){
+			this.dialogBox.clearText();
+			this.dialogBox.setTextToDisplay('Maria Pita pierde vida por el veneno');
+			this.emitter.once('finishTexting', () => {this.player.updateTurn();
+				this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects()})});
+		}
+		else {
+			this.player.updateTurn();
+			this.UpdateEnemyEffects();
+		}
+	}
+
+	// Metodo que actualiza los efectos por turnos de los enemigos
+	UpdateEnemyEffects(index){
+		if (!index) index = 0;
+		// Si el enemigo sigue vivo y esta sangrando da feedback
+		if (!levelFailed(this.enemies[index]) && this.enemies[index].isBleeding()){
+			this.dialogBox.clearText();
+			this.dialogBox.setTextToDisplay('Enemigo pierde vida por el sangrado');
+			this.emitter.once('finishTexting', () => {this.enemies[index].updateTurn();
 				index++;
-				if(index<this.enemies.length&& !levelFailed(this.player)) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} //Se llama al ataque de los demas enemigos si estosno estan muertos
-				else this.emitter.once('finishTurn', () => {this.EnableButtons();})});						// Evento que vuelve a crear los botones                           Tampoco si lo está Maria Pita y tampoco si no hya más enemigos
-		
+				// Si quedan enemigos se actualizan tambien
+				if (index > this.enemies.length) this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects(index)})
+				// Si no quedan se pasa al siguiente turno
+				else this.emitter.once('finishTurn', () => {this.EnableButtons();});});			// Evento que vuelve a crear los botones
+		}
+		else {
+			this.enemies[index].updateTurn();
+			index++;
+			if (index < this.enemies.length) this.UpdateEnemyEffects(index);
+			else this.EnableButtons();
+		}
 	}
 
 	// Desactiva y vuelve invisible los botones

@@ -21,6 +21,7 @@ export default class Player extends Character {
 
     defense(){
         console.log("DEFENSA");
+        this.healthController.scene.time.delayedCall(1000, () => {this.healthController.emitter.emit("finishTurn")});
     }
 
     useItem(item){
@@ -32,10 +33,12 @@ export default class Player extends Character {
             this.healthController.changeHealth(item.getValue());
             this.inventory.subtractItem(item);
         }
+        this.healthController.scene.time.delayedCall(1000, () => {this.healthController.emitter.emit("finishTurn")});
     }
 
-    quelocura(){
+    quelocura(enemy){
         console.log("QUELOCURA");
+        this.attack(enemy);
     }
 
     receiveAttack(damage){

@@ -18,13 +18,14 @@ export class Enemy extends Character {
         this.animator = new EnemyAnimator(scene, this.x, this.y, this.spritesheet);
     }
     attack(player, abilityPercentage) {    
-        // Animacion de ataque
-        // this.animator.playAttack();
 
         // Hace la habilidad y devuelve el daño hecho
         if (abilityPercentage)
             if (Math.floor(Math.random() * 100) < abilityPercentage) 
                 return this.ability(player);
+
+        // Animacion de ataque
+        // this.animator.playAttack();
 
         // Golpea y devuelve el daño hecho
         return player.receiveAttack(this.damage);
@@ -63,7 +64,7 @@ export class ScurviedSailor extends Enemy {
 
     ability(player) {
         player.turnEffectController.activateBleed(3, 2);
-        return super.attack(player);
+        return [super.attack(player), "envenena"];
     }
 }
 
@@ -87,7 +88,7 @@ export class ScurviedSailor extends Enemy {
         // Restaurar el daño
         this.damage -= critDmg;
         
-        return dmg;
+        return [dmg, "hace un golpe critico"];
     }
 }
 
@@ -105,7 +106,7 @@ export class ScurviedSailor extends Enemy {
     ability(player) {
         let dmg = super.attack(player);
         this.healthController.changeHealth((dmg/100)*50);
-        return dmg;
+        return [dmg, "roba vida"];
     }
 }
 
