@@ -35,7 +35,57 @@ export class HealthItem extends Item {
 
 // Items de daño (armas)
 export class WeaponItem extends Item {
-	constructor(name, imgID, value, description) {
+	constructor(name, imgID, value, description, queLocura) {
 		super(name, imgID, "WEAPON", value, description);
+		this.queLocura = queLocura;
 	}
+
+	static areaAttack(percentage) {
+		return function (player, enemies) {
+			let dmg = player.getDamage();
+			dmg /= enemies.length;
+			dmg += dmg*percentage/100;
+			enemies.forEach(enemy => {enemy.healthController.changeHealth(-dmg);});
+			return dmg;		
+		}
+	}
+
+	static bleeding(percentage) {
+		return function(player, enemies, index){
+			enemies[index].turnEffectController.activateBleed(percentage, 3);
+			return player.attack(enemies[index]);
+		}
+	}
+
+	static stun(maxTurns, percentages) {
+		return function(player, enemies, index) {
+			let activeTurns = 0;
+			let active = true;
+			while (activeTurns < maxTurns && active){
+				active = Math.floor(Math.random() * 100) < percentages[activeTurns];
+				if (active) activeTurns++;
+			}
+			console.log(activeTurns);
+			enemies[index].turnEffectController.activateStun(activeTurns);
+			return player.attack(enemies[index]);
+		}
+	}
+
+	static multipleAttack(times) {
+		return function(player, enemies, index) {
+			let dmg = player.getDamage();
+			dmg = dmg * 60 / 100;
+			for (let i = 0; i < times; i++)
+				enemies[index].healthController.changeHealth(-dmg);
+			return dmg * times;
+		}
+	}
+
+	static lifeAbsorbtion(percentage) {
+		return function (player, enemies, index) {
+			let dmg = player.attack(enemies[index]);
+			player.healthController.changeHealth(dmg*percentage/100);
+		}
+	}
+
 }

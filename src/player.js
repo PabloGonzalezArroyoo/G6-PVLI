@@ -17,6 +17,7 @@ export default class Player extends Character {
         this.animator.playAttack();
         // Le baja vida al enemigo
         this.animator.once("animationcomplete-attack",() => {enemy.healthController.changeHealth(-this.damage)});
+        return this.getDamage();
     }
 
     defense(){
@@ -36,9 +37,9 @@ export default class Player extends Character {
         this.healthController.scene.time.delayedCall(1000, () => {this.healthController.emitter.emit("finishTurn")});
     }
 
-    quelocura(enemy){
+    quelocura(enemies, index){
         console.log("QUELOCURA");
-        this.attack(enemy);
+        this.inventory.equippedWeapon.queLocura(this, enemies, index);
     }
 
     receiveAttack(damage){
@@ -47,4 +48,6 @@ export default class Player extends Character {
         this.healthController.changeHealth(-receivedDamage);
         return receivedDamage;
     }
+
+    getDamage() {return this.damage;}
 }

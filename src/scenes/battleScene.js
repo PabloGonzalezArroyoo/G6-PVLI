@@ -6,6 +6,7 @@ import Player from '../player.js';
 import DialogBox from '../dialogBox.js';;
 import { keyboard } from '../keyboardInput.js';
 import EventDispatcher from '../eventDispatcher.js';
+import {WeaponItem} from '../item.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
 const levelCompleted = function(enemies){
@@ -165,7 +166,7 @@ export default class BattleScene extends Phaser.Scene {
 			if (action === 'attack') this.player.attack(this.enemies[0]);				
 			else if (action === 'defense') this.player.defense();
 			else if (action === 'object') this.player.useItem();
-			else if (action === 'queLocura') this.player.quelocura(this.enemies[0]);
+			else if (action === 'queLocura') this.player.quelocura(this.enemies, 0);
 			this.emitter.once('finishTurn', () => {if (!levelCompleted(this.enemies) && !levelFailed(this.player)) this.EnemyTurn()})}); // Evento para que el enemigo ataque
 										
 	}
@@ -174,7 +175,7 @@ export default class BattleScene extends Phaser.Scene {
 	EnemyTurn(index){
 		if (!index) index = 0;
 		// Si el enemigo sigue vivo hace su acción
-		if (!levelFailed(this.enemies[index])) {
+		if (!levelFailed(this.enemies[index]) && !this.enemies[index].isStuned()) {
 			this.dialogBox.clearText();// Borrar texto previo
 			this.dialogBox.setTextToDisplay('Enemigo ataca a Maria Pita');	// Enviar el nuevo texto
 			this.emitter.once('finishTexting', () => {						// Crea un evento para que el enemigo ataque
