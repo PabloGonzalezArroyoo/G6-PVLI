@@ -18,6 +18,9 @@ export default class Player extends Character {
             );
         this._defense;
         this._defenseBoost;
+        this.inventory.addItem(listOfItems[6]);
+        this.inventory.addItem(listOfItems[1]);
+
     }
 
     attack(enemy){

@@ -21,8 +21,10 @@ export default class Inventory{
 		let itemIndex = this.allItems.findIndex((element) => element.getName() === item.getName());
 		if(itemIndex === -1)
 			this.allItems.push(item);
-		else
-			this.allItems[itemIndex].addCuantity(1);
+		else{
+			if(item.getType() !== 'WEAPON')
+				this.allItems[itemIndex].addQuantity(1);
+		}
 	}
 
 	// Resta 1 a la cantidad del item si existe y lo elimina del array si la cantidad es 0
