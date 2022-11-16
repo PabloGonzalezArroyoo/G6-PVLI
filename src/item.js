@@ -6,7 +6,7 @@ export default class Item {
 		this.type = type;
 		this.value = value;
 		this.description = description;
-		this.quantity = 0;
+		this.quantity = 1;
 	}
 
   	getName() { return this.name; }

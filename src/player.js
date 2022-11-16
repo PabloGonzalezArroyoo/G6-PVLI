@@ -2,13 +2,33 @@ import Character from './character.js'
 import PlayerAnimator from './animations/playerAnimator.js';
 import HealthController from './healthController.js';
 import Inventory from './inventory.js';
+import {listOfItems} from './listOfItems.js';
 
 export default class Player extends Character {
     constructor(scene, x, y, damage) {
         super(x, y, new PlayerAnimator(scene, x, y), new HealthController(scene, x, y - 150, 100), damage);
-        this.inventory = new Inventory();
+        this.inventory = new Inventory(listOfItems[0],   // Quitar array para el juego final y dejar el constructor por defecto
+            [listOfItems[1],
+            listOfItems[2],
+            listOfItems[5],
+            listOfItems[6],
+            listOfItems[6],
+            listOfItems[6],
+            listOfItems[6]]
+            );
         this._defense;
         this._defenseBoost;
+
+        /*// Pintar botones correspondientes a los objetos del inventario y hacer sprites interactivos
+        // ESTO ES UNA PRUEBA PARA MOSTRAR LOS OBJETOS EN PANTALLA
+        this.inventory.addItem(1);
+        this.inventory.addItem(1);
+        this.inventory.addItem(2);
+        this.inventory.addItem(5);
+        this.inventory.addItem(6);
+        this.inventory.addItem(6);
+        this.inventory.addItem(6);
+        this.inventory.addItem(6);*/
     }
 
     attack(enemy){
@@ -26,10 +46,11 @@ export default class Player extends Character {
 
     useItem(item){
         //Cambia de arma equipada si el item es un arma
-        if(item.getType()==='arma')
+        if(item.type === 'WEAPON')
             this.inventory.setEquipedWeapon(item);
         //Se cura si el item es un objeto de curacion
-        else if(item.getType()==='curacion'){
+        else if(item.type === 'HEALTH'){
+            console.log(item.getValue())
             this.healthController.changeHealth(item.getValue());
             this.inventory.subtractItem(item);
         }

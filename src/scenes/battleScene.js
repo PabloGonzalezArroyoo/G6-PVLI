@@ -38,8 +38,6 @@ export default class BattleScene extends Phaser.Scene {
 		super({ key: 'battleScene' });
 		this.dialogBox;
 		this.previousLetterTime = 0;
-		this.state = 0;
-		this.isBusy = false;
 
 		this.level;
 		this.enemies;
@@ -54,8 +52,6 @@ export default class BattleScene extends Phaser.Scene {
 		this.level = level;
 		this.enemies = level.enemies;
 		this.loot = level.loot;
-		this.state  = 'Waiting';
-		this.isBusy = false;
 	}
 
 	/**
@@ -123,7 +119,7 @@ export default class BattleScene extends Phaser.Scene {
 		var self = this;
 		this._keyboard = new keyboard(this);
 		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {this.PlayerTurn('attack')},function(){self._keyboard.setBeingUsed(0)}),
-		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, () => {if(this.state === 'Waiting'){this.scene.pause();this.scene.launch('inventoryScene', 'battleScene')}},function(){self._keyboard.setBeingUsed(1)}),
+		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, () => {this.scene.pause();this.scene.launch('inventoryScene', {scene: 'battleScene', inventory: this.player.inventory});this.events.once('resume', (scene, item) => {this.useItem(item)})},function(){self._keyboard.setBeingUsed(1)}),
 		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, () => {this.PlayerTurn('defense')},function(){self._keyboard.setBeingUsed(2)}),
 		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, () => {this.PlayerTurn('queLocura')},function(){self._keyboard.setBeingUsed(3)})];
 		this._keyboard.loadButtonArray(this.botones);
@@ -157,17 +153,34 @@ export default class BattleScene extends Phaser.Scene {
 	}
 
 	// Metodo que efectua la accion del jugador cada turno
-	PlayerTurn(action){
+	PlayerTurn(action, item){
 		this.DisableButtons();															// Desactiva los botones
-		this.dialogBox.clearText();														// Borrar texto previo
-		this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');
-		this.emitter.once('finishTexting', () => {										// Crea un evento para que el jugador actue y crea otro evento
-			if (action === 'attack') this.player.attack(this.enemies[0]);				
-			else if (action === 'defense') this.player.defense();
-			else if (action === 'object') this.player.useItem();
-			else if (action === 'queLocura') this.player.quelocura(this.enemies[0]);
-			this.emitter.once('finishTurn', () => {if (!levelCompleted(this.enemies) && !levelFailed(this.player)) this.EnemyTurn()})}); // Evento para que el enemigo ataque
-										
+		switch (action){									
+			case 'attack' : 																	// Si selecciona atacar
+				this.dialogBox.clearText();														// Borrar texto previo
+				this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');	
+				this.emitter.once('finishTexting', () => {this.player.attack(this.enemies[0])});	
+				break;			
+			case 'defense': 														// Si selecciona defenderse
+				this.dialogBox.clearText();														// Borrar texto previo
+				this.dialogBox.setTextToDisplay('Maria Pita se defiende');	
+				this.emitter.once('finishTexting', () => {this.player.defense()});
+				break;
+			case 'object' : 																	//Si selecciona un objeto
+				this.dialogBox.clearText();														// Borrar texto previo
+				if(item.type === 'WEAPON')													
+					this.dialogBox.setTextToDisplay('Maria Pita ha cambiado de arma ha ' + item.name);
+				else
+					this.dialogBox.setTextToDisplay('Maria Pita ha usado ' + item.name); 
+				this.emitter.once('finishTexting', () => {this.player.useItem(item)});
+				break;
+			case 'queLocura' : 																	// Si selecciona QueLocura
+				this.dialogBox.clearText();														// Borrar texto previo
+				this.dialogBox.setTextToDisplay('Maria Pita ha usado ¡Que Locura!');
+				this.emitter.once('finishTexting', () => {this.player.quelocura(this.enemies[0])});
+				break;
+		}	
+		this.emitter.once('finishTurn', () => {if (!levelCompleted(this.enemies) && !levelFailed(this.player)) this.EnemyTurn()}); // Evento para que el enemigo ataque						
 	}
 
 	// Metodo que efectua la accion de los enemigos cada turno
@@ -259,5 +272,10 @@ export default class BattleScene extends Phaser.Scene {
 			this.botones[i].setInteractive();
 			this.botones[i].visible = true;
 		}
+	}
+	//Usa el item si hay, si no, no hace nada
+	useItem(item){
+		if(item !== 'none')
+			this.PlayerTurn('object', item);
 	}
 }

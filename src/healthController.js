@@ -32,12 +32,11 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
     }
     
     changeHealth(value) {
-
         if (value != 0) {
             /* Lógica */
             this._currentHealth += value;
             // MAXIMO
-            if (this._currentHealth > this._maxHealth) this._currentHealth = this._maxHealth; 
+            if (this._currentHealth > this._maxHealth) this._currentHealth = this._maxHealth;
             // MINIMO
             else if (this._currentHealth <= 0) {
                 this.color.destroy();
@@ -58,12 +57,15 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
                     frameNumber = 0; break;
                 }
             }
+        }
             // Destruye la barra de color anterior
             this.color.destroy();
-
+            console.log(this._colorBarDisplaySizeX);
+            console.log(value);
             /* CALCULOS */
             // Calcula cuantos pixeles se deben quitar/poner
             var pix = value / this._healthDivider;
+            console.log(pix);
             // La posicion X para la barra de color debe ir acumulando esos pixeles/2 ya que se quita por ambos lados
             this._offsetX += pix / 2;
             // El tamaño X para la barra de color debe ir acumulando esos pixeles
@@ -73,8 +75,6 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             this.color = this.scene.add.image(this.x + this._offsetX, this.y, 'lifeBarColors', frameNumber).setDisplaySize(this._colorBarDisplaySizeX, this._colorBarDisplaySizeY);
             // Añade el cuadro de la barra
             this.scene.add.image(this.x, this.y, 'lifeBar').setDisplaySize(this._barDisplaySizeX, this._barDisplaySizeY);
-                
-            }
         }
         else {
             console.log("NO HA CAMBIADO LA VIDA")

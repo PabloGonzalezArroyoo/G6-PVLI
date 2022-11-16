@@ -12,7 +12,7 @@ export var listOfItems = [
 
 	// Items de daño (armas)
 	new WeaponItem("Cimitarra de madera","cimitarraMadera", 25, "*descripcion*"),
-	new WeaponItem("Cimitarra de acero","cimitarraAcero", "*descripcion*"),
+	new WeaponItem("Cimitarra de acero","cimitarraAcero", 25,"*descripcion*"),
 	new WeaponItem("Cimitarra loca","cimitarraLoca", 25, "*descripcion*"),
 	new WeaponItem("Daga Oxidada","*imgID*", 25, "*descripcion*"),
 	new WeaponItem("Daga afilada","*imgID*", 25, "*descripcion*"),
