@@ -4,8 +4,6 @@ export default class Inventory{
 	constructor(equippedWeapon = listOfItems[0], allItems = []){
 		this.equippedWeapon = equippedWeapon;
 		this.allItems = allItems;
-		this.weaponAndObjectSize = 0;
-		this.foodSize = 0;
 	}
 
 	getEquipedWeapon(){return equippedWeapon;}
@@ -35,5 +33,32 @@ export default class Inventory{
 			if(this.allItems[itemIndex].getQuantity() === 0)
 				this.allItems.splice(itemIndex,1);
 		}
+	}
+
+	//Crea un objeto con la copia del inventario actual
+	getInfo(){
+		let inventory = {equippedWeapon: this.equippedWeapon.getName(), allItems: []};
+		let i = 0;
+
+		this.allItems.forEach(element => {
+			inventory.allItems[i] ={ name: element.getName(), quantity: element.getQuantity()} ;
+			i++;			
+		});
+		return inventory;
+	}
+
+	//Añade los objetos perdidos en batalla y reestablece el arma equipada
+	setInfo(inventory){
+		this.equippedWeapon = listOfItems.find((element) => element.getName() === inventory.equippedWeapon);
+		inventory.allItems.forEach(item => {
+			let index = this.allItems.findIndex((element) => element.getName() === item.name);
+			if(index !== -1)
+				this.allItems[index].setQuantity(item.quantity);
+			else{
+				this.allItems.push(listOfItems.find((element) => element.getName() === item.name));
+				this.allItems[this.allItems.length - 1].setQuantity(item.quantity);
+			}
+
+		});
 	}
 }

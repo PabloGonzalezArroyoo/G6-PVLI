@@ -3,7 +3,8 @@
 import {Button} from '../button.js';
 import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
-import DialogBox from '../dialogBox.js';;
+import DialogBox from '../dialogBox.js';
+import Inventory from '../inventory.js';
 import { keyboard } from '../keyboardInput.js';
 import EventDispatcher from '../eventDispatcher.js';
 
@@ -48,10 +49,13 @@ export default class BattleScene extends Phaser.Scene {
 	 * Inicializa variables
 	 * - Cargar nivel seleccionado
 	*/
-	init(level) {
-		this.level = level;
-		this.enemies = level.enemies;
-		this.loot = level.loot;
+	init(data) {
+		this.level = data.level;
+		this.enemies = data.level.enemies;
+		this.loot = data.level.loot;
+		this.inventory = data.inventory;
+		this.inventoryBackup = data.inventory.getInfo();
+		console.log(this.inventoryBackup);
 	}
 
 	/**
@@ -99,8 +103,8 @@ export default class BattleScene extends Phaser.Scene {
 		var background = this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
 		// Maria Pita
-		this.player = new Player(this, 250, 475, 50);
-			
+		this.player = new Player(this, 250, 475, 50, this.inventory);	
+		
 		// Enemy1
 		// this.enemy = new DrunkRuffian(this, 750, 200);
 		this.enemies.forEach(enemy => enemy.setScene(this));
@@ -144,11 +148,11 @@ export default class BattleScene extends Phaser.Scene {
 		}
 		if (levelCompleted(this.enemies)){
 			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
-			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', this.level);});
+			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
 		} 
 		if (levelFailed(this.player)){
 			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
-			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene');});
+			this.time.delayedCall(2000,()=>{this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
 		} 
 	}
 

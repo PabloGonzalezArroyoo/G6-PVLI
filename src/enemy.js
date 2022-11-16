@@ -40,7 +40,7 @@ export class Enemy extends Character {
 // Enemigo 1
 export class DrunkRuffian extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'drunkRuffian', 100, 15);
+        super(scene, x, y, 'drunkRuffian', 100, 55);
     }
 }
 

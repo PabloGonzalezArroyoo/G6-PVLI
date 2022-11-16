@@ -2,24 +2,15 @@ import Character from './character.js'
 import PlayerAnimator from './animations/playerAnimator.js';
 import HealthController from './healthController.js';
 import Inventory from './inventory.js';
-import {listOfItems} from './listOfItems.js';
 
 export default class Player extends Character {
-    constructor(scene, x, y, damage) {
+    constructor(scene, x, y, damage, inventory) {
         super(x, y, new PlayerAnimator(scene, x, y), new HealthController(scene, x, y - 150, 100), damage);
-        this.inventory = new Inventory(listOfItems[0],   // Quitar array para el juego final y dejar el constructor por defecto
-            [listOfItems[1],
-            listOfItems[2],
-            listOfItems[5],
-            listOfItems[6],
-            listOfItems[6],
-            listOfItems[6],
-            listOfItems[6]]
-            );
+        this.inventory = inventory;
         this._defense;
         this._defenseBoost;
-        this.inventory.addItem(listOfItems[6]);
-        this.inventory.addItem(listOfItems[1]);
+        //this.inventory.addItem(listOfItems[6]);
+        //this.inventory.addItem(listOfItems[1]);         //Estas lineas es solo para comprobar
 
     }
 
