@@ -18,17 +18,6 @@ export default class Player extends Character {
             );
         this._defense;
         this._defenseBoost;
-
-        /*// Pintar botones correspondientes a los objetos del inventario y hacer sprites interactivos
-        // ESTO ES UNA PRUEBA PARA MOSTRAR LOS OBJETOS EN PANTALLA
-        this.inventory.addItem(1);
-        this.inventory.addItem(1);
-        this.inventory.addItem(2);
-        this.inventory.addItem(5);
-        this.inventory.addItem(6);
-        this.inventory.addItem(6);
-        this.inventory.addItem(6);
-        this.inventory.addItem(6);*/
     }
 
     attack(enemy){

@@ -46,26 +46,23 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             /* Animación */
             var frameNumber = 3;
             switch (true) {
-                // Colores
-                case this._currentHealth <= 75 && this._currentHealth > 50: {
-                    frameNumber = 2; break;
-                } 
-                case this._currentHealth <= 50 && this._currentHealth > 25: {
-                    frameNumber = 1; break;
-                }
-                case this._currentHealth <= 25 && this._currentHealth > 0: {
-                    frameNumber = 0; break;
+                    // Colores
+                    case this._currentHealth <= 75 && this._currentHealth > 50: {
+                        frameNumber = 2; break;
+                    } 
+                    case this._currentHealth <= 50 && this._currentHealth > 25: {
+                        frameNumber = 1; break;
+                    }
+                    case this._currentHealth <= 25 && this._currentHealth > 0: {
+                        frameNumber = 0; break;
+                    }
                 }
             }
-        }
             // Destruye la barra de color anterior
             this.color.destroy();
-            console.log(this._colorBarDisplaySizeX);
-            console.log(value);
             /* CALCULOS */
             // Calcula cuantos pixeles se deben quitar/poner
             var pix = value / this._healthDivider;
-            console.log(pix);
             // La posicion X para la barra de color debe ir acumulando esos pixeles/2 ya que se quita por ambos lados
             this._offsetX += pix / 2;
             // El tamaño X para la barra de color debe ir acumulando esos pixeles
