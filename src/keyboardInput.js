@@ -2,11 +2,9 @@ import phaser from "./lib/phaser.js";
 export class keyboard
 {
     constructor(scene) {
-        this.beingUsed = 0;
         this.inputKeyboard = false;
         this._scene = scene;
         this.arrows = scene.input.keyboard.addKeys('left, up, right, down, enter');
-        this._buttonArray
         this._cursorPositionX = scene.input.mousePointer.x;
         this._cursorPositionY = scene.input.mousePointer.y;
     }

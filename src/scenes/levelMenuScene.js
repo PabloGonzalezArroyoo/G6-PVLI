@@ -6,31 +6,33 @@ import { keyboard } from '../keyboardInput.js';
 import { Button } from '../button.js';
 
 // Array con todos los niveles del juego
-const levels = [new Level(null, 272, 527.5, 1, [new DrunkRuffian(null, 720, 200)], [], null, function(){}), // Nivel 0
-				new Level(null, 354, 455.5, 0, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], [], null), // Nivel 1
-				new Level(null, 292, 363.5, 0, [], [], null),			// ... 2
-				new Level(null, 405, 363.5, 0, [], [], null),			// 3
-				new Level(null, 354, 271.5, 0, [], [], null),			// 4
-				new Level(null, 507, 302, 0, [], [], null),				// 5
-				new Level(null, 548, 394.5, 0, [], [], null),			// 6
-				new Level(null, 589, 486.5, 0, [], [], null),			// 7
-				new Level(null, 630, 353.5, 0, [], [], null),			// 8
-				new Level(null, 610, 240.5, 0, [], [], null),			// 9
-				new Level(null, 702, 261, 0, [], [], null),				// 10
-				new Level(null, 814, 261, 0, [], [], null)];			// 11
+const levels = [new Level(272, 527.5, [new DrunkRuffian(null, 720, 200)], []), // Nivel 0
+				new Level(354, 455.5, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], []), // Nivel 1
+				new Level(292, 363.5, [], []),			// ... 2
+				new Level(405, 363.5, [], []),			// 3
+				new Level(354, 271.5, [], []),			// 4
+				new Level(507, 302, [], []),			// 5
+				new Level(548, 394.5, [], []),			// 6
+				new Level(589, 486.5, [], []),			// 7
+				new Level(630, 353.5, [], []),			// 8
+				new Level(610, 240.5, [], []),			// 9
+				new Level(702, 261, [], []),			// 10
+				new Level(814, 261, [], [])];			// 11
 
+				levels[0].setUnlocked();
+				
 				// Especificar los niveles que se desbloquean tras completar cada nivel
-				levels[0].setNextLevels([levels[1]], [["right", "down"]]);
-				levels[1].setNextLevels([levels[2], levels[3]], [["left", "down"],["right", "down"]]);
+				levels[0].setNextLevels([levels[1]]);
+				levels[1].setNextLevels([levels[2], levels[3]]);
 				levels[2].setNextLevels(null);
-				levels[3].setNextLevels([levels[4], levels[5], levels[6]], [["left", "down"], ["up", "left"], ["right", "left"]]);
+				levels[3].setNextLevels([levels[4], levels[5], levels[6]]);
 				levels[4].setNextLevels(null);
 				levels[5].setNextLevels(null);
-				levels[6].setNextLevels([levels[7], levels[8]], [["down", "left"], ["right", "down"]]);
+				levels[6].setNextLevels([levels[7], levels[8]]);
 				levels[7].setNextLevels(null);
-				levels[8].setNextLevels([levels[9], levels[10]], [["up", "down"], ["right", "down"]]);
+				levels[8].setNextLevels([levels[9], levels[10]]);
 				levels[9].setNextLevels(null);
-				levels[10].setNextLevels([levels[11]], [["right", "left"]]);
+				levels[10].setNextLevels([levels[11]]);
 				levels[11].setNextLevels(null);
 
 /**
@@ -82,26 +84,22 @@ export default class LevelMenuScene extends Phaser.Scene {
 		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, function(){self.scene.pause('levelMenuScene');self.scene.launch('inventoryScene', 'levelMenuScene')}, function(){});
 		inventoryButton.setScale(3, 3);
 
-		this._keyboard = new keyboard(this);
+		this.keyboard = new keyboard(this);
 
 		// Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
-		var self=this;
+		var self = this;
     	let i = 0;
-		var buttons = [];
+		this.levelButtons = [];
 		levels.forEach(level => {
-			level.setScene(this, this._keyboard);
-			buttons[i] = level.button;
+			this.levelButtons[i] = new Button(this, level.x, level.y, level.spriteSheet, level.defaultFrame, level.frameOnOver, level.frameOnDown, this.keyboard, () => {
+				level.loadLevel(this);
+			});
       		i++;
 		});
-		levels.forEach(level => {
-			level.initializeAdjacentButtons();
-		})
-		this._keyboard.setStartButton(levels[0].button);
-		//console.log(this.buttons);
+		this.inicializeLevelButtonConnections();
 
+		this.keyboard.setStartButton(this.levelButtons[0]);
 
-
-		//this._keyboard.loadButtonArray(buttons);
 		
 		//Ejemplo: Al pulsar la flecha izquierda
 		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
@@ -117,14 +115,24 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		const width = this.scale.width;
         const height = this.scale.height;
-		 
-		// this.add.text(width * 0.5, height * 0.5, 'Level Menu Scene', {})
-        // .setOrigin(0.5);
-		this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('battleScene');
-        });
 	}
 	update() {
-		this._keyboard.processInput();  
+		this.keyboard.processInput();  
+	}
+
+
+	inicializeLevelButtonConnections() {
+		this.levelButtons[0].setAdjacents(this.levelButtons[1], null, null, this.levelButtons[1]);
+		this.levelButtons[1].setAdjacents(this.levelButtons[3], this.levelButtons[0], this.levelButtons[2], this.levelButtons[3]);
+		this.levelButtons[2].setAdjacents(null, this.levelButtons[1], null, this.levelButtons[1]);
+		this.levelButtons[3].setAdjacents(this.levelButtons[5], this.levelButtons[1], this.levelButtons[4], this.levelButtons[6]);
+		this.levelButtons[4].setAdjacents(null, this.levelButtons[3], null, this.levelButtons[3]);
+		this.levelButtons[5].setAdjacents(null, this.levelButtons[3], this.levelButtons[3], null);
+		this.levelButtons[6].setAdjacents(this.levelButtons[8], this.levelButtons[7], this.levelButtons[3], this.levelButtons[8]);
+		this.levelButtons[7].setAdjacents(this.levelButtons[6], null, this.levelButtons[6], null);
+		this.levelButtons[8].setAdjacents(this.levelButtons[9], this.levelButtons[6], this.levelButtons[6],this.levelButtons[10]);
+		this.levelButtons[9].setAdjacents(null, this.levelButtons[8], null, null);
+		this.levelButtons[10].setAdjacents(null, this.levelButtons[8], this.levelButtons[8], this.levelButtons[11]);
+		this.levelButtons[11].setAdjacents(null, null, this.levelButtons[10], null);
 	}
 }

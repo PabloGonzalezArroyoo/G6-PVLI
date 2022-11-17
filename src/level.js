@@ -1,5 +1,3 @@
-import { Button } from "./button.js";
-
 // Objeto State usado como un enum
 const State = {
     locked: 0,
@@ -8,28 +6,16 @@ const State = {
 }
 
 export class Level/* extends Button */{
-    constructor(scene, x, y, state, enemies, loot, keyboard) {
-        this.defaultFrame = 0 + state * 3;
-        this.frameOnOver = 1 + state * 3;
-        this.frameOnDown = 2 + state * 3;
-        if (scene !== null){
-            let self = this;
-            this.button = new Button(scene, x, y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, keyboard, function(){self.loadLevel(scene)});
-        } 
-        else {
-            this.button = null;
-            this.keyboard = null;
-            this.x = x; this.y = y;
-        }
-        this.state = state; // valor que indica si el nivel está bloqueado, desbloqueado o completado
+    constructor(x, y, enemies, loot) {
+        this.x = x; this.y = y;
+        this.state = State.locked;
         this.loot = loot; // array con todos los posibles items que dar al jugador al completar el nivel
         this.enemies = enemies; // array con todos los enemigos del nivel
-    }
-
-    // Da los valores necesarios al objeto para poder funcionar siendo incializados antes de crear la escena
-    setScene(scene, keyboard) {
-        let self = this;
-        this.button = new Button(scene, this.x, this.y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, keyboard, function(){self.loadLevel(scene)});
+    
+        this.spriteSheet = 'level';
+        this.defaultFrame = 0 + this.state * 3;
+        this.frameOnOver = 1 + this.state * 3;
+        this.frameOnDown = 2 + this.state * 3;
     }
     
     // Carga el nivel si no está bloqueado
@@ -38,29 +24,15 @@ export class Level/* extends Button */{
     }
 
     // Asigna al array de siguientes niveles los correspondientes
-    setNextLevels(levels, directions){
-        if (levels){
-            this.nextLevels = levels;
-            this.adjacentDirections = directions;
-        }
-    }
-
-    initializeAdjacentButtons() {
-        if (this.nextLevels){
-            let i = 0;
-            this.nextLevels.forEach(level => {
-                this.button.setAdjacent(level.button, this.adjacentDirections[i][0]);
-                level.button.setAdjacent(this.button, this.adjacentDirections[i][1]);
-                i++;
-            });
-        }
+    setNextLevels(levels){
+        this.nextLevels = levels;
     }
 
     // Desbloquea los siguientes niveles
     unlockNextLevels(){
-        for(let i = 0; i < this.nextLevels.length; i++){
-            this.nextLevels[i].setUnlocked();
-        }
+        this.nextLevels.forEach(level => {
+            level.setUnlocked();
+        });
     }
 
     // devuelve el estado actual del nivel

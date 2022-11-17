@@ -50,7 +50,7 @@ export class Button extends Phaser.GameObjects.Sprite {
     }
 
     setAdjacents(up, down, left, right) {
-        if (!this.adjacent) this.adjacent = {};
+        //if (!this.adjacent) this.adjacent = {};
         this.setAdjacent(up, "up");
         this.setAdjacent(down, "down");
         this.setAdjacent(left, "left");
