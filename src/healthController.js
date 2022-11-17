@@ -32,12 +32,11 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
     }
     
     changeHealth(value) {
-
         if (value != 0) {
             /* Lógica */
             this._currentHealth += value;
             // MAXIMO
-            if (this._currentHealth > this._maxHealth) this._currentHealth = this._maxHealth; 
+            if (this._currentHealth > this._maxHealth) this._currentHealth = this._maxHealth;
             // MINIMO
             else if (this._currentHealth <= 0) {
                 this.color.destroy();
@@ -47,20 +46,20 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             /* Animación */
             var frameNumber = 3;
             switch (true) {
-                // Colores
-                case this._currentHealth <= 75 && this._currentHealth > 50: {
-                    frameNumber = 2; break;
-                } 
-                case this._currentHealth <= 50 && this._currentHealth > 25: {
-                    frameNumber = 1; break;
-                }
-                case this._currentHealth <= 25 && this._currentHealth > 0: {
-                    frameNumber = 0; break;
+                    // Colores
+                    case this._currentHealth <= 75 && this._currentHealth > 50: {
+                        frameNumber = 2; break;
+                    } 
+                    case this._currentHealth <= 50 && this._currentHealth > 25: {
+                        frameNumber = 1; break;
+                    }
+                    case this._currentHealth <= 25 && this._currentHealth > 0: {
+                        frameNumber = 0; break;
+                    }
                 }
             }
             // Destruye la barra de color anterior
             this.color.destroy();
-
             /* CALCULOS */
             // Calcula cuantos pixeles se deben quitar/poner
             var pix = value / this._healthDivider;
@@ -73,8 +72,6 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             this.color = this.scene.add.image(this.x + this._offsetX, this.y, 'lifeBarColors', frameNumber).setDisplaySize(this._colorBarDisplaySizeX, this._colorBarDisplaySizeY);
             // Añade el cuadro de la barra
             this.scene.add.image(this.x, this.y, 'lifeBar').setDisplaySize(this._barDisplaySizeX, this._barDisplaySizeY);
-                
-            }
         }
         else {
             console.log("NO HA CAMBIADO LA VIDA")
