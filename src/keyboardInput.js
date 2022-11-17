@@ -55,6 +55,7 @@ export class keyboard
                 this.onPressedKey(() => {
                     this.button.onReleaseClick();
                 });
+            else this.button.selectButton();
         });
 
 /*

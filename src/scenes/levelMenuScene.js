@@ -87,7 +87,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.keyboard = new keyboard(this);
 
 		// Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
-		var self = this;
     	let i = 0;
 		this.levelButtons = [];
 		levels.forEach(level => {

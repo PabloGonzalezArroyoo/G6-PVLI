@@ -29,6 +29,7 @@ export class Button extends Phaser.GameObjects.Sprite {
         //Keyboard para modificar
         //this._functionOnOver=functiononOver;
         this.keyboard = keyboard;
+        this.adjacent = {}
     }
     onClick() {
         this.setFrame(this._frameOnDown);
@@ -54,7 +55,6 @@ export class Button extends Phaser.GameObjects.Sprite {
     }
 
     setAdjacents(up, down, left, right) {
-        //if (!this.adjacent) this.adjacent = {};
         this.setAdjacent(up, "up");
         this.setAdjacent(down, "down");
         this.setAdjacent(left, "left");
@@ -62,7 +62,6 @@ export class Button extends Phaser.GameObjects.Sprite {
     }
 
     setAdjacent(button, direction){
-        if (!this.adjacent) this.adjacent = {};
         Object.defineProperty(this.adjacent, direction, {
             value: button
         });
