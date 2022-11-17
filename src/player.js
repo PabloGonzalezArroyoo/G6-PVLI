@@ -23,7 +23,12 @@ export default class Player extends Character {
         console.log("DEFENSA");
         this._defenseTurns=3;
         if(this._defenseBoost<4)this._defenseBoost++;
-        this.healthController.scene.time.delayedCall(1000, () => {this.healthController.emitter.emit("finishTurn")});
+        this.animator.playDefense();
+        this.animator.once("animationcomplete-defense",()=>{
+                this.healthController.scene.time.delayedCall(1000, () => {
+                    this.healthController.emitter.emit("finishTurn")
+                })
+            });
     }
 
     useItem(item){

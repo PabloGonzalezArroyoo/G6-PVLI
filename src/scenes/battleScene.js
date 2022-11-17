@@ -72,6 +72,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('player_idleBack', 'assets/characters/mariaPita/mariaPita_idleBack.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('player_jump', 'assets/characters/mariaPita/mariaPita_jump.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('player_attack', 'assets/characters/mariaPita/mariaPita_attack.png', {frameWidth: 50, frameHeight: 32});
+		this.load.spritesheet('mariaPita_defendBack', 'assets/characters/mariaPita/mariaPita_defendBack.png', {frameWidth: 50, frameHeight: 32});
 
 		// Enemy (Animaciones)
 		//this.load.spritesheet('enemy', 'assets/enemy.png', {frameWidth: 97, frameHeight: 97});
@@ -160,7 +161,11 @@ export default class BattleScene extends Phaser.Scene {
 	PlayerTurn(action){
 		this.DisableButtons();															// Desactiva los botones
 		this.dialogBox.clearText();														// Borrar texto previo
-		this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');
+		if (action === 'attack') this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');				
+			else if (action === 'defense') this.dialogBox.setTextToDisplay('Maria Pita aumenta su defensa por 3 turnos');
+			//else if (action === 'object') //no se si queremos texto
+			else if (action === 'queLocura') this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
+			else this.dialogBox.setTextToDisplay('default Text');	
 		this.emitter.once('finishTexting', () => {										// Crea un evento para que el jugador actue y crea otro evento
 			if (action === 'attack') this.player.attack(this.enemies[0]);				
 			else if (action === 'defense') this.player.defense();
