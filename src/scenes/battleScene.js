@@ -237,9 +237,8 @@ export default class BattleScene extends Phaser.Scene {
 		else {
 			this.player.updateTurn();
 			this.UpdateEnemyEffects();
+			console.log(this.player._defenseTurns+" "+this.player._defenseBoost)
 		}
-		if(this.player._defenseTurns>0)this.player._defenseTurns--; //Reduce los turnos de defensa restantes
-		else if(this.player._defenseTurns===0)this.player._defenseBoost=0;//Si no tiene turnos de defensa, su acumulable es 0
 	}
 
 	// Metodo que actualiza los efectos por turnos de los enemigos

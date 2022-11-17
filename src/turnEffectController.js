@@ -26,5 +26,7 @@ export default class TurnEffectController{
 			this.character.healthController.changeHealth(-this.bleedDamage);
 		}
 		if (this.stunTurns > 0) this.stunTurns--;
+		if(this.character._defenseTurns>0)this.character._defenseTurns--; //Reduce los turnos de defensa restantes
+		else if(this.character._defenseTurns===0)this.character._defenseBoost=0;//Si no tiene turnos de defensa, su acumulable es 0
 	}
 }
