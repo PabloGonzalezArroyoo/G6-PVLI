@@ -2,6 +2,7 @@
 import Phaser from '../lib/phaser.js';
 import { Button } from '../button.js';
 import Inventory from '../inventory.js';
+import EventDispatcher from '../eventDispatcher.js';
 
 /**
  * Escena de Inventario.
@@ -14,16 +15,15 @@ export default class InventoryScene extends Phaser.Scene {
 	 */
 	constructor() {
 		super({ key: 'inventoryScene' });
-		
-		this.inventory = new Inventory();
 	}
 
 	/**
 	 * Inicializa las variables
 	 * - Asignar si es inventario principal o de batalla
 	*/
-	init(previousSceneName){
-		this.previousSceneName = previousSceneName;
+	init(data){
+		this.previousSceneName = data.scene;
+		this.inventory = data.inventory;
 	}
 
 	preload(){
@@ -39,6 +39,8 @@ export default class InventoryScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
+		this.emitter = EventDispatcher.getInstance();
+
 		// Constantes
 		const width = this.scale.width;
 		const height = this.scale.height;
@@ -46,17 +48,6 @@ export default class InventoryScene extends Phaser.Scene {
 		
 		// Pintamos el fondo
 		let bg = this.add.image(0,0, 'inventoryBackground').setOrigin(0, 0).setDisplaySize(width, height);
-
-	    // Pintar botones correspondientes a los objetos del inventario y hacer sprites interactivos
-		// ESTO ES UNA PRUEBA PARA MOSTRAR LOS OBJETOS EN PANTALLA
-		this.inventory.addItem(1);
-		this.inventory.addItem(1);
-		this.inventory.addItem(4);
-		this.inventory.addItem(5);
-		this.inventory.addItem(6);
-		this.inventory.addItem(6);
-		this.inventory.addItem(6);
-		this.inventory.addItem(6);
 
 		// SEPARACION ENTRE ARMAS/OBJETOS Y COMIDA
 		let inventoryItems = this.inventory.getItems();
@@ -72,10 +63,6 @@ export default class InventoryScene extends Phaser.Scene {
 			}
 		}
 
-		function usar() {
-			// ACCION PARA USAR EL ITEM YA SEA PARA EQUIPAR ARMA, UTILIZAR OBJETO O COMER
-			console.log("USAR");
-		}
 		function mostrarDescripcion() {
 			// ACCION PARA MOSTRAR LA DESCRIPCION DEL ITEM
 			console.log("MOSTRAR DESCRIPCION");
@@ -94,7 +81,7 @@ export default class InventoryScene extends Phaser.Scene {
 			}
 			y = y * 60 + 140;
 
-			new Button(this, x , y, itemID, 0, 0, 0, usar, mostrarDescripcion).setScale(1.5,1.5);
+			new Button(this, x , y, itemID, 0, 0, 0, () => {this.escape(armasYobjetos[i])}, mostrarDescripcion).setScale(1.5,1.5);
 			if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(1.5,1.5);
 		}
 
@@ -104,7 +91,7 @@ export default class InventoryScene extends Phaser.Scene {
 			let itemQuantity = comida[i].quantity;
 			
 			let x = i * 165 + width / 2; let y = 475;
-			new Button(this, x, y, itemID, 0, 0, 0, usar, mostrarDescripcion).setScale(3,3);
+			new Button(this, x, y, itemID, 0, 0, 0, () => {this.escape(comida[i])}, mostrarDescripcion).setScale(3,3);
 			if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
 		}
 
@@ -126,18 +113,18 @@ export default class InventoryScene extends Phaser.Scene {
 			//this.scene.start('optionsScene');//Se abre el menu de opciones
 		//});
 
-		// SALIDA DE LA ESCENA
-		function escape() {
-			self.scene.stop('inventoryScene'); 			// Para la escena de inventario
-			self.scene.resume(self.previousSceneName); 	// Reanuda la escena anterior
-		}
-
 		// Pintamos botón de salir
-		var inventoryButton = new Button(this, width - 50, 46, 'inventory', 2, 0, 1, escape, function(){});
+		var inventoryButton = new Button(this, width - 50, 46, 'inventory', 2, 0, 1,() => {this.escape()}, function(){});
 		inventoryButton.setScale(3, 3);
 
 		// Al pulsar la tecla T se sale de la escena de inventario
-		this.input.keyboard.once('keydown-T', () => { escape(); });
+		this.input.keyboard.once('keydown-T', () => { this.escape(); });
+	}
+
+	// SALIDA DE LA ESCENA
+	escape(item = "none") {
+		this.scene.stop('inventoryScene'); 			// Para la escena de inventario
+		this.scene.resume(this.previousSceneName, item); 	// Reanuda la escena anterior
 	}
 
 	update() {

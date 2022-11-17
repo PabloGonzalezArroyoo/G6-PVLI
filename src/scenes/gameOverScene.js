@@ -7,6 +7,12 @@ export default class GameOver extends Phaser.Scene {
         super({ key: 'GameOverScene' });
     }
 
+    init(data){
+        this.level = data.level;
+        this.inventoryBackup = data.inventoryBackup;
+        this.inventory = data.inventory;
+    }
+
     create() {
         const width = this.scale.width;
         const height = this.scale.height;
@@ -14,8 +20,14 @@ export default class GameOver extends Phaser.Scene {
         this.add.text(width * 0.5, height * 0.5, 'Game Over', {})
         .setOrigin(0.5);
 
+        this.inventory.setInfo(this.inventoryBackup);                                                   // Devuelve los objetos perdidos durante el combate
+
+        //Sustituir los dos siguientes inputs por botones
         this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('titleScene');
+            this.scene.start('levelMenuScene', {inventory: this.inventory});                             // Esta funcion sirve para volver a la pantalla de titulo
+        });
+        this.input.keyboard.once('keydown-R', () => {
+            this.level.loadLevel(this, this.inventory);                                 // Esta funcion sirve para reintentar el nivel
         });
     }
 }
