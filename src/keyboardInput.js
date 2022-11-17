@@ -1,29 +1,32 @@
 import phaser from "./lib/phaser.js";
-export class keyboard
+export class KeyboardInput
 {
     constructor(scene) {
-        this.inputKeyboard = false;
+        //this.inputKeyboard = false;
         this._scene = scene;
         this.arrows = scene.input.keyboard.addKeys('left, up, right, down, enter');
-        this._cursorPositionX = scene.input.mousePointer.x;
-        this._cursorPositionY = scene.input.mousePointer.y;
+        //this._cursorPositionX = scene.input.mousePointer.x;
+        //this._cursorPositionY = scene.input.mousePointer.y;
     }
 
+    // Asigna un boton inicial
     setStartButton(button) {
         this.button = button;
-        //this.button.selectButton();
     }
 
     unselectButton() {
         this.button.onPointerOut();
     }
 
+    // Cambia el boton actual
     changeButton(button) {
         this.unselectButton();
         this.button = button;
         this.button.selectButton();
     }
 
+    // Si el boton esta seleccionado se ejecuta la funcion pedida
+    // en caso contrario se selecciona el boton
     onPressedKey(func) {
         if (this.button.isSelected()) {
             func();

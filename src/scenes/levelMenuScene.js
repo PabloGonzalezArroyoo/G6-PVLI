@@ -2,7 +2,7 @@
 import Phaser from '../lib/phaser.js';
 import { Level } from '../level.js';
 import { DrunkRuffian, StinkyPirate } from '../enemy.js'
-import { keyboard } from '../keyboardInput.js';
+import { KeyboardInput } from '../keyboardInput.js';
 import { Button } from '../button.js';
 
 // Array con todos los niveles del juego
@@ -81,23 +81,23 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// Botón de inventario
 		var self = this;
-		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, function(){self.scene.pause('levelMenuScene');self.scene.launch('inventoryScene', 'levelMenuScene')}, function(){});
-		inventoryButton.setScale(3, 3);
+		this.inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, function(){self.scene.pause('levelMenuScene');self.scene.launch('inventoryScene', 'levelMenuScene')}, function(){});
+		this.inventoryButton.setScale(3, 3);
 
-		this.keyboard = new keyboard(this);
+		this.keyboardInput = new KeyboardInput(this);
 
 		// Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
     	let i = 0;
 		this.levelButtons = [];
 		levels.forEach(level => {
-			this.levelButtons[i] = new Button(this, level.x, level.y, level.spriteSheet, level.defaultFrame, level.frameOnOver, level.frameOnDown, this.keyboard, () => {
+			this.levelButtons[i] = new Button(this, level.x, level.y, level.spriteSheet, level.defaultFrame, level.frameOnOver, level.frameOnDown, this.keyboardInput, () => {
 				level.loadLevel(this);
 			});
       		i++;
 		});
 		this.inicializeLevelButtonConnections();
 
-		this.keyboard.setStartButton(this.levelButtons[0]);
+		this.keyboardInput.setStartButton(this.levelButtons[0]);
 
 		
 		//Ejemplo: Al pulsar la flecha izquierda
@@ -116,12 +116,13 @@ export default class LevelMenuScene extends Phaser.Scene {
         const height = this.scale.height;
 	}
 	update() {
-		this.keyboard.processInput();  
+		this.keyboardInput.processInput();  
 	}
 
-
+	// Inicializa a qué botón te lleva pulsar cada dirección desde otro botón
 	inicializeLevelButtonConnections() {
-		this.levelButtons[0].setAdjacents(this.levelButtons[1], null, null, this.levelButtons[1]);
+		this.inventoryButton.setAdjacents(this.levelButtons[0], null, null, this.levelButtons[0])
+		this.levelButtons[0].setAdjacents(this.levelButtons[1], this.inventoryButton, this.inventoryButton, this.levelButtons[1]);
 		this.levelButtons[1].setAdjacents(this.levelButtons[3], this.levelButtons[0], this.levelButtons[2], this.levelButtons[3]);
 		this.levelButtons[2].setAdjacents(null, this.levelButtons[1], null, this.levelButtons[1]);
 		this.levelButtons[3].setAdjacents(this.levelButtons[5], this.levelButtons[1], this.levelButtons[4], this.levelButtons[6]);

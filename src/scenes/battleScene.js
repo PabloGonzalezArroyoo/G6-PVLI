@@ -5,7 +5,7 @@ import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
 import {DrunkRuffian, StinkyPirate} from '../enemy.js'
 import DialogBox from '../dialogBox.js';;
-import { keyboard } from '../keyboardInput.js';
+import { KeyboardInput } from '../keyboardInput.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
 const levelCompleted = function(enemies){
@@ -110,24 +110,24 @@ export default class BattleScene extends Phaser.Scene {
 		
 		// Interactivo
 		var self = this;
-		this._keyboard = new keyboard(this);
-		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this._keyboard, () => {if(this.state === 'Waiting')this.state = 'PlayerDescription'}),
-		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this._keyboard, () => {if(this.state === 'Waiting'){this.scene.pause();this.scene.launch('inventoryScene', 'battleScene');}}),
-		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, this._keyboard, () => {this.player.defense()}),
-		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, this._keyboard, () => {this.player.quelocura()})];
-		//this._keyboard.loadButtonArray(this.botones);
+		this.keyboardInput = new KeyboardInput(this);
+		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this.keyboardInput, () => {if(this.state === 'Waiting')this.state = 'PlayerDescription'}),
+		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this.keyboardInput, () => {if(this.state === 'Waiting'){this.scene.pause();this.scene.launch('inventoryScene', 'battleScene');}}),
+		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, this.keyboardInput, () => {this.player.defense()}),
+		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, this.keyboardInput, () => {this.player.quelocura()})];
+		//this.keyboardInput.loadButtonArray(this.botones);
 
 		this.botones[0].setAdjacents(null, this.botones[2], null, this.botones[1]);
 		this.botones[1].setAdjacents(null, this.botones[3], this.botones[0], null);
 		this.botones[2].setAdjacents(this.botones[0], null, null, this.botones[3]);
 		this.botones[3].setAdjacents(this.botones[1], null, this.botones[2], null);
-		this._keyboard.setStartButton(this.botones[0]);
+		this.keyboardInput.setStartButton(this.botones[0]);
 	}
 
 	update(t,dt) {
 		super.update(t,dt);
 		this.previousLetterTime += dt; //Contador del tiempo transcurrido desde la ultima letra
-		this._keyboard.processInput();
+		this.keyboardInput.processInput();
 
 		//Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
 		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){

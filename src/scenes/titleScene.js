@@ -2,7 +2,7 @@
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
 import { Button } from '../button.js';
-import {keyboard} from '../keyboardInput.js';
+import { KeyboardInput } from '../keyboardInput.js';
 import PlayerAnimator from '../animations/playerAnimator.js';
 
 /**
@@ -40,13 +40,13 @@ export default class TitleScene extends Phaser.Scene {
 		// Pintamos el logo del juego
 		var title = this.add.image(512, 100, 'title').setScale(0.25,0.25);
 
-		this.keyboard = new keyboard(this);
+		this.keyboardInput = new KeyboardInput(this);
 		// Botón "JUGAR"
 		var self = this;
-		var button = new Button(this, 514, 690,'play', 0, 1, 2, this.keyboard, function(){self.scene.start('levelMenuScene', -1)});
+		var button = new Button(this, 514, 690,'play', 0, 1, 2, this.keyboardInput, function(){self.scene.start('levelMenuScene', -1)});
 		button.setScale(5, 5);
 
-		this.keyboard.setStartButton(button);
+		this.keyboardInput.setStartButton(button);
 
 		//Para seleccionar botones con teclas, creamos el objeto tecla
 		//var Enter = this.scene.input.keyboard.addKeys('ENTER,Z');
@@ -62,6 +62,6 @@ export default class TitleScene extends Phaser.Scene {
 		//});
 	}
 	update(){
-		this.keyboard.processInput();
+		this.keyboardInput.processInput();
 	}
 }
