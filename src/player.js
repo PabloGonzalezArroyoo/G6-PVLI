@@ -4,8 +4,8 @@ import HealthController from './healthController.js';
 import Inventory from './inventory.js';
 
 export default class Player extends Character {
-    constructor(scene, x, y, damage, inventory) {
-        super(x, y, new PlayerAnimator(scene, x, y), new HealthController(scene, x, y - 150, 100), damage);
+    constructor(scene, x, y, inventory) {
+        super(x, y, new PlayerAnimator(scene, x, y), new HealthController(scene, x, y - 150, 100));
         this.inventory = inventory;
         this._defense;
         this._defenseBoost;
@@ -19,12 +19,15 @@ export default class Player extends Character {
         // Animacion de ataque
         this.animator.playAttack();
         // Le baja vida al enemigo
-        this.animator.once("animationcomplete-attack",() => {enemy.healthController.changeHealth(-this.damage)});
+        this.animator.once("animationcomplete-attack",
+            () => {enemy.healthController.changeHealth(-this.inventory.getEquipedWeapon().getValue())});
+        console.log(-this.inventory.getEquipedWeapon().getValue());
     }
 
     defense(){
         console.log("DEFENSA");
-        this.healthController.scene.time.delayedCall(1000, () => {this.healthController.emitter.emit("finishTurn")});
+        this.healthController.scene.time.delayedCall(1000,
+            () => {this.healthController.emitter.emit("finishTurn")});
     }
 
     useItem(item){
@@ -37,7 +40,8 @@ export default class Player extends Character {
             this.healthController.changeHealth(item.getValue());
             this.inventory.subtractItem(item);
         }
-        this.healthController.scene.time.delayedCall(1000, () => {this.healthController.emitter.emit("finishTurn")});
+        this.healthController.scene.time.delayedCall(1000,
+            () => {this.healthController.emitter.emit("finishTurn")});
     }
 
     quelocura(enemy){

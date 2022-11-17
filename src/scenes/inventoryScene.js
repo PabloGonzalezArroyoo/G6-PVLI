@@ -30,7 +30,7 @@ export default class InventoryScene extends Phaser.Scene {
 		// Fondo
 		this.load.image('inventoryBackground', 'assets/scenes/inventory/inventoryBackground.png');
 		// Items
-		this.load.image('puño', 'assets/scenes/inventory/weapons/puño.png')
+		this.load.image('puño', 'assets/scenes/inventory/weapons/puño.png');
 		this.load.image('cimitarraMadera', 'assets/scenes/inventory/weapons/cimitarraMadera.png');
 		this.load.image('cimitarraAcero', 'assets/scenes/inventory/weapons/cimitarraAcero.png');
 		this.load.image('cimitarraLoca', 'assets/scenes/inventory/weapons/cimitarraLoca.png');

@@ -3,7 +3,7 @@ import { HealthItem, WeaponItem } from './item.js';
 // Array de items al que acceder para saber a qué item se hace referencia
 export var listOfItems = [
 	// Default
-	new WeaponItem("Puño","puño", 60, "*descripcion*"),
+	new WeaponItem("Puño","puño", 15, "*descripcion*"),
 
 	// Items de curación (curativos)
 	new HealthItem("Polbo á feira","cimitarraMadera", 60, "*descripcion*"), // <-- cambiar imgID por la correspondiente
