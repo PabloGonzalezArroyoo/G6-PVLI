@@ -49,6 +49,10 @@ export class Button extends Phaser.GameObjects.Sprite {
         this.setFrame(this._frameOnOver);
     }
 
+    isSelected(){
+        return this.frame.name === this._frameOnOver;
+    }
+
     setAdjacents(up, down, left, right) {
         //if (!this.adjacent) this.adjacent = {};
         this.setAdjacent(up, "up");
