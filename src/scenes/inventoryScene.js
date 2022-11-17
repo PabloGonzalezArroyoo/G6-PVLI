@@ -30,9 +30,13 @@ export default class InventoryScene extends Phaser.Scene {
 		// Fondo
 		this.load.image('inventoryBackground', 'assets/scenes/inventory/inventoryBackground.png');
 		// Items
+		this.load.image('puño', 'assets/scenes/inventory/weapons/puño.png')
 		this.load.image('cimitarraMadera', 'assets/scenes/inventory/weapons/cimitarraMadera.png');
 		this.load.image('cimitarraAcero', 'assets/scenes/inventory/weapons/cimitarraAcero.png');
 		this.load.image('cimitarraLoca', 'assets/scenes/inventory/weapons/cimitarraLoca.png');
+		this.load.image('dagaOxidada', 'assets/scenes/inventory/weapons/dagaOxidada.png');
+		this.load.image('dagaAfilada', 'assets/scenes/inventory/weapons/dagaAfilada.png');
+		this.load.image('dagaExcéntrica', 'assets/scenes/inventory/weapons/dagaExcéntrica.png');
 	}
 
 	/**
@@ -67,6 +71,9 @@ export default class InventoryScene extends Phaser.Scene {
 			// ACCION PARA MOSTRAR LA DESCRIPCION DEL ITEM
 			console.log("MOSTRAR DESCRIPCION");
 		}
+
+		// ARMA EQUIPADA
+		new Button(this, 217, 325, this.inventory.getEquipedWeapon().imgID, 0, 0, 0, function(){}, mostrarDescripcion).setScale(8, 8);
 
 		// ARMAS Y OBJETOS
 		for (let i = 0; i < armasYobjetos.length; i++) {

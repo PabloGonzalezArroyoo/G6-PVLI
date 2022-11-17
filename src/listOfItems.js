@@ -3,7 +3,7 @@ import { HealthItem, WeaponItem } from './item.js';
 // Array de items al que acceder para saber a qué item se hace referencia
 export var listOfItems = [
 	// Default
-	new WeaponItem("Puño","*imgID*", 60, "*descripcion*"),
+	new WeaponItem("Puño","puño", 60, "*descripcion*"),
 
 	// Items de curación (curativos)
 	new HealthItem("Polbo á feira","cimitarraMadera", 60, "*descripcion*"), // <-- cambiar imgID por la correspondiente
@@ -14,9 +14,9 @@ export var listOfItems = [
 	new WeaponItem("Cimitarra de madera","cimitarraMadera", 25, "*descripcion*"),
 	new WeaponItem("Cimitarra de acero","cimitarraAcero", 25,"*descripcion*"),
 	new WeaponItem("Cimitarra loca","cimitarraLoca", 25, "*descripcion*"),
-	new WeaponItem("Daga Oxidada","*imgID*", 25, "*descripcion*"),
-	new WeaponItem("Daga afilada","*imgID*", 25, "*descripcion*"),
-	new WeaponItem("Daga excéntrica","*imgID*", "*descripcion*"),
+	new WeaponItem("Daga Oxidada","dagaOxidada", 25, "*descripcion*"),
+	new WeaponItem("Daga afilada","dagaAfilada", 25, "*descripcion*"),
+	new WeaponItem("Daga excéntrica","dagaExcéntrica", "*descripcion*"),
 	new WeaponItem("Alabarda de marca blanca","*imgID*", 25, "*descripcion*"),
 	new WeaponItem("Alabarda de verdad","*imgID*", 25, "*descripcion*"),
 	new WeaponItem("Alabarda demencial","*imgID*", 25, "*descripcion*"),
