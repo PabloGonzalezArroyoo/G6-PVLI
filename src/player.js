@@ -54,7 +54,7 @@ export default class Player extends Character {
     receiveAttack(damage){
         // guardar en esta variable el calculo del daño
         let receivedDamage = damage;
-        if(this.turnEffectController.isDefending)//Si quedan turnos de defensa
+        if(this.turnEffectController.defenseTurns > 0)//Si quedan turnos de defensa
         {
             receivedDamage-=receivedDamage*(0.15*this._defenseBoost); //Reduce el daño segun los turnos de defensa que se tengan
         }
