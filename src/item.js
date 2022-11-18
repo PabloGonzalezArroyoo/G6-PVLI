@@ -6,7 +6,7 @@ export default class Item {
 		this.type = type;
 		this.value = value;
 		this.description = description;
-		this.quantity = 0;
+		this.quantity = 1;
 	}
 
   	getName() { return this.name; }
@@ -28,8 +28,8 @@ export default class Item {
 
 // Items de curación
 export class HealthItem extends Item {
-	constructor(name, imgID, value, description) {
-		super(name, imgID, "HEALTH", value, description);		
+	constructor(name, imgID, healthValue, description) {
+		super(name, imgID, "HEALTH", healthValue, description);		
 	}
 }
 
@@ -40,6 +40,8 @@ export class WeaponItem extends Item {
 		this.defValue = defValue;
 		this.queLocura = queLocura;
 	}
+	getAttack() { return this.value; }
+	getDefense() { return this.defValue; }
 
 	static areaAttack(percentage) {
 		return function (player, enemies) {

@@ -38,7 +38,7 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             // MAXIMO
             if (this._currentHealth + value > this._maxHealth) value = this._maxHealth - this._currentHealth;
             // MINIMO
-            else if (this._currentHealth - value < 0){
+            else if (this._currentHealth + value < 0){
                 this.color.destroy();
                 value = -this._currentHealth;
             }
