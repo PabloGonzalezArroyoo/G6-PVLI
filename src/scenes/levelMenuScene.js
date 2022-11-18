@@ -79,12 +79,14 @@ export default class LevelMenuScene extends Phaser.Scene {
 		//Pintar el mapa de fondo
 		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 
-		// Botón de inventario
-		var self = this;
-		this.inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, function(){self.scene.pause('levelMenuScene');self.scene.launch('inventoryScene', 'levelMenuScene')}, function(){});
-		this.inventoryButton.setScale(3, 3);
-
 		this.keyboardInput = new KeyboardInput(this);
+
+		// Botón de inventario
+		this.inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
+			this.scene.pause('levelMenuScene');
+			this.scene.launch('inventoryScene', 'levelMenuScene');
+		});
+		this.inventoryButton.setScale(3, 3);
 
 		// Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
     	let i = 0;
