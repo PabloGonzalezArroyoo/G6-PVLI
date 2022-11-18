@@ -35,14 +35,14 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
 
         if (value != 0) {
             /* Lógica */
-            this._currentHealth += value;
             // MAXIMO
-            if (this._currentHealth > this._maxHealth) this._currentHealth = this._maxHealth; 
+            if (this._currentHealth + value > this._maxHealth) value = this._maxHealth - this._currentHealth;
             // MINIMO
-            else if (this._currentHealth <= 0) {
+            else if (this._currentHealth + value < 0){
                 this.color.destroy();
-                this._currentHealth = 0;
+                value = -this._currentHealth;
             }
+            this._currentHealth += value;
 
             /* Animación */
             var frameNumber = 3;
@@ -70,14 +70,13 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             this._colorBarDisplaySizeX += pix;
             
             // Añade la barra de color
-            this.color = this.scene.add.image(this.x + this._offsetX, this.y, 'lifeBarColors', frameNumber).setDisplaySize(this._colorBarDisplaySizeX, this._colorBarDisplaySizeY);
+            if (this._currentHealth > 0) this.color = this.scene.add.image(this.x + this._offsetX, this.y, 'lifeBarColors', frameNumber).setDisplaySize(this._colorBarDisplaySizeX, this._colorBarDisplaySizeY);
             // Añade el cuadro de la barra
             this.scene.add.image(this.x, this.y, 'lifeBar').setDisplaySize(this._barDisplaySizeX, this._barDisplaySizeY);
         }
         else {
             console.log("NO HA CAMBIADO LA VIDA")
         }
-
         this.scene.time.delayedCall(1000, () => {this.emitter.emit("finishTurn")});
     }
 
