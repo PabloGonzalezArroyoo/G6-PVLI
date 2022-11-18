@@ -111,7 +111,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 		// Botón de inventario
 		this.inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
 			this.scene.pause('levelMenuScene');
-			this.scene.launch('inventoryScene', 'levelMenuScene');
+			this.scene.launch('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory});
 		});
 		this.inventoryButton.setScale(3, 3);
 
@@ -120,9 +120,9 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.levelButtons = [];
 		levels.forEach(level => {
 			this.levelButtons[i] = new Button(this, level.x, level.y, level.spriteSheet, level.defaultFrame, level.frameOnOver, level.frameOnDown, this.keyboardInput, () => {
-				level.loadLevel(this);
+				level.loadLevel(this, this.inventory);
 			});
-      i++;
+      		i++;
 		});
 		this.inicializeLevelButtonConnections();
 
@@ -141,7 +141,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 		//});
     
 		const width = this.scale.width;
-    const height = this.scale.height;
+    	const height = this.scale.height;
 	}
 	update() {
 		this.keyboardInput.processInput();  

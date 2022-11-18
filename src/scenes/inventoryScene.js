@@ -3,6 +3,7 @@ import Phaser from '../lib/phaser.js';
 import { Button } from '../button.js';
 import Inventory from '../inventory.js';
 import EventDispatcher from '../eventDispatcher.js';
+import { KeyboardInput } from '../keyboardInput.js';
 
 /**
  * Escena de Inventario.
@@ -73,8 +74,10 @@ export default class InventoryScene extends Phaser.Scene {
 			console.log("MOSTRAR DESCRIPCION");
 		}
 
+		this.keyboardInput = new KeyboardInput(this);
 		// ARMA EQUIPADA
-		new Button(this, 217, 325, this.inventory.getEquipedWeapon().imgID, 0, 0, 0, function(){}, mostrarDescripcion).setScale(8, 8);
+		new Button(this, 217, 325, this.inventory.getEquipedWeapon().imgID, 0, 0, 0, this.keyboardInput, function(){}).setScale(8, 8);
+		
 
 		// ARMAS
 		/*for (let i = 0; i < armas.length; i++) {
@@ -120,8 +123,8 @@ export default class InventoryScene extends Phaser.Scene {
 		//});
 
 		// Pintamos botón de salir
-		var inventoryButton = new Button(this, width - 50, 46, 'inventory', 2, 0, 1,() => {this.escape()}, function(){}).setScale(3, 3);
-
+		var inventoryButton = new Button(this, width - 50, 46, 'inventory', 2, 0, 1, this.keyboardInput, () => {this.escape()}).setScale(3, 3);
+		this.keyboardInput.setStartButton(inventoryButton);
 		// Al pulsar la tecla T se sale de la escena de inventario
 		this.input.keyboard.once('keydown-T', () => { this.escape(); });
 	}
