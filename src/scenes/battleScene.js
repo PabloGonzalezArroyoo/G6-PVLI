@@ -182,17 +182,18 @@ export default class BattleScene extends Phaser.Scene {
 			case 'queLocura' : 																	// Si selecciona QueLocura
 				this.dialogBox.clearText();														// Borrar texto previo
 				this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
-				this.emitter.once('finishTexting', () => {this.player.quelocura(this.enemies[0])});
+				this.emitter.once('finishTexting', () => {this.player.quelocura(this.enemies, 0)});
 				break;
 		}	
-		this.emitter.once('finishTurn', () => {if (!levelCompleted(this.enemies) && !levelFailed(this.player)) this.EnemyTurn()}); // Evento para que el enemigo ataque						
+		this.emitter.once('finishTurn', () => {if (!levelCompleted(this.enemies) && !levelFailed(this.player)) this.EnemyTurn()}); // Evento para que el enemigo ataque	
+										
 	}
 
 	// Metodo que efectua la accion de los enemigos cada turno
 	EnemyTurn(index){
 		if (!index) index = 0;
 		// Si el enemigo sigue vivo hace su acción
-		if (!levelFailed(this.enemies[index])) {
+		if (!levelFailed(this.enemies[index]) && !this.enemies[index].isStuned()) {
 			this.dialogBox.clearText();// Borrar texto previo
 			this.dialogBox.setTextToDisplay('Enemigo ataca a Maria Pita');	// Enviar el nuevo texto
 			this.emitter.once('finishTexting', () => {						// Crea un evento para que el enemigo ataque
