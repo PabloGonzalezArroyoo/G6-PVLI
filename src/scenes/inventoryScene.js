@@ -2,6 +2,7 @@
 import Phaser from '../lib/phaser.js';
 import { Button } from '../button.js';
 import Inventory from '../inventory.js';
+import EventDispatcher from '../eventDispatcher.js';
 
 /**
  * Escena de Inventario.

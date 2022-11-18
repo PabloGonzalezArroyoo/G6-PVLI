@@ -1,6 +1,7 @@
 // Importaciones
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
+
 export default class GameOver extends Phaser.Scene {
     constructor() {
         super({ key: 'GameOverScene' });
@@ -27,7 +28,6 @@ export default class GameOver extends Phaser.Scene {
         });
         this.input.keyboard.once('keydown-R', () => {
             this.level.loadLevel(this, this.inventory);                                 // Esta funcion sirve para reintentar el nivel
-            this.scene.start('titleScene');
         });
     }
 }

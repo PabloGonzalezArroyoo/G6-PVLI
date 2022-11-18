@@ -39,7 +39,7 @@ export default class Player extends Character {
         if(item.type === 'WEAPON')
             this.inventory.setEquipedWeapon(item);
         //Se cura si el item es un objeto de curacion
-         else if(item.type === 'HEALTH'){
+        else if(item.type === 'HEALTH'){
             console.log(item.getValue())
             this.healthController.changeHealth(item.getValue());
             this.inventory.subtractItem(item);
@@ -57,7 +57,12 @@ export default class Player extends Character {
     receiveAttack(damage){
         // guardar en esta variable el calculo del daño
         let receivedDamage = damage;
+        if(this.turnEffectController.defenseTurns > 0)//Si quedan turnos de defensa
+        {
+            receivedDamage-=receivedDamage*(0.15*this._defenseBoost); //Reduce el daño segun los turnos de defensa que se tengan
+        }
         this.healthController.changeHealth(-receivedDamage);
+        console.log(receivedDamage);
         return receivedDamage;
     }
 

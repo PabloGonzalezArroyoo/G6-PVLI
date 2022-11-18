@@ -20,17 +20,24 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 		frameRate: 7,
 		repeat: -1
 		});
+		//animación idle de espaldas
 
 		this.scene.anims.create({
             key: 'idleBack',
             frames: scene.anims.generateFrameNumbers('player_idleBack', {start: 0, end: 5}),
             framesRate: 7,
             repeat: -1 });
-		
+		//animación de ataque
 		this.scene.anims.create({
 			key: 'attack',
 			frames: scene.anims.generateFrameNumbers('player_attack', {start: 0, end: 5}),
 			framesRate: 7,
+			repeat: 0 });
+		//animación de defensa
+		this.scene.anims.create({
+			key: 'defense',
+			frames: scene.anims.generateFrameNumbers('mariaPita_defendBack',{start:0, end:5}),
+			frameRate: 7,
 			repeat: 0 });
 
 		// inicia con la animacion idle
@@ -56,6 +63,9 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 	//cambia a la animacion Attack
 	playAttack(){
 		this.play('attack');
+	}
+	playDefense(){
+		this.play('defense');
 	}
 
 	//pre-update que gestiona los posibles problemas de las animaciones

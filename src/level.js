@@ -26,13 +26,13 @@ export class Level/* extends Button */{
     }
 
     // Da los valores necesarios al objeto para poder funcionar siendo incializados antes de crear la escena
-    setScene(scene, inventory, functionOnOver){
+    setScene(scene, inventory, functionOnOver) {
         let self = this;
         this.button = new Button(scene, this.x, this.y, 'level', this.defaultFrame, this.frameOnOver, this.frameOnDown, function(){self.loadLevel(scene, inventory)}, functionOnOver);
     }
     
     // Carga el nivel si no está bloqueado
-     loadLevel(scene, inventory){
+    loadLevel(scene, inventory){
         if (this.state !== State.locked) scene.scene.start('battleScene', {level: this, inventory: inventory});
     }
 
