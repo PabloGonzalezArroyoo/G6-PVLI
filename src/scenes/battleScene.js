@@ -82,6 +82,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('experiencedBuccaneer', 'assets/characters/enemies/experiencedBuccaneer.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('alienatedCosair', 'assets/characters/enemies/alienatedCosair.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('ensignDrake', 'assets/characters/enemies/ensignDrake.png', {frameWidth: 32, frameHeight:32});
+
 		// Descripcion
 		this.load.image('description', 'assets/scenes/battle/dialogBox.png');
 		// Acciones
@@ -90,7 +91,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('botonDefensa', 'assets/scenes/battle/defenseButton.png', {frameWidth: 241, frameHeight: 67});
 		this.load.spritesheet('botonObjetos', 'assets/scenes/battle/objectsButton.png', {frameWidth: 241, frameHeight: 67});
 		this.load.spritesheet('botonQueLocura', 'assets/scenes/battle/queLocuraButton.png', {frameWidth: 241, frameHeight: 67});
-		
+		this.load.image('select', 'assets/ui/select.png');
+
 		// Barra de vida
 		this.load.image('lifeBar', 'assets/ui/lifeBar38x8sinCorazon.png');
 		this.load.spritesheet('lifeBarColors', 'assets/ui/lifeBarColors16x4.png', {frameWidth: 4, frameHeight: 4});
@@ -109,7 +111,7 @@ export default class BattleScene extends Phaser.Scene {
 		// Enemy1
 		// this.enemy = new DrunkRuffian(this, 750, 200);
 		this.enemies.forEach(enemy => enemy.setScene(this));
-			
+		
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);
 
@@ -150,7 +152,8 @@ export default class BattleScene extends Phaser.Scene {
 	}
 
 	PlayerTurn(){
-		this.DisableButtons();																		//Desactiva los botones
+		this.DisableButtons();																		// Desactiva los botones
+
 		this.dialogBox.clearText();																	// Borrar texto previo
 		this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');								// Si Maria Pita ha empezado a atacar
 		this.emitter.once('finishTexting', () => {this.player.attack(this.enemies[0]);				// Crea un evento para que el jugador ataque y crea otro evento
