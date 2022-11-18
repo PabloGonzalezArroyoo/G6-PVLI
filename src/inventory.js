@@ -22,6 +22,7 @@ export default class Inventory{
 		else{
 			if(item.getType() !== 'WEAPON')
 				this.allItems[itemIndex].addQuantity(1);
+			}
 	}
 
 	// Resta 1 a la cantidad del item si existe y lo elimina del array si la cantidad es 0

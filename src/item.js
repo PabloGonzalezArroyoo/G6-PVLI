@@ -40,7 +40,9 @@ export class WeaponItem extends Item {
 		this.defValue = defValue;
 		this.queLocura = queLocura;
 	}
+
 	getAttack() { return this.value; }
+	
 	getDefense() { return this.defValue; }
 
 	static areaAttack(percentage) {

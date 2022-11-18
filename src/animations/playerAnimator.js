@@ -21,7 +21,6 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 		repeat: -1
 		});
 		//animación idle de espaldas
-
 		this.scene.anims.create({
             key: 'idleBack',
             frames: scene.anims.generateFrameNumbers('player_idleBack', {start: 0, end: 5}),
