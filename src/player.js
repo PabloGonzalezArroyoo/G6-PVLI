@@ -20,12 +20,13 @@ export default class Player extends Character {
         this.animator.playAttack();
         // Le baja vida al enemigo
         this.animator.once("animationcomplete-attack",
-            () => {enemy.healthController.changeHealth(-this.inventory.getEquipedWeapon().getValue())});
-        console.log(-this.inventory.getEquipedWeapon().getValue());
+            () => {enemy.healthController.changeHealth(-this.inventory.getEquipedWeapon().getAttack())});
+        console.log(-this.inventory.getEquipedWeapon().getAttack());
     }
 
     defense(){
         console.log("DEFENSA");
+        console.log(this.inventory.getEquipedWeapon().getDefense());
         this.healthController.scene.time.delayedCall(1000,
             () => {this.healthController.emitter.emit("finishTurn")});
     }
