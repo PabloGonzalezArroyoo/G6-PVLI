@@ -9,7 +9,7 @@ export var listOfItems = [
 	new HealthItem("Polbo á feira","cimitarraMadera", 60, "*descripcion*"), // <-- cambiar imgID por la correspondiente
 	new HealthItem("Caldo gallego","*imgID*", 40, "*descripcion*"),
 	new HealthItem("Bolla de pan","*imgID*", 20, "*descripción*"),
-
+	
 	// Items de daño (armas)
 	new WeaponItem("Cimitarra de madera","cimitarraMadera", 25, 10, "*descripcion*"),
 	new WeaponItem("Cimitarra de acero","cimitarraAcero", 25, 10, "*descripcion*"),

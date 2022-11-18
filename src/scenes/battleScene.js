@@ -47,7 +47,8 @@ export default class BattleScene extends Phaser.Scene {
 
 	/**
 	 * Inicializa variables
-	 * - Cargar nivel seleccionado
+	 * - Cargar nivel seleccionado.
+	 * @param {[Level, Inventory]} data los niveles a cargar
 	*/
 	init(data) {
 		this.level = data.level;
