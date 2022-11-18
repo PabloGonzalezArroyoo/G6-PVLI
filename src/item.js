@@ -28,14 +28,19 @@ export default class Item {
 
 // Items de curación
 export class HealthItem extends Item {
-	constructor(name, imgID, value, description) {
-		super(name, imgID, "HEALTH", value, description);		
+	constructor(name, imgID, healthValue, description) {
+		super(name, imgID, "HEALTH", healthValue, description);		
 	}
 }
 
 // Items de daño (armas)
 export class WeaponItem extends Item {
-	constructor(name, imgID, value, description) {
-		super(name, imgID, "WEAPON", value, description);
+	constructor(name, imgID, attackValue, defValue, description) {
+		super(name, imgID, "WEAPON", attackValue, description);
+		this.defValue = defValue;
 	}
+
+	getAttack() { return this.value; }
+
+	getDefense() { return this.defValue; }
 }

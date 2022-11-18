@@ -6,7 +6,7 @@ export default class Inventory{
 		this.allItems = allItems;
 	}
 
-	getEquipedWeapon(){return equippedWeapon;}
+	getEquipedWeapon(){return this.equippedWeapon;}
 
 	setEquipedWeapon(item){this.equippedWeapon = item;}
 

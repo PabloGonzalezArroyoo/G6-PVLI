@@ -104,7 +104,8 @@ export default class BattleScene extends Phaser.Scene {
 		var background = this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
 		// Maria Pita
-		this.player = new Player(this, 250, 475, 25, this.inventory);	
+		this.player = new Player(this, 250, 475, this.inventory);
+    
 		// Enemy1
 		// this.enemy = new DrunkRuffian(this, 750, 200);
 		this.enemies.forEach(enemy => enemy.setScene(this));

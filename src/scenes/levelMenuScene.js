@@ -62,9 +62,9 @@ export default class LevelMenuScene extends Phaser.Scene {
             listOfItems[2],
             listOfItems[5],
             listOfItems[6],
-            listOfItems[6],
-            listOfItems[6],
-            listOfItems[6]]
+            listOfItems[7],
+            listOfItems[8],
+            listOfItems[9]]
             );
 		else
 			this.inventory = data.inventory;
