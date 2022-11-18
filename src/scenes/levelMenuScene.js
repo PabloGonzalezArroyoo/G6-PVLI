@@ -1,11 +1,9 @@
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
-import Inventory from '../inventory.js';
 import { Level } from '../level.js';
 import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake } from '../enemy.js'
 import { keyboard } from '../keyboardInput.js';
 import { Button } from '../button.js';
-import {listOfItems} from '../listOfItems.js';
 
 // Array con todos los niveles del juego
 const levels = [new Level(null, 272, 527.5, 1, [new DrunkRuffian(null, 720, 200)], [], function(){}), // Nivel 0
@@ -52,22 +50,10 @@ export default class LevelMenuScene extends Phaser.Scene {
 	/**
 	 * Actualizar niveles desbloqueados
 	*/
-	init(data) {
-		if(typeof(data.level) === 'object') {
-			data.level.setCompleted();
+	init(level) {
+		if(typeof(level) === 'object') {
+			level.setCompleted();
 		}
-		if(data.inventory === undefined)
-			this.inventory = new Inventory(listOfItems[0],   // Quitar array para el juego final y dejar el constructor por defecto
-            [listOfItems[1],
-            listOfItems[2],
-            listOfItems[5],
-            listOfItems[6],
-            listOfItems[7],
-            listOfItems[8],
-            listOfItems[9]]
-            );
-		else
-			this.inventory = data.inventory;
 	}
 
 	/**
@@ -93,7 +79,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// Botón de inventario
 		var self = this;
-		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 2, 1, function(){self.scene.pause('levelMenuScene');self.scene.launch('inventoryScene', {scene: 'levelMenuScene', inventory: self.inventory})}, function(){});
+		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 2, 1, function(){self.scene.pause('levelMenuScene');self.scene.launch('inventoryScene', 'levelMenuScene')}, function(){});
 		inventoryButton.setScale(3, 3);
 
 		this._keyboard = new keyboard(this);
@@ -103,7 +89,7 @@ export default class LevelMenuScene extends Phaser.Scene {
     	let i = 0;
 		var buttons = [];
 		levels.forEach(level => {
-			level.setScene(this, self.inventory, function(){self._keyboard.setBeingUsed(i)});
+			level.setScene(this, function(){self._keyboard.setBeingUsed(i)});
 			buttons[i] = level.button;
       		i++;
 		});
