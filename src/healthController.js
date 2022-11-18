@@ -32,7 +32,6 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
     }
     
     changeHealth(value) {
-
         if (value != 0) {
             /* Lógica */
             // MAXIMO
@@ -47,20 +46,20 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             /* Animación */
             var frameNumber = 3;
             switch (true) {
-                // Colores
-                case this._currentHealth <= 75 && this._currentHealth > 50: {
-                    frameNumber = 2; break;
-                } 
-                case this._currentHealth <= 50 && this._currentHealth > 25: {
-                    frameNumber = 1; break;
-                }
-                case this._currentHealth <= 25 && this._currentHealth > 0: {
-                    frameNumber = 0; break;
+                    // Colores
+                    case this._currentHealth <= 75 && this._currentHealth > 50: {
+                        frameNumber = 2; break;
+                    } 
+                    case this._currentHealth <= 50 && this._currentHealth > 25: {
+                        frameNumber = 1; break;
+                    }
+                    case this._currentHealth <= 25 && this._currentHealth > 0: {
+                        frameNumber = 0; break;
+                    }
                 }
             }
             // Destruye la barra de color anterior
             this.color.destroy();
-
             /* CALCULOS */
             // Calcula cuantos pixeles se deben quitar/poner
             var pix = value / this._healthDivider;
