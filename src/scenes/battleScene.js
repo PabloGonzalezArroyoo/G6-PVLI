@@ -72,6 +72,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('player_idleBack', 'assets/characters/mariaPita/mariaPita_idleBack.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('player_jump', 'assets/characters/mariaPita/mariaPita_jump.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('player_attack', 'assets/characters/mariaPita/mariaPita_attack.png', {frameWidth: 50, frameHeight: 32});
+		this.load.spritesheet('mariaPita_defendBack', 'assets/characters/mariaPita/mariaPita_defendBack.png', {frameWidth: 50, frameHeight: 32});
 
 		// Enemy (Animaciones)
 		//this.load.spritesheet('enemy', 'assets/enemy.png', {frameWidth: 97, frameHeight: 97});
@@ -103,8 +104,8 @@ export default class BattleScene extends Phaser.Scene {
 		var background = this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
 		// Maria Pita
-		this.player = new Player(this, 250, 475, this.inventory);	
-		
+		this.player = new Player(this, 250, 475, this.inventory);
+    
 		// Enemy1
 		// this.enemy = new DrunkRuffian(this, 750, 200);
 		this.enemies.forEach(enemy => enemy.setScene(this));
@@ -167,7 +168,7 @@ export default class BattleScene extends Phaser.Scene {
 				break;			
 			case 'defense': 														// Si selecciona defenderse
 				this.dialogBox.clearText();														// Borrar texto previo
-				this.dialogBox.setTextToDisplay('Maria Pita se defiende');	
+				this.dialogBox.setTextToDisplay('Maria Pita se defiende durante 3 turnos');	
 				this.emitter.once('finishTexting', () => {this.player.defense()});
 				break;
 			case 'object' : 																	//Si selecciona un objeto
@@ -180,7 +181,7 @@ export default class BattleScene extends Phaser.Scene {
 				break;
 			case 'queLocura' : 																	// Si selecciona QueLocura
 				this.dialogBox.clearText();														// Borrar texto previo
-				this.dialogBox.setTextToDisplay('Maria Pita ha usado ¡Que Locura!');
+				this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 				this.emitter.once('finishTexting', () => {this.player.quelocura(this.enemies[0])});
 				break;
 		}	
