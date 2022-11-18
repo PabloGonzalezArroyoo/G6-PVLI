@@ -77,7 +77,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 	 */
 	preload(){
 		// Fondo
-		this.load.image('levelMap', 'assets/scenes/levelsMenu/emptyMap.png');
+		this.load.spritesheet('levelMap', 'assets/scenes/levelsMenu/wavesMap_anim.png', { frameWidth: 1024, frameHeight: 768 });
 		
 		// Imagen de botones
 		this.load.spritesheet('level', 'assets/scenes/levelsMenu/levelsButtons.png', {frameWidth: 51, frameHeight: 51});
@@ -88,18 +88,28 @@ export default class LevelMenuScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-		//Pintar el mapa de fondo
-		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
+
+		const self = this;
+		const camera = this.cameras.main;
+
+		// Fade In
+		camera.fadeIn(1000, 0, 0, 0);
+
+		// Fondo
+		this.anims.create({
+			key: 'levelMap',
+			frames: this.anims.generateFrameNumbers('levelMap', {start: 0, end: 9}),
+			frameRate: 10,
+			repeat: -1
+		});
+		this.add.sprite(1024, 768).setOrigin(1,1).play('levelMap');
 
 		// Botón de inventario
-		var self = this;
-		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 2, 1, function(){self.scene.pause('levelMenuScene');self.scene.launch('inventoryScene', {scene: 'levelMenuScene', inventory: self.inventory})}, function(){});
-		inventoryButton.setScale(3, 3);
+		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 2, 1, function(){self.scene.pause('levelMenuScene');self.scene.launch('inventoryScene', 'levelMenuScene')}, function(){}).setScale(3, 3);
 
 		this._keyboard = new keyboard(this);
 
 		// Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
-		var self=this;
     	let i = 0;
 		var buttons = [];
 		levels.forEach(level => {
@@ -107,8 +117,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 			buttons[i] = level.button;
       		i++;
 		});
-		//console.log(this.buttons);
-		
 		this._keyboard.loadButtonArray(buttons);
 		
 		//Ejemplo: Al pulsar la flecha izquierda
@@ -122,15 +130,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		//Esc.on('down', function () {
 			//this.scene.start('optionsScene');//Se abre el menu de opciones
 		//});
-
-		const width = this.scale.width;
-        const height = this.scale.height;
-		 
-		// this.add.text(width * 0.5, height * 0.5, 'Level Menu Scene', {})
-        // .setOrigin(0.5);
-		this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('battleScene');
-        });
 	}
 	update() {
 		this._keyboard.processInput();  
