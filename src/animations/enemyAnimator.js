@@ -4,7 +4,7 @@ export default class EnemyAnimator extends Phaser.GameObjects.Sprite{
 		super(scene, x, y, spritesheet);
 		this.defaultAnimation = spritesheet + '_idle';
 		this.scene.add.existing(this);
-		this.setScale(6,6);
+		this.setScale(3,3);
 
 		//animacion idle
 		this.scene.anims.create({

@@ -1,16 +1,14 @@
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
-import Inventory from '../inventory.js';
 import { Level } from '../level.js';
 import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake } from '../enemy.js'
 import { keyboard } from '../keyboardInput.js';
 import { Button } from '../button.js';
 import Player from '../player.js';
-import {listOfItems} from '../listOfItems.js';
 
 // Array con todos los niveles del juego
 const levels = [new Level(null, 272, 527.5, 1, [new DrunkRuffian(null, 720, 200)], [], function(){}), // Nivel 0
-				new Level(null, 354, 455.5, 0, [new DrunkRuffian(null, 680, 200), new DrunkRuffian(null, 780, 250)], [], function(){}), // Nivel 1
+				new Level(null, 354, 455.5, 0, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], [], function(){}), // Nivel 1
 				new Level(null, 292, 363.5, 0, [], [], function(){}),			// ... 2
 				new Level(null, 405, 363.5, 0, [], [], function(){}),			// 3
 				new Level(null, 354, 271.5, 0, [], [], function(){}),			// 4
@@ -53,22 +51,10 @@ export default class LevelMenuScene extends Phaser.Scene {
 	/**
 	 * Actualizar niveles desbloqueados
 	*/
-	init(data) {
-		if(typeof(data.level) === 'object') {
-			data.level.setCompleted();
+	init(level) {
+		if(typeof(level) === 'object') {
+			level.setCompleted();
 		}
-		if(data.inventory === undefined)
-			this.inventory = new Inventory(listOfItems[0],   // Quitar array para el juego final y dejar el constructor por defecto
-            [listOfItems[1],
-            listOfItems[2],
-            listOfItems[5],
-            listOfItems[6],
-            listOfItems[7],
-            listOfItems[8],
-            listOfItems[9]]
-            );
-		else
-			this.inventory = data.inventory;
 	}
 
 	/**
@@ -106,7 +92,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.add.sprite(1024, 768).setOrigin(1,1).play('levelMap');
 
 		// Botón de inventario
-		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 2, 1, function(){self.scene.pause('levelMenuScene');self.scene.launch('inventoryScene', 'levelMenuScene')}, function(){}).setScale(3, 3);
+		var inventoryButton = new Button(this, 46, 730, 'inventory', 0, 2, 1, function(){self.scene.pause('levelMenuScene');self.scene.launch('inventoryScene', 'levelMenuScene')}, function(){});
+		inventoryButton.setScale(3, 3);
 
 		// Teclado
 		this._keyboard = new keyboard(this);
@@ -115,7 +102,7 @@ export default class LevelMenuScene extends Phaser.Scene {
     	let i = 0;
 		var buttons = [];
 		levels.forEach(level => {
-			level.setScene(this, self.inventory, function(){self._keyboard.setBeingUsed(i)});
+			level.setScene(this, function(){self._keyboard.setBeingUsed(i)});
 			buttons[i] = level.button;
       		i++;
 		});

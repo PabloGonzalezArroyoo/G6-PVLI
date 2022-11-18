@@ -59,7 +59,8 @@ export default class TitleScene extends Phaser.Scene {
 		var title = this.add.image(512, 100, 'title').setScale(0.25,0.25);
 
 		// Botón "JUGAR"
-		var button = new Button(this, 514, 690,'play', 0, 1, 2, jumpToLevelMenuScene, function(){}).setScale(5, 5);
+		var button = new Button(this, 514, 690,'play', 0, 1, 2, jumpToLevelMenuScene, function(){});
+		button.setScale(5, 5);
 
 		function jumpToLevelMenuScene() {
 			// Fade Out
