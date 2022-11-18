@@ -11,7 +11,7 @@ export class Level/* extends Button */{
         this.state = State.locked;
         this.loot = loot; // array con todos los posibles items que dar al jugador al completar el nivel
         this.enemies = enemies; // array con todos los enemigos del nivel
-    
+
         this.spriteSheet = 'level';
         this.defaultFrame = 0 + this.state * 3;
         this.frameOnOver = 1 + this.state * 3;
@@ -19,8 +19,8 @@ export class Level/* extends Button */{
     }
     
     // Carga el nivel si no está bloqueado
-    loadLevel(scene){
-        if (this.state !== State.locked) scene.scene.start('battleScene', this);
+    loadLevel(scene, inventory){
+        if (this.state !== State.locked) scene.scene.start('battleScene', {level: this, inventory: inventory});
     }
 
     // Asigna al array de siguientes niveles los correspondientes

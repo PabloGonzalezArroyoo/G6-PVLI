@@ -1,11 +1,14 @@
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
+import Inventory from '../inventory.js';
 import { Level } from '../level.js';
-import { DrunkRuffian, StinkyPirate } from '../enemy.js'
+import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake } from '../enemy.js'
 import { KeyboardInput } from '../keyboardInput.js';
 import { Button } from '../button.js';
+import {listOfItems} from '../listOfItems.js';
 
 // Array con todos los niveles del juego
+
 const levels = [new Level(272, 527.5, [new DrunkRuffian(null, 720, 200)], []), // Nivel 0
 				new Level(354, 455.5, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], []), // Nivel 1
 				new Level(292, 363.5, [], []),			// ... 2
@@ -52,10 +55,22 @@ export default class LevelMenuScene extends Phaser.Scene {
 	/**
 	 * Actualizar niveles desbloqueados
 	*/
-	init(level) {
-		if(typeof(level) === 'object') {
-			level.setCompleted();
+	init(data) {
+		if(typeof(data.level) === 'object') {
+			data.level.setCompleted();
 		}
+		if(data.inventory === undefined)
+			this.inventory = new Inventory(listOfItems[0],   // Quitar array para el juego final y dejar el constructor por defecto
+            [listOfItems[1],
+            listOfItems[2],
+            listOfItems[5],
+            listOfItems[6],
+            listOfItems[7],
+            listOfItems[8],
+            listOfItems[9]]
+            );
+		else
+			this.inventory = data.inventory;
 	}
 
 	/**
@@ -65,7 +80,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 	 */
 	preload(){
 		// Fondo
-		this.load.image('levelMap', 'assets/scenes/levelsMenu/emptyMap.png');
+		this.load.spritesheet('levelMap', 'assets/scenes/levelsMenu/wavesMap_anim.png', { frameWidth: 1024, frameHeight: 768 });
 		
 		// Imagen de botones
 		this.load.spritesheet('level', 'assets/scenes/levelsMenu/levelsButtons.png', {frameWidth: 51, frameHeight: 51});
@@ -76,11 +91,23 @@ export default class LevelMenuScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-		//Pintar el mapa de fondo
-		var bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
+
+		const self = this;
+		const camera = this.cameras.main;
+
+		// Fade In
+		camera.fadeIn(1000, 0, 0, 0);
+
+		// Fondo
+		this.anims.create({
+			key: 'levelMap',
+			frames: this.anims.generateFrameNumbers('levelMap', {start: 0, end: 9}),
+			frameRate: 10,
+			repeat: -1
+		});
+		this.add.sprite(1024, 768).setOrigin(1,1).play('levelMap');
 
 		this.keyboardInput = new KeyboardInput(this);
-
 		// Botón de inventario
 		this.inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
 			this.scene.pause('levelMenuScene');
@@ -95,12 +122,11 @@ export default class LevelMenuScene extends Phaser.Scene {
 			this.levelButtons[i] = new Button(this, level.x, level.y, level.spriteSheet, level.defaultFrame, level.frameOnOver, level.frameOnDown, this.keyboardInput, () => {
 				level.loadLevel(this);
 			});
-      		i++;
+      i++;
 		});
 		this.inicializeLevelButtonConnections();
 
 		this.keyboardInput.setStartButton(this.levelButtons[0]);
-
 		
 		//Ejemplo: Al pulsar la flecha izquierda
 		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
@@ -113,9 +139,9 @@ export default class LevelMenuScene extends Phaser.Scene {
 		//Esc.on('down', function () {
 			//this.scene.start('optionsScene');//Se abre el menu de opciones
 		//});
-
+    
 		const width = this.scale.width;
-        const height = this.scale.height;
+    const height = this.scale.height;
 	}
 	update() {
 		this.keyboardInput.processInput();  
