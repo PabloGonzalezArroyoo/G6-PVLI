@@ -35,8 +35,9 @@ export class HealthItem extends Item {
 
 // Items de daño (armas)
 export class WeaponItem extends Item {
-	constructor(name, imgID, value, description, queLocura) {
-		super(name, imgID, "WEAPON", value, description);
+	constructor(name, imgID, attackValue, defValue, queLocura, description) {
+		super(name, imgID, "WEAPON", attackValue, description);
+		this.defValue = defValue;
 		this.queLocura = queLocura;
 	}
 
