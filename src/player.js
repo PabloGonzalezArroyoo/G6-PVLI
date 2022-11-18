@@ -10,7 +10,6 @@ export default class Player extends Character {
         this._defenseBoost=0;
         //this.inventory.addItem(listOfItems[6]);
         //this.inventory.addItem(listOfItems[1]);         //Estas lineas es solo para comprobar
-
     }
 
     attack(enemy){
@@ -49,9 +48,10 @@ export default class Player extends Character {
             () => {this.healthController.emitter.emit("finishTurn")});
     }
 
-    quelocura(enemy){
+    quelocura(enemies, index){
         console.log("QUELOCURA");
-        this.attack(enemy);
+        this.inventory.equippedWeapon.queLocura(this, enemies, index);
+        this.healthController.scene.time.delayedCall(1000, () => {this.healthController.emitter.emit("finishTurn")});
     }
 
     receiveAttack(damage){
@@ -65,4 +65,6 @@ export default class Player extends Character {
         console.log(receivedDamage);
         return receivedDamage;
     }
+
+    getDamage() {return this.damage;}
 }
