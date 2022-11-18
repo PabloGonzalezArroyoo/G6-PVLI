@@ -16,18 +16,12 @@ export default class Inventory{
 
 	// Añade armas y objetos (si no existen) al array y suma 1 a la cantidad de objetos si existen
 	addItem(item){
-		addItem(item){
 		let itemIndex = this.allItems.findIndex((element) => element.getName() === item.getName());
 		if(itemIndex === -1)
 			this.allItems.push(item);
 		else{
 			if(item.getType() !== 'WEAPON')
 				this.allItems[itemIndex].addQuantity(1);
-			}
-		}
-		else {
-			console.log("No se puede añadir el arma \"" + itemName + "\"");
-		}
 	}
 
 	// Resta 1 a la cantidad del item si existe y lo elimina del array si la cantidad es 0
@@ -63,7 +57,7 @@ export default class Inventory{
 				this.allItems.push(listOfItems.find((element) => element.getName() === item.name));
 				this.allItems[this.allItems.length - 1].setQuantity(item.quantity);
 			}
-			
+
 		});
 	}
 }
