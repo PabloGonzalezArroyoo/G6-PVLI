@@ -53,19 +53,20 @@ export default class InventoryScene extends Phaser.Scene {
 		// Pintamos el fondo
 		let bg = this.add.image(0,0, 'inventoryBackground').setOrigin(0, 0).setDisplaySize(width, height);
 
-		// SEPARACION ENTRE ARMAS/OBJETOS Y COMIDA
-		let inventoryItems = this.inventory.getItems();
-		let armasYobjetos = [];
+		// SEPARACION ENTRE ARMAS Y COMIDA
+		/*let inventoryItems = this.inventory.getItems();
+		let armas = [];
 		let comida = [];
 		
 		for (let i = 0; i < inventoryItems.length; i++) {
-			if (inventoryItems[i].type === 'WEAPON' || inventoryItems[i].type === 'OBJECT') {
-				armasYobjetos.push(inventoryItems[i]);
+			if (inventoryItems[i].type === 'WEAPON') {
+				armas.push(inventoryItems[i]);
 			}
 			else if (inventoryItems[i].type === 'HEALTH') {
 				comida.push(inventoryItems[i]);
 			}
-		}
+		}*/
+		
 
 		function mostrarDescripcion() {
 			// ACCION PARA MOSTRAR LA DESCRIPCION DEL ITEM
@@ -75,10 +76,9 @@ export default class InventoryScene extends Phaser.Scene {
 		// ARMA EQUIPADA
 		new Button(this, 217, 325, this.inventory.getEquipedWeapon().imgID, 0, 0, 0, function(){}, mostrarDescripcion).setScale(8, 8);
 
-		// ARMAS Y OBJETOS
-		for (let i = 0; i < armasYobjetos.length; i++) {
-			let itemID = armasYobjetos[i].imgID;
-			let itemQuantity = armasYobjetos[i].quantity;
+		// ARMAS
+		/*for (let i = 0; i < armas.length; i++) {
+			let itemID = armas[i].imgID;
 			let x = i % 5 * 102 + width / 2 - 35;
 			let y;
 			switch (true) {
@@ -88,8 +88,7 @@ export default class InventoryScene extends Phaser.Scene {
 			}
 			y = y * 60 + 140;
 
-			new Button(this, x , y, itemID, 0, 0, 0, () => {this.escape(armasYobjetos[i])}, mostrarDescripcion).setScale(1.5,1.5);
-			if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(1.5,1.5);
+			new Button(this, x , y, itemID, 0, 0, 0, () => {this.escape(armas[i])}, mostrarDescripcion).setScale(1.5,1.5);
 		}
 
 		// COMIDA
@@ -100,7 +99,7 @@ export default class InventoryScene extends Phaser.Scene {
 			let x = i * 165 + width / 2; let y = 475;
 			new Button(this, x, y, itemID, 0, 0, 0, () => {this.escape(comida[i])}, mostrarDescripcion).setScale(3,3);
 			if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
-		}
+		}*/
 
 		// TECLAS
 		//Para seleccionar botones con teclas, creamos el objeto tecla
@@ -121,8 +120,7 @@ export default class InventoryScene extends Phaser.Scene {
 		//});
 
 		// Pintamos botón de salir
-		var inventoryButton = new Button(this, width - 50, 46, 'inventory', 2, 0, 1,() => {this.escape()}, function(){});
-		inventoryButton.setScale(3, 3);
+		var inventoryButton = new Button(this, width - 50, 46, 'inventory', 2, 0, 1,() => {this.escape()}, function(){}).setScale(3, 3);
 
 		// Al pulsar la tecla T se sale de la escena de inventario
 		this.input.keyboard.once('keydown-T', () => { this.escape(); });
