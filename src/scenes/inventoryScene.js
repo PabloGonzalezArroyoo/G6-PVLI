@@ -55,7 +55,7 @@ export default class InventoryScene extends Phaser.Scene {
 		let bg = this.add.image(0,0, 'inventoryBackground').setOrigin(0, 0).setDisplaySize(width, height);
 
 		// SEPARACION ENTRE ARMAS Y COMIDA
-		/*let inventoryItems = this.inventory.getItems();
+		let inventoryItems = this.inventory.getItems();
 		let armas = [];
 		let comida = [];
 		
@@ -66,21 +66,15 @@ export default class InventoryScene extends Phaser.Scene {
 			else if (inventoryItems[i].type === 'HEALTH') {
 				comida.push(inventoryItems[i]);
 			}
-		}*/
-		
-
-		function mostrarDescripcion() {
-			// ACCION PARA MOSTRAR LA DESCRIPCION DEL ITEM
-			console.log("MOSTRAR DESCRIPCION");
 		}
 
 		this.keyboardInput = new KeyboardInput(this);
+
 		// ARMA EQUIPADA
-    
-		//new Button(this, 217, 325, this.inventory.getEquipedWeapon().imgID, 0, 0, 0, this.keyboardInput, function(){}).setScale(8, 8);
+		new Button(this, 217, 325, this.inventory.getEquipedWeapon().imgID, 0, 0, 0, this.keyboardInput, function(){}).setScale(8, 8);
 
 		// ARMAS
-		/*for (let i = 0; i < armas.length; i++) {
+		for (let i = 0; i < armas.length; i++) {
 			let itemID = armas[i].imgID;
 			let x = i % 5 * 102 + width / 2 - 35;
 			let y;
@@ -91,7 +85,7 @@ export default class InventoryScene extends Phaser.Scene {
 			}
 			y = y * 60 + 140;
 
-			new Button(this, x , y, itemID, 0, 0, 0, () => {this.escape(armas[i])}, mostrarDescripcion).setScale(1.5,1.5);
+			new Button(this, x , y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(armas[i])}, this.mostrarDescripcion).setScale(1.5,1.5);
 		}
 
 		// COMIDA
@@ -100,9 +94,9 @@ export default class InventoryScene extends Phaser.Scene {
 			let itemQuantity = comida[i].quantity;
 			
 			let x = i * 165 + width / 2; let y = 475;
-			new Button(this, x, y, itemID, 0, 0, 0, () => {this.escape(comida[i])}, mostrarDescripcion).setScale(3,3);
+			new Button(this, x, y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(comida[i])}, this.mostrarDescripcion).setScale(3,3);
 			if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
-		}*/
+		}
 
 		// TECLAS
 		//Para seleccionar botones con teclas, creamos el objeto tecla
@@ -136,5 +130,10 @@ export default class InventoryScene extends Phaser.Scene {
 	}
 
 	update() {
+	}
+
+	mostrarDescripcion() {
+		// ACCION PARA MOSTRAR LA DESCRIPCION DEL ITEM
+		console.log("MOSTRAR DESCRIPCION");
 	}
 }
