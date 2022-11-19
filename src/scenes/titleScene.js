@@ -62,7 +62,7 @@ export default class TitleScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 		// Botón "JUGAR"
 		//var self = this;
-		var button = new Button(this, 514, 690,'play', 0, 1, 2, this.keyboardInput, () => {this.scene.start('levelMenuScene', -1)});
+		var button = new Button(this, 514, 690,'play', 0, 1, 2, this.keyboardInput, jumpToLevelMenuScene);
 		button.setScale(5, 5);
 
 		this.keyboardInput.setStartButton(button);
