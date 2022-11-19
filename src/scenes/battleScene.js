@@ -5,7 +5,7 @@ import Phaser from '../lib/phaser.js';
 import Player from '../player.js';
 import DialogBox from '../dialogBox.js';
 import Inventory from '../inventory.js';
-import { keyboard } from '../keyboardInput.js';
+import { KeyboardInput } from '../keyboardInput.js';
 import EventDispatcher from '../eventDispatcher.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
@@ -123,25 +123,27 @@ export default class BattleScene extends Phaser.Scene {
 		
 		// Interactivo
 		var self = this;
-		this._keyboard = new keyboard(this);
-		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, () => {this.PlayerTurn('attack')},function(){self._keyboard.setBeingUsed(0)}),
-		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, () => {this.scene.pause();this.scene.launch('inventoryScene', {scene: 'battleScene', inventory: this.player.inventory});this.events.once('resume', (scene, item) => {this.useItem(item)})},function(){self._keyboard.setBeingUsed(1)}),
-		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, () => {this.PlayerTurn('defense')},function(){self._keyboard.setBeingUsed(2)}),
-		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, () => {this.PlayerTurn('queLocura')},function(){self._keyboard.setBeingUsed(3)})];
-		this._keyboard.loadButtonArray(this.botones);
-		
-		// Transicion escena
-		this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('optionsScene');
-        });
+    
+		this.keyboardInput = new KeyboardInput(this);
+		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('attack')}),
+		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this.keyboardInput, () => {this.scene.pause();this.scene.launch('inventoryScene', {scene: 'battleScene', inventory: this.player.inventory});this.events.once('resume', (scene, item) => {this.useItem(item)})}),
+		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('defense')}),
+		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('queLocura')})];
+		//this.keyboardInput.loadButtonArray(this.botones);
 
-        this.emitter = EventDispatcher.getInstance();
+		this.botones[0].setAdjacents(null, this.botones[2], null, this.botones[1]);
+		this.botones[1].setAdjacents(null, this.botones[3], this.botones[0], null);
+		this.botones[2].setAdjacents(this.botones[0], null, null, this.botones[3]);
+		this.botones[3].setAdjacents(this.botones[1], null, this.botones[2], null);
+		this.keyboardInput.setStartButton(this.botones[0]);
+    
+    this.emitter = EventDispatcher.getInstance();
 	}
 
 	update(t,dt) {
 		super.update(t,dt);
 		this.previousLetterTime += dt; //Contador del tiempo transcurrido desde la ultima letra
-		this._keyboard.processInput();
+		this.keyboardInput.processInput();
 
 		//Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
 		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){
