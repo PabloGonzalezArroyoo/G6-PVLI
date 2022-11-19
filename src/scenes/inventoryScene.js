@@ -74,7 +74,7 @@ export default class InventoryScene extends Phaser.Scene {
 		}
 
 		// ARMA EQUIPADA
-		new Button(this, 217, 325, this.inventory.getEquipedWeapon().imgID, 0, 0, 0, function(){}, mostrarDescripcion).setScale(8, 8);
+		//new Button(this, 217, 325, this.inventory.getEquipedWeapon().imgID, 0, 0, 0, function(){}, mostrarDescripcion).setScale(8, 8);
 
 		// ARMAS
 		/*for (let i = 0; i < armas.length; i++) {
