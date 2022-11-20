@@ -23,7 +23,7 @@ export var listOfItems = [
 	new WeaponItem("Ropera inglesa","*imgID*", 25, 10, WeaponItem.multipleAttack(2), "*descripcion*"),
 	new WeaponItem("Ropera castellana","*imgID*", 25, 10, WeaponItem.multipleAttack(3), "*descripcion*"),
 	new WeaponItem("Ropera alocada","*imgID*", 25, 10, WeaponItem.multipleAttack(4), "*descripcion*"),
-	new WeaponItem("Sacho","sacho", 25, 10, WeaponItem.lifeAbsorbtion(30), "*descripcion*"),
-	new WeaponItem("Fouciño","fouciño", 25, 10, WeaponItem.lifeAbsorbtion(40), "*descripcion*"),
-	new WeaponItem("Guadaña extravagante","guadañaExtravagante", 25, 10, WeaponItem.lifeAbsorbtion(50), "*descripcion*")
+	new WeaponItem("Sacho","sacho", 25, 10, WeaponItem.lifeAbsorption(30), "*descripcion*"),
+	new WeaponItem("Fouciño","fouciño", 25, 10, WeaponItem.lifeAbsorption(40), "*descripcion*"),
+	new WeaponItem("Guadaña extravagante","guadañaExtravagante", 25, 10, WeaponItem.lifeAbsorption(50), "*descripcion*")
 ];
