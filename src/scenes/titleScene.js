@@ -1,7 +1,8 @@
 // Importaciones
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
-import { Button } from '../button.js';
+import { Button } from '../input/button.js';
+import { KeyboardInput } from '../input/keyboardInput.js';
 import PlayerAnimator from '../animations/playerAnimator.js';
 
 /**
@@ -27,22 +28,65 @@ export default class TitleScene extends Phaser.Scene {
 
 		// Imagen de botones
 		this.load.spritesheet('play', 'assets/scenes/title/playButton.png', {frameWidth: 37, frameHeight: 14});
+
+		// Musica
+		this.load.audio('Pirates of the Atlantic', ['assets/scenes/title/Pirates of the Atlantic - Vivu.mp3']);
 	}
 
 	/**
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-		//Pintamos el fondo
+
+		const self = this;
+		const camera = this.cameras.main;
+		
+		// Musica
+		const musicConfig = {
+			mute: false,
+			volume: 1,
+			detune: 0,
+			seek: 0,
+			loop: true,
+			delay: 0
+		}
+		var music = this.sound.add('Pirates of the Atlantic');
+    	music.play(musicConfig);
+
+		// Fondo
 		var back = this.add.image(0, 0, 'background').setOrigin(0, 0);
 
-		// Pintamos el logo del juego
+		// Logo del juego
 		var title = this.add.image(512, 100, 'title').setScale(0.25,0.25);
 
+		this.keyboardInput = new KeyboardInput(this);
 		// Botón "JUGAR"
-		var self = this;
-		var button = new Button(this, 514, 690,'play', 0, 1, 2, function(){self.scene.start('levelMenuScene', -1)}, function(){});
+		//var self = this;
+		var button = new Button(this, 514, 690,'play', 0, 1, 2, this.keyboardInput, jumpToLevelMenuScene);
 		button.setScale(5, 5);
+
+		this.keyboardInput.setStartButton(button);
+
+		function jumpToLevelMenuScene() {
+			// Fade Out
+			musicFadeOut();
+			camera.fadeOut(1000, 0, 0, 0); // fadeOut(time, R, G, B), 000 = Black
+			camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+				music.stop();
+				self.scene.start('levelMenuScene', -1);
+			})
+		}
+
+		function musicFadeOut() {
+			self.tweens.add({
+				targets: music,
+				volume: -1,
+				ease: 'Linear',
+				duration: 2000,
+			});
+		}
+
+		// Teclado
 		//Para seleccionar botones con teclas, creamos el objeto tecla
 		//var Enter = this.scene.input.keyboard.addKeys('ENTER,Z');
 		//En este caso, cualquiera de los objetos destacaria el boton y el enter lanzaria la escena de cinematica
@@ -55,9 +99,8 @@ export default class TitleScene extends Phaser.Scene {
 		//Esc.on('down', function () {
 			//this.scene.start('optionsScene');//Se abre el menu de opciones
 		//});
-
-		this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('battleScene');
-        });
+	}
+	update(){
+		this.keyboardInput.processInput();
 	}
 }
