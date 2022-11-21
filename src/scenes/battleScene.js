@@ -7,6 +7,7 @@ import DialogBox from '../animations/dialogBox.js';
 import Inventory from '../inventory/inventory.js';
 import { KeyboardInput } from '../input/keyboardInput.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
+import {listOfEnemies} from '../data/listOfEnemies.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
 const levelCompleted = function(enemies){
@@ -41,8 +42,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.previousLetterTime = 0;
 
 		this.level;
-		this.enemies;
-		this.loot;
+		this.enemies = [];
+		this.loot = [];
 	}
 
 	/**
@@ -52,11 +53,10 @@ export default class BattleScene extends Phaser.Scene {
 	*/
 	init(data) {
 		this.level = data.level;
-		this.enemies = data.level.enemies;
+		this.enemiesData = data.level.enemies;
 		this.loot = data.level.loot;
 		this.inventory = data.inventory;
 		this.inventoryBackup = data.inventory.getInfo();
-		console.log(this.inventoryBackup);
 	}
 
 	/**
@@ -109,7 +109,8 @@ export default class BattleScene extends Phaser.Scene {
     
 		// Enemy1
 		// this.enemy = new DrunkRuffian(this, 750, 200);
-		this.enemies.forEach(enemy => enemy.setScene(this));
+		//this.enemies.forEach(enemy => enemy.setScene(this));
+		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this ,enemy.x, enemy.y)));
 			
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);

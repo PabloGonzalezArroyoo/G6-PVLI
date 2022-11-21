@@ -6,21 +6,22 @@ import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, Alien
 import { KeyboardInput } from '../input/keyboardInput.js';
 import { Button } from '../input/button.js';
 import {listOfItems} from '../data/listOfItemsANTIGUO.js';
+import {listOfLevels} from '../data/listOfLevels.js';
 
 // Array con todos los niveles del juego
-
-const levels = [new Level(272, 527.5, [new DrunkRuffian(null, 720, 200)], []), // Nivel 0
-				new Level(354, 455.5, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], []), // Nivel 1
-				new Level(292, 363.5, [], []),			// ... 2
-				new Level(405, 363.5, [], []),			// 3
-				new Level(354, 271.5, [], []),			// 4
-				new Level(507, 302, [], []),			// 5
-				new Level(548, 394.5, [], []),			// 6
-				new Level(589, 486.5, [], []),			// 7
-				new Level(630, 353.5, [], []),			// 8
-				new Level(610, 240.5, [], []),			// 9
-				new Level(702, 261, [], []),			// 10
-				new Level(814, 261, [], [])];			// 11
+const levels = [//new Level(272, 527.5, [new DrunkRuffian(null, 720, 200)], []), // Nivel 0
+				new Level(listOfLevels[0]),
+				new Level(listOfLevels[1]), // Nivel 1
+				new Level(listOfLevels[2]),			// ... 2
+				new Level(listOfLevels[3]),			// 3
+				new Level(listOfLevels[4]),			// 4
+				new Level(listOfLevels[5]),			// 5
+				new Level(listOfLevels[6]),			// 6
+				new Level(listOfLevels[7]),			// 7
+				new Level(listOfLevels[8]),			// 8
+				new Level(listOfLevels[9]),			// 9
+				new Level(listOfLevels[10]),			// 10
+				new Level(listOfLevels[11])];			// 11
 
 				levels[0].setUnlocked();
 				
