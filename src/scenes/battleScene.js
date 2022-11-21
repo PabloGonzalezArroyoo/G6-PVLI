@@ -1,12 +1,12 @@
 // Importaciones
 //import { Character } from '../character.js';
-import {Button} from '../button.js';
+import {Button} from '../input/button.js';
 import Phaser from '../lib/phaser.js';
-import Player from '../player.js';
-import DialogBox from '../dialogBox.js';
-import Inventory from '../inventory.js';
-import { KeyboardInput } from '../keyboardInput.js';
-import EventDispatcher from '../eventDispatcher.js';
+import Player from '../characters/player.js';
+import DialogBox from '../combat/dialogBox.js';
+import Inventory from '../inventory/inventory.js';
+import { KeyboardInput } from '../input/keyboardInput.js';
+import EventDispatcher from '../combat/eventDispatcher.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
 const levelCompleted = function(enemies){

@@ -1,5 +1,5 @@
 import Character from './character.js'
-import EnemyAnimator from './animations/enemyAnimator.js'
+import EnemyAnimator from '../animations/enemyAnimator.js'
 import HealthController from './healthController.js';
 
 // Clase base Enemy

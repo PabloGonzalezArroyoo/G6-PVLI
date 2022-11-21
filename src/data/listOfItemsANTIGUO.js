@@ -1,4 +1,6 @@
-import { HealthItem, WeaponItem } from './item.js';
+// ARCHIVO NO FINAL
+// CAMBIAR, UNA VEZ ESTÉ IMPLEMENTADO, ESTE ARCHIVO POR "listOfItems.js"
+import { HealthItem, WeaponItem } from '../inventory/item.js';
 
 // Array de items al que acceder para saber a qué item se hace referencia
 export var listOfItems = [

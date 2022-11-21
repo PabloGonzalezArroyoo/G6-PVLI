@@ -1,4 +1,4 @@
-import phaser from "./lib/phaser.js";
+import phaser from "../lib/phaser.js";
 export class KeyboardInput
 {
     constructor(scene) {

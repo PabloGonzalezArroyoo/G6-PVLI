@@ -1,9 +1,9 @@
 // Importaciones
 import Phaser from '../lib/phaser.js';
-import { Button } from '../button.js';
-import Inventory from '../inventory.js';
-import EventDispatcher from '../eventDispatcher.js';
-import { KeyboardInput } from '../keyboardInput.js';
+import { Button } from '../input/button.js';
+import Inventory from '../inventory/inventory.js';
+import EventDispatcher from '../combat/eventDispatcher.js';
+import { KeyboardInput } from '../input/keyboardInput.js';
 
 /**
  * Escena de Inventario.
@@ -58,12 +58,12 @@ export default class InventoryScene extends Phaser.Scene {
 		let inventoryItems = this.inventory.getItems();
 		let armas = [];
 		let comida = [];
-		
+
 		for (let i = 0; i < inventoryItems.length; i++) {
-			if (inventoryItems[i].type === 'WEAPON') {
+			if (inventoryItems[i].type === "WEAPON") {
 				armas.push(inventoryItems[i]);
 			}
-			else if (inventoryItems[i].type === 'HEALTH') {
+			else if (inventoryItems[i].type === "HEALTH") {
 				comida.push(inventoryItems[i]);
 			}
 		}

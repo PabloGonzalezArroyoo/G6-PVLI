@@ -1,8 +1,8 @@
 // Importaciones
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
-import { Button } from '../button.js';
-import { KeyboardInput } from '../keyboardInput.js';
+import { Button } from '../input/button.js';
+import { KeyboardInput } from '../input/keyboardInput.js';
 import PlayerAnimator from '../animations/playerAnimator.js';
 
 /**

@@ -1,4 +1,4 @@
-import TurnEffectController from './turnEffectController.js'
+import TurnEffectController from '../combat/turnEffectController.js'
 
 //Demomento solo necesita su posicion y en animator, luego se puede añadir mas propiedades si son necesarias
 export default class Character{

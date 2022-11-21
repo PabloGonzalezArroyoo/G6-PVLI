@@ -1,4 +1,4 @@
-import {listOfItems} from './listOfItems.js'
+import {listOfItems} from '../data/listOfItemsANTIGUO.js'
 
 export default class Inventory{
 	constructor(equippedWeapon = listOfItems[0], allItems = []){

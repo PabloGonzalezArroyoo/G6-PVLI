@@ -1,7 +1,7 @@
 import Character from './character.js'
-import PlayerAnimator from './animations/playerAnimator.js';
+import PlayerAnimator from '../animations/playerAnimator.js';
 import HealthController from './healthController.js';
-import Inventory from './inventory.js';
+import Inventory from '../inventory/inventory.js';
 
 export default class Player extends Character {
     constructor(scene, x, y, inventory) {

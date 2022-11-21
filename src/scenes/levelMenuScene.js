@@ -1,11 +1,11 @@
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
-import Inventory from '../inventory.js';
-import { Level } from '../level.js';
-import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake } from '../enemy.js'
-import { KeyboardInput } from '../keyboardInput.js';
-import { Button } from '../button.js';
-import {listOfItems} from '../listOfItems.js';
+import Inventory from '../inventory/inventory.js';
+import { Level } from '../levels/level.js';
+import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake } from '../characters/enemy.js'
+import { KeyboardInput } from '../input/keyboardInput.js';
+import { Button } from '../input/button.js';
+import {listOfItems} from '../data/listOfItemsANTIGUO.js';
 
 // Array con todos los niveles del juego
 

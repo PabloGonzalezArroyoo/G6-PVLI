@@ -1,4 +1,4 @@
-import EventDispatcher from './eventDispatcher.js';
+import EventDispatcher from '../combat/eventDispatcher.js';
 
 export default class HealthController extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, maxHP) {

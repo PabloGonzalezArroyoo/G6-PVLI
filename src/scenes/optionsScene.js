@@ -1,7 +1,7 @@
 // Importaciones
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
-import { Button } from '../button.js';
+import { Button } from '../input/button.js';
 
 /**
  * Escena de Opciones.
