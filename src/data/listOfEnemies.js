@@ -1,4 +1,4 @@
-import {Enemy, DrunkRuffian} from '../characters/enemy.js'
+import {DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake} from '../characters/enemy.js'
 
 //Los nombres de las propiedades deben coincidir con las claves del spritesheet para mayor manejo
 export var listOfEnemies = {
