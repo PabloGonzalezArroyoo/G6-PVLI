@@ -1,4 +1,4 @@
-import EventDispatcher from './eventDispatcher.js'
+import EventDispatcher from '../combat/eventDispatcher.js'
 
 export default class DialogBox extends Phaser.GameObjects.Text {
 	constructor(scene, x, y, width){

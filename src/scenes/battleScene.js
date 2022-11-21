@@ -3,7 +3,7 @@
 import {Button} from '../input/button.js';
 import Phaser from '../lib/phaser.js';
 import Player from '../characters/player.js';
-import DialogBox from '../combat/dialogBox.js';
+import DialogBox from '../animations/dialogBox.js';
 import Inventory from '../inventory/inventory.js';
 import { KeyboardInput } from '../input/keyboardInput.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
