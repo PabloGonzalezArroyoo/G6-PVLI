@@ -5,11 +5,11 @@ import { Level } from '../levels/level.js';
 import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake } from '../characters/enemy.js'
 import { KeyboardInput } from '../input/keyboardInput.js';
 import { Button } from '../input/button.js';
-import {listOfItems} from '../data/listOfItemsANTIGUO.js';
+import {listOfItems} from '../data/listOfItems.js';
 import {listOfLevels} from '../data/listOfLevels.js';
 
 // Array con todos los niveles del juego
-const levels = [//new Level(272, 527.5, [new DrunkRuffian(null, 720, 200)], []), // Nivel 0
+const levels = [
 				new Level(listOfLevels[0]),
 				new Level(listOfLevels[1]), // Nivel 1
 				new Level(listOfLevels[2]),			// ... 2
@@ -61,15 +61,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 			data.level.setCompleted();
 		}
 		if(data.inventory === undefined)
-			this.inventory = new Inventory(listOfItems[0],   // Quitar array para el juego final y dejar el constructor por defecto
-            [listOfItems[1],
-            listOfItems[2],
-            listOfItems[5],
-            listOfItems[6],
-            listOfItems[7],
-            listOfItems[8],
-            listOfItems[9]]
-            );
+			this.inventory = new Inventory();
 		else
 			this.inventory = data.inventory;
 	}

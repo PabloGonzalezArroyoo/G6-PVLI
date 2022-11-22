@@ -1,10 +1,9 @@
 export default class Item {
 	//type puede ser arma o objeto y valor es el valor de ataque(arma) o de curacion(objeto) 
-	constructor(name, imgID, type, value, description){
+	constructor(name, imgID, type, description){
 		this.name = name;
 		this.imgID = imgID;
 		this.type = type;
-		this.value = value;
 		this.description = description;
 		this.quantity = 1;
 	}
@@ -28,20 +27,24 @@ export default class Item {
 
 // Items de curación
 export class HealthItem extends Item {
-	constructor(name, imgID, healthValue, description) {
-		super(name, imgID, "HEALTH", healthValue, description);		
+	constructor(itemData) {
+		super(itemData.key, itemData.imgID, "HEALTH", itemData.desc);	
+		this.healthValue = itemData.healthValue;	
 	}
+
+	getHealthValue() { return this.attackValue; }
 }
 
 // Items de daño (armas)
 export class WeaponItem extends Item {
-	constructor(name, imgID, attackValue, defValue, queLocura, description) {
-		super(name, imgID, "WEAPON", attackValue, description);
-		this.defValue = defValue;
-		this.queLocura = queLocura;
+	constructor(itemData) {
+		super(itemData.key, itemData.imgID, "WEAPON", itemData.desc);
+		this.attackValue = itemData.attackValue;
+		this.defValue = itemData.defValue;
+		this.queLocura = itemData.queLocura;
 	}
 
-	getAttack() { return this.value; }
+	getAttack() { return this.attackValue; }
 	
 	getDefense() { return this.defValue; }
 

@@ -1,7 +1,8 @@
-import {listOfItems} from '../data/listOfItemsANTIGUO.js'
+import {listOfItems} from '../data/listOfItems.js'
+import {HealthItem, WeaponItem} from './item.js'
 
 export default class Inventory{
-	constructor(equippedWeapon = listOfItems[0], allItems = []){
+/*	constructor(equippedWeapon = listOfItems[0], allItems = []){
 		this.equippedWeapon = equippedWeapon;
 		this.allItems = allItems;
 	}
@@ -60,5 +61,87 @@ export default class Inventory{
 			}
 
 		});
+	}
+}*/
+
+
+	constructor() {
+		this.weapons = {};
+		listOfItems.weapons.forEach(object => {
+			Object.defineProperty(this.weapons, object.imgID, {enumerable: true, value: {weapon: new WeaponItem(object), owned: false}});
+		});
+		this.healths = {};
+		listOfItems.healths.forEach(object => {
+			Object.defineProperty(this.healths, object.imgID, {enumerable: true, value: {item: object, amount: 0}});
+		});
+		this.addWeapon('puño');
+		this.equipWeapon('puño');
+	}
+
+	equipWeapon(weaponId) {
+		this.equipedWeapon = this.weapons[weaponId].weapon;
+	}
+
+	addWeapon(weaponId) {
+		this.weapons[weaponId].owned = true;
+	}
+
+	addHealth(itemId) {
+		this.health[itemId].amount++;
+	}
+
+	substractWeapon(weaponId) {
+		this.weapons[weaponId].owned = false;
+	}
+
+	substractHealth(itemId) {
+		if (this.health[itemId].amount > 0) this.health[itemId].amount--;
+	}
+
+	getEquipedWeapon(){
+		return this.equipedWeapon;
+	}
+
+	// Devuelve la referencia a las armas
+	getWeapons(){
+		return this.weapons;
+	}
+
+	// Devuelve la referencia a los items de curacion
+	getHealths(){
+		return this.healths;
+	}
+
+	/**
+	 * Genera un backup del inventario
+	 * */
+	getInventory(){
+		let weapons = [];
+		Object.values(this.weapons).forEach(val => {
+			weapons.push({imgID: val.weapon.imgID, owned: val.owned});
+		});
+
+		let healths = [];
+		Object.values(this.healths).forEach(val => {
+			healths.push({imgID: val.item.imgID, amount: val.amount});
+		});
+
+		return {equipedWeapon: this.equipedWeapon.imgID, weapons: weapons, healths: healths}
+	}
+
+	/**
+	 * Cambias el inventario al que se pasa por parametro
+	 * @param {equipedWeapon: imgID, weapons: [{imgID, owned}], healths: [{imgID, amount}]} inventory Backup del inventario generado por getInventory
+	**/
+	setInventory(inventory){
+		inventory.weapons.forEach(object => {
+			this.weapons[object.imgID].owned = object.owned;
+			});
+
+		inventory.healths.forEach(object => {
+			this.healths[object.imgID].amount = object.owned;
+			});
+
+		this.equipWeapon(inventory.equipedWeapon);
 	}
 }

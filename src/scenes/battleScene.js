@@ -56,7 +56,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.enemiesData = data.level.enemies;
 		this.loot = data.level.loot;
 		this.inventory = data.inventory;
-		this.inventoryBackup = data.inventory.getInfo();
+		this.inventoryBackup = data.inventory.getInventory();
 	}
 
 	/**
@@ -108,8 +108,6 @@ export default class BattleScene extends Phaser.Scene {
 		this.player = new Player(this, 250, 475, this.inventory);
     
 		// Enemy1
-		// this.enemy = new DrunkRuffian(this, 750, 200);
-		//this.enemies.forEach(enemy => enemy.setScene(this));
 		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this ,enemy.x, enemy.y)));
 			
 		// Descripcion

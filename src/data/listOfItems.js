@@ -1,5 +1,5 @@
 export var listOfItems = {
-	weapon: [
+	weapons: [
 		{key: "Puño",
 		imgID: "puño", 
 		attack: 15,
@@ -97,7 +97,7 @@ export var listOfItems = {
 		desc: "-"},
 	],
 
-	health: [
+	healths: [
 		{key: "Bolla de pan",
 		imgID: "bolla", 
 		heal: 20,
