@@ -1,6 +1,7 @@
 import Character from './character.js'
 import EnemyAnimator from '../animations/enemyAnimator.js'
 import HealthController from './healthController.js';
+import EventDispatcher from '../combat/eventDispatcher.js';
 
 // Clase base Enemy
 export class Enemy extends Character {
@@ -11,6 +12,11 @@ export class Enemy extends Character {
             this.spritesheet = spritesheet;
             this.maxHealth = maxHealth;
         }
+        this.emmiter= EventDispatcher.getInstance();
+        this.animator.on('pointerover',this.animator.setScale(1.5));
+        this.animator.on('pointerout',this.animator.setScale(1));
+        this.animator.on('pointerdown',this.OnClick());
+
     }
     // método para añadir una escena si no tenía
     setScene(scene) {
@@ -35,6 +41,12 @@ export class Enemy extends Character {
     ability(player) { return Enemy.prototype.attack.call(this, player); }
 
     getAnimator() { return this.animator; }
+    //Devuelve el enemigo sobre el que realizar el ataque
+    OnClick()
+    {   
+        this.scene.selectedEnemy=this;
+        this.emmiter.emit('enemyselected');
+    }
 }
 
 // Enemigo 1

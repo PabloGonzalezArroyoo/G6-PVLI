@@ -110,7 +110,8 @@ export default class BattleScene extends Phaser.Scene {
 		// Enemy1
 		// this.enemy = new DrunkRuffian(this, 750, 200);
 		this.enemies.forEach(enemy => enemy.setScene(this));
-			
+		//Para guardar y usar el enemigo seleccionado
+		this.selectedEnemy;
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);
 
@@ -166,8 +167,14 @@ export default class BattleScene extends Phaser.Scene {
 		switch (action){									
 			case 'attack' : 																	// Si selecciona atacar
 				this.dialogBox.clearText();														// Borrar texto previo
-				this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');	
-				this.emitter.once('finishTexting', () => {this.player.attack(this.enemies[0])});	
+				this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
+				this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {Element.animator.setInteractive();	
+				});});
+				this.emitter.once('enemyselected',()=>{
+					this.dialogBox.clearText();														// Borrar texto previo
+					this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');	
+					this.emitter.once('finishTexting', () => {this.player.attack()});
+				})	
 				break;			
 			case 'defense': 														// Si selecciona defenderse
 				this.dialogBox.clearText();														// Borrar texto previo
