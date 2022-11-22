@@ -5,7 +5,6 @@ export default class Item {
 		this.imgID = imgID;
 		this.type = type;
 		this.description = description;
-		this.quantity = 1;
 	}
 
   	getName() { return this.name; }
@@ -17,30 +16,24 @@ export default class Item {
 	getType() { return this.type; }
 
 	getValue() { return this.value; }
-
-	addQuantity(number) { this.quantity += number; }
-  
-  	setQuantity(quantity) { this.quantity=quantity; }
-  
-	getQuantity() { return this.quantity; }
 }
 
 // Items de curación
 export class HealthItem extends Item {
 	constructor(itemData) {
 		super(itemData.key, itemData.imgID, "HEALTH", itemData.desc);	
-		this.healthValue = itemData.healthValue;	
+		this.healthValue = itemData.heal;
 	}
 
-	getHealthValue() { return this.attackValue; }
+	getHealthValue() { return this.healthValue; }
 }
 
 // Items de daño (armas)
 export class WeaponItem extends Item {
 	constructor(itemData) {
 		super(itemData.key, itemData.imgID, "WEAPON", itemData.desc);
-		this.attackValue = itemData.attackValue;
-		this.defValue = itemData.defValue;
+		this.attackValue = itemData.attack;
+		this.defValue = itemData.defense;
 		this.queLocura = itemData.queLocura;
 	}
 

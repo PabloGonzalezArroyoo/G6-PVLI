@@ -72,30 +72,31 @@ export default class Inventory{
 		});
 		this.healths = {};
 		listOfItems.healths.forEach(object => {
-			Object.defineProperty(this.healths, object.imgID, {enumerable: true, value: {item: object, amount: 0}});
+			Object.defineProperty(this.healths, object.imgID, {enumerable: true, value: {item: new HealthItem(object), amount: 0}});
 		});
 		this.addWeapon('puño');
-		this.equipWeapon('puño');
+		this.setEquipedWeapon('puño');
 	}
 
-	equipWeapon(weaponId) {
-		this.equipedWeapon = this.weapons[weaponId].weapon;
+	setEquipedWeapon(weaponID) {
+		this.equipedWeapon = this.weapons[weaponID].weapon;
 	}
 
-	addWeapon(weaponId) {
-		this.weapons[weaponId].owned = true;
+	addWeapon(weaponID) {
+		this.weapons[weaponID].owned = true;
 	}
 
-	addHealth(itemId) {
-		this.health[itemId].amount++;
+	addHealth(itemID, amount = 1) {
+		console.log(itemID);
+		this.healths[itemID].amount += amount;
 	}
 
-	substractWeapon(weaponId) {
-		this.weapons[weaponId].owned = false;
+	substractWeapon(weaponID) {
+		this.weapons[weaponID].owned = false;
 	}
 
-	substractHealth(itemId) {
-		if (this.health[itemId].amount > 0) this.health[itemId].amount--;
+	substractHealth(itemID) {
+		if (this.healths[itemID].amount > 0) this.healths[itemID].amount--;
 	}
 
 	getEquipedWeapon(){
@@ -139,9 +140,9 @@ export default class Inventory{
 			});
 
 		inventory.healths.forEach(object => {
-			this.healths[object.imgID].amount = object.owned;
+			this.healths[object.imgID].amount = object.amount;
 			});
 
-		this.equipWeapon(inventory.equipedWeapon);
+		this.setEquipedWeapon(inventory.equipedWeapon);
 	}
 }
