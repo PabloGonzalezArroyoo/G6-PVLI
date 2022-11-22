@@ -50,7 +50,7 @@ export default class Player extends Character {
 
     quelocura(enemies, index){
         console.log("QUELOCURA");
-        this.inventory.equippedWeapon.queLocura(this, enemies, index);
+        this.inventory.equipedWeapon.queLocura(this, enemies, index);
         this.healthController.scene.time.delayedCall(1000, () => {this.healthController.emitter.emit("finishTurn")});
     }
 
