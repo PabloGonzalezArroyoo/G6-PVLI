@@ -4,6 +4,7 @@ import { Button } from '../input/button.js';
 import Inventory from '../inventory/inventory.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
 import { KeyboardInput } from '../input/keyboardInput.js';
+import DialogBox from '../animations/dialogBox.js';
 
 /**
  * Escena de Inventario.
@@ -45,6 +46,7 @@ export default class InventoryScene extends Phaser.Scene {
 	*/
 	create() {
 		this.emitter = EventDispatcher.getInstance();
+		this.DialogBox=new DialogBox(this, 545, 565, 450);
 
 		// Constantes
 		const width = this.scale.width;
@@ -85,7 +87,7 @@ export default class InventoryScene extends Phaser.Scene {
 			}
 			y = y * 60 + 140;
 
-			new Button(this, x , y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(armas[i])}, this.mostrarDescripcion).setScale(1.5,1.5);
+			new Button(this, x , y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(armas[i])}, ()=>{this.mostrarDescripcion(armas[i])}).setScale(1.5,1.5);
 		}
 
 		// COMIDA
@@ -94,7 +96,7 @@ export default class InventoryScene extends Phaser.Scene {
 			let itemQuantity = comida[i].quantity;
 			
 			let x = i * 165 + width / 2; let y = 475;
-			new Button(this, x, y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(comida[i])}, this.mostrarDescripcion).setScale(3,3);
+			new Button(this, x, y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(comida[i])}, ()=>{this.mostrarDescripcion}).setScale(3,3);
 			if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
 		}
 
@@ -129,11 +131,20 @@ export default class InventoryScene extends Phaser.Scene {
 		this.scene.resume(this.previousSceneName, item); 	// Reanuda la escena anterior
 	}
 
-	update() {
+	update(t,dt) {
+		super.update(t,dt);
+		this.previousLetterTime += dt; //Contador del tiempo transcurrido desde la ultima letra
+
+		//Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
+		if(this.DialogBox.isWritting && this.DialogBox.timePerLetter <= this.previousLetterTime){
+			this.DialogBox.write();
+			this.previousLetterTime = 0;
+		}
 	}
 
-	mostrarDescripcion() {
-		// ACCION PARA MOSTRAR LA DESCRIPCION DEL ITEM
-		console.log("MOSTRAR DESCRIPCION");
+	mostrarDescripcion(item) {
+			this.DialogBox.clearText();
+			this.DialogBox.setTextToDisplay(item.getDesc());
+			console.log(item.getDesc());
 	}
 }
