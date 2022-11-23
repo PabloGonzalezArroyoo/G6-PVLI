@@ -191,7 +191,7 @@ export default class BattleScene extends Phaser.Scene {
 				break;			
 			case 'defense': 														// Si selecciona defenderse
 				this.dialogBox.clearText();														// Borrar texto previo
-				this.dialogBox.setTextToDisplay('Maria Pita se defiende durante 3 turnos');	
+				this.dialogBox.setTextToDisplay('Maria Pita aumenta su defensa durante 3 turnos');	
 				this.emitter.once('finishTexting', () => {this.player.defense()});
 				break;
 			case 'object' : 																	//Si selecciona un objeto
@@ -199,7 +199,7 @@ export default class BattleScene extends Phaser.Scene {
 				if(item.type === 'WEAPON')													
 					this.dialogBox.setTextToDisplay('Maria Pita ha cambiado de arma a ' + item.name);
 				else
-					this.dialogBox.setTextToDisplay('Maria Pita ha usado ' + item.name); 
+					this.dialogBox.setTextToDisplay('Maria Pita ha usado ' + item.name + ' y se curó ' + item.getHealthValue() + ' de vida'); 
 				this.emitter.once('finishTexting', () => {this.player.useItem(item)});
 				break;
 			case 'queLocura' : 																	// Si selecciona QueLocura
