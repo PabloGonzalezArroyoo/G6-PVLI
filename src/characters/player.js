@@ -65,5 +65,5 @@ export default class Player extends Character {
         return receivedDamage;
     }
 
-    getDamage() {return this.damage;}
+    getDamage() {return this.inventory.getEquipedWeapon().getAttack();}
 }
