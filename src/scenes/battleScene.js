@@ -109,7 +109,9 @@ export default class BattleScene extends Phaser.Scene {
 		this.player = new Player(this, 250, 475, this.inventory);
     
 		// Enemy1
-		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this ,enemy.x, enemy.y)));
+		this.enemies = []; //ARREGLO RAPIDO: quitar cuando se implemente una funcion para cuando muere un enemigo
+		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
+		//console.log(this.enemies);
 			
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);

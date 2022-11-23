@@ -19,7 +19,6 @@ export default class Player extends Character {
         // Le baja vida al enemigo
         this.animator.once("animationcomplete-attack",
             () => {enemy.healthController.changeHealth(-this.inventory.getEquipedWeapon().getAttack())});
-        console.log(-this.inventory.getEquipedWeapon().getAttack());
     }
 
     defense(){
