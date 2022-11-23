@@ -108,11 +108,11 @@ export default class BattleScene extends Phaser.Scene {
 		// Maria Pita
 		this.player = new Player(this, 250, 475, this.inventory);
     
-		// Enemy1
+		// Enemigo seleccionado
+		this.selectedEnemy=null;
 		this.enemies = []; //ARREGLO RAPIDO: quitar cuando se implemente una funcion para cuando muere un enemigo
 		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
 		//console.log(this.enemies);
-			
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);
 
@@ -171,11 +171,21 @@ export default class BattleScene extends Phaser.Scene {
 	PlayerTurn(action, item){
 		this.DisableButtons();															// Desactiva los botones
 		switch (action){									
-			case 'attack' : 																	// Si selecciona atacar
+			case 'attack' : 																	// Se selecciona atacar
 				this.UpdateQueLocura(35)																
 				this.dialogBox.clearText();														// Borrar texto previo
-				this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');	
-				this.emitter.once('finishTexting', () => {this.player.attack(this.enemies[0]);});	
+				this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
+				//Se hace a todos los enemigos interactuables
+				this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {Element.animator.setInteractive();	
+				});});
+				//Una vez se reciba confirmación del ataque y el enemigo seleccionado, se ataca.
+				this.emitter.once('enemyselected',()=>{
+					this.dialogBox.clearText();														// Borrar texto previo
+					this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');	
+					this.emitter.once('finishTexting', () => {this.player.attack(this.selectedEnemy);
+						this.enemies.forEach(Element => {Element.animator.disableInteractive();});
+					});
+				})	
 				break;			
 			case 'defense': 														// Si selecciona defenderse
 				this.dialogBox.clearText();														// Borrar texto previo
