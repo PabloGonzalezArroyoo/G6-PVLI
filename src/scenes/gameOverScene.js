@@ -20,7 +20,7 @@ export default class GameOver extends Phaser.Scene {
         this.add.text(width * 0.5, height * 0.5, 'Game Over', {})
         .setOrigin(0.5);
 
-        this.inventory.setInfo(this.inventoryBackup);                                                   // Devuelve los objetos perdidos durante el combate
+        this.inventory.setInventory(this.inventoryBackup);                                                   // Devuelve los objetos perdidos durante el combate
 
         //Sustituir los dos siguientes inputs por botones
         this.input.keyboard.once('keydown-SPACE', () => {

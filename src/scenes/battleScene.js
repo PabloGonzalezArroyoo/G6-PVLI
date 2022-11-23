@@ -7,6 +7,7 @@ import DialogBox from '../animations/dialogBox.js';
 import Inventory from '../inventory/inventory.js';
 import { KeyboardInput } from '../input/keyboardInput.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
+import {listOfEnemies} from '../data/listOfEnemies.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
 const levelCompleted = function(enemies){
@@ -41,8 +42,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.previousLetterTime = 0;
 
 		this.level;
-		this.enemies;
-		this.loot;
+		this.enemies = [];
+		this.loot = [];
 	}
 
 	/**
@@ -52,11 +53,10 @@ export default class BattleScene extends Phaser.Scene {
 	*/
 	init(data) {
 		this.level = data.level;
-		this.enemies = data.level.enemies;
+		this.enemiesData = data.level.enemies;
 		this.loot = data.level.loot;
 		this.inventory = data.inventory;
-		this.inventoryBackup = data.inventory.getInfo();
-		console.log(this.inventoryBackup);
+		this.inventoryBackup = data.inventory.getInventory();
 	}
 
 	/**
@@ -91,6 +91,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('botonDefensa', 'assets/scenes/battle/defenseButton.png', {frameWidth: 241, frameHeight: 67});
 		this.load.spritesheet('botonObjetos', 'assets/scenes/battle/objectsButton.png', {frameWidth: 241, frameHeight: 67});
 		this.load.spritesheet('botonQueLocura', 'assets/scenes/battle/queLocuraButton.png', {frameWidth: 241, frameHeight: 67});
+		this.load.spritesheet('emptyButton', 'assets/scenes/battle/layers/emptyButton.png', {frameWidth: 241, frameHeight: 67});
 		
 		// Barra de vida
 		this.load.image('lifeBar', 'assets/ui/lifeBar38x8sinCorazon.png');
@@ -108,10 +109,10 @@ export default class BattleScene extends Phaser.Scene {
 		this.player = new Player(this, 250, 475, this.inventory);
     
 		// Enemy1
-		// this.enemy = new DrunkRuffian(this, 750, 200);
-		this.enemies.forEach(enemy => enemy.setScene(this));
-		//Para guardar y usar el enemigo seleccionado
 		this.selectedEnemy;
+		this.enemies = []; //ARREGLO RAPIDO: quitar cuando se implemente una funcion para cuando muere un enemigo
+		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
+		//console.log(this.enemies);
 		// Descripcion
 		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);
 
@@ -130,15 +131,20 @@ export default class BattleScene extends Phaser.Scene {
 		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this.keyboardInput, () => {this.scene.pause();this.scene.launch('inventoryScene', {scene: 'battleScene', inventory: this.player.inventory});this.events.once('resume', (scene, item) => {this.useItem(item)})}),
 		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('defense')}),
 		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('queLocura')})];
-		//this.keyboardInput.loadButtonArray(this.botones);
 
 		this.botones[0].setAdjacents(null, this.botones[2], null, this.botones[1]);
 		this.botones[1].setAdjacents(null, this.botones[3], this.botones[0], null);
 		this.botones[2].setAdjacents(this.botones[0], null, null, this.botones[3]);
 		this.botones[3].setAdjacents(this.botones[1], null, this.botones[2], null);
 		this.keyboardInput.setStartButton(this.botones[0]);
+
+		this.emptyButton = this.add.image(254.5, 663.5, 'emptyButton').setOrigin(0,0);
+
+		this.botones[3].visible = false;
+		this.DisableQueLocura();
+		this.UpdateQueLocura(0);
     
-    this.emitter = EventDispatcher.getInstance();
+    	this.emitter = EventDispatcher.getInstance();
 	}
 
 	update(t,dt) {
@@ -166,6 +172,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.DisableButtons();															// Desactiva los botones
 		switch (action){									
 			case 'attack' : 																	// Si selecciona atacar
+				this.UpdateQueLocura(35)																
 				this.dialogBox.clearText();														// Borrar texto previo
 				this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
 				this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {Element.animator.setInteractive();	
@@ -190,6 +197,7 @@ export default class BattleScene extends Phaser.Scene {
 				this.emitter.once('finishTexting', () => {this.player.useItem(item)});
 				break;
 			case 'queLocura' : 																	// Si selecciona QueLocura
+				this.DisableQueLocura(); 																	
 				this.dialogBox.clearText();														// Borrar texto previo
 				this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 				this.emitter.once('finishTexting', () => {this.player.quelocura(this.enemies, 0)});
@@ -280,15 +288,47 @@ export default class BattleScene extends Phaser.Scene {
 			this.botones[i].disableInteractive();
 			this.botones[i].visible = false;
 		}
+		this.emptyButton.visible = false;
 	}
 
 	// Activa y vuelve visible los botones
 	EnableButtons(){
 		for(var i=0; i < this.botones.length; i++) {
-			this.botones[i].setInteractive();
-			this.botones[i].visible = true;
+			if(i === 3 && this.currentQueLocura <= 100){
+				this.emptyButton.visible = true;
+			}else{
+				this.botones[i].setInteractive();
+				this.botones[i].visible = true;
+			}
 		}
 	}
+
+	// Impide seleccionar que locura y pone el contador a cero
+	DisableQueLocura(){
+		this.botones[1].setAdjacents(null, null, this.botones[0], null);
+		this.botones[2].setAdjacents(this.botones[0], null, null, null);
+		this.botones[3].disableInteractive();	
+		this.currentQueLocura = 0;
+		this.UpdateQueLocura(0);
+	}
+
+	// Activa que locura y hace posible seleccionarla
+	EnableQueLocura(){
+		this.botones[1].setAdjacents(null, this.botones[3], this.botones[0], null);
+		this.botones[2].setAdjacents(this.botones[0], null, null, this.botones[3]);
+		this.botones[3].setInteractive();
+	}
+
+	//Aumenta el contador segun el parametro dado y actializa la imagen
+	UpdateQueLocura(add){
+		this.currentQueLocura += add;
+		if(this.currentQueLocura >= 100){
+			this.EnableQueLocura();
+		}else{
+			this.emptyButton.setCrop(0,0, (this.emptyButton.width/100)*this.currentQueLocura, this.emptyButton.height);
+		}
+	}
+
 	//Usa el item si hay, si no, no hace nada
 	useItem(item){
 		if(item !== 'none')
