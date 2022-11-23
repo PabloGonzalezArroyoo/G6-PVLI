@@ -61,7 +61,8 @@ export class Button extends Phaser.GameObjects.Sprite {
     // Asigna el boton dado en la direccion dada
     setAdjacent(button, direction){
         Object.defineProperty(this.adjacent, direction, {
-            value: button
+            value: button,
+            writable: true
         });
     }
 }

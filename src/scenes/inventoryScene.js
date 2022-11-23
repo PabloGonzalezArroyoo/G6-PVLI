@@ -32,12 +32,12 @@ export default class InventoryScene extends Phaser.Scene {
 		this.load.image('inventoryBackground', 'assets/scenes/inventory/inventoryBackground.png');
 		// Items
 		this.load.image('puño', 'assets/scenes/inventory/weapons/puño.png');
-		this.load.image('cimitarraMadera', 'assets/scenes/inventory/weapons/cimitarraMadera.png');
-		this.load.image('cimitarraAcero', 'assets/scenes/inventory/weapons/cimitarraAcero.png');
-		this.load.image('cimitarraLoca', 'assets/scenes/inventory/weapons/cimitarraLoca.png');
-		this.load.image('dagaOxidada', 'assets/scenes/inventory/weapons/dagaOxidada.png');
-		this.load.image('dagaAfilada', 'assets/scenes/inventory/weapons/dagaAfilada.png');
-		this.load.image('dagaExcéntrica', 'assets/scenes/inventory/weapons/dagaExcéntrica.png');
+		this.load.image('cimMad', 'assets/scenes/inventory/weapons/cimitarraMadera.png');
+		this.load.image('cimAc', 'assets/scenes/inventory/weapons/cimitarraAcero.png');
+		this.load.image('cimLoc', 'assets/scenes/inventory/weapons/cimitarraLoca.png');
+		this.load.image('dagOx', 'assets/scenes/inventory/weapons/dagaOxidada.png');
+		this.load.image('dagAf', 'assets/scenes/inventory/weapons/dagaAfilada.png');
+		this.load.image('dagEx', 'assets/scenes/inventory/weapons/dagaExcéntrica.png');
 	}
 
 	/**
@@ -55,48 +55,47 @@ export default class InventoryScene extends Phaser.Scene {
 		let bg = this.add.image(0,0, 'inventoryBackground').setOrigin(0, 0).setDisplaySize(width, height);
 
 		// SEPARACION ENTRE ARMAS Y COMIDA
-		let inventoryItems = this.inventory.getItems();
-		let armas = [];
-		let comida = [];
-
-		for (let i = 0; i < inventoryItems.length; i++) {
-			if (inventoryItems[i].type === "WEAPON") {
-				armas.push(inventoryItems[i]);
-			}
-			else if (inventoryItems[i].type === "HEALTH") {
-				comida.push(inventoryItems[i]);
-			}
-		}
+		let armas = this.inventory.getWeapons();
+		let comida = this.inventory.getHealths();
 
 		this.keyboardInput = new KeyboardInput(this);
 
 		// ARMA EQUIPADA
 		new Button(this, 217, 325, this.inventory.getEquipedWeapon().imgID, 0, 0, 0, this.keyboardInput, function(){}).setScale(8, 8);
 
+		let i = 0;
 		// ARMAS
-		for (let i = 0; i < armas.length; i++) {
-			let itemID = armas[i].imgID;
-			let x = i % 5 * 102 + width / 2 - 35;
-			let y;
-			switch (true) {
-				case i >= 5 && i < 10: y = 1; break;
-				case i >= 10: y = 2; break;
-				default: y = 0; break;
+		Object.values(armas).forEach(val => {
+			let itemID = val.weapon.imgID;
+
+			if(val.owned){
+				let x = i % 5 * 102 + width / 2 - 35;
+				let y;
+				switch (true) {
+					case i >= 5 && i < 10: y = 1; break;
+					case i >= 10: y = 2; break;
+					default: y = 0; break;
+				}
+				y = y * 60 + 140;
+
+				new Button(this, x , y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(val.weapon)}, this.mostrarDescripcion).setScale(1.5,1.5);
+				i++;
 			}
-			y = y * 60 + 140;
+		});
 
-			new Button(this, x , y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(armas[i])}, this.mostrarDescripcion).setScale(1.5,1.5);
-		}
-
+		i = 0;
 		// COMIDA
-		for (let i = 0; i < comida.length; i++) {
-			let itemID = comida[i].imgID;
-			let itemQuantity = comida[i].quantity;
+		Object.values(comida).forEach(val => {
+			let itemID = val.item.imgID;
+			let itemQuantity = val.amount;
 			
-			let x = i * 165 + width / 2; let y = 475;
-			new Button(this, x, y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(comida[i])}, this.mostrarDescripcion).setScale(3,3);
-			if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
-		}
+			if(itemQuantity > 0){
+				let x = i * 165 + width / 2; let y = 475;
+				new Button(this, x, y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(val.item)}, this.mostrarDescripcion).setScale(3,3);
+				if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
+				i++;
+			}
+		});
 
 		// TECLAS
 		//Para seleccionar botones con teclas, creamos el objeto tecla

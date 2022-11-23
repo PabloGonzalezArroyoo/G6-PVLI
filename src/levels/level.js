@@ -6,11 +6,11 @@ const State = {
 }
 
 export class Level/* extends Button */{
-    constructor(x, y, enemies, loot) {
-        this.x = x; this.y = y;
+    constructor(levelData) {
+        this.x = levelData.x; this.y = levelData.y;
         this.state = State.locked;
-        this.loot = loot; // array con todos los posibles items que dar al jugador al completar el nivel
-        this.enemies = enemies; // array con todos los enemigos del nivel
+        this.loot = levelData.loot; // array con todos los posibles items que dar al jugador al completar el nivel
+        this.enemies = levelData.enemies; // array con todos los enemigos del nivel
 
         this.spriteSheet = 'level';
         this.defaultFrame = 0 + this.state * 3;

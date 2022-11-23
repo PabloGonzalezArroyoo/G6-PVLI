@@ -1,8 +1,11 @@
-import { Position, Scale, Rotation } from './entity'
-import {Enemy} from '/characters/enemy.js'
+import {DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake} from '../characters/enemy.js'
 
-export var listOfEnemies = [
-    new Enemy("enemy1_1", new Position(0,0), new Scale(10,10), new Rotation(0,0,0), 'white', 'enemy1'),
-    new Enemy("enemy1_2", new Position(0,50), new Scale(10,10), new Rotation(0,0,0), 'black', 'enemy2'),
-    new Enemy("enemy1_3", new Position(0,100), new Scale(10,10), new Rotation(0,0,0), 'grey', 'enemy3')
-];
+//Los nombres de las propiedades deben coincidir con las claves del spritesheet para mayor manejo
+export var listOfEnemies = {
+    drunkRuffian: function(scene, x, y){return new DrunkRuffian(scene, x, y);},
+    stinkyPirate: function(scene, x, y){return new StinkyPirate(scene, x, y);},
+    scurviedSailor: function(scene, x, y){return new ScurviedSailor(scene, x, y);},
+    experiencedBuccaneer: function(scene, x, y){return new ExperiencedBuccaneer(scene, x, y);},
+    alienatedCosair: function(scene, x, y){return new AlienatedCosair(scene, x, y);},
+    ensignDrake: function(scene, x, y){return new EnsignDrake(scene, x, y);}
+};

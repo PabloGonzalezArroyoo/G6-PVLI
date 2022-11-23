@@ -19,7 +19,6 @@ export default class Player extends Character {
         // Le baja vida al enemigo
         this.animator.once("animationcomplete-attack",
             () => {enemy.healthController.changeHealth(-this.inventory.getEquipedWeapon().getAttack())});
-        console.log(-this.inventory.getEquipedWeapon().getAttack());
     }
 
     defense(){
@@ -37,12 +36,12 @@ export default class Player extends Character {
     useItem(item){
         //Cambia de arma equipada si el item es un arma
         if(item.type === 'WEAPON')
-            this.inventory.setEquipedWeapon(item);
+            this.inventory.setEquipedWeapon(item.imgID);
         //Se cura si el item es un objeto de curacion
         else if(item.type === 'HEALTH'){
-            console.log(item.getValue())
-            this.healthController.changeHealth(item.getValue());
-            this.inventory.subtractItem(item);
+            console.log(item.getHealthValue())
+            this.healthController.changeHealth(item.getHealthValue());
+            this.inventory.substractHealth(item.imgID);
         }
         this.healthController.scene.time.delayedCall(1000,
             () => {this.healthController.emitter.emit("finishTurn")});
@@ -50,7 +49,7 @@ export default class Player extends Character {
 
     quelocura(enemies, index){
         console.log("QUELOCURA");
-        this.inventory.equippedWeapon.queLocura(this, enemies, index);
+        this.inventory.equipedWeapon.queLocura(this, enemies, index);
         this.healthController.scene.time.delayedCall(1000, () => {this.healthController.emitter.emit("finishTurn")});
     }
 
