@@ -12,10 +12,12 @@ export class Enemy extends Character {
             this.spritesheet = spritesheet;
             this.maxHealth = maxHealth;
         }
+        this.scene=scene;
+        //Hacer al enemigo interactuable
         this.emmiter= EventDispatcher.getInstance();
-        this.animator.on('pointerover',this.animator.setScale(1.5));
-        this.animator.on('pointerout',this.animator.setScale(1));
-        this.animator.on('pointerdown',this.OnClick());
+        this.animator.on('pointerover',()=>{this.animator.setScale(7)});
+        this.animator.on('pointerout',()=>{this.animator.setScale(6)});
+        this.animator.on('pointerdown',()=>{this.OnClick()});
 
     }
     // método para añadir una escena si no tenía
@@ -41,7 +43,7 @@ export class Enemy extends Character {
     ability(player) { return Enemy.prototype.attack.call(this, player); }
 
     getAnimator() { return this.animator; }
-    //Devuelve el enemigo sobre el que realizar el ataque
+    //Devuelve el enemigo sobre el que realizar el ataque y avisa de que este ya se puede realizar
     OnClick()
     {   
         this.scene.selectedEnemy=this;
