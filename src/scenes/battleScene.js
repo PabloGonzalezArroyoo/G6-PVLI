@@ -139,8 +139,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.keyboardInput.setStartButton(this.botones[0]);
 
 		this.emptyButton = this.add.image(254.5, 663.5, 'emptyButton').setOrigin(0,0);
+		this.emptyButton.setCrop(0, 0, 0, 0);
 
-		this.botones[3].visible = false;
 		this.DisableQueLocura();
 		this.UpdateQueLocura(0);
     
@@ -185,7 +185,7 @@ export default class BattleScene extends Phaser.Scene {
 			case 'object' : 																	//Si selecciona un objeto
 				this.dialogBox.clearText();														// Borrar texto previo
 				if(item.type === 'WEAPON')													
-					this.dialogBox.setTextToDisplay('Maria Pita ha cambiado de arma ha ' + item.name);
+					this.dialogBox.setTextToDisplay('Maria Pita ha cambiado de arma a ' + item.name);
 				else
 					this.dialogBox.setTextToDisplay('Maria Pita ha usado ' + item.name); 
 				this.emitter.once('finishTexting', () => {this.player.useItem(item)});
@@ -295,14 +295,21 @@ export default class BattleScene extends Phaser.Scene {
 				this.botones[i].visible = true;
 			}
 		}
+		if(this.player.inventory.getEquipedWeapon().imgID === 'puño'){
+			this.botones[3].disableInteractive();
+			this.botones[3].visible = false;
+		}
 	}
 
 	// Impide seleccionar que locura y pone el contador a cero
-	DisableQueLocura(){
+	DisableQueLocura(saveCounter = false){
 		this.botones[1].setAdjacents(null, null, this.botones[0], null);
 		this.botones[2].setAdjacents(this.botones[0], null, null, null);
-		this.botones[3].disableInteractive();	
-		this.currentQueLocura = 0;
+		this.botones[3].disableInteractive();
+		this.botones[3].visible = false;
+		if(!saveCounter){
+			this.currentQueLocura = 0;
+		}
 		this.UpdateQueLocura(0);
 	}
 
@@ -315,17 +322,22 @@ export default class BattleScene extends Phaser.Scene {
 
 	//Aumenta el contador segun el parametro dado y actializa la imagen
 	UpdateQueLocura(add){
-		this.currentQueLocura += add;
-		if(this.currentQueLocura >= 100){
-			this.EnableQueLocura();
-		}else{
-			this.emptyButton.setCrop(0,0, (this.emptyButton.width/100)*this.currentQueLocura, this.emptyButton.height);
+		if(this.player.inventory.getEquipedWeapon().imgID != 'puño'){
+			this.currentQueLocura += add;
+			if(this.currentQueLocura >= 100){
+				this.EnableQueLocura();
+			}else{
+				this.emptyButton.setCrop(0,0, (this.emptyButton.width/100)*this.currentQueLocura, this.emptyButton.height);
+			}
 		}
 	}
 
 	//Usa el item si hay, si no, no hace nada
 	useItem(item){
-		if(item !== 'none')
+		if(item !== 'none'){
 			this.PlayerTurn('object', item);
+			if(item.imgID === 'puño')
+				this.DisableQueLocura(true);
+		}
 	}
 }

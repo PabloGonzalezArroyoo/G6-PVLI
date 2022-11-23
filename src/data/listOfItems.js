@@ -4,7 +4,7 @@ export var listOfItems = {
 	weapons: [
 		{key: "Puño",
 		imgID: "puño", 
-		attack: 65,
+		attack: 15,
 		defense: 10,
 		desc: "-"},
 		
