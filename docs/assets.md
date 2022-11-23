@@ -11,6 +11,7 @@ A destacar también tendríamos: el mapa de selección de niveles, el cual repre
 La gran mayoría de los assets son propios y originales, creados por Pantheon Studios. Para la creación de los mismos hemos usado las siguientes herramientas externas:
 - [Piskel](https://www.piskelapp.com/)
 - [Aseprite](https://www.aseprite.org/)
+- [Pixilart](https://www.pixilart.com/)
 - [Coolors](https://coolors.co/)
 
 A continuación se listan los assets restantes utilizados en el proyecto, provenientes de fuentes externas a nuestro equipo. Así pues, de no aparecer en esta lista un asset en concretro, es de autoridad de Pantheon Studios:
