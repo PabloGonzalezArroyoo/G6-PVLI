@@ -6,71 +6,77 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
         // Sprite en la UI
         super(scene, x, y, 'lifeBar');
 
-        // Escala inicial del cuadro de la barra
-        // **Cambiar este valor para aumentar/disminuir la escala de la barra de vida
-        this._barDisplaySizeX = 120;
-        this._barDisplaySizeY = 25;
-        // Escala inicial de la barra de color
-        this._colorBarDisplaySizeX = this._barDisplaySizeX - 6;
-        this._colorBarDisplaySizeY = this._barDisplaySizeY - 12;
+        this.barScaleX = 4;
+        this.barScaleY = 4;
+        this.colorBarScaleX = this.barScaleX * 9;
+        this.colorBarScaleY = this.barScaleY;
 
         // Divisiones de la barra de vida
-        this._healthDivider = maxHP / this._colorBarDisplaySizeX;
-
+        this.healthDivider = this.colorBarScaleX / maxHP;
+        
         // Offset para la barra de color
-        this._offsetX = 0;
+        this.offsetX = 0;
 
         // Añade barra de color escalada
-        this.color = this.scene.add.image(x + this._offsetX, y, 'lifeBarColors', 3).setDisplaySize(this._colorBarDisplaySizeX, this._colorBarDisplaySizeY);
+        // TAM SPRITE * SCALE
+        this.color = this.scene.add.image(x, y, 'lifeBarColors', 3).setScale(this.colorBarScaleX,this.colorBarScaleY);
         // Añade cuadro de la barra
-        this.scene.add.existing(this).setDisplaySize(this._barDisplaySizeX, this._barDisplaySizeY);
+        this.scene.add.existing(this).setScale(this.barScaleX,this.barScaleY);
 
         /* Lógica */
-        this._maxHealth = maxHP;
-        this._currentHealth = maxHP;
-        this.emitter = EventDispatcher.getInstance();
+        this.maxHealth = maxHP;
+        this.currentHealth = maxHP;
+        this.emitter = EventDispatcher.getInstance();        
     }
-    
+
     changeHealth(value) {
 
         if (value != 0) {
             /* Lógica */
             // MAXIMO
-            if (this._currentHealth + value > this._maxHealth) value = this._maxHealth - this._currentHealth;
+            if (this.currentHealth + value > this.maxHealth) value = this.maxHealth - this.currentHealth;
             // MINIMO
-            else if (this._currentHealth + value < 0){
+            else if (this.currentHealth + value < 0){
                 this.color.destroy();
-                value = -this._currentHealth;
+                value = -this.currentHealth;
             }
-            this._currentHealth += value;
+            this.currentHealth += value;
 
             /* Animación */
             var frameNumber = 3;
             switch (true) {
                 // Colores
-                case this._currentHealth <= 75 && this._currentHealth > 50: {
+                case this.currentHealth <= 75 && this.currentHealth > 50: {
                     frameNumber = 2; break;
                 } 
-                case this._currentHealth <= 50 && this._currentHealth > 25: {
+                case this.currentHealth <= 50 && this.currentHealth > 25: {
                     frameNumber = 1; break;
                 }
-                case this._currentHealth <= 25 && this._currentHealth > 0: {
+                case this.currentHealth <= 25 && this.currentHealth > 0: {
                     frameNumber = 0; break;
                 }
             }
-            // Destruye la barra de color anterior
-            this.color.destroy();
 
             /* CALCULOS */
-            // Calcula cuantos pixeles se deben quitar/poner
-            var pix = value / this._healthDivider;
             // La posicion X para la barra de color debe ir acumulando esos pixeles/2 ya que se quita por ambos lados
-            this._offsetX += pix / 2;
-            // El tamaño X para la barra de color debe ir acumulando esos pixeles
-            this._colorBarDisplaySizeX += pix;
+            // Calcular los pixeles a quitar
+            var pix =  this.colorBarScaleX * this.currentHealth/this.maxHealth;
+            this.offsetX -= Math.round(pix / 2);
+            //console.log(this.offsetX);
+            const self = this;
             
-            // Añade la barra de color
-            if (this._currentHealth > 0) this.color = this.scene.add.image(this.x + this._offsetX, this.y, 'lifeBarColors', frameNumber).setDisplaySize(this._colorBarDisplaySizeX, this._colorBarDisplaySizeY);
+            if (this.currentHealth > 0) {
+                /* Animación de la barra de vida */
+                this.scene.tweens.add({
+                    targets: self.color,
+                    scaleX: self.colorBarScaleX * (self.currentHealth/self.maxHealth),
+                    x: self.x + self.offsetX,
+                    ease: 'Linear',
+                    duration: 2000,
+                });
+                //console.log(self.color.x);
+            }
+            
             // Añade el cuadro de la barra
             this.scene.add.image(this.x, this.y, 'lifeBar').setDisplaySize(this._barDisplaySizeX, this._barDisplaySizeY);
         }
@@ -80,6 +86,6 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
         this.scene.time.delayedCall(1000, () => {this.emitter.emit("finishTurn")});
     }
 
-    getCurrentHealth(){ return this._currentHealth; }
-    getMaxHealth(){ return this._maxHealth; }
+    getCurrentHealth(){ return this.currentHealth; }
+    getMaxHealth(){ return this.maxHealth; }
 }
