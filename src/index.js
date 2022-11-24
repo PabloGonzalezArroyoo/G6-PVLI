@@ -36,7 +36,7 @@ let config = {
 		zoom: 1
     },
     // El orden de las escenas es la  siguiente
-    scene: [Title, Battle, Levels, Options, Inventory, Cinematic, GameOver],//[Title, Levels, Battle, Options, Inventory, Cinematic, GameOver],
+    scene: [Title, Battle, Levels, Options, Inventory, Cinematic, GameOver],//[Title, Battle, Levels, Options, Inventory, Cinematic, GameOver],
 };
 
 // Crea nuevo juego Phaser con la configuración dada

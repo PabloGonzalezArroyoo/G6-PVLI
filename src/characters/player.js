@@ -12,13 +12,15 @@ export default class Player extends Character {
         //this.inventory.addItem(listOfItems[1]);         //Estas lineas es solo para comprobar
     }
 
+    getAttackWeapon() { return this.inventory.getEquipedWeapon().getAttack(); }
+
     attack(enemy){
         console.log("ATAQUE");
         // Animacion de ataque
         this.animator.playAttack();
         // Le baja vida al enemigo
         this.animator.once("animationcomplete-attack",
-            () => {enemy.healthController.changeHealth(-this.inventory.getEquipedWeapon().getAttack())});
+            () => {enemy.healthController.changeHealth(-this.getAttackWeapon())});
     }
 
     defense(){

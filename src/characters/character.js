@@ -11,6 +11,9 @@ export default class Character{
         this.turnEffectController = new TurnEffectController(this);
     }
 
+    // Devuelve la posición del personaje
+    getPosition() { return {x: this.x, y: this.y}; }
+
     //getCurrentHealth() {return this._healthController.getCurrentHealth();}
     updateTurn(){
         this.turnEffectController.updateTurn();

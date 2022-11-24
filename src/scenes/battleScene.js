@@ -8,6 +8,7 @@ import Inventory from '../inventory/inventory.js';
 import { KeyboardInput } from '../input/keyboardInput.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
 import {listOfEnemies} from '../data/listOfEnemies.js';
+import DamageInd from '../animations/damageIndicator.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
 const levelCompleted = function(enemies){
@@ -39,6 +40,7 @@ export default class BattleScene extends Phaser.Scene {
 	constructor() {
 		super({ key: 'battleScene' });
 		this.dialogBox;
+		this.damageIndicator;
 		this.previousLetterTime = 0;
 
 		this.level;
@@ -123,6 +125,9 @@ export default class BattleScene extends Phaser.Scene {
 		// Acciones
 		var cuadroAcciones = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
 		
+		// Indicadores de daño
+		this.damageIndicator = new DamageInd(this, 300, 565, 'lifebar');
+
 		// Interactivo
 		var self = this;
     
@@ -182,7 +187,9 @@ export default class BattleScene extends Phaser.Scene {
 				this.emitter.once('enemyselected',()=>{
 					this.dialogBox.clearText();														// Borrar texto previo
 					this.dialogBox.setTextToDisplay('Maria Pita ataca a enemigo');	
-					this.emitter.once('finishTexting', () => {this.player.attack(this.selectedEnemy);
+					this.emitter.once('finishTexting', () => {
+						this.player.attack(this.selectedEnemy);
+						this.damageIndicator.updateInd("player", this.selectedEnemy.getPosition(), "damage", this.player.getAttackWeapon()); // Actualizar indicador
 						this.enemies.forEach(Element => {Element.animator.disableInteractive();});
 					});
 				})	
@@ -222,6 +229,7 @@ export default class BattleScene extends Phaser.Scene {
 				
 				// Guarda el daño hecho o el daño y un texto si se ha usado una habilidad
 				let attack = this.enemies[index].attack(this.player);
+				this.damageIndicator.updateInd("enemy", this.player.getPosition(), "damage", this.enemies[index].getDamage()); // Actualizar indicador
 				
 				// Si el ataque no ha sido con habilidad pasar al siguiente turno
 				if (typeof attack == 'number'){

@@ -49,6 +49,9 @@ export class Enemy extends Character {
         this.scene.selectedEnemy=this;
         this.emmiter.emit('enemyselected');
     }
+
+    // Devuelve el daño
+    getDamage() { return this.damage; }
 }
 
 // Enemigo 1
