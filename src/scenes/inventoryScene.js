@@ -47,7 +47,6 @@ export default class InventoryScene extends Phaser.Scene {
 	*/
 	create() {
 		this.emitter = EventDispatcher.getInstance();
-		this.dialogBox= new DialogBox(this, 60, 600, 850);
 
 		// Constantes
 		const width = this.scale.width;
@@ -81,7 +80,7 @@ export default class InventoryScene extends Phaser.Scene {
 				}
 				y = y * 60 + 140;
 
-				new Button(this, x , y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(val.weapon)}, ()=>{this.mostrarDescripcion(val.weapon)}).setScale(1.5,1.5);
+				new Button(this, x , y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(val.weapon)}, ()=>{this.mostrarDescripcion(val.weapon);},/*()=>{this.dialogBox.clearText();console.log("hola");}*/).setScale(1.5,1.5);
 				i++;
 			}
 		});
@@ -94,7 +93,7 @@ export default class InventoryScene extends Phaser.Scene {
 			
 			if(itemQuantity > 0){
 				let x = i * 165 + width / 2; let y = 475;
-				new Button(this, x, y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(val.item)}, ()=>{this.mostrarDescripcion(val.item)}).setScale(3,3);
+				new Button(this, x, y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(val.item)}, ()=>{this.mostrarDescripcion(val.item);},/*()=>{this.dialogBox.clearText();}*/).setScale(3,3);
 				if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
 				i++;
 			}
@@ -123,6 +122,7 @@ export default class InventoryScene extends Phaser.Scene {
 		this.keyboardInput.setStartButton(inventoryButton);
 		// Al pulsar la tecla T se sale de la escena de inventario
 		this.input.keyboard.once('keydown-T', () => { this.escape(); });
+		this.dialogBox= new DialogBox(this, 70, 620, 850);
 	}
 
 	// SALIDA DE LA ESCENA
@@ -137,7 +137,7 @@ export default class InventoryScene extends Phaser.Scene {
 	}
 
 	mostrarDescripcion(item) {
-			//this.dialogBox.clearText();
+			this.dialogBox.clearText();
 			this.dialogBox.setTextToDisplay(item.getDesc());
 			this.dialogBox.printText();
 			console.log(item.getDesc());
