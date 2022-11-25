@@ -46,7 +46,7 @@ export default class InventoryScene extends Phaser.Scene {
 	*/
 	create() {
 		this.emitter = EventDispatcher.getInstance();
-		this.dialogBox= new DialogBox(this, 545, 565, 450);
+		this.dialogBox= new DialogBox(this, 60, 600, 850);
 
 		// Constantes
 		const width = this.scale.width;
@@ -131,20 +131,14 @@ export default class InventoryScene extends Phaser.Scene {
 	}
 
 	update(t,dt) {
-		super.update(t,dt);
-		this.previousLetterTime += dt; //Contador del tiempo transcurrido desde la ultima letra
+		//console.log(this.game.input.mousePointer.x+" "+this.game.input.mousePointer.y)
 
-		//Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
-		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){
-			this.dialogBox.write();
-			this.previousLetterTime = 0;
-			console.log("hola");
-		}
 	}
 
 	mostrarDescripcion(item) {
-			this.dialogBox.clearText();
+			//this.dialogBox.clearText();
 			this.dialogBox.setTextToDisplay(item.getDesc());
+			this.dialogBox.printText();
 			console.log(item.getDesc());
 	}
 }
