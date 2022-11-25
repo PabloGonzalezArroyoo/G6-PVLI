@@ -23,7 +23,7 @@ export var listOfLevels = [
 		x: 292,
 		y: 363.5,
 		enemies: [
-			{id: "drunkRuffian", x: 700, y: 200},
+			{id: "stinkyPirate", x: 700, y: 200},
 			{id: "drunkRuffian", x: 750, y: 250}
 			],
 		loot: [],
@@ -33,8 +33,9 @@ export var listOfLevels = [
 		x: 405,
 		y: 363.5,
 		enemies: [
-			{id: "drunkRuffian", x: 700, y: 200},
-			{id: "drunkRuffian", x: 750, y: 250}
+			{id: "stinkyPirate", x: 700, y: 200},
+			{id: "drunkRuffian", x: 750, y: 250},
+			{id: "drunkRuffian", x: 800, y: 300}
 			],
 		loot: [],
 	},
@@ -43,8 +44,8 @@ export var listOfLevels = [
 		x: 354,
 		y: 271.5,
 		enemies: [
-			{id: "drunkRuffian", x: 700, y: 200},
-			{id: "drunkRuffian", x: 750, y: 250}
+			{id: "scurviedSailor", x: 700, y: 200},
+			{id: "stinkyPirate", x: 750, y: 250}
 			],
 		loot: [],
 	},
@@ -53,7 +54,7 @@ export var listOfLevels = [
 		x: 507,
 		y: 302,
 		enemies: [
-			{id: "drunkRuffian", x: 700, y: 200},
+			{id: "experiencedBuccaneer", x: 700, y: 200},
 			{id: "drunkRuffian", x: 750, y: 250}
 			],
 		loot: [],
@@ -63,8 +64,8 @@ export var listOfLevels = [
 		x: 548,
 		y: 394.5,
 		enemies: [
-			{id: "drunkRuffian", x: 700, y: 200},
-			{id: "drunkRuffian", x: 750, y: 250}
+			{id: "scurviedSailor", x: 700, y: 200},
+			{id: "experiencedBuccaneer", x: 750, y: 250}
 			],
 		loot: [],
 	},
@@ -73,8 +74,9 @@ export var listOfLevels = [
 		x: 589,
 		y: 486.5,
 		enemies: [
-			{id: "drunkRuffian", x: 700, y: 200},
-			{id: "drunkRuffian", x: 750, y: 250}
+			{id: "alienatedCorsair", x: 700, y: 200},
+			{id: "scurviedSailor", x: 750, y: 250},
+			{id: "scurviedSailor", x: 800, y: 300}
 			],
 		loot: [],
 	},
@@ -84,8 +86,9 @@ export var listOfLevels = [
 		x: 630,
 		y: 353.5,
 		enemies: [
-			{id: "drunkRuffian", x: 700, y: 200},
-			{id: "drunkRuffian", x: 750, y: 250}
+			{id: "alienatedCorsair", x: 700, y: 200},
+			{id: "scurviedSailor", x: 750, y: 250},
+			{id: "experiencedBuccaneer", x: 800, y: 300}
 			],
 		loot: [],
 	},
