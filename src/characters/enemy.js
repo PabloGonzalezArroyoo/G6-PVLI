@@ -46,9 +46,22 @@ export class Enemy extends Character {
     //Devuelve el enemigo sobre el que realizar el ataque y avisa de que este ya se puede realizar
     OnClick()
     {   
-        this.scene.selectedEnemy=this;
+        this.scene.selectedEnemy = this;
         this.emmiter.emit('enemyselected');
     }
+
+    getName() { 
+        switch (this.constructor.name) {
+            case 'DrunkRuffian': return 'Rufián embriagado';
+            case 'StinkyPirate': return 'Pirata maloliente';
+            case 'ScurviedSailor': return 'Marinero escorbutado';
+            case 'ExperiencedBuccaneer': return 'Bucanero experimentado';
+            case 'AlienatedCosair': return 'Corsario enajenado';
+            case 'EnsignDrake': return 'Alferez Drake (hermano)';
+        }
+    }
+
+    getDamage() { return this.damage; }
 }
 
 // Enemigo 1
