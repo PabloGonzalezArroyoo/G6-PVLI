@@ -2,7 +2,6 @@
 import Phaser from '../lib/phaser.js';
 import Inventory from '../inventory/inventory.js';
 import { Level } from '../levels/level.js';
-import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake } from '../characters/enemy.js'
 import { KeyboardInput } from '../input/keyboardInput.js';
 import { Button } from '../input/button.js';
 import {listOfItems} from '../data/listOfItems.js';

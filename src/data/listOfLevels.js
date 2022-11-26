@@ -5,7 +5,6 @@ export var listOfLevels = [
 		y: 261,
 		enemies: [
 			{id: "drunkRuffian", x: 700, y: 200},
-			{id: "drunkRuffian", x: 750, y: 250}
 			],
 		loot: [],
 	},
