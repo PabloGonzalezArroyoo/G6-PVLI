@@ -82,7 +82,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 	 */
 	preload(){
 		// Fondo
-		this.load.spritesheet('levelMap', 'assets/scenes/levelsMenu/wavesMap_anim.png', { frameWidth: 1024, frameHeight: 768 });
+		this.load.spritesheet('waves', 'assets/scenes/levelsMenu/waves_anim.png', { frameWidth: 1024, frameHeight: 768 });
+		this.load.image('levelMap', 'assets/scenes/levelsMenu/emptyMap.png');
 		
 		// Imagen de botones
 		this.load.spritesheet('level', 'assets/scenes/levelsMenu/levelsButtons.png', {frameWidth: 51, frameHeight: 51});
@@ -102,12 +103,13 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// Fondo
 		this.anims.create({
-			key: 'levelMap',
-			frames: this.anims.generateFrameNumbers('levelMap', {start: 0, end: 9}),
+			key: 'waves',
+			frames: this.anims.generateFrameNumbers('waves', {start: 0, end: 9}),
 			frameRate: 10,
 			repeat: -1
 		});
-		this.add.sprite(1024, 768).setOrigin(1,1).play('levelMap');
+		this.add.sprite(1024, 768).setOrigin(1,1).play('waves');
+		let bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 
 		this.keyboardInput = new KeyboardInput(this);
 		// Botón de inventario
