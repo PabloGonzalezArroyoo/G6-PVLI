@@ -81,7 +81,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('stinkyPirate', 'assets/characters/enemies/stinkyPirate.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('scurviedSailor', 'assets/characters/enemies/scurviedSailor.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('experiencedBuccaneer', 'assets/characters/enemies/experiencedBuccaneer.png', {frameWidth: 32, frameHeight:32});
-		this.load.spritesheet('alienatedCosair', 'assets/characters/enemies/alienatedCosair.png', {frameWidth: 32, frameHeight:32});
+		this.load.spritesheet('alienatedCosair', 'assets/characters/enemies/alienatedCorsair.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('ensignDrake', 'assets/characters/enemies/ensignDrake.png', {frameWidth: 32, frameHeight:32});
 		// Descripcion
 		this.load.image('description', 'assets/scenes/battle/dialogBox.png');

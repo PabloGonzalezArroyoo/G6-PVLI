@@ -107,9 +107,9 @@ export class ScurviedSailor extends Enemy {
 }
 
 // Enemigo 5
- export class AlienatedCosair extends Enemy {
+ export class AlienatedCorsair extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'alienatedCosair', 300, 55);
+        super(scene, x, y, 'alienatedCorsair', 300, 55);
     }
     
     // Atacar con un 15% de probabilidad de hacer su habilidad
@@ -142,7 +142,7 @@ export class ScurviedSailor extends Enemy {
         let enemyType;
         if (rnd == 0) enemyType = ScurviedSailor;
         else if (rnd == 1) enemyType = ExperiencedBuccaneer;
-        else if (rnd == 2) enemyType = AlienatedCosair;
+        else if (rnd == 2) enemyType = AlienatedCorsair;
         // Habilidad
         return enemyType.prototype.ability.call(this, player);
     }
