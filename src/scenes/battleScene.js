@@ -184,12 +184,12 @@ export default class BattleScene extends Phaser.Scene {
 
 	// Metodo que efectua la accion del jugador cada turno
 	PlayerTurn(action, item){
-		this.DisableButtons();																	// Desactiva los botones
+		this.DisableButtons();															// Desactiva los botones
 		switch (action){									
 			
-      case 'attack' : 															// Se selecciona atacar
+      		case 'attack' : 															// Se selecciona atacar
 				this.UpdateQueLocura(35)																
-				this.dialogBox.clearText();												  // Borrar texto previo
+				this.dialogBox.clearText();												// Borrar texto previo
 				if (this.enemies.length > 1) {											// Si hay más de un enemigo en escena
 					this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
 					//Se hace a todos los enemigos interactuables
@@ -198,15 +198,15 @@ export default class BattleScene extends Phaser.Scene {
 					//Una vez se reciba confirmación del ataque y el enemigo seleccionado, se ataca.
 					this.emitter.once('enemyselected',() => {
 						this.dialogBox.clearText();														// Borrar texto previo
-					  this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
-					 	  ' con ' + this.player.inventory.getEquipedWeapon().name +
-					  	' y le baja ' + this.player.getDamage() + ' puntos de vida');
-						  this.emitter.once('finishTexting', () => {
-							this.player.attack(this.selectedEnemy);
-              this.indicator.updateInd("player", "damage", this.selectedEnemy.getPosition(), this.player.getAttackWeapon()); // Actualizar indicador
-							this.enemies.forEach(Element => {Element.animator.disableInteractive();});
-						});
-					})	
+					  	this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
+					 	  	' con ' + this.player.inventory.getEquipedWeapon().name +
+					  		' y le baja ' + this.player.getDamage() + ' puntos de vida');
+						  	this.emitter.once('finishTexting', () => {
+								this.player.attack(this.selectedEnemy);
+              					this.indicator.updateInd("player", "damage", this.selectedEnemy.getPosition(), this.player.getAttackWeapon()); // Actualizar indicador
+								this.enemies.forEach(Element => {Element.animator.disableInteractive();});
+							});
+						})	
 				} else {																                // Si solo hay uno
 					this.dialogBox.clearText();														// Borrar texto previo
 					this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.enemies[0].getName() +
@@ -214,12 +214,12 @@ export default class BattleScene extends Phaser.Scene {
 					' y le baja ' + this.player.getDamage() + ' puntos de vida');
 					this.emitter.once('finishTexting', () => {
 						this.player.attack(this.enemies[0]);
-            this.indicator.updateInd("player", "damage", this.enemies[0].getPosition(), this.player.getAttackWeapon()); // Actualizar indicador
+            			this.indicator.updateInd("player", "damage", this.enemies[0].getPosition(), this.player.getAttackWeapon()); // Actualizar indicador
 					});
 				}
 				break;			
 			
-      case 'defense': 																	// Si selecciona defenderse
+      		case 'defense': 																	// Si selecciona defenderse
 				this.dialogBox.clearText();														// Borrar texto previo
 				this.dialogBox.setTextToDisplay('Maria Pita aumenta su defensa durante 3 turnos');
 				this.emitter.once('finishTexting', () => {
@@ -228,24 +228,20 @@ export default class BattleScene extends Phaser.Scene {
 				});
 				break;
 			
-      case 'object' : 																	// Si selecciona un objeto
+      		case 'object' : 																	// Si selecciona un objeto
 				this.dialogBox.clearText();														// Borrar texto previo
-				if(item.type === 'WEAPON') {											
-					this.dialogBox.setTextToDisplay('Maria Pita ha cambiado de arma a ' + item.name);
-				}
-				else {
-					this.dialogBox.setTextToDisplay('Maria Pita ha usado ' + item.name + ' y se curó ' + item.getHealthValue() + ' de vida'); 
-				  this.emitter.once('finishTexting', () => {
+				if(item.type === 'WEAPON') this.dialogBox.setTextToDisplay('Maria Pita ha cambiado de arma a ' + item.name);
+				else this.dialogBox.setTextToDisplay('Maria Pita ha usado ' + item.name + ' y se curó ' + item.getHealthValue() + ' de vida');
+				this.emitter.once('finishTexting', () => {
 					this.player.useItem(item);
 
 					// Actualizar indicador
 					if (item.type === "HEALTH") this.indicator.updateInd("player", "health" , this.player.getPosition(), item.getHealthValue());
 					else this.indicator.updateInd("player", "weapon", this.player.getPosition(), item.getAttack());
-				});
-        }
+					});
 				break;
 			
-      case 'queLocura' : 																	// Si selecciona QueLocura
+      		case 'queLocura' : 																	// Si selecciona QueLocura
 				this.DisableQueLocura(); 																	
 				this.dialogBox.clearText();														// Borrar texto previo
 				this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
