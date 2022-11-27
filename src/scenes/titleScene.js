@@ -69,6 +69,7 @@ export default class TitleScene extends Phaser.Scene {
 
 		function jumpToLevelMenuScene() {
 			// Fade Out
+			button.setVisible(false);
 			musicFadeOut();
 			camera.fadeOut(1000, 0, 0, 0); // fadeOut(time, R, G, B), 000 = Black
 			camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {

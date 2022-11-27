@@ -13,7 +13,7 @@ export var listOfItems = {
 		attack: 25,
 		defense: 3,
 		queLocura: WeaponItem.areaAttack(10),
-		desc: "Más que una cimitarra (un tipo de espada arabe si no sabes lo que es) parece un juguete pero sigue haciendo pupa si se usa con rabia."}, 
+		desc: "Más que una cimitarra (un tipo de espada arabe si no sabes lo que es) parece un juguete, pero sigue haciendo pupa si se usa con rabia."}, 
 
 		{key: "Cimitarra de acero",
 		imgID: "cimAc", 
