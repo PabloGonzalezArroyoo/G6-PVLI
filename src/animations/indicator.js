@@ -100,7 +100,7 @@ export default class Indicator extends Phaser.GameObjects.GameObject {
     setIndPosition(actor, position, type) {
         // Posición en X
         if (actor === "player" && (type === "damage" || type === "bleed")) { // Si realiza la acción el jugador y es un ataque, posición en el enemigo
-            this.textObj.x = position.x - 120;
+            this.textObj.x = position.x - 130;
             this.spriteObj.x = this.textObj.x + 20;
         }
         else {                                              // Si no es un ataque del jugador o es el ataque del enemigo, posición del jugador
