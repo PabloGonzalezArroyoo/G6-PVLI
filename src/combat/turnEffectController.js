@@ -20,7 +20,7 @@ export default class TurnEffectController{
 		}
 	}
 	activateDefense(turns){
-			this.defenseTurns=turns;
+			this.defenseTurns = turns;
 	}
 
 	updateTurn(){

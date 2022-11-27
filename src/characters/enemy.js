@@ -43,32 +43,45 @@ export class Enemy extends Character {
     ability(player) { return Enemy.prototype.attack.call(this, player); }
 
     getAnimator() { return this.animator; }
-    //Devuelve el enemigo sobre el que realizar el ataque y avisa de que este ya se puede realizar
+    
+    // Devuelve el enemigo sobre el que realizar el ataque y avisa de que este ya se puede realizar
     OnClick()
     {   
-        this.scene.selectedEnemy=this;
+        this.scene.selectedEnemy = this;
         this.emmiter.emit('enemyselected');
     }
-
+    
+    // Devuelve el nombre del enemigo
+    getName() { 
+        switch (this.constructor.name) {
+            case 'DrunkRuffian': return 'Rufián embriagado';
+            case 'StinkyPirate': return 'Pirata maloliente';
+            case 'ScurviedSailor': return 'Marinero escorbutado';
+            case 'ExperiencedBuccaneer': return 'Bucanero experimentado';
+            case 'AlienatedCosair': return 'Corsario enajenado';
+            case 'EnsignDrake': return 'Alferez Drake (hermano)';
+        }
+    }
+    
     // Devuelve el daño
     getDamage() { return this.damage; }
 }
 
-// Enemigo 1
+// Rufián Embriagado
 export class DrunkRuffian extends Enemy {
     constructor(scene, x, y) {
         super(scene, x, y, 'drunkRuffian', 100, 15);
     }
 }
 
-// Enemigo 2
+// Pirata maloliente
  export class StinkyPirate extends Enemy {
     constructor(scene, x, y) {
         super(scene, x, y, 'stinkyPirate', 150, 25);
     }
 }
 
-// Enemigo 3
+// Marinero escorbutado
 export class ScurviedSailor extends Enemy {
     constructor(scene, x, y) {
         super(scene, x, y, 'scurviedSailor', 200, 35);
@@ -85,7 +98,7 @@ export class ScurviedSailor extends Enemy {
     }
 }
 
-// Enemigo 4
+// Bucanero experimentado
  export class ExperiencedBuccaneer extends Enemy {
     constructor(scene, x, y) {
         super(scene, x, y, 'experiencedBuccaneer', 250, 45);
@@ -109,10 +122,10 @@ export class ScurviedSailor extends Enemy {
     }
 }
 
-// Enemigo 5
- export class AlienatedCosair extends Enemy {
+// Corsario enajenado
+ export class AlienatedCorsair extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'alienatedCosair', 300, 55);
+        super(scene, x, y, 'alienatedCorsair', 300, 55);
     }
     
     // Atacar con un 15% de probabilidad de hacer su habilidad
@@ -127,7 +140,7 @@ export class ScurviedSailor extends Enemy {
     }
 }
 
-// Boss Final
+// Alferez Drake (hermano) (BOSS FINAL)
  export class EnsignDrake extends Enemy {
     constructor(scene, x, y) {
         super(scene, x, y, 'ensignDrake', 500, 50);
@@ -145,7 +158,7 @@ export class ScurviedSailor extends Enemy {
         let enemyType;
         if (rnd == 0) enemyType = ScurviedSailor;
         else if (rnd == 1) enemyType = ExperiencedBuccaneer;
-        else if (rnd == 2) enemyType = AlienatedCosair;
+        else if (rnd == 2) enemyType = AlienatedCorsair;
         // Habilidad
         return enemyType.prototype.ability.call(this, player);
     }

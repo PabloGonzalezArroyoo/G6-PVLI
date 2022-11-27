@@ -23,8 +23,9 @@ export default class TitleScene extends Phaser.Scene {
 	 */
 	preload(){
 		// Imagen fondo y logo
-		this.load.image('background', 'assets/scenes/title/titleBackground.png');
+		//this.load.image('background', 'assets/scenes/title/titleBackground.png');
 		this.load.image('title','assets/MariaPitasRevenge.png');
+		this.load.spritesheet('titleAnim','assets/scenes/title/TittleAnim.png',{frameWidth:1024, frameHeight: 768});
 
 		// Imagen de botones
 		this.load.spritesheet('play', 'assets/scenes/title/playButton.png', {frameWidth: 37, frameHeight: 14});
@@ -54,7 +55,14 @@ export default class TitleScene extends Phaser.Scene {
     	music.play(musicConfig);
 
 		// Fondo
-		var back = this.add.image(0, 0, 'background').setOrigin(0, 0);
+		var back = this.add.sprite(0, 0).setOrigin(0, 0);
+		this.anims.create({
+			key: 'titleAnim',
+			frames: this.anims.generateFrameNumbers('titleAnim', {start: 0, end: 6}),
+			frameRate: 6,
+			repeat: -1
+		})
+		back.play('titleAnim');
 
 		// Logo del juego
 		var title = this.add.image(512, 100, 'title').setScale(0.25,0.25);
@@ -69,6 +77,7 @@ export default class TitleScene extends Phaser.Scene {
 
 		function jumpToLevelMenuScene() {
 			// Fade Out
+			button.setVisible(false);
 			musicFadeOut();
 			camera.fadeOut(1000, 0, 0, 0); // fadeOut(time, R, G, B), 000 = Black
 			camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
