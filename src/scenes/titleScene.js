@@ -51,7 +51,7 @@ export default class TitleScene extends Phaser.Scene {
 			delay: 0
 		}
 		var music = this.sound.add('Pirates of the Atlantic');
-    	// music.play(musicConfig);
+    	music.play(musicConfig);
 
 		// Fondo
 		var back = this.add.image(0, 0, 'background').setOrigin(0, 0);

@@ -98,7 +98,7 @@ export default class Indicator extends Phaser.GameObjects.GameObject {
 
     // Cambia la posición del indicador
     setIndPosition(actor, position, type) {
-        // Posicón en X
+        // Posición en X
         if (actor === "player" && (type === "damage" || type === "bleed")) { // Si realiza la acción el jugador y es un ataque, posición en el enemigo
             this.textObj.x = position.x - 120;
             this.spriteObj.x = this.textObj.x + 20;
@@ -110,14 +110,9 @@ export default class Indicator extends Phaser.GameObjects.GameObject {
         }
         
         // Posición en Y
-        if (type == "damage" || type === "weapon") {        // Si es un ataque o se está cambiando de arma
-            this.textObj.y = position.y - 165;
-            this.spriteObj.y = this.textObj.y + 15;
-        }
-        else {                                              // Si es de curación, sangrado o veneno
-            this.textObj.y = position.y - 165;
-            this.spriteObj.y = this.textObj.y + 18;
-        }
+        this.textObj.y = position.y - 165;
+        if (type == "damage" || type === "weapon") this.spriteObj.y = this.textObj.y + 15; // Si es un ataque o se está cambiando de arma
+        else this.spriteObj.y = this.textObj.y + 18;        // Si es de curación, sangrado o veneno
     }
 
     // Cambia el texto a mostrar y su color
