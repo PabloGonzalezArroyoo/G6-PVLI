@@ -8,6 +8,7 @@ export default class Player extends Character {
         super(x, y, new PlayerAnimator(scene, x, y), new HealthController(scene, x, y - 150, 100));
         this.inventory = inventory;
         this._defenseBoost=0;
+        this.receivedDamage;
         //this.inventory.addItem(listOfItems[6]);
         //this.inventory.addItem(listOfItems[1]);         //Estas lineas es solo para comprobar
     }
@@ -57,15 +58,17 @@ export default class Player extends Character {
 
     receiveAttack(damage){
         // guardar en esta variable el calculo del daño
-        let receivedDamage = damage;
+        this.receivedDamage = damage;
         if(this.turnEffectController.defenseTurns > 0)//Si quedan turnos de defensa
         {
-            receivedDamage-=receivedDamage*(0.15*this._defenseBoost); //Reduce el daño segun los turnos de defensa que se tengan
+            this.receivedDamage-= this.receivedDamage*(0.15*this._defenseBoost); //Reduce el daño segun los turnos de defensa que se tengan
         }
-        this.healthController.changeHealth(-receivedDamage);
-        console.log(receivedDamage);
-        return receivedDamage;
+        this.healthController.changeHealth(-this.receivedDamage);
+        console.log(this.receivedDamage);
+        return this.receivedDamage;
     }
+
+    getRecievedDamage() { this.receivedDamage; }
 
     getDamage() {return this.inventory.getEquipedWeapon().getAttack();}
 }

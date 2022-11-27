@@ -19,6 +19,8 @@ export default class Character{
         this.turnEffectController.updateTurn();
     }
 
+    getBleedDamage() { return this.turnEffectController.getBleedDamage(); }
+
     isBleeding(){ return this.turnEffectController.bleedTurns > 0; }
     isStuned(){ return this.turnEffectController.stunTurns > 0; }
 }
