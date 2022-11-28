@@ -33,4 +33,6 @@ export default class TurnEffectController{
 		else this.character._defenseBoost=0;//Si no tiene turnos de defensa, su acumulable es 0
 		console.log(this.defenseTurns+" "+this.character._defenseBoost);
 	}
+
+	getBleedDamage() { return this.bleedDamage; }
 }

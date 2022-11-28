@@ -8,6 +8,8 @@ import Inventory from '../inventory/inventory.js';
 import { KeyboardInput } from '../input/keyboardInput.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
 import {listOfEnemies} from '../data/listOfEnemies.js';
+import DamageInd from '../animations/indicator.js';
+import Indicator from '../animations/indicator.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
 const levelCompleted = function(enemies){
@@ -39,6 +41,7 @@ export default class BattleScene extends Phaser.Scene {
 	constructor() {
 		super({ key: 'battleScene' });
 		this.dialogBox;
+		this.indicator;
 		this.previousLetterTime = 0;
 
 		this.level;
@@ -96,6 +99,14 @@ export default class BattleScene extends Phaser.Scene {
 		// Barra de vida
 		this.load.image('lifeBar', 'assets/ui/lifeBar38x8sinCorazon.png');
 		this.load.spritesheet('lifeBarColors', 'assets/ui/lifeBarColors16x4.png', {frameWidth: 4, frameHeight: 4});
+
+		// Indicador
+		this.load.spritesheet('dmgInd', 'assets/scenes/battle/indicator/dmgInd.png', { frameWidth: 37, frameHeight: 28});
+		this.load.spritesheet('healInd', 'assets/scenes/battle/indicator/healInd.png', {frameWidth: 37, frameHeight: 29});
+		this.load.spritesheet('defInd', 'assets/scenes/battle/indicator/defInd.png', {frameWidth: 37, frameHeight: 28});
+		this.load.spritesheet('wpInd', 'assets/scenes/battle/indicator/wpInd.png', {frameWidth: 37, frameHeight: 28});
+		this.load.spritesheet('psnInd', 'assets/scenes/battle/indicator/psnInd.png', {frameWidth: 37, frameHeight: 28});
+		this.load.spritesheet('bleedInd', 'assets/scenes/battle/indicator/bleedInd.png', {frameWidth: 37, frameHeight: 28});
 	}
 
 	/**
@@ -123,6 +134,10 @@ export default class BattleScene extends Phaser.Scene {
 		// Acciones
 		var cuadroAcciones = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
 		
+		// Indicadores de daño
+		this.indicator = new Indicator(this, 300, 565,
+			{dmgInd: 'dmgInd', healInd: 'healInd', defInd: 'defInd', wpInd: 'wpInd', psnInd: 'psnInd', bleedInd: 'bleedInd'});
+
 		// Interactivo
 		var self = this;
     
@@ -149,10 +164,10 @@ export default class BattleScene extends Phaser.Scene {
 
 	update(t,dt) {
 		super.update(t,dt);
-		this.previousLetterTime += dt; //Contador del tiempo transcurrido desde la ultima letra
+		this.previousLetterTime += dt; // Contador del tiempo transcurrido desde la ultima letra
 		this.keyboardInput.processInput();
 
-		//Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
+		// Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
 		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){
 			this.dialogBox.write();
 			this.previousLetterTime = 0;
@@ -171,7 +186,8 @@ export default class BattleScene extends Phaser.Scene {
 	PlayerTurn(action, item){
 		this.DisableButtons();															// Desactiva los botones
 		switch (action){									
-			case 'attack' : 															// Se selecciona atacar
+			
+      		case 'attack' : 															// Se selecciona atacar
 				this.UpdateQueLocura(35)																
 				this.dialogBox.clearText();												// Borrar texto previo
 				if (this.enemies.length > 1) {											// Si hay más de un enemigo en escena
@@ -180,48 +196,58 @@ export default class BattleScene extends Phaser.Scene {
 					this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {Element.animator.setInteractive();	
 					});});
 					//Una vez se reciba confirmación del ataque y el enemigo seleccionado, se ataca.
-					this.emitter.once('enemyselected',()=>{
+					this.emitter.once('enemyselected',() => {
 						this.dialogBox.clearText();														// Borrar texto previo
-						this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
-					 	' con ' + this.player.inventory.getEquipedWeapon().name +
-					  	' y le baja ' + this.player.getDamage() + ' puntos de vida');
-						this.emitter.once('finishTexting', () => {
-							this.player.attack(this.selectedEnemy);
-							this.enemies.forEach(Element => {Element.animator.disableInteractive();});
-						});
-					})	
-				} else {																// Si solo hay uno
+					  	this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
+					 	  	' con ' + this.player.inventory.getEquipedWeapon().name +
+					  		' y le baja ' + this.player.getDamage() + ' puntos de vida');
+						  	this.emitter.once('finishTexting', () => {
+								this.player.attack(this.selectedEnemy);
+              					this.indicator.updateInd("player", "damage", this.selectedEnemy.getPosition(), this.player.getAttackWeapon()); // Actualizar indicador
+								this.enemies.forEach(Element => {Element.animator.disableInteractive();});
+							});
+						})	
+				} else {																                // Si solo hay uno
 					this.dialogBox.clearText();														// Borrar texto previo
 					this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.enemies[0].getName() +
 					' con ' + this.player.inventory.getEquipedWeapon().name);
 					this.emitter.once('finishTexting', () => {
 						this.player.attack(this.enemies[0]);
-						this.enemies.forEach(Element => {Element.animator.disableInteractive();});
+            			this.indicator.updateInd("player", "damage", this.enemies[0].getPosition(), this.player.getAttackWeapon()); // Actualizar indicador
 					});
 				}
 				break;			
-			case 'defense': 														// Si selecciona defenderse
+			
+      		case 'defense': 																	// Si selecciona defenderse
 				this.dialogBox.clearText();														// Borrar texto previo
-				this.dialogBox.setTextToDisplay('Maria Pita aumenta su defensa durante 3 turnos');	
-				this.emitter.once('finishTexting', () => {this.player.defense()});
+				this.dialogBox.setTextToDisplay('Maria Pita aumenta su defensa durante 3 turnos');
+				this.emitter.once('finishTexting', () => {
+					this.player.defense()
+					this.indicator.updateInd("player", "def", this.player.getPosition(), ""); 	// Actualizar indicador
+				});
 				break;
-			case 'object' : 																	//Si selecciona un objeto
+			
+      		case 'object' : 																	// Si selecciona un objeto
 				this.dialogBox.clearText();														// Borrar texto previo
-				if(item.type === 'WEAPON')													
-					this.dialogBox.setTextToDisplay('Maria Pita ha cambiado de arma a ' + item.name);
-				else
-					this.dialogBox.setTextToDisplay('Maria Pita ha usado ' + item.name + ' y se curó ' + item.getHealthValue() + ' de vida'); 
-				this.emitter.once('finishTexting', () => {this.player.useItem(item)});
+				if(item.type === 'WEAPON') this.dialogBox.setTextToDisplay('Maria Pita ha cambiado de arma a ' + item.name);
+				else this.dialogBox.setTextToDisplay('Maria Pita ha usado ' + item.name + ' y se curó ' + item.getHealthValue() + ' de vida');
+				this.emitter.once('finishTexting', () => {
+					this.player.useItem(item);
+
+					// Actualizar indicador
+					if (item.type === "HEALTH") this.indicator.updateInd("player", "health" , this.player.getPosition(), item.getHealthValue());
+					else this.indicator.updateInd("player", "weapon", this.player.getPosition(), item.getAttack());
+					});
 				break;
-			case 'queLocura' : 																	// Si selecciona QueLocura
+			
+      		case 'queLocura' : 																	// Si selecciona QueLocura
 				this.DisableQueLocura(); 																	
 				this.dialogBox.clearText();														// Borrar texto previo
 				this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 				this.emitter.once('finishTexting', () => {this.player.quelocura(this.enemies, 0)});
 				break;
 		}	
-		this.emitter.once('finishTurn', () => {if (!levelCompleted(this.enemies) && !levelFailed(this.player)) this.EnemyTurn()}); // Evento para que el enemigo ataque	
-										
+		this.emitter.once('finishTurn', () => {if (!levelCompleted(this.enemies) && !levelFailed(this.player)) this.EnemyTurn()}); // Evento para que el enemigo ataque				
 	}
 
 	// Metodo que efectua la accion de los enemigos cada turno
@@ -229,12 +255,13 @@ export default class BattleScene extends Phaser.Scene {
 		if (!index) index = 0;
 		// Si el enemigo sigue vivo hace su acción
 		if (!levelFailed(this.enemies[index]) && !this.enemies[index].isStuned()) {
-			this.dialogBox.clearText();// Borrar texto previo
+			this.dialogBox.clearText();                           // Borrar texto previo
 			this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' (' +  index + ')' +' ataca a Maria Pita');	// Enviar el nuevo texto
 			this.emitter.once('finishTexting', () => {						// Crea un evento para que el enemigo ataque
 				
 				// Guarda el daño hecho o el daño y un texto si se ha usado una habilidad
 				let attack = this.enemies[index].attack(this.player);
+				this.indicator.updateInd("enemy", "damage", this.player.getPosition(), this.player.receivedDamage); // Actualizar indicador
 				
 				// Si el ataque no ha sido con habilidad pasar al siguiente turno
 				if (typeof attack == 'number'){
@@ -268,7 +295,9 @@ export default class BattleScene extends Phaser.Scene {
 		if (this.player.isBleeding()){
 			this.dialogBox.clearText();
 			this.dialogBox.setTextToDisplay('Maria Pita pierde vida por el veneno');
-			this.emitter.once('finishTexting', () => {this.player.updateTurn();
+			this.emitter.once('finishTexting', () => {
+				this.player.updateTurn();
+				this.indicator.updateInd("player", "poison", this.player.getPosition(), this.player.getBleedDamage());
 				this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects()})});
 		}
 		else {
@@ -284,7 +313,9 @@ export default class BattleScene extends Phaser.Scene {
 		if (!levelFailed(this.enemies[index]) && this.enemies[index].isBleeding()){
 			this.dialogBox.clearText();
 			this.dialogBox.setTextToDisplay('Enemigo pierde vida por el sangrado');
-			this.emitter.once('finishTexting', () => {this.enemies[index].updateTurn();
+			this.emitter.once('finishTexting', () => {
+				this.enemies[index].updateTurn();
+				this.indicator.updateInd("player", "bleed", this.enemies[index].getPosition(), this.enemies[index].getBleedDamage()); // Actualizar indicador
 				index++;
 				// Si quedan enemigos se actualizan tambien
 				if (index > this.enemies.length) this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects(index)})
