@@ -81,7 +81,7 @@ export default class InventoryScene extends Phaser.Scene {
 
 		// ARMA EQUIPADA
 		this.add.image(217, 325, this.inventory.getEquipedWeapon().imgID).setScale(8, 8);
-		this.equipedWeaponButton = new Button(this, 217, 325, 'selected', 0, 1, 2, this.keyboardInput, () => {this.escape('puño')}, ()=>{this.mostrarDescripcion(this.inventory.getEquipedWeapon());}).setScale(8, 8);
+		this.equipedWeaponButton = new Button(this, 217, 325, 'selected', 0, 1, 2, this.keyboardInput, () => {if (this.inventory.getEquipedWeapon().imgID !== 'puño') this.escape(this.inventory.getWeapons()['puño'].weapon)}, ()=>{this.mostrarDescripcion(this.inventory.getEquipedWeapon());}).setScale(8, 8);
 
 		this.weaponButtons = [];
 		for (let i = 0; i < 5; i++) this.weaponButtons[i] = [];
@@ -101,7 +101,7 @@ export default class InventoryScene extends Phaser.Scene {
 				}
 				y = y * 60 + 140;*/
 				if (val.owned) this.add.image(x, y, itemID).setScale(1.5,1.5);
-				this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput, () => {if (val.owned) this.escape(val.weapon)}, ()=>{if (val.owned) this.mostrarDescripcion(val.weapon);}).setScale(1.5,1.5);
+				this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput, () => {if (val.owned && this.inventory.getEquipedWeapon().imgID !== itemID) this.escape(val.weapon)}, ()=>{if (val.owned) this.mostrarDescripcion(val.weapon);}).setScale(1.5,1.5);
 				i++;
 			}
 		});
