@@ -140,8 +140,9 @@ export default class InventoryScene extends Phaser.Scene {
 		//});
 
 		// Pintamos botón de salir
-		var inventoryButton = new Button(this, width - 50, 46, 'inventory', 2, 0, 1, this.keyboardInput, () => {this.escape()}).setScale(3, 3);
-		this.keyboardInput.setStartButton(inventoryButton);
+		this.inventoryButton = new Button(this, width - 50, 46, 'inventory', 2, 0, 1, this.keyboardInput, () => {this.escape()}).setScale(3, 3);
+		this.keyboardInput.setStartButton(this.equipedWeaponButton);
+		this.inicializeButtonConnections()
 		// Al pulsar la tecla T se sale de la escena de inventario
 		this.input.keyboard.once('keydown-T', () => { this.escape(); });
 		this.dialogBox= new DialogBox(this, 70, 620, 850);
@@ -155,7 +156,7 @@ export default class InventoryScene extends Phaser.Scene {
 
 	update(t,dt) {
 		//console.log(this.game.input.mousePointer.x+" "+this.game.input.mousePointer.y)
-
+		this.keyboardInput.processInput();
 	}
 
 	mostrarDescripcion(item) {
@@ -163,5 +164,24 @@ export default class InventoryScene extends Phaser.Scene {
 			this.dialogBox.setTextToDisplay(item.getDesc());
 			this.dialogBox.printText();
 			console.log(item.getDesc());
+	}
+
+	inicializeButtonConnections(){
+		// Salir
+		this.inventoryButton.setAdjacents(null, this.weaponButtons[4][0], this.weaponButtons[4][0], null);
+		// Armas
+		this.equipedWeaponButton.setAdjacents(null, null, null, this.weaponButtons[0][0]);
+		for (let i = 0; i < 3; i++) this.weaponButtons[0][i].setAdjacents(this.weaponButtons[0][i-1], this.weaponButtons[0][i+1], this.equipedWeaponButton, this.weaponButtons[1][i]);
+		for (let i = 0; i < 3; i++)
+			for (let j = 1; j < 4; j++)
+				this.weaponButtons[j][i].setAdjacents(this.weaponButtons[j][i-1], this.weaponButtons[j][i+1], this.weaponButtons[j - 1][i], this.weaponButtons[j + 1][i]);
+		for (let i = 0; i < 3; i++) this.weaponButtons[4][i].setAdjacents(this.weaponButtons[4][i-1], this.weaponButtons[4][i+1], this.weaponButtons[3][i], null);
+		this.weaponButtons[4][0].setAdjacent(this.inventoryButton, 'up');
+		this.weaponButtons[4][0].setAdjacent(this.inventoryButton, 'right');
+		for (let i = 0; i < 5; i++) this.weaponButtons[i][2].setAdjacent(this.foodButtons[Math.floor(i/2)], 'down');
+		// Comida
+		this.foodButtons[0].setAdjacents(this.weaponButtons[0][2], null, this.equipedWeaponButton, this.foodButtons[1]);
+		this.foodButtons[1].setAdjacents(this.weaponButtons[2][2], null, this.foodButtons[0], this.foodButtons[2]);
+		this.foodButtons[2].setAdjacents(this.weaponButtons[4][2], null, this.foodButtons[1], null);
 	}
 }
