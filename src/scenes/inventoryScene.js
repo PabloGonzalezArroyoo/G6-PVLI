@@ -163,7 +163,7 @@ export default class InventoryScene extends Phaser.Scene {
 			this.dialogBox.clearText();
 			this.dialogBox.setTextToDisplay(item.getDesc());
 			this.dialogBox.printText();
-			console.log(item.getDesc());
+			//console.log(item.getDesc());
 	}
 
 	inicializeButtonConnections(){
