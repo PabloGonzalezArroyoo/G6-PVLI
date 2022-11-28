@@ -40,6 +40,18 @@ export default class InventoryScene extends Phaser.Scene {
 		this.load.image('dagOx', 'assets/scenes/inventory/weapons/dagaOxidada.png');
 		this.load.image('dagAf', 'assets/scenes/inventory/weapons/dagaAfilada.png');
 		this.load.image('dagEx', 'assets/scenes/inventory/weapons/dagaExcéntrica.png');
+		//this.load.image('alMb', 'assets/scenes/inventory/weapons/alabarda.png');
+		//this.load.image('alVrd', 'assets/scenes/inventory/weapons/cimitarraMadera.png');
+		//this.load.image('alDem', 'assets/scenes/inventory/weapons/cimitarraAcero.png');
+		this.load.image('ropIng', 'assets/scenes/inventory/weapons/roperaInglesa.png');
+		this.load.image('ropCst', 'assets/scenes/inventory/weapons/roperaCastellana.png');
+		this.load.image('ropAl', 'assets/scenes/inventory/weapons/roperaAlocada.png');
+		this.load.image('sacho', 'assets/scenes/inventory/weapons/sacho.png');
+		this.load.image('fouc', 'assets/scenes/inventory/weapons/fouciño.png');
+		this.load.image('guad', 'assets/scenes/inventory/weapons/guadañaExtravagante.png');
+		this.load.image('bolla', 'assets/scenes/inventory/objects/bollaDePan.png');
+		this.load.image('caldo', 'assets/scenes/inventory/objects/caldoGallego.png');
+		//this.load.image('polbo', 'assets/scenes/inventory/objects/pulpoALaGallega.png');
 	}
 
 	/**
@@ -47,6 +59,10 @@ export default class InventoryScene extends Phaser.Scene {
 	*/
 	create() {
 		this.emitter = EventDispatcher.getInstance();
+
+
+		this.inventory.addWeapon('fouc');
+
 
 		// Constantes
 		const width = this.scale.width;
@@ -63,24 +79,29 @@ export default class InventoryScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 
 		// ARMA EQUIPADA
-		new Button(this, 217, 325, this.inventory.getEquipedWeapon().imgID, 0, 0, 0, this.keyboardInput, function(){}).setScale(8, 8);
-
+		this.equipedWeaponButton = new Button(this, 217, 325, this.inventory.getEquipedWeapon().imgID, 0, 0, 0, this.keyboardInput, function(){}).setScale(8, 8);
+		//this.weaponButtons = Array.from(Array(3), () => new Array(5));
+		//this.weaponButtons = new Array(3);
+		this.weaponButtons = [];
+		//this.weaponButtons.forEach(elem => {elem = [];});
+		for (let i = 0; i < 5; i++) this.weaponButtons[i] = [];
+		console.log(this.weaponButtons);
 		let i = 0;
 		// ARMAS
 		Object.values(armas).forEach(val => {
 			let itemID = val.weapon.imgID;
 
-			if(val.owned){
-				let x = i % 5 * 102 + width / 2 - 35;
-				let y;
+			if(val.owned && itemID != 'puño'){
+				let x = val.i * 102 + width / 2 - 35;
+				let y = val.j * 60 + 140;/*
 				switch (true) {
 					case i >= 5 && i < 10: y = 1; break;
 					case i >= 10: y = 2; break;
 					default: y = 0; break;
 				}
-				y = y * 60 + 140;
-
-				new Button(this, x , y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(val.weapon)}, ()=>{this.mostrarDescripcion(val.weapon);},/*()=>{this.dialogBox.clearText();console.log("hola");}*/).setScale(1.5,1.5);
+				y = y * 60 + 140;*/
+				console.log(val.i, val.j);
+				this.weaponButtons[val.i][val.j] = new Button(this, x , y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(val.weapon)}, ()=>{this.mostrarDescripcion(val.weapon);},/*()=>{this.dialogBox.clearText();console.log("hola");}*/).setScale(1.5,1.5);
 				i++;
 			}
 		});
@@ -91,8 +112,8 @@ export default class InventoryScene extends Phaser.Scene {
 			let itemID = val.item.imgID;
 			let itemQuantity = val.amount;
 			
-			if(itemQuantity > 0){
-				let x = i * 165 + width / 2; let y = 475;
+			if(itemQuantity){
+				let x = val.i * 165 + width / 2; let y = 475;
 				new Button(this, x, y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(val.item)}, ()=>{this.mostrarDescripcion(val.item);},/*()=>{this.dialogBox.clearText();}*/).setScale(3,3);
 				if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
 				i++;
