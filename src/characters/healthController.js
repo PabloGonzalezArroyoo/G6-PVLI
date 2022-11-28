@@ -45,7 +45,7 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
                 }
             }
             
-            if (this.currentHealth > 0) {
+            if (this.currentHealth >= 0) {
                 /* Animación de la barra de vida */
                 this.scene.tweens.add({
                     targets: this.colorBar,

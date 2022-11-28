@@ -210,8 +210,7 @@ export default class BattleScene extends Phaser.Scene {
 				} else {																                // Si solo hay uno
 					this.dialogBox.clearText();														// Borrar texto previo
 					this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.enemies[0].getName() +
-					' con ' + this.player.inventory.getEquipedWeapon().name +
-					' y le baja ' + this.player.getDamage() + ' puntos de vida');
+					' con ' + this.player.inventory.getEquipedWeapon().name);
 					this.emitter.once('finishTexting', () => {
 						this.player.attack(this.enemies[0]);
             			this.indicator.updateInd("player", "damage", this.enemies[0].getPosition(), this.player.getAttackWeapon()); // Actualizar indicador
@@ -256,9 +255,8 @@ export default class BattleScene extends Phaser.Scene {
 		if (!index) index = 0;
 		// Si el enemigo sigue vivo hace su acción
 		if (!levelFailed(this.enemies[index]) && !this.enemies[index].isStuned()) {
-			this.dialogBox.clearText();                   // Borrar texto previo
-			this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' (' +  index + ')' +' ataca a Maria Pita y le baja ' +
-			this.enemies[index].getDamage() + ' puntos de vida');	// Enviar el nuevo texto
+			this.dialogBox.clearText();                           // Borrar texto previo
+			this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' (' +  index + ')' +' ataca a Maria Pita');	// Enviar el nuevo texto
 			this.emitter.once('finishTexting', () => {						// Crea un evento para que el enemigo ataque
 				
 				// Guarda el daño hecho o el daño y un texto si se ha usado una habilidad
