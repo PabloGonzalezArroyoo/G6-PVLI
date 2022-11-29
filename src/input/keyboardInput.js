@@ -30,6 +30,7 @@ export class KeyboardInput
     onPressedKey(func) {
         if (this.button.isSelected()) {
             func();
+            if (this.button._functionOnOver) this.button._functionOnOver();
         } else {
             this.button.selectButton();
         }

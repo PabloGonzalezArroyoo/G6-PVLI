@@ -2,12 +2,6 @@ import {WeaponItem} from '../inventory/item.js';
 
 export var listOfItems = {
 	weapons: [
-		{key: "Puño",
-		imgID: "puño", 
-		attack: 15,
-		defense: 10,
-		desc: "-"},
-		
 		{key: "Cimitarra de madera",
 		imgID: "cimMad", 
 		attack: 25,
@@ -112,6 +106,12 @@ export var listOfItems = {
 		defense: 4,
 		queLocura: WeaponItem.lifeAbsorption(50),
 		desc: "Has encontrado la guadaña de la Muerte y quiere que se la devuelvas. Tendrás que pagarle con vidas y, aunque la de los habitantes de la Pérfida Albión no valgan mucho, seguramente se conforme si la cantidad es grande. ¡Es hora de cosechar!"},
+	
+		{key: "Puño",
+		imgID: "puño", 
+		attack: 15,
+		defense: 10,
+		desc: "-"}
 	],
 
 	healths: [

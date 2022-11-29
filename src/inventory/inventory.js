@@ -3,13 +3,17 @@ import {HealthItem, WeaponItem} from './item.js'
 
 export default class Inventory{
 	constructor() {
+		let count = 0;
 		this.weapons = {};
 		listOfItems.weapons.forEach(object => {
-			Object.defineProperty(this.weapons, object.imgID, {enumerable: true, value: {weapon: new WeaponItem(object), owned: false}});
+			Object.defineProperty(this.weapons, object.imgID, {enumerable: true, value: {weapon: new WeaponItem(object), owned: false, i: Math.floor(count / 3), j: count % 3}});
+			count++;
 		});
+		count = 0;
 		this.healths = {};
 		listOfItems.healths.forEach(object => {
-			Object.defineProperty(this.healths, object.imgID, {enumerable: true, value: {item: new HealthItem(object), amount: 0}});
+			Object.defineProperty(this.healths, object.imgID, {enumerable: true, value: {item: new HealthItem(object), amount: 0, i: count }});
+			count++;
 		});
 		this.addWeapon('puño');
 		this.setEquipedWeapon('puño');
@@ -56,12 +60,12 @@ export default class Inventory{
 	getInventory(){
 		let weapons = [];
 		Object.values(this.weapons).forEach(val => {
-			weapons.push({imgID: val.weapon.imgID, owned: val.owned});
+			weapons.push({imgID: val.weapon.imgID, owned: val.owned, i: val.i, j: val.j});
 		});
 
 		let healths = [];
 		Object.values(this.healths).forEach(val => {
-			healths.push({imgID: val.item.imgID, amount: val.amount});
+			healths.push({imgID: val.item.imgID, amount: val.amount, i: val.i});
 		});
 
 		return {equipedWeapon: this.equipedWeapon.imgID, weapons: weapons, healths: healths}
