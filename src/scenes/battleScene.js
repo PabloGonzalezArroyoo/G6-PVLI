@@ -41,6 +41,9 @@ export default class BattleScene extends Phaser.Scene {
 	constructor() {
 		super({ key: 'battleScene' });
 		this.dialogBox;
+		this.descriptionBox;
+		this.actionBox;
+		this.lootBox;
 		this.indicator;
 		this.previousLetterTime = 0;
 
@@ -107,6 +110,9 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('wpInd', 'assets/scenes/battle/indicator/wpInd.png', {frameWidth: 37, frameHeight: 28});
 		this.load.spritesheet('psnInd', 'assets/scenes/battle/indicator/psnInd.png', {frameWidth: 37, frameHeight: 28});
 		this.load.spritesheet('bleedInd', 'assets/scenes/battle/indicator/bleedInd.png', {frameWidth: 37, frameHeight: 28});
+
+		// Cuadro de Loot
+		this.load.image('lootBox', 'assets/scenes/battle/itemBox.png')
 	}
 
 	/**
@@ -125,21 +131,26 @@ export default class BattleScene extends Phaser.Scene {
 		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
 		//console.log(this.enemies);
 		// Descripcion
-		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);
+		this.descriptionBox = this.add.image(0, 0, 'description').setOrigin(0, 0);
 
 		// Cuadro de dialogo
 		this.dialogBox = new DialogBox(this, 545, 565, 450); 
 		//this.dialogBox.setTextToDisplay('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,');
 
 		// Acciones
-		var cuadroAcciones = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
+		this.actionBox = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
 		
+		// Loot
+		const width = this.scale.width;
+    	const height = this.scale.height;
+		this.lootBox = this.add.image(width/2, height/2, 'lootBox').setScale(2,2).setVisible(false);
+
 		// Indicadores de daño
 		this.indicator = new Indicator(this, 300, 565,
 			{dmgInd: 'dmgInd', healInd: 'healInd', defInd: 'defInd', wpInd: 'wpInd', psnInd: 'psnInd', bleedInd: 'bleedInd'});
 
 		// Interactivo
-		var self = this;
+		const self = this;
     
 		this.keyboardInput = new KeyboardInput(this);
 		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('attack')}),
@@ -173,8 +184,8 @@ export default class BattleScene extends Phaser.Scene {
 			this.previousLetterTime = 0;
 		}
 		if (levelCompleted(this.enemies)){
-			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
-			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
+			this.EnableLoot();
+			//this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});										
 		} 
 		if (levelFailed(this.player)){
 			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
@@ -393,5 +404,21 @@ export default class BattleScene extends Phaser.Scene {
 			if(item.imgID === 'puño')
 				this.DisableQueLocura(true);
 		}
+	}
+
+	EnableLoot(){
+		this.DisableButtons();
+		this.dialogBox.clearText();
+		this.actionBox.setVisible(false);
+		this.descriptionBox.setVisible(false);
+
+		// Maria Pita celebrando
+		// Enemigos en el suelo
+
+		// Coger el tween del ultimo enemigo en pie
+		//this.enemies[X].healthController.once('', ()=>{this.lootBox.setVisible(true).setAlpha(0.85);})
+		this.lootBox.setVisible(true).setAlpha(0.85);
+
+		// Seleccion del arma con cierta probabilidad según el nivel del arma (que no tenga ya Maria Pita)
 	}
 }
