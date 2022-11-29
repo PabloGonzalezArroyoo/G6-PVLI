@@ -49,6 +49,7 @@ export default class BattleScene extends Phaser.Scene {
 
 		this.level;
 		this.enemies = [];
+		this.selectedEnemy= null;
 		this.loot = [];
 	}
 
@@ -125,8 +126,6 @@ export default class BattleScene extends Phaser.Scene {
 		// Maria Pita
 		this.player = new Player(this, 250, 475, this.inventory);
     
-		// Enemigo seleccionado
-		this.selectedEnemy= null;
 		this.enemies = []; //ARREGLO RAPIDO: quitar cuando se implemente una funcion para cuando muere un enemigo
 		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
 		//console.log(this.enemies);
@@ -135,7 +134,6 @@ export default class BattleScene extends Phaser.Scene {
 
 		// Cuadro de dialogo
 		this.dialogBox = new DialogBox(this, 545, 565, 450); 
-		//this.dialogBox.setTextToDisplay('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,');
 
 		// Acciones
 		this.actionBox = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
@@ -210,21 +208,21 @@ export default class BattleScene extends Phaser.Scene {
 					this.emitter.once('enemyselected',() => {
 						this.dialogBox.clearText();														// Borrar texto previo
 					  	this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
-					 	  	' con ' + this.player.inventory.getEquipedWeapon().name +
-					  		' y le baja ' + this.player.getDamage() + ' puntos de vida');
+					 	  	' con ' + this.player.inventory.getEquipedWeapon().name);
 						  	this.emitter.once('finishTexting', () => {
 								this.player.attack(this.selectedEnemy);
               					this.indicator.updateInd("player", "damage", this.selectedEnemy.getPosition(), this.player.getAttackWeapon()); // Actualizar indicador
 								this.enemies.forEach(Element => {Element.animator.disableInteractive();});
 							});
-						})	
+						});	
 				} else {																                // Si solo hay uno
+					this.selectedEnemy = this.enemies[0];
 					this.dialogBox.clearText();														// Borrar texto previo
-					this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.enemies[0].getName() +
+					this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
 					' con ' + this.player.inventory.getEquipedWeapon().name);
 					this.emitter.once('finishTexting', () => {
-						this.player.attack(this.enemies[0]);
-            			this.indicator.updateInd("player", "damage", this.enemies[0].getPosition(), this.player.getAttackWeapon()); // Actualizar indicador
+						this.player.attack(this.selectedEnemy);
+            			this.indicator.updateInd("player", "damage", this.selectedEnemy.getPosition(), this.player.getAttackWeapon()); // Actualizar indicador
 					});
 				}
 				break;			
@@ -407,17 +405,18 @@ export default class BattleScene extends Phaser.Scene {
 	}
 
 	EnableLoot(){
-		this.DisableButtons();
-		this.dialogBox.clearText();
-		this.actionBox.setVisible(false);
-		this.descriptionBox.setVisible(false);
-
+		
 		// Maria Pita celebrando
 		// Enemigos en el suelo
 
 		// Coger el tween del ultimo enemigo en pie
-		//this.enemies[X].healthController.once('', ()=>{this.lootBox.setVisible(true).setAlpha(0.85);})
-		this.lootBox.setVisible(true).setAlpha(0.85);
+		this.selectedEnemy.healthController.colorBarTween.once('complete', ()=>{
+			this.DisableButtons();
+			this.dialogBox.clearText();
+			this.actionBox.setVisible(false);
+			this.descriptionBox.setVisible(false);
+			this.lootBox.setVisible(true).setAlpha(0.85);
+		})
 
 		// Seleccion del arma con cierta probabilidad según el nivel del arma (que no tenga ya Maria Pita)
 	}
