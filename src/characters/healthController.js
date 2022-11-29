@@ -34,6 +34,9 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             /* Animación */
             switch (true) {
                 // Colores
+                case this.currentHealth > 0.75 * this.maxHealth: {
+                    this.color = 0x00FF00; break; // Verde
+                }
                 case this.currentHealth <= 0.75 * this.maxHealth && this.currentHealth > 0.50 * this.maxHealth: {
                     this.color = 0xff8000; break; // Naranja
                 } 
