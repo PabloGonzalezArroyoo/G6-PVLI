@@ -10,6 +10,7 @@ import EventDispatcher from '../combat/eventDispatcher.js';
 import {listOfEnemies} from '../data/listOfEnemies.js';
 import DamageInd from '../animations/indicator.js';
 import Indicator from '../animations/indicator.js';
+import { WeaponItem } from '../inventory/item.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
 const levelCompleted = function(enemies){
@@ -51,6 +52,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.enemies = [];
 		this.selectedEnemy= null;
 		this.loot = [];
+		this.notOwnedWeapons = [];
+		this.once = false;
 	}
 
 	/**
@@ -182,8 +185,19 @@ export default class BattleScene extends Phaser.Scene {
 			this.previousLetterTime = 0;
 		}
 		if (levelCompleted(this.enemies)){
-			this.EnableLoot();
-			//this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});										
+			// Cuando termine el tween del ultimo enemigo en pie aparece el loot conseguido
+			this.selectedEnemy.healthController.colorBarTween.once('complete', ()=>{
+				// Solo lo queremos realizar una vez
+				if (this.once === false) this.EnableLoot();
+				// Cuando ya se haya hecho el loot
+				else {
+					// Espera del input
+					// ...
+					// Cambio de escena
+					this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
+				}
+				
+			})
 		} 
 		if (levelFailed(this.player)){
 			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
@@ -405,19 +419,24 @@ export default class BattleScene extends Phaser.Scene {
 	}
 
 	EnableLoot(){
+	
+		this.DisableButtons();
+		this.dialogBox.clearText();
+		this.actionBox.setVisible(false);
+		this.descriptionBox.setVisible(false);
+		this.lootBox.setVisible(true).setAlpha(0.85);
+		// Añade todos las armas que no tiene Maria Pita
+		this.inventoryBackup.weapons.forEach(Element => {
+			if (!Element.owned) {
+				this.notOwnedWeapons.push(Element.imgID);
+			}
+		});
 		
-		// Maria Pita celebrando
-		// Enemigos en el suelo
-
-		// Coger el tween del ultimo enemigo en pie
-		this.selectedEnemy.healthController.colorBarTween.once('complete', ()=>{
-			this.DisableButtons();
-			this.dialogBox.clearText();
-			this.actionBox.setVisible(false);
-			this.descriptionBox.setVisible(false);
-			this.lootBox.setVisible(true).setAlpha(0.85);
-		})
-
 		// Seleccion del arma con cierta probabilidad según el nivel del arma (que no tenga ya Maria Pita)
+		// Hacer probabilidad
+		let random = Math.floor(Math.random() * this.notOwnedWeapons.length);
+		var imgID = this.notOwnedWeapons[random];
+		this.inventory.weapons[imgID].owned = true;
+		this.once = true;
 	}
 }
