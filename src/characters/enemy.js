@@ -33,7 +33,7 @@ export class Enemy extends Character {
                 return this.ability(player);
 
         // Animacion de ataque
-        // this.animator.playAttack();
+        this.animator.playAttack();
 
         // Golpea y devuelve el daño hecho
         return player.receiveAttack(this.damage);
