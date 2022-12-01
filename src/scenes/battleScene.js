@@ -107,6 +107,9 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('wpInd', 'assets/scenes/battle/indicator/wpInd.png', {frameWidth: 37, frameHeight: 28});
 		this.load.spritesheet('psnInd', 'assets/scenes/battle/indicator/psnInd.png', {frameWidth: 37, frameHeight: 28});
 		this.load.spritesheet('bleedInd', 'assets/scenes/battle/indicator/bleedInd.png', {frameWidth: 37, frameHeight: 28});
+
+		// Transición
+		this.load.spritesheet('fadeIn', 'assets/scenes/transitions/fadeInOutBattleTransition.png', {frameWidth: 1024, frameHeight: 768});
 	}
 
 	/**
@@ -114,7 +117,7 @@ export default class BattleScene extends Phaser.Scene {
 	*/
 	create() {
 		// Fondo
-		var background = this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
+		this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
 		// Maria Pita
 		this.player = new Player(this, 250, 475, this.inventory);
@@ -123,23 +126,19 @@ export default class BattleScene extends Phaser.Scene {
 		this.selectedEnemy= null;
 		this.enemies = []; //ARREGLO RAPIDO: quitar cuando se implemente una funcion para cuando muere un enemigo
 		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
-		//console.log(this.enemies);
 		// Descripcion
-		var description = this.add.image(0, 0, 'description').setOrigin(0, 0);
+		this.add.image(0, 0, 'description').setOrigin(0, 0);
 
 		// Cuadro de dialogo
 		this.dialogBox = new DialogBox(this, 545, 565, 450); 
 		//this.dialogBox.setTextToDisplay('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,');
 
 		// Acciones
-		var cuadroAcciones = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
+		this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
 		
 		// Indicadores de daño
 		this.indicator = new Indicator(this, 300, 565,
 			{dmgInd: 'dmgInd', healInd: 'healInd', defInd: 'defInd', wpInd: 'wpInd', psnInd: 'psnInd', bleedInd: 'bleedInd'});
-
-		// Interactivo
-		var self = this;
     
 		this.keyboardInput = new KeyboardInput(this);
 		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('attack')}),
@@ -160,6 +159,16 @@ export default class BattleScene extends Phaser.Scene {
 		this.UpdateQueLocura(0);
     
     	this.emitter = EventDispatcher.getInstance();
+
+		// Transición
+		// FadeIn
+		this.anims.create({
+			key: 'transition',
+			frames: this.anims.generateFrameNumbers('fadeIn', {start: 0, end: 15}),
+			frameRate: 18,
+			repeat: 0
+		});
+		this.add.sprite(1024, 768, 'fadeIn').setOrigin(1, 1).play('transition');
 	}
 
 	update(t,dt) {
