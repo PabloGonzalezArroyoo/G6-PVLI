@@ -33,7 +33,7 @@ export class Enemy extends Character {
                 return this.ability(player);
 
         // Animacion de ataque
-        // this.animator.playAttack();
+        this.animator.playAttack();
 
         // Golpea y devuelve el daño hecho
         return player.receiveAttack(this.damage);
@@ -58,7 +58,7 @@ export class Enemy extends Character {
             case 'StinkyPirate': return 'Pirata maloliente';
             case 'ScurviedSailor': return 'Marinero escorbutado';
             case 'ExperiencedBuccaneer': return 'Bucanero experimentado';
-            case 'AlienatedCosair': return 'Corsario enajenado';
+            case 'AlienatedCorsair': return 'Corsario enajenado';
             case 'EnsignDrake': return 'Alferez Drake (hermano)';
         }
     }
