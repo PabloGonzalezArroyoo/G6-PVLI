@@ -2,10 +2,10 @@ export default class EnemyAnimator extends Phaser.GameObjects.Sprite{
 	// Name es el nombre del spritesheet
 	constructor(scene, x, y, spritesheet){
 		super(scene, x, y, spritesheet);
+		this.spritesheet = spritesheet;
 		this.defaultAnimation = this.spritesheet + '_idle';
 		this.scene.add.existing(this);
 		this.setScale(6,6);
-
 		//animacion idle
 		this.scene.anims.create({
 		key: this.spritesheet + '_idle',
