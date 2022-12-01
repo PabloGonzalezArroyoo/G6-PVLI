@@ -105,7 +105,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.load.spritesheet('inventory', 'assets/scenes/levelsMenu/inventoryButtons.png', {frameWidth: 30, frameHeight: 18});
 
 		// Transición
-		this.load.spritesheet('fadeOut', 'assets/scenes/transitions/fadeOutBattleTransition.png', {frameWidth: 1024, frameHeight: 768});
+		this.load.spritesheet('fadeOut', 'assets/scenes/transitions/fadeOutLevelsMenuTransition.png', {frameWidth: 1024, frameHeight: 768});
 	}
 
 	/**

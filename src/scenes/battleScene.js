@@ -109,7 +109,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('bleedInd', 'assets/scenes/battle/indicator/bleedInd.png', {frameWidth: 37, frameHeight: 28});
 
 		// Transición
-		this.load.spritesheet('fadeIn', 'assets/scenes/transitions/fadeInOutBattleTransition.png', {frameWidth: 1024, frameHeight: 768});
+		this.load.spritesheet('fadeIn', 'assets/scenes/transitions/fadeInBattleTransition.png', {frameWidth: 1024, frameHeight: 768});
 	}
 
 	/**
