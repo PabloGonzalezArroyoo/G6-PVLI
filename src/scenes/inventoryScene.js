@@ -32,6 +32,7 @@ export default class InventoryScene extends Phaser.Scene {
 	preload(){
 		// Fondo
 		this.load.image('inventoryBackground', 'assets/scenes/inventory/inventoryBackground.png');
+
 		// Items
 		this.load.image('puño', 'assets/scenes/inventory/weapons/puño.png');
 		this.load.image('cimMad', 'assets/scenes/inventory/weapons/cimitarraMadera.png');
@@ -40,6 +41,19 @@ export default class InventoryScene extends Phaser.Scene {
 		this.load.image('dagOx', 'assets/scenes/inventory/weapons/dagaOxidada.png');
 		this.load.image('dagAf', 'assets/scenes/inventory/weapons/dagaAfilada.png');
 		this.load.image('dagEx', 'assets/scenes/inventory/weapons/dagaExcéntrica.png');
+		//this.load.image('alMb', 'assets/scenes/inventory/weapons/.png');
+		//this.load.image('alVrd', 'assets/scenes/inventory/weapons/.png');
+		//this.load.image('alDem', 'assets/scenes/inventory/weapons/.png');
+		this.load.image('ropIng', 'assets/scenes/inventory/weapons/roperaInglesa.png');
+		this.load.image('ropCst', 'assets/scenes/inventory/weapons/roperaCastellana.png');
+		this.load.image('ropAl', 'assets/scenes/inventory/weapons/roperaAlocada.png');
+		this.load.image('sacho', 'assets/scenes/inventory/weapons/sacho.png');
+		this.load.image('fouc', 'assets/scenes/inventory/weapons/fouciño.png');
+		this.load.image('guad', 'assets/scenes/inventory/weapons/guadañaExtravagante.png');
+		
+		this.load.image('bolla', 'assets/scenes/inventory/objects/bollaDePan.png');
+		this.load.image('caldo', 'assets/scenes/inventory/objects/caldoGallego.png');
+		this.load.image('polbo', 'assets/scenes/inventory/objects/pulpoALaGallega.png');
 	}
 
 	/**
