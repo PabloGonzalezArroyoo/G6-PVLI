@@ -11,7 +11,7 @@ import {listOfEnemies} from '../data/listOfEnemies.js';
 import DamageInd from '../animations/indicator.js';
 import Indicator from '../animations/indicator.js';
 import { WeaponItem } from '../inventory/item.js';
-import { listOfItems } from '../data/listOfItems.js';
+import { listOfItems, weaponsLevel1, weaponsLevel2, weaponsLevel3 } from '../data/listOfItems.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
 const levelCompleted = function(enemies){
@@ -64,9 +64,11 @@ export default class BattleScene extends Phaser.Scene {
 	init(data) {
 		this.level = data.level;
 		this.enemiesData = data.level.enemies;
-		this.loot = data.level.loot;
 		this.inventory = data.inventory;
 		this.inventoryBackup = data.inventory.getInventory();
+		this.level1prob = data.level1prob;
+		this.level2prob = data.level2prob;
+		this.level3prob = data.level3prob;
 	}
 
 	/**
@@ -178,8 +180,6 @@ export default class BattleScene extends Phaser.Scene {
 		super.update(t,dt);
 		this.previousLetterTime += dt; // Contador del tiempo transcurrido desde la ultima letra
 		this.keyboardInput.processInput();
-
-		console.log(this.inventory.weapons);
 
 		// Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
 		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){
@@ -425,65 +425,59 @@ export default class BattleScene extends Phaser.Scene {
 		this.actionBox.setVisible(false);
 		this.descriptionBox.setVisible(false);
 		this.lootBox.setVisible(true).setAlpha(0.85);
-		// Añade todos las armas que no tiene Maria Pita
-		this.inventoryBackup.weapons.forEach(Element => {
-			if (!Element.owned) {
-				this.notOwnedWeapons.push(Element.imgID);
-			}
-		});
 		
-		// Si hay al menos un arma...
-		var imgID; var loot = false;
-		if (this.notOwnedWeapons.length != 0){
-			this.level1 = [];
-			this.level2 = [];
-			this.level3 = [];
-			
-			this.notOwnedWeapons.forEach(Element => {
-				switch(Element){
-					case "cimMad": this.level1.push(Element); break;
-					case "cimAc": this.level2.push(Element); break;
-					case "cimLoc": this.level3.push(Element); break;
-					case "dagOx": this.level1.push(Element); break;
-					case "dagAf": this.level2.push(Element); break;
-					case "dagEx": this.level3.push(Element); break;
-					case "alMB": this.level1.push(Element); break;
-					case "alVrd": this.level2.push(Element); break;
-					case "alDem": this.level3.push(Element); break;
-					case "ropIng": this.level1.push(Element); break;
-					case "ropCst": this.level2.push(Element); break;
-					case "ropAl": this.level3.push(Element); break;
-					case "sacho": this.level1.push(Element); break;
-					case "fouc": this.level2.push(Element); break;
-					case "guad": this.level3.push(Element); break;
-				}
-			})
-			
-			// Seleccion del arma con cierta probabilidad según el nivel del arma (que no tenga ya Maria Pita)
-			let levelLoot;
-			switch (this.level.state) {
-				case 1: case 2: case 3: case 5: levelLoot = this.level1; break;
-				case 4: case 6: case 8: case 10: levelLoot = this.level2; break;
-				case 7 : case 9: case 11: levelLoot = this.level3; break;
-			}
+		// Looteo arma
+		let randomWeapon = Math.floor(Math.random() * 5);
+		let randomSet = Math.floor(Math.random() * 100);
+		let weaponLoot = false; let weaponImgID;
+		console.log('Random: ' + randomSet);
+		console.log('Level1Prob: ' + this.level1prob);
+		console.log('Level2Prob: ' + this.level2prob);
+		console.log('Level3Prob: ' + this.level3prob);
 
-			if (size != 0) {
-				let random = Math.floor(Math.random() * levelLoot.length);
-				imgID = levelLoot[random];
-				this.inventory.weapons[imgID].owned = true;
+		if (randomSet <= this.level1prob) {
+			console.log('Level1 Weapon');
+			if (this.inventory.weapons[weaponsLevel1[randomWeapon]].owned = false) {
+				weaponImgID = weaponsLevel1[randomWeapon];
+				this.inventory.weapons[weaponImgID].owned = true;
+				weaponLoot = true;
 			}
-			
 		}
-		// Le damos comida
+		else if (randomSet <= this.level1prob + this.level2prob) {
+			console.log('Level2 Weapon');
+			if (this.inventory.weapons[weaponsLevel2[randomWeapon]].owned = false) {
+				weaponImgID = weaponsLevel2[randomWeapon];
+				this.inventory.weapons[weaponImgID].owned = true;
+				weaponLoot = true;
+			}
+		}
 		else {
-			let randomFood = Math.floor(Math.random() * 3);
-			let randomQuantity = Math.floor(Math.random() * 10);
-			img = listOfItems.healths[randomFood];
-			this.inventory.healths[randomFood].amount = randomQuantity;
+			console.log('Level3 Weapon');
+			if (this.inventory.weapons[weaponsLevel3[randomWeapon]].owned = false) {
+				weaponImgID = weaponsLevel3[randomWeapon];
+				this.inventory.weapons[weaponImgID].owned = true;
+				weaponLoot = true;
+			}
 		}
+
+		// Looteo comida
+		let randomFood = Math.floor(Math.random() * 3);
+		let randomQuantity = Math.floor(Math.random() * 10);
+		let foodImgID = listOfItems.healths[randomFood].imgID;
+		this.inventory.healths[foodImgID].amount = randomQuantity;
 
 		// Looteo
-		this.add.image(this.scale.width/2, this.scale.height/2, imgID).setScale(6,6);
+		// Si no me ha tocado arma
+		if (!weaponLoot) {
+			console.log("COMIDA");
+			this.add.image(this.scale.width/2, this.scale.height/2, foodImgID).setScale(6,6);
+		}
+		// Si me ha tocado arma
+		else {
+			console.log("ARMA Y COMIDA");
+			this.add.image(this.scale.width/3, this.scale.height/2, weaponImgID).setScale(4,4);
+			this.add.image(this.scale*2/3, this.scale.height/2, foodImgID).setScale(4,4);
+		}
 		this.once = true;
 	}
 }

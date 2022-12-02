@@ -131,3 +131,7 @@ export var listOfItems = {
 		desc: "-"},
 	]
 }
+
+export var weaponsLevel1 = ["cimMad", "dagOx", "alMb", "ropIng", "sacho"];
+export var weaponsLevel2 = ["cimAc", "dagAf", "alVrd", "ropCst", "fouc"];
+export var weaponsLevel3 = ["cimLoc", "dagEx", "alDem", "ropAl", "guad"];

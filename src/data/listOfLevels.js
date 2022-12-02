@@ -6,7 +6,9 @@ export var listOfLevels = [
 		enemies: [
 			{id: "drunkRuffian", x: 700, y: 200},
 			],
-		loot: [],
+		level1prob: 100,
+		level2prob: 0,
+		level3prob: 0
 	},
 	// Level 2
 	{
@@ -16,7 +18,9 @@ export var listOfLevels = [
 			{id: "drunkRuffian", x: 700, y: 200},
 			{id: "drunkRuffian", x: 750, y: 250}
 			],
-		loot: [],
+		level1prob: 100,
+		level2prob: 0,
+		level3prob: 0
 	},
 	// Level 3
 	{
@@ -26,7 +30,9 @@ export var listOfLevels = [
 			{id: "stinkyPirate", x: 700, y: 200},
 			{id: "drunkRuffian", x: 750, y: 250}
 			],
-		loot: [],
+		level1prob: 100,
+		level2prob: 0,
+		level3prob: 0
 	},
 	// Level 4
 	{
@@ -37,7 +43,9 @@ export var listOfLevels = [
 			{id: "drunkRuffian", x: 750, y: 250},
 			{id: "drunkRuffian", x: 800, y: 300}
 			],
-		loot: [],
+		level1prob: 40,
+		level2prob: 60,
+		level3prob: 0
 	},
 	// Level 5
 	{
@@ -47,7 +55,9 @@ export var listOfLevels = [
 			{id: "scurviedSailor", x: 700, y: 200},
 			{id: "stinkyPirate", x: 750, y: 250}
 			],
-		loot: [],
+		level1prob: 100,
+		level2prob: 0,
+		level3prob: 0
 	},
 	// Level 6
 	{
@@ -57,7 +67,9 @@ export var listOfLevels = [
 			{id: "experiencedBuccaneer", x: 700, y: 200},
 			{id: "drunkRuffian", x: 750, y: 250}
 			],
-		loot: [],
+		level1prob: 0,
+		level2prob: 40,
+		level3prob: 60
 	},
 	// Level 7
 	{
@@ -67,7 +79,9 @@ export var listOfLevels = [
 			{id: "scurviedSailor", x: 700, y: 200},
 			{id: "experiencedBuccaneer", x: 750, y: 250}
 			],
-		loot: [],
+		level1prob: 40,
+		level2prob: 60,
+		level3prob: 0
 	},
 	// Level 8
 	{
@@ -78,7 +92,9 @@ export var listOfLevels = [
 			{id: "scurviedSailor", x: 750, y: 250},
 			{id: "scurviedSailor", x: 800, y: 300}
 			],
-		loot: [],
+		level1prob: 0,
+		level2prob: 100,
+		level3prob: 0
 	},
 
 	// Level 9
@@ -90,7 +106,10 @@ export var listOfLevels = [
 			{id: "scurviedSailor", x: 750, y: 250},
 			{id: "experiencedBuccaneer", x: 800, y: 300}
 			],
-		loot: [],
+		level1prob: 0,
+		level2prob: 40,
+		level3prob: 60
+		
 	},
 	// Level 10
 	{
@@ -100,7 +119,9 @@ export var listOfLevels = [
 			{id: "drunkRuffian", x: 700, y: 200},
 			{id: "drunkRuffian", x: 750, y: 250}
 			],
-		loot: [],
+		level1prob: 0,
+		level2prob: 100,
+		level3prob: 0
 	},
 	// Level 11
 	{
@@ -110,7 +131,9 @@ export var listOfLevels = [
 			{id: "drunkRuffian", x: 700, y: 200},
 			{id: "drunkRuffian", x: 750, y: 250}
 			],
-		loot: [],
+		level1prob: 0,
+		level2prob: 40,
+		level3prob: 60
 	},
 	// Level 12
 	{
@@ -119,6 +142,8 @@ export var listOfLevels = [
 		enemies: [
 			{id: "drunkRuffian", x: 720, y: 200}
 			],
-		loot: []
+		level1prob: 0,
+		level2prob: 0,
+		level3prob: 100
 	}
 ]

@@ -74,14 +74,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		}
 		if(data.inventory === undefined){
 			this.inventory = new Inventory();
-			this.inventory.addWeapon('cimMad');
-			this.inventory.addWeapon('cimAc');
-			this.inventory.addWeapon('cimLoc');
-			this.inventory.addWeapon('dagOx');
-			this.inventory.addWeapon('dagAf');
-			this.inventory.addWeapon('dagEx');
-			this.inventory.addHealth('bolla');
-			this.inventory.addHealth('polbo', 3);
 		}
 		else
 			this.inventory = data.inventory;
