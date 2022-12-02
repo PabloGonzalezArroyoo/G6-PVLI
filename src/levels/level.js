@@ -1,3 +1,5 @@
+import EventDispatcher from "../combat/eventDispatcher.js";
+
 // Objeto State usado como un enum
 const State = {
     locked: 0,
@@ -5,7 +7,7 @@ const State = {
     complete: 2
 }
 
-export class Level/* extends Button */{
+export class Level {
     constructor(levelData) {
         this.x = levelData.x; this.y = levelData.y;
         this.state = State.locked;
@@ -16,11 +18,12 @@ export class Level/* extends Button */{
         this.defaultFrame = 0 + this.state * 3;
         this.frameOnOver = 1 + this.state * 3;
         this.frameOnDown = 2 + this.state * 3;
+        this.emitter = EventDispatcher.getInstance();
     }
     
-    // Carga el nivel si no está bloqueado
-    loadLevel(scene, inventory){
-        if (this.state !== State.locked) scene.scene.start('battleScene', {level: this, inventory: inventory});
+    // Carga el nivel si no está bloqueado, emitiendo un evento que pasa los valores del nivel
+    loadLevel(inventory){
+        if (this.state !== State.locked) this.emitter.emit('levelSelected', {level: this, inventory: inventory});
     }
 
     // Asigna al array de siguientes niveles los correspondientes
