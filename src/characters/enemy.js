@@ -132,12 +132,12 @@ export class ScurviedSailor extends Enemy {
 // Alferez Drake (hermano) (BOSS FINAL)
  export class EnsignDrake extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'ensignDrake', 500, 50);
+        super(scene, x, y, 'ensignDrake', 500, 5);
     }
     
     attack(player) {
         // Atacar con un 20% de probabilidad de hacer su habilidad
-        return super.attack(player, 20);
+        return super.attack(player, 0);
     }
 
     ability(player) {

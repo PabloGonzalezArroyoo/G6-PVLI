@@ -109,8 +109,14 @@ export var listOfItems = {
 	
 		{key: "Puño",
 		imgID: "puño", 
-		attack: 15,
+		attack: 100,
 		defense: 10,
+		desc: "-"},
+
+		{key: "Asta de Bandera",
+		imgID: 'asta',
+		attack: 80,
+		defense: 15,
 		desc: "-"}
 	],
 
