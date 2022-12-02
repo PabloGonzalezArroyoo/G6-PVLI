@@ -421,9 +421,7 @@ export default class BattleScene extends Phaser.Scene {
 	CheckFinalWeapon() {
 		// Si está Drake en la batalla
 		if (this.player.inventory.getEquipedWeapon().imgID !== 'asta') {
-
 			if (this.enemies[0].animator.spritesheet === 'ensignDrake') {
-				console.log('a');
 				// Si la vida de Drake es menos de la mitad
 				if (this.enemies[0].healthController.getCurrentHealth() < this.enemies[0].healthController.getMaxHealth() / 2) {
 					//-- Menú de recibir loot con el arma final
@@ -434,7 +432,7 @@ export default class BattleScene extends Phaser.Scene {
 					this.dialogBox.setTextToDisplay('Maria Pita ha encontrado un asta de bandera y se la ha equipado.');	// Enviar el nuevo texto
 					this.emitter.once('finishTexting', () => {
 						this.EnableButtons();
-					})
+					});
 				}
 				else this.EnableButtons();
 			}
