@@ -309,7 +309,6 @@ export default class BattleScene extends Phaser.Scene {
 			if (index < this.enemies.length) this.EnemyTurn(index);
 			else this.UpdatePlayerEffects();
 		}
-		console.log(this.player.receivedDamage);
 	}
 
 	// Metodo que actualiza los efectos por turnos del jugador

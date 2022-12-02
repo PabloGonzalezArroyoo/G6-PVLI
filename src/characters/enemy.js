@@ -11,9 +11,9 @@ export class Enemy extends Character {
         this.adjacent={};
         //Hacer al enemigo interactuable
         this.emmiter = EventDispatcher.getInstance();
-        this.animator.on('pointerover',()=>{this.animator.setScale(7)});
-        this.animator.on('pointerout',()=>{this.animator.setScale(6)});
-        this.animator.on('pointerdown',()=>{this.OnClick()});
+        this.animator.on('pointerover',()=>{this.selectButton()});
+        this.animator.on('pointerout',()=>{this.onPointerOut()});
+        this.animator.on('pointerdown',()=>{this.onReleaseClick()});
 
     }
 
@@ -36,9 +36,23 @@ export class Enemy extends Character {
     getAnimator() { return this.animator; }
     
     // Devuelve el enemigo sobre el que realizar el ataque y avisa de que este ya se puede realizar
-    OnClick() {   
+    onReleaseClick() {   
         this.scene.selectedEnemy = this;
+        this.onPointerOut();
         this.emmiter.emit('enemyselected');
+    }
+    //Devuelve al enemigo a su estado inicial
+    onPointerOut()
+    {
+        this.animator.setScale(6)
+    }
+    //Detecta si el enemigo está ya seleccionado o no
+    isSelected(){
+        return this.animator.scale === 7;
+    }
+    // Selecciona al enemigo
+    selectButton(){
+        this.animator.setScale(7);
     }
     
     // Devuelve el nombre del enemigo

@@ -60,7 +60,6 @@ export default class Player extends Character {
              this.receivedDamage -= this.receivedDamage * (0.15 * this._defenseBoost);  //Reduce el daño segun los turnos de defensa que se tengan
         }
         this.healthController.changeHealth(-this.receivedDamage);
-        console.log(this.receivedDamage);
         return this.receivedDamage;
     }
 
