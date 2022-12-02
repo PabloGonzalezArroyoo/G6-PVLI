@@ -11,6 +11,7 @@ import {listOfEnemies} from '../data/listOfEnemies.js';
 import DamageInd from '../animations/indicator.js';
 import Indicator from '../animations/indicator.js';
 import { WeaponItem } from '../inventory/item.js';
+import { listOfItems } from '../data/listOfItems.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
 const levelCompleted = function(enemies){
@@ -48,7 +49,6 @@ export default class BattleScene extends Phaser.Scene {
 		this.indicator;
 		this.previousLetterTime = 0;
 
-		this.level;
 		this.enemies = [];
 		this.selectedEnemy= null;
 		this.loot = [];
@@ -179,6 +179,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.previousLetterTime += dt; // Contador del tiempo transcurrido desde la ultima letra
 		this.keyboardInput.processInput();
 
+		console.log(this.inventory.weapons);
+
 		// Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
 		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){
 			this.dialogBox.write();
@@ -194,9 +196,8 @@ export default class BattleScene extends Phaser.Scene {
 					// Espera del input
 					// ...
 					// Cambio de escena
-					this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
+					this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory}, this.once = false);});
 				}
-				
 			})
 		} 
 		if (levelFailed(this.player)){
@@ -419,7 +420,6 @@ export default class BattleScene extends Phaser.Scene {
 	}
 
 	EnableLoot(){
-	
 		this.DisableButtons();
 		this.dialogBox.clearText();
 		this.actionBox.setVisible(false);
@@ -432,11 +432,58 @@ export default class BattleScene extends Phaser.Scene {
 			}
 		});
 		
-		// Seleccion del arma con cierta probabilidad según el nivel del arma (que no tenga ya Maria Pita)
-		// Hacer probabilidad
-		let random = Math.floor(Math.random() * this.notOwnedWeapons.length);
-		var imgID = this.notOwnedWeapons[random];
-		this.inventory.weapons[imgID].owned = true;
+		// Si hay al menos un arma...
+		var imgID; var loot = false;
+		if (this.notOwnedWeapons.length != 0){
+			this.level1 = [];
+			this.level2 = [];
+			this.level3 = [];
+			
+			this.notOwnedWeapons.forEach(Element => {
+				switch(Element){
+					case "cimMad": this.level1.push(Element); break;
+					case "cimAc": this.level2.push(Element); break;
+					case "cimLoc": this.level3.push(Element); break;
+					case "dagOx": this.level1.push(Element); break;
+					case "dagAf": this.level2.push(Element); break;
+					case "dagEx": this.level3.push(Element); break;
+					case "alMB": this.level1.push(Element); break;
+					case "alVrd": this.level2.push(Element); break;
+					case "alDem": this.level3.push(Element); break;
+					case "ropIng": this.level1.push(Element); break;
+					case "ropCst": this.level2.push(Element); break;
+					case "ropAl": this.level3.push(Element); break;
+					case "sacho": this.level1.push(Element); break;
+					case "fouc": this.level2.push(Element); break;
+					case "guad": this.level3.push(Element); break;
+				}
+			})
+			
+			// Seleccion del arma con cierta probabilidad según el nivel del arma (que no tenga ya Maria Pita)
+			let levelLoot;
+			switch (this.level.state) {
+				case 1: case 2: case 3: case 5: levelLoot = this.level1; break;
+				case 4: case 6: case 8: case 10: levelLoot = this.level2; break;
+				case 7 : case 9: case 11: levelLoot = this.level3; break;
+			}
+
+			if (size != 0) {
+				let random = Math.floor(Math.random() * levelLoot.length);
+				imgID = levelLoot[random];
+				this.inventory.weapons[imgID].owned = true;
+			}
+			
+		}
+		// Le damos comida
+		else {
+			let randomFood = Math.floor(Math.random() * 3);
+			let randomQuantity = Math.floor(Math.random() * 10);
+			img = listOfItems.healths[randomFood];
+			this.inventory.healths[randomFood].amount = randomQuantity;
+		}
+
+		// Looteo
+		this.add.image(this.scale.width/2, this.scale.height/2, imgID).setScale(6,6);
 		this.once = true;
 	}
 }
