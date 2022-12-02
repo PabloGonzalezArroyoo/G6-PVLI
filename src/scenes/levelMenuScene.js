@@ -9,8 +9,7 @@ import {listOfLevels} from '../data/listOfLevels.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
 
 // Array con todos los niveles del juego
-const levels = [
-				new Level(listOfLevels[0]),
+const levels = [new Level(listOfLevels[0]),
 				new Level(listOfLevels[1]), // Nivel 1
 				new Level(listOfLevels[2]),			// ... 2
 				new Level(listOfLevels[3]),			// 3
@@ -28,7 +27,7 @@ const levels = [
 				
 				// Especificar los niveles que se desbloquean tras completar cada nivel
 				levels[0].setNextLevels([levels[1]]);
-				levels[1].setNextLevels([levels[2], levels[3]]);
+				levels[1].setNextLevels([levels[2]]);
 				levels[2].setNextLevels([levels[3], levels[4]]);
 				levels[3].setNextLevels(null);
 				levels[4].setNextLevels([levels[5], levels[6], levels[7]]);
@@ -39,18 +38,6 @@ const levels = [
 				levels[9].setNextLevels([levels[10], levels[11]]);
 				levels[10].setNextLevels(null);
 				levels[11].setNextLevels(null);
-
-				/*
-				levels[2].setNextLevels(null);
-				levels[3].setNextLevels([levels[4], levels[5], levels[6]]);
-				levels[4].setNextLevels(null);
-				levels[5].setNextLevels(null);
-				levels[6].setNextLevels([levels[7], levels[8]]);
-				levels[7].setNextLevels(null);
-				levels[8].setNextLevels([levels[9], levels[10]]);
-				levels[9].setNextLevels(null);
-				levels[10].setNextLevels([levels[11]]);
-				levels[11].setNextLevels(null);*/
 
 /**
  * Escena de Menú de Niveles.

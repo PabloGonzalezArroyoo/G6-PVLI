@@ -28,7 +28,6 @@ export default class Inventory{
 	}
 
 	addHealth(itemID, amount = 1) {
-		console.log(itemID);
 		this.healths[itemID].amount += amount;
 	}
 

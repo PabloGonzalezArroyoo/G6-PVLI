@@ -33,9 +33,11 @@ export class Level {
 
     // Desbloquea los siguientes niveles
     unlockNextLevels(){
-        this.nextLevels.forEach(level => {
-            level.setUnlocked();
-        });
+        if (this.nextLevels){
+            this.nextLevels.forEach(level => {
+                level.setUnlocked();
+            });   
+        }
     }
 
     // devuelve el estado actual del nivel
@@ -49,19 +51,18 @@ export class Level {
 
     // Marca el nivel como desbloqueado y cambia el sprite
     setUnlocked() {
-        this.state = State.unlocked;
-        this.changeSpriteState(this.state);
+        this.changeState(State.unlocked);
     }
 
     // Marca el nivel como completado y cambia el sprite
     setCompleted() {
-        this.state = State.complete;
-        this.changeSpriteState(this.state);
-        if (this.getNextLevels() !== null) this.unlockNextLevels();
+        this.changeState(State.complete);
+        this.unlockNextLevels();
     }
 
-    // Cambia el sprite según el estado del nivel
-    changeSpriteState(state) {
+    // Cambia el estado del nivel y adecúa el sprite
+    changeState(state) {
+        this.state = state;
         this.defaultFrame = this.defaultFrame % 3 + state * 3;
         this.frameOnOver = this.frameOnOver % 3 + state * 3;
         this.frameOnDown = this.frameOnDown % 3 + state * 3;

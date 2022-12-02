@@ -4,7 +4,7 @@ export default class TurnEffectController{
 		this.bleedTurns = 0;
 		this.bleedDamage = 0;
 		this.stunTurns = 0;
-		this.defenseTurns=0;
+		this.defenseTurns = 0;
 	}
 
 	activateBleed(turns, damagePercentage){
@@ -29,9 +29,8 @@ export default class TurnEffectController{
 			this.character.healthController.changeHealth(-this.bleedDamage);
 		}
 		if (this.stunTurns > 0) this.stunTurns--;
-		if(this.defenseTurns>0)this.defenseTurns--; //Reduce los turnos de defensa restantes
-		else this.character._defenseBoost=0;//Si no tiene turnos de defensa, su acumulable es 0
-		console.log(this.defenseTurns+" "+this.character._defenseBoost);
+		if (this.defenseTurns > 0) this.defenseTurns--; //Reduce los turnos de defensa restantes
+		else this.character._defenseBoost = 0; //Si no tiene turnos de defensa, su acumulable es 0
 	}
 
 	getBleedDamage() { return this.bleedDamage; }
