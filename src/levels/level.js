@@ -9,7 +9,6 @@ export class Level/* extends Button */{
     constructor(levelData) {
         this.x = levelData.x; this.y = levelData.y;
         this.state = State.locked;
-        console.log('level data: ' + levelData.level1prob);
         this.level1prob = levelData.level1prob;
         this.level2prob = levelData.level2prob;
         this.level3prob = levelData.level3prob;

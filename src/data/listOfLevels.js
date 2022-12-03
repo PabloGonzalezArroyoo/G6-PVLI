@@ -96,7 +96,6 @@ export var listOfLevels = [
 		level2prob: 100,
 		level3prob: 0
 	},
-
 	// Level 9
 	{
 		x: 354,
@@ -109,7 +108,6 @@ export var listOfLevels = [
 		level1prob: 0,
 		level2prob: 40,
 		level3prob: 60
-		
 	},
 	// Level 10
 	{

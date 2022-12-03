@@ -66,9 +66,9 @@ export default class BattleScene extends Phaser.Scene {
 		this.enemiesData = data.level.enemies;
 		this.inventory = data.inventory;
 		this.inventoryBackup = data.inventory.getInventory();
-		this.level1prob = data.level1prob;
-		this.level2prob = data.level2prob;
-		this.level3prob = data.level3prob;
+		this.level1prob = data.level.level1prob;
+		this.level2prob = data.level.level2prob;
+		this.level3prob = data.level.level3prob;
 	}
 
 	/**
@@ -119,6 +119,28 @@ export default class BattleScene extends Phaser.Scene {
 
 		// Cuadro de Loot
 		this.load.image('lootBox', 'assets/scenes/battle/itemBox.png')
+		// Items
+		// Items
+		this.load.image('puño', 'assets/scenes/inventory/weapons/puño.png');
+		this.load.image('cimMad', 'assets/scenes/inventory/weapons/cimitarraMadera.png');
+		this.load.image('cimAc', 'assets/scenes/inventory/weapons/cimitarraAcero.png');
+		this.load.image('cimLoc', 'assets/scenes/inventory/weapons/cimitarraLoca.png');
+		this.load.image('dagOx', 'assets/scenes/inventory/weapons/dagaOxidada.png');
+		this.load.image('dagAf', 'assets/scenes/inventory/weapons/dagaAfilada.png');
+		this.load.image('dagEx', 'assets/scenes/inventory/weapons/dagaExcéntrica.png');
+		//this.load.image('alMb', 'assets/scenes/inventory/weapons/.png');
+		//this.load.image('alVrd', 'assets/scenes/inventory/weapons/.png');
+		//this.load.image('alDem', 'assets/scenes/inventory/weapons/.png');
+		this.load.image('ropIng', 'assets/scenes/inventory/weapons/roperaInglesa.png');
+		this.load.image('ropCst', 'assets/scenes/inventory/weapons/roperaCastellana.png');
+		this.load.image('ropAl', 'assets/scenes/inventory/weapons/roperaAlocada.png');
+		this.load.image('sacho', 'assets/scenes/inventory/weapons/sacho.png');
+		this.load.image('fouc', 'assets/scenes/inventory/weapons/fouciño.png');
+		this.load.image('guad', 'assets/scenes/inventory/weapons/guadañaExtravagante.png');
+		
+		this.load.image('bolla', 'assets/scenes/inventory/objects/bollaDePan.png');
+		this.load.image('caldo', 'assets/scenes/inventory/objects/caldoGallego.png');
+		this.load.image('polbo', 'assets/scenes/inventory/objects/pulpoALaGallega.png');
 	}
 
 	/**
@@ -193,10 +215,9 @@ export default class BattleScene extends Phaser.Scene {
 				if (this.once === false) this.EnableLoot();
 				// Cuando ya se haya hecho el loot
 				else {
-					// Espera del input
-					// ...
-					// Cambio de escena
-					this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory}, this.once = false);});
+					// Input
+					//this.input.keyboard.once();
+					this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory}, this.once = false)});
 				}
 			})
 		} 
@@ -425,36 +446,30 @@ export default class BattleScene extends Phaser.Scene {
 		this.actionBox.setVisible(false);
 		this.descriptionBox.setVisible(false);
 		this.lootBox.setVisible(true).setAlpha(0.85);
-		
+		this.dialogBox.setVisible(false);
+
 		// Looteo arma
 		let randomWeapon = Math.floor(Math.random() * 5);
 		let randomSet = Math.floor(Math.random() * 100);
-		let weaponLoot = false; let weaponImgID;
-		console.log('Random: ' + randomSet);
-		console.log('Level1Prob: ' + this.level1prob);
-		console.log('Level2Prob: ' + this.level2prob);
-		console.log('Level3Prob: ' + this.level3prob);
+		let weaponImgID; let weaponLoot = false; 
 
 		if (randomSet <= this.level1prob) {
-			console.log('Level1 Weapon');
-			if (this.inventory.weapons[weaponsLevel1[randomWeapon]].owned = false) {
-				weaponImgID = weaponsLevel1[randomWeapon];
+			weaponImgID = weaponsLevel1[randomWeapon];
+			if (this.inventory.weapons[weaponImgID].owned === false) {
 				this.inventory.weapons[weaponImgID].owned = true;
 				weaponLoot = true;
 			}
 		}
 		else if (randomSet <= this.level1prob + this.level2prob) {
-			console.log('Level2 Weapon');
-			if (this.inventory.weapons[weaponsLevel2[randomWeapon]].owned = false) {
-				weaponImgID = weaponsLevel2[randomWeapon];
+			weaponImgID = weaponsLevel2[randomWeapon];
+			if (this.inventory.weapons[weaponImgID].owned === false) {
 				this.inventory.weapons[weaponImgID].owned = true;
 				weaponLoot = true;
 			}
 		}
 		else {
-			console.log('Level3 Weapon');
-			if (this.inventory.weapons[weaponsLevel3[randomWeapon]].owned = false) {
-				weaponImgID = weaponsLevel3[randomWeapon];
+			weaponImgID = weaponsLevel3[randomWeapon];
+			if (this.inventory.weapons[weaponImgID].owned === false) {
 				this.inventory.weapons[weaponImgID].owned = true;
 				weaponLoot = true;
 			}
@@ -464,20 +479,32 @@ export default class BattleScene extends Phaser.Scene {
 		let randomFood = Math.floor(Math.random() * 3);
 		let randomQuantity = Math.floor(Math.random() * 10);
 		let foodImgID = listOfItems.healths[randomFood].imgID;
-		this.inventory.healths[foodImgID].amount = randomQuantity;
+		this.inventory.healths[foodImgID].amount += randomQuantity + 1;
 
-		// Looteo
+		// Looteo parte visual
+		const width = this.scale.width;
+		const height = this.scale.height;
+		const itemQuantity = this.inventory.healths[foodImgID].amount;
+		var text;
 		// Si no me ha tocado arma
 		if (!weaponLoot) {
-			console.log("COMIDA");
-			this.add.image(this.scale.width/2, this.scale.height/2, foodImgID).setScale(6,6);
+			text = '¡Has conseguido ' + listOfItems.healths[randomFood].key + ' !';
+			this.add.image(width/2,height/2, foodImgID).setScale(6,6);
 		}
 		// Si me ha tocado arma
 		else {
-			console.log("ARMA Y COMIDA");
-			this.add.image(this.scale.width/3, this.scale.height/2, weaponImgID).setScale(4,4);
-			this.add.image(this.scale*2/3, this.scale.height/2, foodImgID).setScale(4,4);
+			text = '¡Has conseguido ' + this.inventory.weapons[weaponImgID].weapon.name + ' y \n' + itemQuantity + ' de ' + listOfItems.healths[randomFood].key + ' !';
+			this.add.image(width/3, height/2, weaponImgID).setScale(5,5);
+			this.add.image(width/1.5, height/2, foodImgID).setScale(5,5);
+			if (itemQuantity > 1) this.add.text(width/1.5 + 20, height/2 + 20, itemQuantity, {}).setScale(3,3);
 		}
+		
+		//this.dialogBox= new DialogBox(this, 200, height/2 - 200, 700);
+		//this.dialogBox.clearText();
+		//this.dialogBox.setTextToDisplay(text);
+		//this.dialogBox.printText();
+		this.add.text(175, height/2 - 200, text, {fontFamily: 'Silkscreen' }).setScale(1.5, 1.5);
+
 		this.once = true;
 	}
 }
