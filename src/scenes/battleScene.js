@@ -60,7 +60,6 @@ export default class BattleScene extends Phaser.Scene {
 		this.loot = data.level.loot;
 		this.inventory = data.inventory;
 		this.inventoryBackup = data.inventory.getInventory();
-        console.log(this.inventoryBackup);
 	}
 
 	/**
@@ -183,6 +182,7 @@ export default class BattleScene extends Phaser.Scene {
 			this.previousLetterTime = 0;
 		} 
 		if (levelFailed(this.player)){
+            this.emitter.destroy();
 			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
 			this.time.delayedCall(2000,()=>{this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
 		} 
@@ -326,7 +326,7 @@ export default class BattleScene extends Phaser.Scene {
 				// Si quedan enemigos se actualizan tambien
 				if (index > this.enemies.length) this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects(index)})
 				// Si no quedan se pasa al siguiente turno
-				else this.emitter.once('finishTurn', () => {this.EnableButtons();});});			// Evento que vuelve a crear los botones
+				else this.emitter.once('finishTurn', () => {console.log("1");this.EnableButtons();});});			// Evento que vuelve a crear los botones
 		}
 		else {
 			this.enemies[index].updateTurn();
@@ -401,6 +401,7 @@ export default class BattleScene extends Phaser.Scene {
 		}
 	}
 
+	// Comprueba si hay enemigos que matar y pasa al siguiente turno o termina la partida si no quedan emeigos
 	checkEnemies(){
 		for (var i = 0; i < this.enemies.length; i++){
 			if (this.enemies[i].healthController.getCurrentHealth() === 0){
@@ -408,8 +409,8 @@ export default class BattleScene extends Phaser.Scene {
 				this.enemies.splice(i , 1);
 			}
 		}
-		console.log(this.enemies);
 		if(this.enemies.length === 0){
+			this.emitter.destroy();
 			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
 			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
 		}
