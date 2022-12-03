@@ -286,7 +286,7 @@ export default class BattleScene extends Phaser.Scene {
 				this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
 				// Loot
 				this.EnableLoot();
-        this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
+        		this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
 			}
 			else this.EnemyTurn()}); 			
 	}
@@ -459,8 +459,6 @@ export default class BattleScene extends Phaser.Scene {
 		this.DisableButtons();
 		this.dialogBox.clearText();
 		this.dialogBox.setVisible(false);
-		this.actionBox.setVisible(false);
-		this.descriptionBox.setVisible(false);
 		this.lootBox.setVisible(true).setAlpha(0.85);
 
 		// Looteo arma
