@@ -343,13 +343,13 @@ export default class BattleScene extends Phaser.Scene {
 				// Si quedan enemigos se actualizan tambien
 				if (index > this.enemies.length) this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects(index);})
 				// Si no quedan se pasa al siguiente turno
-				else this.emitter.once('finishTurn', () => {this.EnableButtons();});});			// Evento que vuelve a crear los botones
+				else this.emitter.once('finishTurn', () => {this.CheckFinalWeapon();});});			// Evento que vuelve a crear los botones
 		}
 		else {
 			this.enemies[index].updateTurn();
 			index++;
 			if (index < this.enemies.length) this.UpdateEnemyEffects(index);
-			else this.EnableButtons();
+			else this.CheckFinalWeapon();
 		}
 	}
 
@@ -416,5 +416,32 @@ export default class BattleScene extends Phaser.Scene {
 			if(item.imgID === 'puño')
 				this.DisableQueLocura(true);
 		}
+	}
+
+	CheckFinalWeapon() {
+		// Si no se tiene ya el asta
+		if (this.player.inventory.getEquipedWeapon().imgID !== 'asta') {
+			// Si está Drake en la batalla
+			if (this.enemies[0].animator.spritesheet === 'ensignDrake') {
+				// Si la vida de Drake es menos de la mitad
+				if (this.enemies[0].healthController.getCurrentHealth() < this.enemies[0].healthController.getMaxHealth() / 2) {
+					// Menú de recibir loot con el arma final
+					
+					// TO DO (se necesita el menu de loot aun no implementado)
+
+					// Poner asta como el arma equipada
+					this.player.inventory.setEquipedWeapon('asta');
+					// Texto diciendo que se ha encontrado el arma
+					this.dialogBox.clearText();
+					this.dialogBox.setTextToDisplay('Maria Pita ha encontrado un asta de bandera y se la ha equipado.');	// Enviar el nuevo texto
+					this.emitter.once('finishTexting', () => {
+						this.EnableButtons();
+					});
+				}
+				else this.EnableButtons();
+			}
+			else this.EnableButtons();
+		}
+		else this.EnableButtons();
 	}
 }
