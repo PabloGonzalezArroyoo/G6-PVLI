@@ -60,6 +60,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.loot = data.level.loot;
 		this.inventory = data.inventory;
 		this.inventoryBackup = data.inventory.getInventory();
+        console.log(this.inventoryBackup);
 	}
 
 	/**
@@ -180,10 +181,6 @@ export default class BattleScene extends Phaser.Scene {
 		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){
 			this.dialogBox.write();
 			this.previousLetterTime = 0;
-		}
-		if (levelCompleted(this.enemies)){
-			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
-			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
 		} 
 		if (levelFailed(this.player)){
 			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
@@ -256,7 +253,7 @@ export default class BattleScene extends Phaser.Scene {
 				this.emitter.once('finishTexting', () => {this.player.quelocura(this.enemies, 0)});
 				break;
 		}	
-		this.emitter.once('finishTurn', () => {if (!levelCompleted(this.enemies) && !levelFailed(this.player)) this.EnemyTurn()}); // Evento para que el enemigo ataque				
+		this.emitter.once('finishTurn', this.checkEnemies, this);			
 	}
 
 	// Metodo que efectua la accion de los enemigos cada turno
@@ -401,6 +398,23 @@ export default class BattleScene extends Phaser.Scene {
 			this.PlayerTurn('object', item);
 			if(item.imgID === 'puño')
 				this.DisableQueLocura(true);
+		}
+	}
+
+	checkEnemies(){
+		for (var i = 0; i < this.enemies.length; i++){
+			if (this.enemies[i].healthController.getCurrentHealth() === 0){
+				this.enemies[i].destroy(); 
+				this.enemies.splice(i , 1);
+			}
+		}
+		console.log(this.enemies);
+		if(this.enemies.length === 0){
+			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
+			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
+		}
+		else{
+			if(!levelFailed(this.player)) this.EnemyTurn(); // Evento para que el enemigo ataque	
 		}
 	}
 }

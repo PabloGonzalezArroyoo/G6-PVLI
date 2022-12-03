@@ -27,6 +27,7 @@ export default class GameOver extends Phaser.Scene {
             this.scene.start('levelMenuScene', {inventory: this.inventory});                             // Esta funcion sirve para volver a la pantalla de titulo
         });
         this.input.keyboard.once('keydown-R', () => {
+            console.log(this.inventory);
             this.level.loadLevel(this, this.inventory);                                 // Esta funcion sirve para reintentar el nivel
         });
     }
