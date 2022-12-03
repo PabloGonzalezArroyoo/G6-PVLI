@@ -51,8 +51,6 @@ export default class BattleScene extends Phaser.Scene {
 
 		this.enemies = [];
 		this.selectedEnemy= null;
-		this.notOwnedWeapons = [];
-		this.once = false;
 	}
 
 	/**
@@ -92,7 +90,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('stinkyPirate', 'assets/characters/enemies/stinkyPirate.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('scurviedSailor', 'assets/characters/enemies/scurviedSailor.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('experiencedBuccaneer', 'assets/characters/enemies/experiencedBuccaneer.png', {frameWidth: 32, frameHeight:32});
-		this.load.spritesheet('alienatedCosair', 'assets/characters/enemies/alienatedCorsair.png', {frameWidth: 32, frameHeight:32});
+		this.load.spritesheet('alienatedCorsair', 'assets/characters/enemies/alienatedCorsair.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('ensignDrake', 'assets/characters/enemies/ensignDrake.png', {frameWidth: 32, frameHeight:32});
 		// Descripcion
 		this.load.image('description', 'assets/scenes/battle/dialogBox.png');
@@ -140,6 +138,9 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.image('bolla', 'assets/scenes/inventory/objects/bollaDePan.png');
 		this.load.image('caldo', 'assets/scenes/inventory/objects/caldoGallego.png');
 		this.load.image('polbo', 'assets/scenes/inventory/objects/pulpoALaGallega.png');
+    
+		// Transición
+		this.load.spritesheet('fadeIn', 'assets/scenes/transitions/fadeInBattleTransition.png', {frameWidth: 1024, frameHeight: 768});
 	}
 
 	/**
@@ -147,22 +148,21 @@ export default class BattleScene extends Phaser.Scene {
 	*/
 	create() {
 		// Fondo
-		var background = this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
+		this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
 		// Maria Pita
 		this.player = new Player(this, 250, 475, this.inventory);
     
 		this.enemies = []; //ARREGLO RAPIDO: quitar cuando se implemente una funcion para cuando muere un enemigo
 		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
-		//console.log(this.enemies);
 		// Descripcion
-		this.descriptionBox = this.add.image(0, 0, 'description').setOrigin(0, 0);
+		this.add.image(0, 0, 'description').setOrigin(0, 0);
 
 		// Cuadro de dialogo
 		this.dialogBox = new DialogBox(this, 545, 565, 450); 
 
 		// Acciones
-		this.actionBox = this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
+		this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
 		
 		// Loot
 		const width = this.scale.width;
@@ -172,9 +172,6 @@ export default class BattleScene extends Phaser.Scene {
 		// Indicadores de daño
 		this.indicator = new Indicator(this, 300, 565,
 			{dmgInd: 'dmgInd', healInd: 'healInd', defInd: 'defInd', wpInd: 'wpInd', psnInd: 'psnInd', bleedInd: 'bleedInd'});
-
-		// Interactivo
-		const self = this;
     
 		this.keyboardInput = new KeyboardInput(this);
 		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('attack')}),
@@ -195,6 +192,16 @@ export default class BattleScene extends Phaser.Scene {
 		this.UpdateQueLocura(0);
     
     	this.emitter = EventDispatcher.getInstance();
+
+		// Transición
+		// FadeIn
+		this.anims.create({
+			key: 'transition',
+			frames: this.anims.generateFrameNumbers('fadeIn', {start: 0, end: 15}),
+			frameRate: 18,
+			repeat: 0
+		});
+		this.add.sprite(1024, 768, 'fadeIn').setOrigin(1, 1).play('transition');
 	}
 
 	update(t,dt) {
@@ -207,23 +214,6 @@ export default class BattleScene extends Phaser.Scene {
 			this.dialogBox.write();
 			this.previousLetterTime = 0;
 		}
-		if (levelCompleted(this.enemies)){
-			// Cuando termine el tween del ultimo enemigo en pie aparece el loot conseguido
-			this.selectedEnemy.healthController.colorBarTween.once('complete', ()=>{
-				// Solo lo queremos realizar una vez
-				if (this.once === false) this.EnableLoot();
-				// Cuando ya se haya hecho el loot
-				else {
-					// Input
-					//this.input.keyboard.once();
-					this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory}, this.once = false)});
-				}
-			})
-		} 
-		if (levelFailed(this.player)){
-			this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
-			this.time.delayedCall(2000,()=>{this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
-		} 
 	}
 
 	// Metodo que efectua la accion del jugador cada turno
@@ -246,7 +236,7 @@ export default class BattleScene extends Phaser.Scene {
 					 	  	' con ' + this.player.inventory.getEquipedWeapon().name);
 						  	this.emitter.once('finishTexting', () => {
 								this.player.attack(this.selectedEnemy);
-              					this.indicator.updateInd("player", "damage", this.selectedEnemy.getPosition(), this.player.getAttackWeapon()); // Actualizar indicador
+              					this.indicator.updateInd("player", "damage", this.selectedEnemy.getPosition(), this.player.getDamage()); // Actualizar indicador
 								this.enemies.forEach(Element => {Element.animator.disableInteractive();});
 							});
 						});	
@@ -256,8 +246,8 @@ export default class BattleScene extends Phaser.Scene {
 					this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
 					' con ' + this.player.inventory.getEquipedWeapon().name);
 					this.emitter.once('finishTexting', () => {
-						this.player.attack(this.selectedEnemy);
-            			this.indicator.updateInd("player", "damage", this.selectedEnemy.getPosition(), this.player.getAttackWeapon()); // Actualizar indicador
+						this.player.attack(this.enemies[0]);
+            			this.indicator.updateInd("player", "damage", this.enemies[0].getPosition(), this.player.getDamage()); // Actualizar indicador
 					});
 				}
 				break;			
@@ -291,7 +281,14 @@ export default class BattleScene extends Phaser.Scene {
 				this.emitter.once('finishTexting', () => {this.player.quelocura(this.enemies, 0)});
 				break;
 		}	
-		this.emitter.once('finishTurn', () => {if (!levelCompleted(this.enemies) && !levelFailed(this.player)) this.EnemyTurn()}); // Evento para que el enemigo ataque				
+		this.emitter.once('finishTurn', () => {				// Evento para que el enemigo ataque	
+			if (levelCompleted(this.enemies)){
+				this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
+				// Loot
+				this.EnableLoot();
+        this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
+			}
+			else this.EnemyTurn()}); 			
 	}
 
 	// Metodo que efectua la accion de los enemigos cada turno
@@ -310,7 +307,12 @@ export default class BattleScene extends Phaser.Scene {
 				// Si el ataque no ha sido con habilidad pasar al siguiente turno
 				if (typeof attack == 'number'){
 					index++;
-					if(index < this.enemies.length) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} 	//Se llama al ataque de los demas enemigos
+					
+					if (levelFailed(this.player)) {
+						this.dialogBox.clearText();																	// Borrar texto previo
+						this.time.delayedCall(2000,()=>{this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
+					}
+					else if(index < this.enemies.length) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} 	//Se llama al ataque de los demas enemigos
 					else this.emitter.once('finishTurn', () => {this.UpdatePlayerEffects();})							// Evento que actualiza los estados del jugador en el turno
 				}
 				
@@ -320,7 +322,11 @@ export default class BattleScene extends Phaser.Scene {
 					this.dialogBox.setTextToDisplay('Enemigo ' + attack[1] + ' a Maria Pita');
 					this.emitter.once('finishTexting', () => {
 						index++;
-						if(index < this.enemies.length) this.EnemyTurn(index); 	//Se llama al ataque de los demas enemigos
+						if (levelFailed(this.player)) {
+							this.dialogBox.clearText();																	// Borrar texto previo
+							this.time.delayedCall(2000,()=>{this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
+						}
+						else if (index < this.enemies.length) this.EnemyTurn(index); 	//Se llama al ataque de los demas enemigos
 						else this.UpdatePlayerEffects();						// Evento que actualiza los estados del jugador en el turno
 					});
 				}});
@@ -342,7 +348,11 @@ export default class BattleScene extends Phaser.Scene {
 			this.emitter.once('finishTexting', () => {
 				this.player.updateTurn();
 				this.indicator.updateInd("player", "poison", this.player.getPosition(), this.player.getBleedDamage());
-				this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects()})});
+				if (levelFailed(this.player)) {
+					this.dialogBox.clearText();																	// Borrar texto previo
+					this.time.delayedCall(2000,()=>{this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
+				}
+				else this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects()})});
 		}
 		else {
 			this.player.updateTurn();
@@ -361,16 +371,22 @@ export default class BattleScene extends Phaser.Scene {
 				this.enemies[index].updateTurn();
 				this.indicator.updateInd("player", "bleed", this.enemies[index].getPosition(), this.enemies[index].getBleedDamage()); // Actualizar indicador
 				index++;
+				if (levelCompleted(this.enemies)){
+					this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
+					// Loot
+				  this.EnableLoot();
+          this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
+				}
 				// Si quedan enemigos se actualizan tambien
-				if (index > this.enemies.length) this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects(index)})
+				if (index > this.enemies.length) this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects(index);})
 				// Si no quedan se pasa al siguiente turno
-				else this.emitter.once('finishTurn', () => {this.EnableButtons();});});			// Evento que vuelve a crear los botones
+				else this.emitter.once('finishTurn', () => {this.CheckFinalWeapon();});});			// Evento que vuelve a crear los botones
 		}
 		else {
 			this.enemies[index].updateTurn();
 			index++;
 			if (index < this.enemies.length) this.UpdateEnemyEffects(index);
-			else this.EnableButtons();
+			else this.CheckFinalWeapon();
 		}
 	}
 
@@ -493,5 +509,32 @@ export default class BattleScene extends Phaser.Scene {
 		lootText.printText();
 
 		this.once = true;
+  }
+  
+	CheckFinalWeapon() {
+		// Si no se tiene ya el asta
+		if (this.player.inventory.getEquipedWeapon().imgID !== 'asta') {
+			// Si está Drake en la batalla
+			if (this.enemies[0].animator.spritesheet === 'ensignDrake') {
+				// Si la vida de Drake es menos de la mitad
+				if (this.enemies[0].healthController.getCurrentHealth() < this.enemies[0].healthController.getMaxHealth() / 2) {
+					// Menú de recibir loot con el arma final
+					
+					// TO DO (se necesita el menu de loot aun no implementado)
+
+					// Poner asta como el arma equipada
+					this.player.inventory.setEquipedWeapon('asta');
+					// Texto diciendo que se ha encontrado el arma
+					this.dialogBox.clearText();
+					this.dialogBox.setTextToDisplay('Maria Pita ha encontrado un asta de bandera y se la ha equipado.');	// Enviar el nuevo texto
+					this.emitter.once('finishTexting', () => {
+						this.EnableButtons();
+					});
+				}
+				else this.EnableButtons();
+			}
+			else this.EnableButtons();
+		}
+		else this.EnableButtons();
 	}
 }

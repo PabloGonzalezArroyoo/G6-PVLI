@@ -50,10 +50,11 @@ export default class InventoryScene extends Phaser.Scene {
 		this.load.image('sacho', 'assets/scenes/inventory/weapons/sacho.png');
 		this.load.image('fouc', 'assets/scenes/inventory/weapons/fouciño.png');
 		this.load.image('guad', 'assets/scenes/inventory/weapons/guadañaExtravagante.png');
-		
 		this.load.image('bolla', 'assets/scenes/inventory/objects/bollaDePan.png');
 		this.load.image('caldo', 'assets/scenes/inventory/objects/caldoGallego.png');
 		this.load.image('polbo', 'assets/scenes/inventory/objects/pulpoALaGallega.png');
+		this.load.image('asta', 'assets/scenes/inventory/weapons/astaBandera.png');
+		this.load.spritesheet('selected', 'assets/scenes/inventory/selectedItem.png', {frameWidth: 32, frameHeight:32});
 	}
 
 	/**
@@ -61,6 +62,10 @@ export default class InventoryScene extends Phaser.Scene {
 	*/
 	create() {
 		this.emitter = EventDispatcher.getInstance();
+
+
+		this.inventory.addWeapon('fouc');
+
 
 		// Constantes
 		const width = this.scale.width;
@@ -77,27 +82,36 @@ export default class InventoryScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 
 		// ARMA EQUIPADA
-		new Button(this, 217, 325, this.inventory.getEquipedWeapon().imgID, 0, 0, 0, this.keyboardInput, function(){}).setScale(8, 8);
+		this.add.image(217, 325, this.inventory.getEquipedWeapon().imgID).setScale(8, 8);
+		this.equipedWeaponButton = new Button(this, 217, 325, 'selected', 0, 1, 2, this.keyboardInput, () => {if (this.inventory.getEquipedWeapon().imgID !== 'puño' && this.inventory.getEquipedWeapon().imgID !== 'asta') this.escape(this.inventory.getWeapons()['puño'].weapon)}, ()=>{this.mostrarDescripcion(this.inventory.getEquipedWeapon());}).setScale(8, 8);
+
+		this.weaponButtons = [];
+		for (let i = 0; i < 5; i++) this.weaponButtons[i] = [];
 
 		let i = 0;
 		// ARMAS
 		Object.values(armas).forEach(val => {
 			let itemID = val.weapon.imgID;
 
-			if(val.owned){
-				let x = i % 5 * 102 + width / 2 - 35;
-				let y;
+			if(itemID != 'puño' && itemID != 'asta'){
+				let x = val.i * 102 + width / 2 - 35;
+				let y = val.j * 60 + 140;/*
 				switch (true) {
 					case i >= 5 && i < 10: y = 1; break;
 					case i >= 10: y = 2; break;
 					default: y = 0; break;
 				}
-				y = y * 60 + 140;
-
-				new Button(this, x , y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(val.weapon)}, ()=>{this.mostrarDescripcion(val.weapon);},/*()=>{this.dialogBox.clearText();console.log("hola");}*/).setScale(1.5,1.5);
+				y = y * 60 + 140;*/
+				if (val.owned) this.add.image(x, y, itemID).setScale(1.5,1.5);
+				this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput, () => {
+					if (val.owned && this.inventory.getEquipedWeapon().imgID !== itemID && this.inventory.getEquipedWeapon().imgID !== 'asta') 
+						this.escape(val.weapon);
+				}, ()=>{if (val.owned) this.mostrarDescripcion(val.weapon);}).setScale(1.5,1.5);
 				i++;
 			}
 		});
+
+		this.foodButtons = [];
 
 		i = 0;
 		// COMIDA
@@ -105,12 +119,11 @@ export default class InventoryScene extends Phaser.Scene {
 			let itemID = val.item.imgID;
 			let itemQuantity = val.amount;
 			
-			if(itemQuantity > 0){
-				let x = i * 165 + width / 2; let y = 475;
-				new Button(this, x, y, itemID, 0, 0, 0, this.keyboardInput, () => {this.escape(val.item)}, ()=>{this.mostrarDescripcion(val.item);},/*()=>{this.dialogBox.clearText();}*/).setScale(3,3);
-				if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
-				i++;
-			}
+			let x = val.i * 165 + width / 2; let y = 475;
+			if (val.amount) this.add.image(x, y, itemID).setScale(3, 3);
+			this.foodButtons[val.i] = new Button(this, x, y, 'selected', 0, 1, 2, this.keyboardInput, () => {if (val.amount) this.escape(val.item)}, ()=>{if (val.amount) this.mostrarDescripcion(val.item);}).setScale(3,3);
+			if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
+			i++;
 		});
 
 		// TECLAS
@@ -132,8 +145,9 @@ export default class InventoryScene extends Phaser.Scene {
 		//});
 
 		// Pintamos botón de salir
-		var inventoryButton = new Button(this, width - 50, 46, 'inventory', 2, 0, 1, this.keyboardInput, () => {this.escape()}).setScale(3, 3);
-		this.keyboardInput.setStartButton(inventoryButton);
+		this.inventoryButton = new Button(this, width - 50, 46, 'inventory', 2, 0, 1, this.keyboardInput, () => {this.escape()}).setScale(3, 3);
+		this.keyboardInput.setStartButton(this.equipedWeaponButton);
+		this.inicializeButtonConnections()
 		// Al pulsar la tecla T se sale de la escena de inventario
 		this.input.keyboard.once('keydown-T', () => { this.escape(); });
 		this.dialogBox= new DialogBox(this, 70, 620, 850);
@@ -147,13 +161,32 @@ export default class InventoryScene extends Phaser.Scene {
 
 	update(t,dt) {
 		//console.log(this.game.input.mousePointer.x+" "+this.game.input.mousePointer.y)
-
+		this.keyboardInput.processInput();
 	}
 
 	mostrarDescripcion(item) {
 			this.dialogBox.clearText();
 			this.dialogBox.setTextToDisplay(item.getDesc());
 			this.dialogBox.printText();
-			console.log(item.getDesc());
+			//console.log(item.getDesc());
+	}
+
+	inicializeButtonConnections(){
+		// Salir
+		this.inventoryButton.setAdjacents(null, this.weaponButtons[4][0], this.weaponButtons[4][0], null);
+		// Armas
+		this.equipedWeaponButton.setAdjacents(null, null, null, this.weaponButtons[0][0]);
+		for (let i = 0; i < 3; i++) this.weaponButtons[0][i].setAdjacents(this.weaponButtons[0][i-1], this.weaponButtons[0][i+1], this.equipedWeaponButton, this.weaponButtons[1][i]);
+		for (let i = 0; i < 3; i++)
+			for (let j = 1; j < 4; j++)
+				this.weaponButtons[j][i].setAdjacents(this.weaponButtons[j][i-1], this.weaponButtons[j][i+1], this.weaponButtons[j - 1][i], this.weaponButtons[j + 1][i]);
+		for (let i = 0; i < 3; i++) this.weaponButtons[4][i].setAdjacents(this.weaponButtons[4][i-1], this.weaponButtons[4][i+1], this.weaponButtons[3][i], null);
+		this.weaponButtons[4][0].setAdjacent(this.inventoryButton, 'up');
+		this.weaponButtons[4][0].setAdjacent(this.inventoryButton, 'right');
+		for (let i = 0; i < 5; i++) this.weaponButtons[i][2].setAdjacent(this.foodButtons[Math.floor(i/2)], 'down');
+		// Comida
+		this.foodButtons[0].setAdjacents(this.weaponButtons[0][2], null, this.equipedWeaponButton, this.foodButtons[1]);
+		this.foodButtons[1].setAdjacents(this.weaponButtons[2][2], null, this.foodButtons[0], this.foodButtons[2]);
+		this.foodButtons[2].setAdjacents(this.weaponButtons[4][2], null, this.foodButtons[1], null);
 	}
 }

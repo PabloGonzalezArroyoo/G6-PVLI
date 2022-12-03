@@ -6,6 +6,6 @@ export var listOfEnemies = {
     stinkyPirate: function(scene, x, y){return new StinkyPirate(scene, x, y);},
     scurviedSailor: function(scene, x, y){return new ScurviedSailor(scene, x, y);},
     experiencedBuccaneer: function(scene, x, y){return new ExperiencedBuccaneer(scene, x, y);},
-    alienatedCosair: function(scene, x, y){return new AlienatedCosair(scene, x, y);},
+    alienatedCorsair: function(scene, x, y){return new AlienatedCorsair(scene, x, y);},
     ensignDrake: function(scene, x, y){return new EnsignDrake(scene, x, y);}
 };

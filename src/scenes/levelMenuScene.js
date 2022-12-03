@@ -6,10 +6,10 @@ import { KeyboardInput } from '../input/keyboardInput.js';
 import { Button } from '../input/button.js';
 import {listOfItems} from '../data/listOfItems.js';
 import {listOfLevels} from '../data/listOfLevels.js';
+import EventDispatcher from '../combat/eventDispatcher.js';
 
 // Array con todos los niveles del juego
-const levels = [
-				new Level(listOfLevels[0]),
+const levels = [new Level(listOfLevels[0]),
 				new Level(listOfLevels[1]), // Nivel 1
 				new Level(listOfLevels[2]),			// ... 2
 				new Level(listOfLevels[3]),			// 3
@@ -27,7 +27,7 @@ const levels = [
 				
 				// Especificar los niveles que se desbloquean tras completar cada nivel
 				levels[0].setNextLevels([levels[1]]);
-				levels[1].setNextLevels([levels[2], levels[3]]);
+				levels[1].setNextLevels([levels[2]]);
 				levels[2].setNextLevels([levels[3], levels[4]]);
 				levels[3].setNextLevels(null);
 				levels[4].setNextLevels([levels[5], levels[6], levels[7]]);
@@ -38,18 +38,6 @@ const levels = [
 				levels[9].setNextLevels([levels[10], levels[11]]);
 				levels[10].setNextLevels(null);
 				levels[11].setNextLevels(null);
-
-				/*
-				levels[2].setNextLevels(null);
-				levels[3].setNextLevels([levels[4], levels[5], levels[6]]);
-				levels[4].setNextLevels(null);
-				levels[5].setNextLevels(null);
-				levels[6].setNextLevels([levels[7], levels[8]]);
-				levels[7].setNextLevels(null);
-				levels[8].setNextLevels([levels[9], levels[10]]);
-				levels[9].setNextLevels(null);
-				levels[10].setNextLevels([levels[11]]);
-				levels[11].setNextLevels(null);*/
 
 /**
  * Escena de Menú de Niveles.
@@ -63,6 +51,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 	constructor() {
 		super({ key: 'levelMenuScene' });
+
+        this.emitter = EventDispatcher.getInstance();
 	}
 
 	/**
@@ -92,14 +82,15 @@ export default class LevelMenuScene extends Phaser.Scene {
 		// Imagen de botones
 		this.load.spritesheet('level', 'assets/scenes/levelsMenu/levelsButtons.png', {frameWidth: 51, frameHeight: 51});
 		this.load.spritesheet('inventory', 'assets/scenes/levelsMenu/inventoryButtons.png', {frameWidth: 30, frameHeight: 18});
+
+		// Transición
+		this.load.spritesheet('fadeOut', 'assets/scenes/transitions/fadeOutLevelsMenuTransition.png', {frameWidth: 1024, frameHeight: 768});
 	}
 
 	/**
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-
-		const self = this;
 		const camera = this.cameras.main;
 
 		// Fade In
@@ -109,11 +100,11 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.anims.create({
 			key: 'waves',
 			frames: this.anims.generateFrameNumbers('waves', {start: 0, end: 9}),
-			frameRate: 10,
+			frameRate: 12,
 			repeat: -1
 		});
 		this.add.sprite(1024, 768).setOrigin(1,1).play('waves');
-		let bg = this.add.image(0,0, 'levelMap').setOrigin(0, 0);
+		this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 
 		this.keyboardInput = new KeyboardInput(this);
 		// Botón de inventario
@@ -128,31 +119,31 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.levelButtons = [];
 		levels.forEach(level => {
 			this.levelButtons[i] = new Button(this, level.x, level.y, level.spriteSheet, level.defaultFrame, level.frameOnOver, level.frameOnDown, this.keyboardInput, () => {
-				level.loadLevel(this, this.inventory);
+				level.loadLevel(this.inventory);
 			});
       		i++;
 		});
 		this.inicializeLevelButtonConnections();
 
 		this.keyboardInput.setStartButton(this.levelButtons[0]);
-		
-		//Ejemplo: Al pulsar la flecha izquierda
-		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
-		
-		//Ejemplo: Al pulsar el enter
-		//Enter.on('down', function () {/*Marca el botón*/ });
-		//Enter.on('up', function () {
-			//this.scene.start('battleScene'); //Cambiamos a la escena de combate correspondiente al nivel seleccionado
-		//});
-		//Esc.on('down', function () {
-			//this.scene.start('optionsScene');//Se abre el menu de opciones
-		//});
-    
-		const width = this.scale.width;
-    	const height = this.scale.height;
+
+		// Transición y elección de nivel
+		// FadeOut
+		this.anims.create({
+			key: 'fOut',
+			frames: this.anims.generateFrameNumbers('fadeOut', {start: 0, end: 5}),
+			frameRate: 17,
+			repeat: 0
+		});
+		// Recoger el envento para cargar el siguiente nivel
+		this.emitter.on('levelSelected', (levelData) => {
+			this.add.sprite(1024, 768, 'fadeOut').setOrigin(1, 1).play('fOut');
+			this.time.delayedCall(1000, () => {this.scene.start('battleScene', levelData)});
+		});
 	}
+
 	update() {
-		this.keyboardInput.processInput();  
+		this.keyboardInput.processInput(); 
 	}
 
 	// Inicializa a qué botón te lleva pulsar cada dirección desde otro botón
