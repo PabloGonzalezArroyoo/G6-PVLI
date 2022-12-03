@@ -134,6 +134,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.image('sacho', 'assets/scenes/inventory/weapons/sacho.png');
 		this.load.image('fouc', 'assets/scenes/inventory/weapons/fouciño.png');
 		this.load.image('guad', 'assets/scenes/inventory/weapons/guadañaExtravagante.png');
+		this.load.image('asta', 'assets/scenes/inventory/weapons/astaBandera.png');
 		
 		this.load.image('bolla', 'assets/scenes/inventory/objects/bollaDePan.png');
 		this.load.image('caldo', 'assets/scenes/inventory/objects/caldoGallego.png');
@@ -505,8 +506,6 @@ export default class BattleScene extends Phaser.Scene {
 		let lootText = new DialogBox(this, 200, height/2 - 200, 750);
 		lootText.setTextToDisplay(text);
 		lootText.printText();
-
-		this.once = true;
   }
   
 	CheckFinalWeapon() {
@@ -516,17 +515,29 @@ export default class BattleScene extends Phaser.Scene {
 			if (this.enemies[0].animator.spritesheet === 'ensignDrake') {
 				// Si la vida de Drake es menos de la mitad
 				if (this.enemies[0].healthController.getCurrentHealth() < this.enemies[0].healthController.getMaxHealth() / 2) {
-					// Menú de recibir loot con el arma final
-					
-					// TO DO (se necesita el menu de loot aun no implementado)
-
 					// Poner asta como el arma equipada
 					this.player.inventory.setEquipedWeapon('asta');
-					// Texto diciendo que se ha encontrado el arma
-					this.dialogBox.clearText();
-					this.dialogBox.setTextToDisplay('Maria Pita ha encontrado un asta de bandera y se la ha equipado.');	// Enviar el nuevo texto
-					this.emitter.once('finishTexting', () => {
-						this.EnableButtons();
+					
+					// Menú de recibir loot con el arma final
+					this.lootBox.setVisible(true).setAlpha(0.85);
+					const width = this.scale.width;
+					const height = this.scale.height;
+					let lootText = new DialogBox(this, 200, height/2 - 200, 750);
+					lootText.setTextToDisplay('Maria Pita ha encontrado un asta de bandera.');
+					lootText.printText();
+					var item = this.add.image(width/2,height/2, this.player.inventory.getEquipedWeapon().imgID).setScale(6,6);
+
+					this.time.delayedCall(3000,()=>{
+						this.lootBox.setVisible(false);
+						lootText.setVisible(false);
+						item.setVisible(false);
+
+						// Texto diciendo que se ha encontrado el arma
+						this.dialogBox.clearText();
+						this.dialogBox.setTextToDisplay('Maria Pita se ha equipado el asta de la bandera.');	// Enviar el nuevo texto
+						this.emitter.once('finishTexting', () => {
+							this.EnableButtons();
+						});
 					});
 				}
 				else this.EnableButtons();
