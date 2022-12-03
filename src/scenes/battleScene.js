@@ -10,6 +10,8 @@ import EventDispatcher from '../combat/eventDispatcher.js';
 import {listOfEnemies} from '../data/listOfEnemies.js';
 import DamageInd from '../animations/indicator.js';
 import Indicator from '../animations/indicator.js';
+import { WeaponItem } from '../inventory/item.js';
+import { listOfItems, weaponsLevel1, weaponsLevel2, weaponsLevel3 } from '../data/listOfItems.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
 const levelCompleted = function(enemies){
@@ -41,12 +43,14 @@ export default class BattleScene extends Phaser.Scene {
 	constructor() {
 		super({ key: 'battleScene' });
 		this.dialogBox;
+		this.descriptionBox;
+		this.actionBox;
+		this.lootBox;
 		this.indicator;
 		this.previousLetterTime = 0;
 
-		this.level;
 		this.enemies = [];
-		this.loot = [];
+		this.selectedEnemy= null;
 	}
 
 	/**
@@ -57,9 +61,11 @@ export default class BattleScene extends Phaser.Scene {
 	init(data) {
 		this.level = data.level;
 		this.enemiesData = data.level.enemies;
-		this.loot = data.level.loot;
 		this.inventory = data.inventory;
 		this.inventoryBackup = data.inventory.getInventory();
+		this.level1prob = data.level.level1prob;
+		this.level2prob = data.level.level2prob;
+		this.level3prob = data.level.level3prob;
 	}
 
 	/**
@@ -108,6 +114,31 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('psnInd', 'assets/scenes/battle/indicator/psnInd.png', {frameWidth: 37, frameHeight: 28});
 		this.load.spritesheet('bleedInd', 'assets/scenes/battle/indicator/bleedInd.png', {frameWidth: 37, frameHeight: 28});
 
+		// Cuadro de Loot
+		this.load.image('lootBox', 'assets/scenes/battle/itemBox.png')
+		
+		// Items
+		this.load.image('puño', 'assets/scenes/inventory/weapons/puño.png');
+		this.load.image('cimMad', 'assets/scenes/inventory/weapons/cimitarraMadera.png');
+		this.load.image('cimAc', 'assets/scenes/inventory/weapons/cimitarraAcero.png');
+		this.load.image('cimLoc', 'assets/scenes/inventory/weapons/cimitarraLoca.png');
+		this.load.image('dagOx', 'assets/scenes/inventory/weapons/dagaOxidada.png');
+		this.load.image('dagAf', 'assets/scenes/inventory/weapons/dagaAfilada.png');
+		this.load.image('dagEx', 'assets/scenes/inventory/weapons/dagaExcéntrica.png');
+		//this.load.image('alMb', 'assets/scenes/inventory/weapons/.png');
+		//this.load.image('alVrd', 'assets/scenes/inventory/weapons/.png');
+		//this.load.image('alDem', 'assets/scenes/inventory/weapons/.png');
+		this.load.image('ropIng', 'assets/scenes/inventory/weapons/roperaInglesa.png');
+		this.load.image('ropCst', 'assets/scenes/inventory/weapons/roperaCastellana.png');
+		this.load.image('ropAl', 'assets/scenes/inventory/weapons/roperaAlocada.png');
+		this.load.image('sacho', 'assets/scenes/inventory/weapons/sacho.png');
+		this.load.image('fouc', 'assets/scenes/inventory/weapons/fouciño.png');
+		this.load.image('guad', 'assets/scenes/inventory/weapons/guadañaExtravagante.png');
+		
+		this.load.image('bolla', 'assets/scenes/inventory/objects/bollaDePan.png');
+		this.load.image('caldo', 'assets/scenes/inventory/objects/caldoGallego.png');
+		this.load.image('polbo', 'assets/scenes/inventory/objects/pulpoALaGallega.png');
+    
 		// Transición
 		this.load.spritesheet('fadeIn', 'assets/scenes/transitions/fadeInBattleTransition.png', {frameWidth: 1024, frameHeight: 768});
 	}
@@ -122,8 +153,6 @@ export default class BattleScene extends Phaser.Scene {
 		// Maria Pita
 		this.player = new Player(this, 250, 475, this.inventory);
     
-		// Enemigo seleccionado
-		this.selectedEnemy= null;
 		this.enemies = []; //ARREGLO RAPIDO: quitar cuando se implemente una funcion para cuando muere un enemigo
 		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
 		// Descripcion
@@ -131,11 +160,15 @@ export default class BattleScene extends Phaser.Scene {
 
 		// Cuadro de dialogo
 		this.dialogBox = new DialogBox(this, 545, 565, 450); 
-		//this.dialogBox.setTextToDisplay('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,');
 
 		// Acciones
 		this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
 		
+		// Loot
+		const width = this.scale.width;
+    	const height = this.scale.height;
+		this.lootBox = this.add.image(width/2, height/2, 'lootBox').setScale(2,2).setVisible(false);
+
 		// Indicadores de daño
 		this.indicator = new Indicator(this, 300, 565,
 			{dmgInd: 'dmgInd', healInd: 'healInd', defInd: 'defInd', wpInd: 'wpInd', psnInd: 'psnInd', bleedInd: 'bleedInd'});
@@ -200,17 +233,17 @@ export default class BattleScene extends Phaser.Scene {
 					this.emitter.once('enemyselected',() => {
 						this.dialogBox.clearText();														// Borrar texto previo
 					  	this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
-					 	  	' con ' + this.player.inventory.getEquipedWeapon().name +
-					  		' y le baja ' + this.player.getDamage() + ' puntos de vida');
+					 	  	' con ' + this.player.inventory.getEquipedWeapon().name);
 						  	this.emitter.once('finishTexting', () => {
 								this.player.attack(this.selectedEnemy);
               					this.indicator.updateInd("player", "damage", this.selectedEnemy.getPosition(), this.player.getDamage()); // Actualizar indicador
 								this.enemies.forEach(Element => {Element.animator.disableInteractive();});
 							});
-						})	
+						});	
 				} else {																                // Si solo hay uno
+					this.selectedEnemy = this.enemies[0];
 					this.dialogBox.clearText();														// Borrar texto previo
-					this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.enemies[0].getName() +
+					this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
 					' con ' + this.player.inventory.getEquipedWeapon().name);
 					this.emitter.once('finishTexting', () => {
 						this.player.attack(this.enemies[0]);
@@ -251,7 +284,9 @@ export default class BattleScene extends Phaser.Scene {
 		this.emitter.once('finishTurn', () => {				// Evento para que el enemigo ataque	
 			if (levelCompleted(this.enemies)){
 				this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
-				this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
+				// Loot
+				this.EnableLoot();
+        		this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
 			}
 			else this.EnemyTurn()}); 			
 	}
@@ -338,7 +373,9 @@ export default class BattleScene extends Phaser.Scene {
 				index++;
 				if (levelCompleted(this.enemies)){
 					this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
-					this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
+					// Loot
+				  this.EnableLoot();
+          this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
 				}
 				// Si quedan enemigos se actualizan tambien
 				if (index > this.enemies.length) this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects(index);})
@@ -418,6 +455,60 @@ export default class BattleScene extends Phaser.Scene {
 		}
 	}
 
+	EnableLoot(){
+		this.DisableButtons();
+		this.dialogBox.clearText();
+		this.dialogBox.setVisible(false);
+		this.lootBox.setVisible(true).setAlpha(0.85);
+
+		// Looteo arma
+		let randomWeapon = Math.floor(Math.random() * 5);
+		let randomSet = Math.floor(Math.random() * 100);
+		let weaponImgID; let weaponLoot = false; 
+
+		switch(true){
+			case randomSet <= this.level1prob: weaponImgID = weaponsLevel1[randomWeapon]; break;
+			case randomSet <= this.level1prob + this.level2prob: weaponImgID = weaponsLevel2[randomWeapon]; break;
+			default: weaponImgID = weaponsLevel3[randomWeapon]; break;
+		}
+		
+		// Si no tiene el arma, se la añade al inventario
+		if (!this.inventory.weapons[weaponImgID].owned) {
+			this.inventory.addWeapon(weaponImgID);
+			weaponLoot = true;
+		}
+
+		// Looteo comida
+		let randomFood = Math.floor(Math.random() * 3);
+		let randomQuantity = Math.floor(Math.random() * 3) + 3;
+		let foodImgID = listOfItems.healths[randomFood].imgID;
+		this.inventory.healths[foodImgID].amount += randomQuantity;
+
+		// Looteo parte visual
+		const width = this.scale.width;
+		const height = this.scale.height;
+		const itemQuantity = this.inventory.healths[foodImgID].amount;
+		var text;
+		// Si no me ha tocado arma
+		if (!weaponLoot) {
+			text = '¡Has conseguido ' + listOfItems.healths[randomFood].key + ' !';
+			this.add.image(width/2,height/2, foodImgID).setScale(6,6);
+		}
+		// Si me ha tocado arma
+		else {
+			text = '¡Has conseguido ' + this.inventory.weapons[weaponImgID].weapon.name + ' y \n' + itemQuantity + ' de ' + listOfItems.healths[randomFood].key + ' !';
+			this.add.image(width/3, height/2, weaponImgID).setScale(6,6);
+			this.add.image(width/1.5, height/2, foodImgID).setScale(6,6);
+			if (itemQuantity > 1) this.add.text(width/1.5 + 20, height/2 + 20, itemQuantity, {}).setScale(3,3);
+		}
+		
+		let lootText = new DialogBox(this, 200, height/2 - 200, 750);
+		lootText.setTextToDisplay(text);
+		lootText.printText();
+
+		this.once = true;
+  }
+  
 	CheckFinalWeapon() {
 		// Si no se tiene ya el asta
 		if (this.player.inventory.getEquipedWeapon().imgID !== 'asta') {
