@@ -51,7 +51,6 @@ export default class BattleScene extends Phaser.Scene {
 
 		this.enemies = [];
 		this.selectedEnemy= null;
-		this.loot = [];
 		this.notOwnedWeapons = [];
 		this.once = false;
 	}
@@ -119,7 +118,7 @@ export default class BattleScene extends Phaser.Scene {
 
 		// Cuadro de Loot
 		this.load.image('lootBox', 'assets/scenes/battle/itemBox.png')
-		// Items
+		
 		// Items
 		this.load.image('puño', 'assets/scenes/inventory/weapons/puño.png');
 		this.load.image('cimMad', 'assets/scenes/inventory/weapons/cimitarraMadera.png');
@@ -443,43 +442,33 @@ export default class BattleScene extends Phaser.Scene {
 	EnableLoot(){
 		this.DisableButtons();
 		this.dialogBox.clearText();
+		this.dialogBox.setVisible(false);
 		this.actionBox.setVisible(false);
 		this.descriptionBox.setVisible(false);
 		this.lootBox.setVisible(true).setAlpha(0.85);
-		this.dialogBox.setVisible(false);
 
 		// Looteo arma
 		let randomWeapon = Math.floor(Math.random() * 5);
 		let randomSet = Math.floor(Math.random() * 100);
 		let weaponImgID; let weaponLoot = false; 
 
-		if (randomSet <= this.level1prob) {
-			weaponImgID = weaponsLevel1[randomWeapon];
-			if (this.inventory.weapons[weaponImgID].owned === false) {
-				this.inventory.weapons[weaponImgID].owned = true;
-				weaponLoot = true;
-			}
+		switch(true){
+			case randomSet <= this.level1prob: weaponImgID = weaponsLevel1[randomWeapon]; break;
+			case randomSet <= this.level1prob + this.level2prob: weaponImgID = weaponsLevel2[randomWeapon]; break;
+			default: weaponImgID = weaponsLevel3[randomWeapon]; break;
 		}
-		else if (randomSet <= this.level1prob + this.level2prob) {
-			weaponImgID = weaponsLevel2[randomWeapon];
-			if (this.inventory.weapons[weaponImgID].owned === false) {
-				this.inventory.weapons[weaponImgID].owned = true;
-				weaponLoot = true;
-			}
-		}
-		else {
-			weaponImgID = weaponsLevel3[randomWeapon];
-			if (this.inventory.weapons[weaponImgID].owned === false) {
-				this.inventory.weapons[weaponImgID].owned = true;
-				weaponLoot = true;
-			}
+		
+		// Si no tiene el arma, se la añade al inventario
+		if (!this.inventory.weapons[weaponImgID].owned) {
+			this.inventory.addWeapon(weaponImgID);
+			weaponLoot = true;
 		}
 
 		// Looteo comida
 		let randomFood = Math.floor(Math.random() * 3);
-		let randomQuantity = Math.floor(Math.random() * 10);
+		let randomQuantity = Math.floor(Math.random() * 3) + 3;
 		let foodImgID = listOfItems.healths[randomFood].imgID;
-		this.inventory.healths[foodImgID].amount += randomQuantity + 1;
+		this.inventory.healths[foodImgID].amount += randomQuantity;
 
 		// Looteo parte visual
 		const width = this.scale.width;
@@ -494,16 +483,14 @@ export default class BattleScene extends Phaser.Scene {
 		// Si me ha tocado arma
 		else {
 			text = '¡Has conseguido ' + this.inventory.weapons[weaponImgID].weapon.name + ' y \n' + itemQuantity + ' de ' + listOfItems.healths[randomFood].key + ' !';
-			this.add.image(width/3, height/2, weaponImgID).setScale(5,5);
-			this.add.image(width/1.5, height/2, foodImgID).setScale(5,5);
+			this.add.image(width/3, height/2, weaponImgID).setScale(6,6);
+			this.add.image(width/1.5, height/2, foodImgID).setScale(6,6);
 			if (itemQuantity > 1) this.add.text(width/1.5 + 20, height/2 + 20, itemQuantity, {}).setScale(3,3);
 		}
 		
-		//this.dialogBox= new DialogBox(this, 200, height/2 - 200, 700);
-		//this.dialogBox.clearText();
-		//this.dialogBox.setTextToDisplay(text);
-		//this.dialogBox.printText();
-		this.add.text(175, height/2 - 200, text, {fontFamily: 'Silkscreen' }).setScale(1.5, 1.5);
+		let lootText = new DialogBox(this, 200, height/2 - 200, 750);
+		lootText.setTextToDisplay(text);
+		lootText.printText();
 
 		this.once = true;
 	}
