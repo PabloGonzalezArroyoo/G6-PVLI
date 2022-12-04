@@ -63,7 +63,7 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
         else {
             console.log("NO HA CAMBIADO LA VIDA")
         }
-        this.scene.time.delayedCall(1000, () => {this.emitter.emit("finishTurn")});
+        this.colorBarTween.once('complete', () => {this.scene.time.delayedCall(500, () => this.emitter.emit("finishTurn"))});
     }
 
     getCurrentHealth(){ return this.currentHealth; }

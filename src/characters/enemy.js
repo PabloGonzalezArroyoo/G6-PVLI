@@ -13,7 +13,17 @@ export class Enemy extends Character {
         this.animator.on('pointerover',()=>{this.animator.setScale(7)});
         this.animator.on('pointerout',()=>{this.animator.setScale(6)});
         this.animator.on('pointerdown',()=>{this.OnClick()});
+    }
 
+    destroy(){
+        this.animator.destroy();
+        this.healthController.destroy();
+    }
+
+    // método para añadir una escena si no tenía
+    setScene(scene) {
+        this.healthController = new HealthController(scene, this.x, this.y - 150, this.maxHealth);
+        this.animator = new EnemyAnimator(scene, this.x, this.y, this.spritesheet);
     }
 
     attack(player, abilityPercentage) {    

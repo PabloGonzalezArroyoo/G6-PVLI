@@ -25,7 +25,10 @@ export class Level {
     
     // Carga el nivel si no está bloqueado, emitiendo un evento que pasa los valores del nivel
     loadLevel(inventory){
-        if (this.state !== State.locked) this.emitter.emit('levelSelected', {level: this, inventory: inventory});
+        if (this.state !== State.locked) {
+            this.emitter.emit('levelSelected', {level: this, inventory: inventory});
+            this.emitter.destroy();
+        }
     }
 
     // Asigna al array de siguientes niveles los correspondientes

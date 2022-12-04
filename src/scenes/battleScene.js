@@ -282,14 +282,7 @@ export default class BattleScene extends Phaser.Scene {
 				this.emitter.once('finishTexting', () => {this.player.quelocura(this.enemies, 0)});
 				break;
 		}	
-		this.emitter.once('finishTurn', () => {				// Evento para que el enemigo ataque	
-			if (levelCompleted(this.enemies)){
-				this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
-				// Loot
-				this.EnableLoot();
-        		this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
-			}
-			else this.EnemyTurn()}); 			
+		this.emitter.once('finishTurn', this.checkEnemies, this);
 	}
 
 	// Metodo que efectua la accion de los enemigos cada turno
@@ -381,7 +374,7 @@ export default class BattleScene extends Phaser.Scene {
 				// Si quedan enemigos se actualizan tambien
 				if (index > this.enemies.length) this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects(index);})
 				// Si no quedan se pasa al siguiente turno
-				else this.emitter.once('finishTurn', () => {this.CheckFinalWeapon();});});			// Evento que vuelve a crear los botones
+				else this.emitter.once('finishTurn', () => {this.CheckFinalWeapon();});});
 		}
 		else {
 			this.enemies[index].updateTurn();
@@ -455,7 +448,27 @@ export default class BattleScene extends Phaser.Scene {
 				this.DisableQueLocura(true);
 		}
 	}
-
+  
+	// Comprueba si hay enemigos que matar y pasa al siguiente turno o termina la partida si no quedan emeigos
+	checkEnemies(){
+		for (var i = 0; i < this.enemies.length; i++){
+			if (this.enemies[i].healthController.getCurrentHealth() === 0){
+				this.enemies[i].destroy(); 
+				this.enemies.splice(i , 1);
+			}
+		}
+		if(this.enemies.length === 0){
+			this.emitter.destroy();
+			this.dialogBox.clearText();																	// Borrar texto previo				
+				// Loot
+				this.EnableLoot();			
+			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
+		}
+		else{
+			if(!levelFailed(this.player)) this.EnemyTurn(); // Evento para que el enemigo ataque	
+		}
+	}
+    
 	EnableLoot(){
 		this.DisableButtons();
 		this.dialogBox.clearText();
@@ -506,7 +519,7 @@ export default class BattleScene extends Phaser.Scene {
 		let lootText = new DialogBox(this, 200, height/2 - 200, 750);
 		lootText.setTextToDisplay(text);
 		lootText.printText();
-  }
+	}
   
 	CheckFinalWeapon() {
 		// Si no se tiene ya el asta
