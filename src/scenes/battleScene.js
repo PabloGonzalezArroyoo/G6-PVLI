@@ -291,7 +291,8 @@ export default class BattleScene extends Phaser.Scene {
 		// Si el enemigo sigue vivo hace su acción
 		if (!levelFailed(this.enemies[index]) && !this.enemies[index].isStuned()) {
 			this.dialogBox.clearText();                           // Borrar texto previo
-			this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' (' +  index + ')' +' ataca a Maria Pita');	// Enviar el nuevo texto
+			if (this.enemies.length <= 1) this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' ataca a Maria Pita'); // Enviar el nuevo texto
+			else this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' (' +  index + ')' +' ataca a Maria Pita');	
 			this.emitter.once('finishTexting', () => {						// Crea un evento para que el enemigo ataque
 				
 				// Guarda el daño hecho o el daño y un texto si se ha usado una habilidad
