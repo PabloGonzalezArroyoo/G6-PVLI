@@ -518,27 +518,34 @@ export default class BattleScene extends Phaser.Scene {
 					// Poner asta como el arma equipada
 					this.player.inventory.setEquipedWeapon('asta');
 					
-					// Menú de recibir loot con el arma final
-					this.lootBox.setVisible(true).setAlpha(0.85);
-					const width = this.scale.width;
-					const height = this.scale.height;
-					let lootText = new DialogBox(this, 200, height/2 - 200, 750);
-					lootText.setTextToDisplay('Maria Pita ha encontrado un asta de bandera.');
-					lootText.printText();
-					var item = this.add.image(width/2,height/2, this.player.inventory.getEquipedWeapon().imgID).setScale(6,6);
+					this.dialogBox.clearText();
+					this.dialogBox.setTextToDisplay('Maria Pita ha ido a por Drake y ha robado su bandera.');
+					this.emitter.once('finishTexting', () => { 
+						this.enemies[0].stealFlag();
 
-					this.time.delayedCall(3000,()=>{
-						this.lootBox.setVisible(false);
-						lootText.setVisible(false);
-						item.setVisible(false);
+						// Menú de recibir loot con el arma final
+						this.lootBox.setVisible(true).setAlpha(0.85);
+						const width = this.scale.width;
+						const height = this.scale.height;
+						let lootText = new DialogBox(this, 200, height/2 - 200, 750);
+						lootText.setTextToDisplay('Maria Pita ha conseguido un asta de bandera.');
+						lootText.printText();
+						var item = this.add.image(width/2,height/2, this.player.inventory.getEquipedWeapon().imgID).setScale(6,6);
 
-						// Texto diciendo que se ha encontrado el arma
-						this.dialogBox.clearText();
-						this.dialogBox.setTextToDisplay('Maria Pita se ha equipado el asta de la bandera.');	// Enviar el nuevo texto
-						this.emitter.once('finishTexting', () => {
-							this.EnableButtons();
+						this.time.delayedCall(3000,()=>{
+							this.lootBox.setVisible(false);
+							lootText.setVisible(false);
+							item.setVisible(false);
+
+							// Texto diciendo que se ha encontrado el arma
+							this.dialogBox.clearText();
+							this.dialogBox.setTextToDisplay('Maria Pita se ha equipado el asta de la bandera.');	// Enviar el nuevo texto
+							this.emitter.once('finishTexting', () => {
+								this.EnableButtons();
+							});
 						});
 					});
+					
 				}
 				else this.EnableButtons();
 			}
