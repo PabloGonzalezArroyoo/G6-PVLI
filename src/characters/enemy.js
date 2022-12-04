@@ -75,7 +75,7 @@ export class Enemy extends Character {
 // Rufián Embriagado
 export class DrunkRuffian extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'drunkRuffian', 100, 100);
+        super(scene, x, y, 'drunkRuffian', 100, 15);
     }
 }
 
