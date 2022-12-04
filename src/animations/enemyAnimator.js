@@ -9,6 +9,7 @@ export default class EnemyAnimator extends Phaser.GameObjects.Sprite{
 		this.defaultAnimation = this.spritesheet + '_idle';
 		this.attackAnimation = this.spritesheet + 'attack';
 
+
 		//animacion idle
 		this.scene.anims.create({
 			key: this.defaultAnimation,
@@ -22,7 +23,25 @@ export default class EnemyAnimator extends Phaser.GameObjects.Sprite{
 			frames: this.scene.anims.generateFrameNumbers(spritesheet, {start: 4, end: 8}),
 			frameRate: 6,
 			repeat: 0
-		})
+		});
+		
+		if (this.spritesheet === 'ensignDrake') {
+			this.noFlag = false;
+			//animacion idle sin bandera
+			this.scene.anims.create({
+				key: this.defaultAnimation + '_noFlag',
+				frames: this.scene.anims.generateFrameNumbers(spritesheet, {start: 9, end: 12}),
+				frameRate: 6,
+				repeat: -1
+			});
+			// animacion ataque sin bandera
+			this.scene.anims.create({
+				key: this.attackAnimation + '_noFlag',
+				frames: this.scene.anims.generateFrameNumbers(spritesheet, {start: 13, end: 17}),
+				frameRate: 6,
+				repeat: 0
+			});
+		}
 
 		// inicia con la animacion idle
 		this.playIdle();
@@ -30,11 +49,13 @@ export default class EnemyAnimator extends Phaser.GameObjects.Sprite{
 
 	//cambia a la animacion Idle
 	playIdle(){
-		this.play(this.defaultAnimation);
+		if (!this.noFlag) this.play(this.defaultAnimation);
+		else this.play(this.defaultAnimation + '_noFlag');
 	}
 
 	playAttack(){
-		this.play(this.attackAnimation);
+		if (!this.noFlag) this.play(this.attackAnimation);
+		else this.play(this.attackAnimation + '_noFlag');
 	}
 
 	//pre-update que gestiona los posibles problemas de las animaciones
@@ -42,7 +63,7 @@ export default class EnemyAnimator extends Phaser.GameObjects.Sprite{
 		super.preUpdate(t, dt);
 		//si no hay animacion vuelve a la animacion por defecto
 		if(this.anims.isPlaying === false){
-			this.play(this.defaultAnimation);
+			this.playIdle();
 		}
 	}
 }

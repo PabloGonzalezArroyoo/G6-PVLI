@@ -161,4 +161,9 @@ export class ScurviedSailor extends Enemy {
         // Habilidad
         return enemyType.prototype.ability.call(this, player);
     }
+
+    stealFlag() {
+        this.animator.noFlag = true;
+        this.animator.playIdle();
+    }
 }
