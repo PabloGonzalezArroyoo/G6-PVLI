@@ -467,6 +467,7 @@ export default class BattleScene extends Phaser.Scene {
 		else{
 			if(!levelFailed(this.player)) this.EnemyTurn(); // Evento para que el enemigo ataque	
 		}
+	}
     
 	EnableLoot(){
 		this.DisableButtons();
@@ -518,7 +519,7 @@ export default class BattleScene extends Phaser.Scene {
 		let lootText = new DialogBox(this, 200, height/2 - 200, 750);
 		lootText.setTextToDisplay(text);
 		lootText.printText();
-  }
+	}
   
 	CheckFinalWeapon() {
 		// Si no se tiene ya el asta
