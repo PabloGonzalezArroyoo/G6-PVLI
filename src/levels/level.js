@@ -11,7 +11,9 @@ export class Level {
     constructor(levelData) {
         this.x = levelData.x; this.y = levelData.y;
         this.state = State.locked;
-        this.loot = levelData.loot; // array con todos los posibles items que dar al jugador al completar el nivel
+        this.level1prob = levelData.level1prob;
+        this.level2prob = levelData.level2prob;
+        this.level3prob = levelData.level3prob;
         this.enemies = levelData.enemies; // array con todos los enemigos del nivel
 
         this.spriteSheet = 'level';
@@ -36,9 +38,11 @@ export class Level {
 
     // Desbloquea los siguientes niveles
     unlockNextLevels(){
-        this.nextLevels.forEach(level => {
-            level.setUnlocked();
-        });
+        if (this.nextLevels){
+            this.nextLevels.forEach(level => {
+                level.setUnlocked();
+            });   
+        }
     }
 
     // devuelve el estado actual del nivel
@@ -52,19 +56,18 @@ export class Level {
 
     // Marca el nivel como desbloqueado y cambia el sprite
     setUnlocked() {
-        this.state = State.unlocked;
-        this.changeSpriteState(this.state);
+        this.changeState(State.unlocked);
     }
 
     // Marca el nivel como completado y cambia el sprite
     setCompleted() {
-        this.state = State.complete;
-        this.changeSpriteState(this.state);
-        if (this.getNextLevels() !== null) this.unlockNextLevels();
+        this.changeState(State.complete);
+        this.unlockNextLevels();
     }
 
-    // Cambia el sprite según el estado del nivel
-    changeSpriteState(state) {
+    // Cambia el estado del nivel y adecúa el sprite
+    changeState(state) {
+        this.state = state;
         this.defaultFrame = this.defaultFrame % 3 + state * 3;
         this.frameOnOver = this.frameOnOver % 3 + state * 3;
         this.frameOnDown = this.frameOnDown % 3 + state * 3;

@@ -6,13 +6,8 @@ import EventDispatcher from '../combat/eventDispatcher.js';
 // Clase base Enemy
 export class Enemy extends Character {
     constructor(scene, x, y, spritesheet, maxHealth, damage) {
-        if (scene !== null) super(x, y, new EnemyAnimator(scene, x, y, spritesheet), new HealthController(scene, x, y - 150, maxHealth), damage);
-        else {
-            super(x, y, null, null, damage);
-            this.spritesheet = spritesheet;
-            this.maxHealth = maxHealth;
-        }
-        this.scene=scene;
+        super(x, y, new EnemyAnimator(scene, x, y, spritesheet), new HealthController(scene, x, y - 150, maxHealth), damage);
+        this.scene = scene;
         //Hacer al enemigo interactuable
         this.emmiter = EventDispatcher.getInstance();
         this.animator.on('pointerover',()=>{this.animator.setScale(7)});
@@ -30,8 +25,8 @@ export class Enemy extends Character {
         this.healthController = new HealthController(scene, this.x, this.y - 150, this.maxHealth);
         this.animator = new EnemyAnimator(scene, this.x, this.y, this.spritesheet);
     }
-    attack(player, abilityPercentage) {    
 
+    attack(player, abilityPercentage) {    
         // Hace la habilidad y devuelve el daño hecho
         if (abilityPercentage)
             if (Math.floor(Math.random() * 100) < abilityPercentage) 
@@ -50,8 +45,7 @@ export class Enemy extends Character {
     getAnimator() { return this.animator; }
     
     // Devuelve el enemigo sobre el que realizar el ataque y avisa de que este ya se puede realizar
-    OnClick()
-    {   
+    OnClick() {   
         this.scene.selectedEnemy = this;
         this.emmiter.emit('enemyselected');
     }
