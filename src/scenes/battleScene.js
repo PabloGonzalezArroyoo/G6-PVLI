@@ -205,6 +205,7 @@ export default class BattleScene extends Phaser.Scene {
 					});});
 					//Una vez se reciba confirmación del ataque y el enemigo seleccionado, se ataca.
 					this.emitter.once('enemyselected',() => {
+						this.DisableEnemy();
 						this.dialogBox.clearText();														// Borrar texto previo
 					  	this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
 					 	  	' con ' + this.player.inventory.getEquipedWeapon().name +
@@ -212,7 +213,6 @@ export default class BattleScene extends Phaser.Scene {
 						  	this.emitter.once('finishTexting', () => {
 								this.player.attack(this.selectedEnemy);
               					this.indicator.updateInd("player", "damage", this.selectedEnemy.getPosition(), this.player.getDamage()); // Actualizar indicador
-								this.enemies.forEach(Element => {Element.animator.disableInteractive();});
 							});
 						})	
 				} else {																                // Si solo hay uno
@@ -261,11 +261,11 @@ export default class BattleScene extends Phaser.Scene {
 					});});
 					//Una vez se reciba confirmación del ataque y el enemigo seleccionado, se ataca.
 					this.emitter.once('enemyselected',() => {
+						this.DisableEnemy();
 						this.dialogBox.clearText();														// Borrar texto previo
 						this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 						this.emitter.once('finishTexting', () => {
 								this.player.quelocura(this.enemies, this.selectedEnemy);
-								this.enemies.forEach(Element => {Element.animator.disableInteractive();});
 							});
 						});	
 				} else {																                // Si solo hay uno
@@ -446,5 +446,13 @@ export default class BattleScene extends Phaser.Scene {
 			if(item.imgID === 'puño')
 				this.DisableQueLocura(true);
 		}
+	}
+	DisableEnemy()
+	{
+		this.enemies.forEach(Element => {
+			Element.onPointerOut();
+			Element.animator.disableInteractive();
+
+		});
 	}
 }

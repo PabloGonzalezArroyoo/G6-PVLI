@@ -54,6 +54,10 @@ export class Enemy extends Character {
     selectButton(){
         this.animator.setScale(7);
     }
+
+    isEnabled(){
+        return this.animator.input.enabled;
+    }
     
     // Devuelve el nombre del enemigo
     getName() { 
