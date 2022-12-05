@@ -110,7 +110,6 @@ export var listOfItems = {
 		{key: "Puño",
 		imgID: "puño", 
 		attack: 15,
-		defense: 0,
 		defense: 10,
 		desc: "-"},
 

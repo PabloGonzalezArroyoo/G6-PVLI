@@ -179,21 +179,16 @@ export default class BattleScene extends Phaser.Scene {
 		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this.keyboardInput, () => {this.scene.pause();this.scene.launch('inventoryScene', {scene: 'battleScene', inventory: this.player.inventory});this.events.once('resume', (scene, item) => {this.useItem(item)})}),
 		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('defense')}),
 		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('queLocura')})];
-		 //Coloca los botones adyacentes en las acciones del jugador
+
 		this.botones[0].setAdjacents(null, this.botones[2], null, this.botones[1]);
 		this.botones[1].setAdjacents(null, this.botones[3], this.botones[0], null);
 		this.botones[2].setAdjacents(this.botones[0], null, null, this.botones[3]);
 		this.botones[3].setAdjacents(this.botones[1], null, this.botones[2], null);
 		this.keyboardInput.setStartButton(this.botones[0]);
-		//Coloca los enemigos adyacentes
-		for(let i=0;i<this.enemies.length;i++)
-		{
-			if(i!=0 && i!=this.enemies.length-1)this.enemies[i].setAdjacents(null,null,this.enemies[i-1],this.enemies[i+1]);
-			else if(i==0)this.enemies[i].setAdjacents(null,null,this.enemies[this.enemies.length-1],this.enemies[i+1]);
-			else if(i==this.enemies.length-1) this.enemies[i].setAdjacents(null,null,this.enemies[i-1],this.enemies[0]);
-		}
+
 		this.emptyButton = this.add.image(254.5, 663.5, 'emptyButton').setOrigin(0,0);
 		this.emptyButton.setCrop(0, 0, 0, 0);
+
 		this.DisableQueLocura();
 		this.UpdateQueLocura(0);
     
@@ -228,24 +223,22 @@ export default class BattleScene extends Phaser.Scene {
 		switch (action){									
 			
       		case 'attack' : 															// Se selecciona atacar
-				this.UpdateQueLocura(100)																
+				this.UpdateQueLocura(35)																
 				this.dialogBox.clearText();												// Borrar texto previo
 				if (this.enemies.length > 1) {											// Si hay más de un enemigo en escena
 					this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
 					//Se hace a todos los enemigos interactuables
-					this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {
-						Element.animator.setInteractive();
-						this.keyboardInput.setStartButton(this.enemies[0]);	
+					this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {Element.animator.setInteractive();	
 					});});
 					//Una vez se reciba confirmación del ataque y el enemigo seleccionado, se ataca.
 					this.emitter.once('enemyselected',() => {
-						this.DisableEnemy();
 						this.dialogBox.clearText();														// Borrar texto previo
 					  	this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
 					 	  	' con ' + this.player.inventory.getEquipedWeapon().name);
 						  	this.emitter.once('finishTexting', () => {
 								this.player.attack(this.selectedEnemy);
               					this.indicator.updateInd("player", "damage", this.selectedEnemy.getPosition(), this.player.getDamage()); // Actualizar indicador
+								this.enemies.forEach(Element => {Element.animator.disableInteractive();});
 							});
 						});	
 				} else {																                // Si solo hay uno
@@ -285,30 +278,8 @@ export default class BattleScene extends Phaser.Scene {
       		case 'queLocura' : 																	// Si selecciona QueLocura
 				this.DisableQueLocura(); 																	
 				this.dialogBox.clearText();														// Borrar texto previo
-				if (this.enemies.length > 1 && (this.player.inventory.getEquipedWeapon().imgID !== 'cimMad'||
-						this.player.inventory.getEquipedWeapon().imgID !== 'CimAc'||this.player.inventory.getEquipedWeapon().imgID !== 'cimLoc')) {											// Si hay más de un enemigo en escena
-					this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
-					//Se hace a todos los enemigos interactuables
-					this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {
-						Element.animator.setInteractive();
-						this.keyboardInput.setStartButton(this.enemies[0]);	
-					});});
-					//Una vez se reciba confirmación del ataque y el enemigo seleccionado, se ataca.
-					this.emitter.once('enemyselected',() => {
-						this.DisableEnemy();
-						this.dialogBox.clearText();														// Borrar texto previo
-						this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
-						this.emitter.once('finishTexting', () => {
-								this.player.quelocura(this.enemies, this.selectedEnemy);
-							});
-						});	
-				} else {																                // Si solo hay uno
-					this.dialogBox.clearText();														// Borrar texto previo
-					this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
-					this.emitter.once('finishTexting', () => {
-						this.player.quelocura(this.enemies, this.enemies[0]);
-					});
-				}
+				this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
+				this.emitter.once('finishTexting', () => {this.player.quelocura(this.enemies, 0)});
 				break;
 		}	
 		this.emitter.once('finishTurn', this.checkEnemies, this);
@@ -436,7 +407,6 @@ export default class BattleScene extends Phaser.Scene {
 			this.botones[3].disableInteractive();
 			this.botones[3].visible = false;
 		}
-		this.keyboardInput.setStartButton(this.botones[0]);
 	}
 
 	// Impide seleccionar que locura y pone el contador a cero
@@ -477,14 +447,6 @@ export default class BattleScene extends Phaser.Scene {
 			if(item.imgID === 'puño')
 				this.DisableQueLocura(true);
 		}
-	}
-	DisableEnemy()
-	{
-		this.enemies.forEach(Element => {
-			Element.onPointerOut();
-			Element.animator.disableInteractive();
-
-		});
 	}
   
 	// Comprueba si hay enemigos que matar y pasa al siguiente turno o termina la partida si no quedan emeigos
