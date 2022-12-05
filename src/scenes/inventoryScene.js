@@ -18,14 +18,14 @@ export default class InventoryScene extends Phaser.Scene {
 	constructor() {
 		super({ key: 'inventoryScene' });
 		this.dialogBox;
+		this.previousSceneName;
 	}
 
 	/**
 	 * Inicializa las variables
 	 * - Asignar si es inventario principal o de batalla
 	*/
-	init(data){
-		this.previousSceneName = data.scene;
+	init(data) {
 		this.inventory = data.inventory;
 	}
 
@@ -63,17 +63,17 @@ export default class InventoryScene extends Phaser.Scene {
 	create() {
 		this.emitter = EventDispatcher.getInstance();
 
-
 		this.inventory.addWeapon('fouc');
+		this.inventory.addWeapon('dagEx');
 
-
+		this.events.on('wake', (scene, prev) => {this.previousSceneName = prev});
+		
 		// Constantes
 		const width = this.scale.width;
 		const height = this.scale.height;
-		const self = this;
 		
 		// Pintamos el fondo
-		let bg = this.add.image(0,0, 'inventoryBackground').setOrigin(0, 0).setDisplaySize(width, height);
+		this.add.image(0,0, 'inventoryBackground').setOrigin(0, 0).setDisplaySize(width, height);
 
 		// SEPARACION ENTRE ARMAS Y COMIDA
 		let armas = this.inventory.getWeapons();
@@ -82,8 +82,13 @@ export default class InventoryScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 
 		// ARMA EQUIPADA
-		this.add.image(217, 325, this.inventory.getEquipedWeapon().imgID).setScale(8, 8);
-		this.equipedWeaponButton = new Button(this, 217, 325, 'selected', 0, 1, 2, this.keyboardInput, () => {if (this.inventory.getEquipedWeapon().imgID !== 'puño' && this.inventory.getEquipedWeapon().imgID !== 'asta') this.escape(this.inventory.getWeapons()['puño'].weapon)}, ()=>{this.mostrarDescripcion(this.inventory.getEquipedWeapon());}).setScale(8, 8);
+		this.equiped = this.add.image(217, 325, this.inventory.getEquipedWeapon().imgID).setScale(8, 8);
+		this.equipedWeaponButton = new Button(this, 217, 325, 'selected', 0, 1, 2, 
+			this.keyboardInput, () => {
+				if (this.inventory.getEquipedWeapon().imgID !== 'puño' && this.inventory.getEquipedWeapon().imgID !== 'asta')
+				this.escape(this.inventory.getWeapons()['puño'].weapon)},
+			() => {this.mostrarDescripcion(this.inventory.getEquipedWeapon());}
+		).setScale(8, 8);
 
 		this.weaponButtons = [];
 		for (let i = 0; i < 5; i++) this.weaponButtons[i] = [];
@@ -126,41 +131,25 @@ export default class InventoryScene extends Phaser.Scene {
 			i++;
 		});
 
-		// TECLAS
-		//Para seleccionar botones con teclas, creamos el objeto tecla
-		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
-		//var Esc = this.scene.input.keyboard.addKey('ESC,X');
-		//var Enter = this.scene.input.keyboard.addKeys('ENTER,Z')
-
-		//Ejemplo: Al pulsar la flecha izquierda
-		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
-		
-		//Ejemplo: Al pulsar el enter
-		//Enter.on('down', function () {/*Marca el botón*/ });
-		//Enter.on('up', function () {
-			 /*Se usa el objeto seleccionado*/
-		//});
-		//Esc.on('down', function () {
-			//this.scene.start('optionsScene');//Se abre el menu de opciones
-		//});
-
 		// Pintamos botón de salir
 		this.inventoryButton = new Button(this, width - 50, 46, 'inventory', 2, 0, 1, this.keyboardInput, () => {this.escape()}).setScale(3, 3);
 		this.keyboardInput.setStartButton(this.equipedWeaponButton);
 		this.inicializeButtonConnections()
-		// Al pulsar la tecla T se sale de la escena de inventario
-		this.input.keyboard.once('keydown-T', () => { this.escape(); });
-		this.dialogBox= new DialogBox(this, 70, 620, 850);
+		
+		// Al pulsar la tecla ESC se sale de la escena de inventario
+		this.input.keyboard.once('keydown-ESC', () => { this.escape(); });
+		this.dialogBox = new DialogBox(this, 70, 620, 850);
 	}
 
 	// SALIDA DE LA ESCENA
 	escape(item = "none") {
-		this.scene.stop('inventoryScene'); 			// Para la escena de inventario
-		this.scene.resume(this.previousSceneName, item); 	// Reanuda la escena anterior
+		console.log(item);
+		if (item !== "none" && item.type !== "HEALTH") this.equiped.setTexture(item.imgID);	// Cambiar imagen al haber elegido un arma
+		this.scene.sleep('inventoryScene'); 						// Para la escena de inventario
+		this.scene.wake(this.previousSceneName, item); 				// Reanuda la escena anterior
 	}
 
 	update(t,dt) {
-		//console.log(this.game.input.mousePointer.x+" "+this.game.input.mousePointer.y)
 		this.keyboardInput.processInput();
 	}
 
@@ -168,7 +157,6 @@ export default class InventoryScene extends Phaser.Scene {
 			this.dialogBox.clearText();
 			this.dialogBox.setTextToDisplay(item.getDesc());
 			this.dialogBox.printText();
-			//console.log(item.getDesc());
 	}
 
 	inicializeButtonConnections(){
