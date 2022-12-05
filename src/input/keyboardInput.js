@@ -39,8 +39,6 @@ export class KeyboardInput
     // Procesa el input
     processInput() {
         this._scene.input.keyboard.on('keydown',() => {
-        if(this.button.isEnabled()){
-            
             if (phaser.Input.Keyboard.JustDown(this.arrows.up) && this.button.adjacent.up) 
                 this.onPressedKey(() => {
                     this.changeButton(this.button.adjacent.up);
@@ -62,7 +60,6 @@ export class KeyboardInput
                     this.button.onReleaseClick();
                 });
             else this.button.selectButton();
-        }
         });
 
 /*
