@@ -64,14 +64,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		}
 		if(data.inventory === undefined){
 			this.inventory = new Inventory();
-			this.inventory.addWeapon('cimMad');
-			this.inventory.addWeapon('cimAc');
-			this.inventory.addWeapon('cimLoc');
-			this.inventory.addWeapon('dagOx');
-			this.inventory.addWeapon('dagAf');
-			this.inventory.addWeapon('dagEx');
-			this.inventory.addHealth('bolla');
-			this.inventory.addHealth('polbo', 3);
 		}
 		else
 			this.inventory = data.inventory;
@@ -144,9 +136,10 @@ export default class LevelMenuScene extends Phaser.Scene {
 			repeat: 0
 		});
 		// Recoger el envento para cargar el siguiente nivel
-		this.emitter.on('levelSelected', (levelData) => {
+		this.emitter.once('levelSelected', (levelData) => {
 			this.add.sprite(1024, 768, 'fadeOut').setOrigin(1, 1).play('fOut');
 			this.time.delayedCall(1000, () => {this.scene.start('battleScene', levelData)});
+            this.emitter.destroy();
 		});
 	}
 

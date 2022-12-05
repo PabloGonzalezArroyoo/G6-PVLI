@@ -13,6 +13,7 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
         // Añade barra de color escalada
         this.color = 0x00FF00;
         this.colorBar = this.scene.add.rectangle(x - this.colorBarScaleX/2, y - this.colorBarScaleY/2 , this.colorBarScaleX, this.colorBarScaleY, this.color).setOrigin(0,0);
+        this.colorBarTween;
         // Añade cuadro de la barra
         this.scene.add.existing(this).setScale(this.barScaleX,this.barScaleY);
 
@@ -50,7 +51,7 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
             
             if (this.currentHealth >= 0) {
                 /* Animación de la barra de vida */
-                this.scene.tweens.add({
+                this.colorBarTween = this.scene.tweens.add({
                     targets: this.colorBar,
                     width: this.colorBarScaleX * (this.currentHealth/this.maxHealth),
                     fillColor: this.color,
@@ -62,7 +63,7 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
         else {
             console.log("NO HA CAMBIADO LA VIDA")
         }
-        this.scene.time.delayedCall(1000, () => {this.emitter.emit("finishTurn")});
+        this.colorBarTween.once('complete', () => {this.scene.time.delayedCall(500, () => this.emitter.emit("finishTurn"))});
     }
 
     getCurrentHealth(){ return this.currentHealth; }

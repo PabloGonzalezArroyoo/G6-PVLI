@@ -32,6 +32,7 @@ export default class InventoryScene extends Phaser.Scene {
 	preload(){
 		// Fondo
 		this.load.image('inventoryBackground', 'assets/scenes/inventory/inventoryBackground.png');
+
 		// Items
 		this.load.image('puño', 'assets/scenes/inventory/weapons/puño.png');
 		this.load.image('cimMad', 'assets/scenes/inventory/weapons/cimitarraMadera.png');
@@ -40,9 +41,9 @@ export default class InventoryScene extends Phaser.Scene {
 		this.load.image('dagOx', 'assets/scenes/inventory/weapons/dagaOxidada.png');
 		this.load.image('dagAf', 'assets/scenes/inventory/weapons/dagaAfilada.png');
 		this.load.image('dagEx', 'assets/scenes/inventory/weapons/dagaExcéntrica.png');
-		//this.load.image('alMb', 'assets/scenes/inventory/weapons/alabarda.png');
-		//this.load.image('alVrd', 'assets/scenes/inventory/weapons/cimitarraMadera.png');
-		//this.load.image('alDem', 'assets/scenes/inventory/weapons/cimitarraAcero.png');
+		//this.load.image('alMb', 'assets/scenes/inventory/weapons/.png');
+		//this.load.image('alVrd', 'assets/scenes/inventory/weapons/.png');
+		//this.load.image('alDem', 'assets/scenes/inventory/weapons/.png');
 		this.load.image('ropIng', 'assets/scenes/inventory/weapons/roperaInglesa.png');
 		this.load.image('ropCst', 'assets/scenes/inventory/weapons/roperaCastellana.png');
 		this.load.image('ropAl', 'assets/scenes/inventory/weapons/roperaAlocada.png');
@@ -51,8 +52,9 @@ export default class InventoryScene extends Phaser.Scene {
 		this.load.image('guad', 'assets/scenes/inventory/weapons/guadañaExtravagante.png');
 		this.load.image('bolla', 'assets/scenes/inventory/objects/bollaDePan.png');
 		this.load.image('caldo', 'assets/scenes/inventory/objects/caldoGallego.png');
-		//this.load.image('polbo', 'assets/scenes/inventory/objects/pulpoALaGallega.png');
-		this.load.spritesheet('selected', 'assets/scenes/inventory/selectedItem.png', {frameWidth: 32, frameHeight:32})
+		this.load.image('polbo', 'assets/scenes/inventory/objects/pulpoALaGallega.png');
+		this.load.image('asta', 'assets/scenes/inventory/weapons/astaBandera.png');
+		this.load.spritesheet('selected', 'assets/scenes/inventory/selectedItem.png', {frameWidth: 32, frameHeight:32});
 	}
 
 	/**
@@ -81,7 +83,7 @@ export default class InventoryScene extends Phaser.Scene {
 
 		// ARMA EQUIPADA
 		this.add.image(217, 325, this.inventory.getEquipedWeapon().imgID).setScale(8, 8);
-		this.equipedWeaponButton = new Button(this, 217, 325, 'selected', 0, 1, 2, this.keyboardInput, () => {if (this.inventory.getEquipedWeapon().imgID !== 'puño') this.escape(this.inventory.getWeapons()['puño'].weapon)}, ()=>{this.mostrarDescripcion(this.inventory.getEquipedWeapon());}).setScale(8, 8);
+		this.equipedWeaponButton = new Button(this, 217, 325, 'selected', 0, 1, 2, this.keyboardInput, () => {if (this.inventory.getEquipedWeapon().imgID !== 'puño' && this.inventory.getEquipedWeapon().imgID !== 'asta') this.escape(this.inventory.getWeapons()['puño'].weapon)}, ()=>{this.mostrarDescripcion(this.inventory.getEquipedWeapon());}).setScale(8, 8);
 
 		this.weaponButtons = [];
 		for (let i = 0; i < 5; i++) this.weaponButtons[i] = [];
@@ -91,7 +93,7 @@ export default class InventoryScene extends Phaser.Scene {
 		Object.values(armas).forEach(val => {
 			let itemID = val.weapon.imgID;
 
-			if(itemID != 'puño'){
+			if(itemID != 'puño' && itemID != 'asta'){
 				let x = val.i * 102 + width / 2 - 35;
 				let y = val.j * 60 + 140;/*
 				switch (true) {
@@ -101,7 +103,10 @@ export default class InventoryScene extends Phaser.Scene {
 				}
 				y = y * 60 + 140;*/
 				if (val.owned) this.add.image(x, y, itemID).setScale(1.5,1.5);
-				this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput, () => {if (val.owned && this.inventory.getEquipedWeapon().imgID !== itemID) this.escape(val.weapon)}, ()=>{if (val.owned) this.mostrarDescripcion(val.weapon);}).setScale(1.5,1.5);
+				this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput, () => {
+					if (val.owned && this.inventory.getEquipedWeapon().imgID !== itemID && this.inventory.getEquipedWeapon().imgID !== 'asta') 
+						this.escape(val.weapon);
+				}, ()=>{if (val.owned) this.mostrarDescripcion(val.weapon);}).setScale(1.5,1.5);
 				i++;
 			}
 		});

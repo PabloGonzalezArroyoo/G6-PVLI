@@ -111,6 +111,13 @@ export var listOfItems = {
 		imgID: "puño", 
 		attack: 15,
 		defense: 0,
+		defense: 10,
+		desc: "-"},
+
+		{key: "Asta de Bandera",
+		imgID: 'asta',
+		attack: 80,
+		defense: 15,
 		desc: "-"}
 	],
 
@@ -131,3 +138,7 @@ export var listOfItems = {
 		desc: "-"},
 	]
 }
+
+export var weaponsLevel1 = ["cimMad", "dagOx", "alMb", "ropIng", "sacho"];
+export var weaponsLevel2 = ["cimAc", "dagAf", "alVrd", "ropCst", "fouc"];
+export var weaponsLevel3 = ["cimLoc", "dagEx", "alDem", "ropAl", "guad"];
