@@ -1,6 +1,8 @@
 // Importaciones
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
+import { KeyboardInput } from '../input/keyboardInput.js';
+import {Button} from '../input/button.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
 
 
@@ -19,10 +21,19 @@ export default class GameOver extends Phaser.Scene {
 
         // Transición
         this.load.spritesheet('fadeOut', 'assets/scenes/transitions/fadeOutBattleTransition.png', {frameWidth: 1024, frameHeight: 768});
+        this.load.image('GameOver', 'assets/scenes/gameOver/GameOver.png');
+        this.load.image('Maria_Dead', 'assets/scenes/gameOver/Maria_Muerta.png');
+        this.load.image('emptyButton', 'assets/scenes/battle/layers/emptyButton.png');
     }
 
     create() {
         this.emitter = EventDispatcher.getInstance();
+
+        // Letrero de GameOver
+        this.add.image(575, 230, 'GameOver').setScale(5,5);
+
+        // Imagen de maria pita muerta
+        this.add.image(512, 425, 'Maria_Dead').setScale(7,7);
 
         // Transición y elección de nivel
         // FadeOut
@@ -41,22 +52,22 @@ export default class GameOver extends Phaser.Scene {
         const width = this.scale.width;
         const height = this.scale.height;
 
-        this.add.text(width * 0.5, height * 0.5, 'Game Over', {})
-        .setOrigin(0.5);
-
         this.inventory.setInventory(this.inventoryBackup);                                                   // Devuelve los objetos perdidos durante el combate
 
-        //Sustituir los dos siguientes inputs por botones
-        this.input.keyboard.once('keydown-SPACE', () => {
-            this.emitter.destroy();
-            this.scene.start('levelMenuScene', {inventory: this.inventory});                             // Esta funcion sirve para volver a la pantalla de titulo
-        });
-        this.input.keyboard.once('keydown-R', () => {
-            this.level.loadLevel(this.inventory);                                 // Esta funcion sirve para reintentar el nivel
-            this.emitter.destroy();
-        });
+        this.keyboardInput = new KeyboardInput(this);
+
+        this.botones = [new Button(this, 375, 600, 'emptyButton', 0, 1, 2, this.keyboardInput, () => {this.scene.start('levelMenuScene', {inventory: this.inventory})}),
+                    new Button(this, 675, 600, 'emptyButton', 0, 1, 2, this.keyboardInput, () => {this.level.loadLevel(this, this.inventory);})
+                    ];
+
+        this.buttonText1 = this.add.text(375, 597, 'Salir', {fontFamily: 'Silkscreen'}).setOrigin(0.5).setFontSize(20).setColor('black');
+        this.buttonText2 = this.add.text(675, 597, 'Reintentar', {fontFamily: 'Silkscreen'}).setOrigin(0.5).setFontSize(20).setColor('black');
+
+        this.keyboardInput.setStartButton(this.botones[0]);
     }
 
-    reloadLevel(){
+    update(t,dt) {
+        super.update(t,dt);
+        this.keyboardInput.processInput();
     }
 }

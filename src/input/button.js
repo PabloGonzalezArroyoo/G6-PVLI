@@ -51,6 +51,9 @@ export class Button extends Phaser.GameObjects.Sprite {
     isSelected(){
         return this.frame.name === this._frameOnOver;
     }
+    isEnabled(){
+        return this.input.enabled;
+    }
 
     // Asigna los botones adjacentes a este
     // Usado para acceder a estos a traves del input

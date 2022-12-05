@@ -8,11 +8,12 @@ export class Enemy extends Character {
     constructor(scene, x, y, spritesheet, maxHealth, damage) {
         super(x, y, new EnemyAnimator(scene, x, y, spritesheet), new HealthController(scene, x, y - 150, maxHealth), damage);
         this.scene = scene;
+        this.adjacent={};
         //Hacer al enemigo interactuable
         this.emmiter = EventDispatcher.getInstance();
-        this.animator.on('pointerover',()=>{this.animator.setScale(7)});
-        this.animator.on('pointerout',()=>{this.animator.setScale(6)});
-        this.animator.on('pointerdown',()=>{this.OnClick()});
+        this.animator.on('pointerover',()=>{this.selectButton()});
+        this.animator.on('pointerout',()=>{this.onPointerOut()});
+        this.animator.on('pointerdown',()=>{this.onReleaseClick()});
     }
 
     destroy(){
@@ -45,9 +46,27 @@ export class Enemy extends Character {
     getAnimator() { return this.animator; }
     
     // Devuelve el enemigo sobre el que realizar el ataque y avisa de que este ya se puede realizar
-    OnClick() {   
+    onReleaseClick() {   
         this.scene.selectedEnemy = this;
+        this.onPointerOut();
         this.emmiter.emit('enemyselected');
+    }
+    //Devuelve al enemigo a su estado inicial
+    onPointerOut()
+    {
+        this.animator.setScale(6)
+    }
+    //Detecta si el enemigo está ya seleccionado o no
+    isSelected(){
+        return this.animator.scale === 7;
+    }
+    // Selecciona al enemigo
+    selectButton(){
+        this.animator.setScale(7);
+    }
+
+    isEnabled(){
+        return this.animator.input.enabled;
     }
     
     // Devuelve el nombre del enemigo
@@ -64,12 +83,29 @@ export class Enemy extends Character {
     
     // Devuelve el daño
     getDamage() { return this.damage; }
+   
+   
+    // Asigna los enemigos adjacentes a este
+    // Usado para acceder a estos a traves del input de teclado
+    setAdjacents(up, down, left, right) {
+        this.setAdjacent(up, "up");
+        this.setAdjacent(down, "down");
+        this.setAdjacent(left, "left");
+        this.setAdjacent(right, "right");
+    }
+    // Asigna el boton dado en la direccion dada
+    setAdjacent(button, direction){
+        Object.defineProperty(this.adjacent, direction, {
+            value: button,
+            writable: true
+        });
+    }
 }
 
 // Rufián Embriagado
 export class DrunkRuffian extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'drunkRuffian', 100, 15);
+        super(scene, x, y, 'drunkRuffian', 100, 120);
     }
 }
 
