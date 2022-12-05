@@ -14,7 +14,17 @@ export class Enemy extends Character {
         this.animator.on('pointerover',()=>{this.selectButton()});
         this.animator.on('pointerout',()=>{this.onPointerOut()});
         this.animator.on('pointerdown',()=>{this.onReleaseClick()});
+    }
 
+    destroy(){
+        this.animator.destroy();
+        this.healthController.destroy();
+    }
+
+    // método para añadir una escena si no tenía
+    setScene(scene) {
+        this.healthController = new HealthController(scene, this.x, this.y - 150, this.maxHealth);
+        this.animator = new EnemyAnimator(scene, this.x, this.y, this.spritesheet);
     }
 
     attack(player, abilityPercentage) {    
@@ -186,5 +196,10 @@ export class ScurviedSailor extends Enemy {
         else if (rnd == 2) enemyType = AlienatedCorsair;
         // Habilidad
         return enemyType.prototype.ability.call(this, player);
+    }
+
+    stealFlag() {
+        this.animator.noFlag = true;
+        this.animator.playIdle();
     }
 }

@@ -11,7 +11,9 @@ export class Level {
     constructor(levelData) {
         this.x = levelData.x; this.y = levelData.y;
         this.state = State.locked;
-        this.loot = levelData.loot; // array con todos los posibles items que dar al jugador al completar el nivel
+        this.level1prob = levelData.level1prob;
+        this.level2prob = levelData.level2prob;
+        this.level3prob = levelData.level3prob;
         this.enemies = levelData.enemies; // array con todos los enemigos del nivel
 
         this.spriteSheet = 'level';
@@ -23,7 +25,10 @@ export class Level {
     
     // Carga el nivel si no está bloqueado, emitiendo un evento que pasa los valores del nivel
     loadLevel(inventory){
-        if (this.state !== State.locked) this.emitter.emit('levelSelected', {level: this, inventory: inventory});
+        if (this.state !== State.locked) {
+            this.emitter.emit('levelSelected', {level: this, inventory: inventory});
+            this.emitter.destroy();
+        }
     }
 
     // Asigna al array de siguientes niveles los correspondientes
