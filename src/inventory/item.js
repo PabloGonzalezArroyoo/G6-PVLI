@@ -52,14 +52,14 @@ export class WeaponItem extends Item {
 	}
 
 	static bleeding(percentage) {
-		return function(player, enemies, index){
-			enemies[index].turnEffectController.activateBleed(percentage, 3);
+		return function(player, enemies, enemy){
+			enemy.turnEffectController.activateBleed(percentage, 3);
 			return player.attack(enemies[index]);
 		}
 	}
 
 	static stun(maxTurns, percentages) {
-		return function(player, enemies, index) {
+		return function(player, enemies, enemy) {
 			let activeTurns = 0;
 			let active = true;
 			while (activeTurns < maxTurns && active){
@@ -67,24 +67,24 @@ export class WeaponItem extends Item {
 				if (active) activeTurns++;
 			}
 			console.log(activeTurns);
-			enemies[index].turnEffectController.activateStun(activeTurns);
+			enemy.turnEffectController.activateStun(activeTurns);
 			return player.attack(enemies[index]);
 		}
 	}
 
 	static multipleAttack(times) {
-		return function(player, enemies, index) {
+		return function(player, enemies, enemy) {
 			let dmg = player.getDamage();
 			dmg = dmg * 60 / 100;
 			for (let i = 0; i < times; i++)
-				enemies[index].healthController.changeHealth(-dmg);
+				enemy.healthController.changeHealth(-dmg);
 			return dmg * times;
 		}
 	}
 
 	static lifeAbsorption(percentage) {
-		return function (player, enemies, index) {
-			let dmg = player.attack(enemies[index]);
+		return function (player, enemies, enemy) {
+			let dmg = player.attack(enemy);
 			player.healthController.changeHealth(dmg*percentage/100);
 		}
 	}

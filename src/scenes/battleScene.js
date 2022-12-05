@@ -194,7 +194,7 @@ export default class BattleScene extends Phaser.Scene {
 		switch (action){									
 			
       		case 'attack' : 															// Se selecciona atacar
-				this.UpdateQueLocura(35)																
+				this.UpdateQueLocura(100)																
 				this.dialogBox.clearText();												// Borrar texto previo
 				if (this.enemies.length > 1) {											// Si hay más de un enemigo en escena
 					this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
@@ -251,8 +251,30 @@ export default class BattleScene extends Phaser.Scene {
       		case 'queLocura' : 																	// Si selecciona QueLocura
 				this.DisableQueLocura(); 																	
 				this.dialogBox.clearText();														// Borrar texto previo
-				this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
-				this.emitter.once('finishTexting', () => {this.player.quelocura(this.enemies, 0)});
+				if (this.enemies.length > 1 && (this.player.inventory.getEquipedWeapon().imgID != 'cimMad'||
+						this.player.inventory.getEquipedWeapon().imgID != 'CimAc'||this.player.inventory.getEquipedWeapon().imgID != 'cimLoc')) {											// Si hay más de un enemigo en escena
+					this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
+					//Se hace a todos los enemigos interactuables
+					this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {
+						Element.animator.setInteractive();
+						this.keyboardInput.setStartButton(this.enemies[0]);	
+					});});
+					//Una vez se reciba confirmación del ataque y el enemigo seleccionado, se ataca.
+					this.emitter.once('enemyselected',() => {
+						this.dialogBox.clearText();														// Borrar texto previo
+						this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
+						this.emitter.once('finishTexting', () => {
+								this.player.quelocura(this.enemies, this.selectedEnemy);
+								this.enemies.forEach(Element => {Element.animator.disableInteractive();});
+							});
+						});	
+				} else {																                // Si solo hay uno
+					this.dialogBox.clearText();														// Borrar texto previo
+					this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
+					this.emitter.once('finishTexting', () => {
+						this.player.quelocura(this.enemies, this.enemies[0]);
+					});
+				}
 				break;
 		}	
 		this.emitter.once('finishTurn', () => {				// Evento para que el enemigo ataque	
