@@ -117,9 +117,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
 			this.scene.sleep('levelMenuScene');							// Parar la escena de menú
 			this.scene.wake('inventoryScene', 'levelMenuScene');		// Reanudar la escena de inventario
-			this.events.once('wake', (scene, item) => {					// Evento al volver de la escena de inventario
-				if (item !== "none" && item.type !== "HEALTH") this.inventory.setEquipedWeapon(item.imgID);
-			});
 		});
 		this.inventoryButton.setScale(3, 3);
 
