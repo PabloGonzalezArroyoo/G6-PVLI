@@ -51,7 +51,6 @@ export default class Player extends Character {
         this.animator.playWhatAMadness();
         this.animator.once("animationcomplete-whatAmadness",()=>{
             this.inventory.equipedWeapon.queLocura(this, enemies, index);
-            this.healthController.scene.time.delayedCall(1000, () => {this.healthController.emitter.emit("finishTurn")});
         });
     }
 

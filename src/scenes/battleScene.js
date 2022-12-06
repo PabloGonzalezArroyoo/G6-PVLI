@@ -463,9 +463,9 @@ export default class BattleScene extends Phaser.Scene {
 	}
 
 	// Activa y vuelve visible los botones
-	EnableButtons() {
-		for (var i=0; i < this.botones.length; i++) {
-			if (i === 3 && this.currentQueLocura <= 100) {
+	EnableButtons(){
+		for(var i=0; i < this.botones.length; i++) {
+			if(i === 3 && this.currentQueLocura < 100){
 				this.emptyButton.visible = true;
 			} else {
 				this.botones[i].setInteractive();
