@@ -150,6 +150,8 @@ export default class BattleScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
+    	this.emitter = EventDispatcher.getInstance();
+
 		// Fondo
 		this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
@@ -178,9 +180,13 @@ export default class BattleScene extends Phaser.Scene {
     
 		this.keyboardInput = new KeyboardInput(this);
 		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('attack')}),
-		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this.keyboardInput, () => {this.scene.pause();this.scene.launch('inventoryScene', {scene: 'battleScene', inventory: this.player.inventory});this.events.once('resume', (scene, item) => {this.useItem(item)})}),
-		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('defense')}),
-		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('queLocura')})];
+		 	new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this.keyboardInput, () => {
+				this.scene.sleep('battleScene');								// Parar la escena de batalla
+				this.scene.wake('inventoryScene', 'battleScene');				// Reanudar la escena de inventario
+				this.events.once('wake', (scene, item) => {this.useItem(item)})	// Evento al volver de la escena de inventario
+		 	}),
+		 	new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('defense')}),
+		 	new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('queLocura')})];
 
 		this.botones[0].setAdjacents(null, this.botones[2], null, this.botones[1]);
 		this.botones[1].setAdjacents(null, this.botones[3], this.botones[0], null);
@@ -193,8 +199,6 @@ export default class BattleScene extends Phaser.Scene {
 
 		this.DisableQueLocura();
 		this.UpdateQueLocura(0);
-    
-    	this.emitter = EventDispatcher.getInstance();
 
 		// Transición
 		// FadeIn

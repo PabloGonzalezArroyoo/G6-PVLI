@@ -18,14 +18,14 @@ export default class InventoryScene extends Phaser.Scene {
 	constructor() {
 		super({ key: 'inventoryScene' });
 		this.dialogBox;
+		this.previousSceneName;
 	}
 
 	/**
 	 * Inicializa las variables
 	 * - Asignar si es inventario principal o de batalla
 	*/
-	init(data){
-		this.previousSceneName = data.scene;
+	init(data) {
 		this.inventory = data.inventory;
 	}
 
@@ -63,17 +63,20 @@ export default class InventoryScene extends Phaser.Scene {
 	create() {
 		this.emitter = EventDispatcher.getInstance();
 
-
+		// BORRAR ESTAS LÍNEAS PARA EL JUEGO FINAL
 		this.inventory.addWeapon('fouc');
+		this.inventory.addWeapon('dagEx');
+		this.inventory.addHealth('polbo');
 
-
+		// Guardar la escena de la que te han despertado
+		this.events.on('wake', (scene, prev) => {this.previousSceneName = prev});
+		
 		// Constantes
 		const width = this.scale.width;
 		const height = this.scale.height;
-		const self = this;
 		
 		// Pintamos el fondo
-		let bg = this.add.image(0,0, 'inventoryBackground').setOrigin(0, 0).setDisplaySize(width, height);
+		this.add.image(0,0, 'inventoryBackground').setOrigin(0, 0).setDisplaySize(width, height);
 
 		// SEPARACION ENTRE ARMAS Y COMIDA
 		let armas = this.inventory.getWeapons();
@@ -82,8 +85,13 @@ export default class InventoryScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 
 		// ARMA EQUIPADA
-		this.add.image(217, 325, this.inventory.getEquipedWeapon().imgID).setScale(8, 8);
-		this.equipedWeaponButton = new Button(this, 217, 325, 'selected', 0, 1, 2, this.keyboardInput, () => {if (this.inventory.getEquipedWeapon().imgID !== 'puño' && this.inventory.getEquipedWeapon().imgID !== 'asta') this.escape(this.inventory.getWeapons()['puño'].weapon)}, ()=>{this.mostrarDescripcion(this.inventory.getEquipedWeapon());}).setScale(8, 8);
+		this.equiped = this.add.image(217, 325, this.inventory.getEquipedWeapon().imgID).setScale(8, 8);
+		this.equipedWeaponButton = new Button(this, 217, 325, 'selected', 0, 1, 2, 
+			this.keyboardInput, () => {
+				if (this.inventory.getEquipedWeapon().imgID !== 'puño' && this.inventory.getEquipedWeapon().imgID !== 'asta')
+				this.selected(this.inventory.getWeapons()['puño'], "W")},
+			() => {this.mostrarDescripcion(this.inventory.getEquipedWeapon())}
+		).setScale(8, 8);
 
 		this.weaponButtons = [];
 		for (let i = 0; i < 5; i++) this.weaponButtons[i] = [];
@@ -103,10 +111,9 @@ export default class InventoryScene extends Phaser.Scene {
 				}
 				y = y * 60 + 140;*/
 				if (val.owned) this.add.image(x, y, itemID).setScale(1.5,1.5);
-				this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput, () => {
-					if (val.owned && this.inventory.getEquipedWeapon().imgID !== itemID && this.inventory.getEquipedWeapon().imgID !== 'asta') 
-						this.escape(val.weapon);
-				}, ()=>{if (val.owned) this.mostrarDescripcion(val.weapon);}).setScale(1.5,1.5);
+				this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput,
+					() => {this.selected(val, "W")},
+					()=>{if (val.owned) this.mostrarDescripcion(val.weapon);}).setScale(1.5,1.5);
 				i++;
 			}
 		});
@@ -121,56 +128,66 @@ export default class InventoryScene extends Phaser.Scene {
 			
 			let x = val.i * 165 + width / 2; let y = 475;
 			if (val.amount) this.add.image(x, y, itemID).setScale(3, 3);
-			this.foodButtons[val.i] = new Button(this, x, y, 'selected', 0, 1, 2, this.keyboardInput, () => {if (val.amount) this.escape(val.item)}, ()=>{if (val.amount) this.mostrarDescripcion(val.item);}).setScale(3,3);
+			this.foodButtons[val.i] = new Button(this, x, y, 'selected', 0, 1, 2, this.keyboardInput,
+				() => {if (val.amount) this.selected(val.item, "H")},
+				() => {if (val.amount) this.mostrarDescripcion(val.item);}).setScale(3,3);
 			if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
 			i++;
 		});
-
-		// TECLAS
-		//Para seleccionar botones con teclas, creamos el objeto tecla
-		//var keys = this.scene.input.keyboard.addKeys('LEFT, UP, RIGHT,DOWN,W,A,S,D');
-		//var Esc = this.scene.input.keyboard.addKey('ESC,X');
-		//var Enter = this.scene.input.keyboard.addKeys('ENTER,Z')
-
-		//Ejemplo: Al pulsar la flecha izquierda
-		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
-		
-		//Ejemplo: Al pulsar el enter
-		//Enter.on('down', function () {/*Marca el botón*/ });
-		//Enter.on('up', function () {
-			 /*Se usa el objeto seleccionado*/
-		//});
-		//Esc.on('down', function () {
-			//this.scene.start('optionsScene');//Se abre el menu de opciones
-		//});
 
 		// Pintamos botón de salir
 		this.inventoryButton = new Button(this, width - 50, 46, 'inventory', 2, 0, 1, this.keyboardInput, () => {this.escape()}).setScale(3, 3);
 		this.keyboardInput.setStartButton(this.equipedWeaponButton);
 		this.inicializeButtonConnections()
-		// Al pulsar la tecla T se sale de la escena de inventario
-		this.input.keyboard.once('keydown-T', () => { this.escape(); });
-		this.dialogBox= new DialogBox(this, 70, 620, 850);
+		
+		// Al pulsar la tecla ESC se sale de la escena de inventario
+		this.input.keyboard.once('keydown-ESC', () => { this.escape(); });
+		this.dialogBox = new DialogBox(this, 70, 620, 850).setColor('99582A');
 	}
 
 	// SALIDA DE LA ESCENA
 	escape(item = "none") {
-		this.scene.stop('inventoryScene'); 			// Para la escena de inventario
-		this.scene.resume(this.previousSceneName, item); 	// Reanuda la escena anterior
+		this.scene.sleep('inventoryScene'); 						// Para la escena de inventario
+		this.scene.wake(this.previousSceneName, item); 				// Reanuda la escena anterior
 	}
 
 	update(t,dt) {
-		//console.log(this.game.input.mousePointer.x+" "+this.game.input.mousePointer.y)
 		this.keyboardInput.processInput();
 	}
 
+	// Muestra la descripción de los objetos borrando el texto anterior y añadiendo el nuevo
 	mostrarDescripcion(item) {
 			this.dialogBox.clearText();
 			this.dialogBox.setTextToDisplay(item.getDesc());
 			this.dialogBox.printText();
-			//console.log(item.getDesc());
 	}
 
+	// Gestiona si, al elegirse un arma, debe volver a la escena anterior haciendo el cambio en esa escena (battleScene) o si debe mantenerse 
+	// en la escena de inventario haciendo el cambio aquí (levelMenuScene)
+	selected(val, type) {
+		if (type === "W") {
+			if (val.owned && this.inventory.getEquipedWeapon().imgID !== val.weapon.imgID && this.inventory.getEquipedWeapon().imgID !== 'asta') {
+				// Cambiar imagen al haber elegido un arma	
+				this.equiped.setTexture(val.weapon.imgID);
+				
+				// Salir en battleScene o mantenerse en el resto y aplicar cambios
+				if (this.previousSceneName === 'battleScene') this.escape(val.weapon);
+				else this.inventory.setEquipedWeapon(val.weapon.imgID);
+			}
+		}
+		else {
+			// Usar el objeto curativo
+			if (this.previousSceneName === 'battleScene') this.escape(val);
+			else {
+				// Evitar que el jugador use el obejto fuera de la escena de batalla
+				this.dialogBox.setTextToDisplay("Mejor no uses el/la " + val.name + " ahora, te será más útil en batalla");
+				this.dialogBox.printText();
+			};
+		}
+		
+	}
+
+	// Inicializar conexiones de los botones para el input por teclado
 	inicializeButtonConnections(){
 		// Salir
 		this.inventoryButton.setAdjacents(null, this.weaponButtons[4][0], this.weaponButtons[4][0], null);
