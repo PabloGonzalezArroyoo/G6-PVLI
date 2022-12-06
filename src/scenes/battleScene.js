@@ -435,7 +435,7 @@ export default class BattleScene extends Phaser.Scene {
 	// Activa y vuelve visible los botones
 	EnableButtons(){
 		for(var i=0; i < this.botones.length; i++) {
-			if(i === 3 && this.currentQueLocura <= 100){
+			if(i === 3 && this.currentQueLocura < 100){
 				this.emptyButton.visible = true;
 			}else{
 				this.botones[i].setInteractive();
@@ -507,8 +507,8 @@ export default class BattleScene extends Phaser.Scene {
 		}
 		if(this.enemies.length === 0){
 			this.dialogBox.clearText();																	// Borrar texto previo	
-				// Loot
-				this.EnableLoot();			
+			// Loot
+			this.EnableLoot();			
 			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
 		}
 		else{

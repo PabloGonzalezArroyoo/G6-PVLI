@@ -54,6 +54,7 @@ export class WeaponItem extends Item {
 	static bleeding(percentage) {
 		return function(player, enemies, enemy){
 			enemy.turnEffectController.activateBleed(percentage, 3);
+            this.player.scene.time.delayedCall(1000, () => {this.player.healthController.emitter.emit("finishTurn")});
 			return player.attack(enemies[index]);
 		}
 	}
@@ -68,6 +69,7 @@ export class WeaponItem extends Item {
 			}
 			console.log(activeTurns);
 			enemy.turnEffectController.activateStun(activeTurns);
+            this.player.scene.time.delayedCall(1000, () => {this.player.healthController.emitter.emit("finishTurn")});
 			return player.attack(enemies[index]);
 		}
 	}
