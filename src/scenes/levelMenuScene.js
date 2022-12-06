@@ -51,6 +51,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 		super({key: 'levelMenuScene'});
 
 		this.inventory;
+		this.emitter = EventDispatcher.getInstance();
 	}
 
 	/**
@@ -96,10 +97,10 @@ export default class LevelMenuScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-		// Variables constantes y eventos
+		// Variables constantes y se destruyen los eventos anteriores
 		const self = this;
 		const camera = this.cameras.main;
-		this.emitter = EventDispatcher.getInstance();
+		this.emitter.destroy();
 
 		// Musica
 		const musicConfig = {
