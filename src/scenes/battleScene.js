@@ -384,6 +384,7 @@ export default class BattleScene extends Phaser.Scene {
 						if (levelFailed(this.player)) {
 							this.dialogBox.clearText();																	// Borrar texto previo
 							this.time.delayedCall(2000, () => {
+								this.music.stop();
 								this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
 						}
 						else if (index < this.enemies.length) this.EnemyTurn(index); 	//Se llama al ataque de los demas enemigos
@@ -411,6 +412,7 @@ export default class BattleScene extends Phaser.Scene {
 				if (levelFailed(this.player)) {
 					this.dialogBox.clearText();																	// Borrar texto previo
 					this.time.delayedCall(2000, () => {
+						this.music.stop();
 						this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
 				}
 				else this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects()})});
