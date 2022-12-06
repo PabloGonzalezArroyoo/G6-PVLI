@@ -53,6 +53,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 		super({ key: 'levelMenuScene' });
 
 		this.inventory;
+		this.emitter = EventDispatcher.getInstance();
 	}
 
 	/**
