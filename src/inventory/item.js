@@ -86,7 +86,8 @@ export class WeaponItem extends Item {
 
 	static lifeAbsorption(percentage) {
 		return function (player, enemies, enemy) {
-			let dmg = player.attack(enemy);
+			let dmg = player.getDamage();
+			player.attack(enemy);
 			player.healthController.changeHealth(dmg*percentage/100);
 		}
 	}

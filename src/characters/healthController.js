@@ -23,7 +23,7 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
         this.emitter = EventDispatcher.getInstance();        
     }
 
-    changeHealth(value) {
+    changeHealth(value, finish = true) {
 
         if (value != 0) {
             /* Lógica */
@@ -63,7 +63,9 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
         else {
             console.log("NO HA CAMBIADO LA VIDA")
         }
-        this.colorBarTween.once('complete', () => {this.scene.time.delayedCall(500, () => this.emitter.emit("finishTurn"))});
+        if(finish){
+            this.colorBarTween.once('complete', () => {this.scene.time.delayedCall(500, () => {this.emitter.emit("finishTurn")})});
+        }
     }
 
     getCurrentHealth(){ return this.currentHealth; }
