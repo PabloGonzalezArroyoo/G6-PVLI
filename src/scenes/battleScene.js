@@ -79,12 +79,14 @@ export default class BattleScene extends Phaser.Scene {
 	preload() {
 		// Fondo
 		this.load.image('battleBackground', 'assets/scenes/battle/battleBackground.png');
+
 		// Maria Pita (Animaciones)
 		this.load.spritesheet('player_idle', 'assets/characters/mariaPita/mariaPita_idle.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('player_idleBack', 'assets/characters/mariaPita/mariaPita_idleBack.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('player_jump', 'assets/characters/mariaPita/mariaPita_jump.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('player_attack', 'assets/characters/mariaPita/mariaPita_attack.png', {frameWidth: 50, frameHeight: 32});
-		this.load.spritesheet('mariaPita_defendBack', 'assets/characters/mariaPita/mariaPita_defendBack.png', {frameWidth: 50, frameHeight: 32});
+		this.load.spritesheet('player_defendBack', 'assets/characters/mariaPita/mariaPita_defendBack.png', {frameWidth: 50, frameHeight: 32});
+		this.load.spritesheet('player_whatAmadness', 'assets/characters/mariaPita/mariaPita_whatAmadness.png', {frameWidth: 50, frameHeight: 32})
 
 		// Enemy (Animaciones)
 		//this.load.spritesheet('enemy', 'assets/enemy.png', {frameWidth: 97, frameHeight: 97});
@@ -150,8 +152,8 @@ export default class BattleScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-        // Se destruyen los eventos anteriores
-        this.emitter.destroy();
+    // Se destruyen los eventos anteriores
+    this.emitter.destroy();
         
 		// Fondo
 		this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
@@ -181,10 +183,14 @@ export default class BattleScene extends Phaser.Scene {
     
 		this.keyboardInput = new KeyboardInput(this);
 		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('attack')}),
-		 new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this.keyboardInput, () => {this.scene.pause();this.scene.launch('inventoryScene', {scene: 'battleScene', inventory: this.player.inventory});this.events.once('resume', (scene, item) => {this.useItem(item)})}),
-		 new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('defense')}),
-		 new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('queLocura')})];
-		 //Coloca los botones adyacentes en las acciones del jugador
+		 	new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this.keyboardInput, () => {
+				this.scene.sleep('battleScene');								// Parar la escena de batalla
+				this.scene.wake('inventoryScene', 'battleScene');				// Reanudar la escena de inventario
+				this.events.once('wake', (scene, item) => {this.useItem(item)})	// Evento al volver de la escena de inventario
+		 	}),
+		 	new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('defense')}),
+		 	new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('queLocura')})];
+
 		this.botones[0].setAdjacents(null, this.botones[2], null, this.botones[1]);
 		this.botones[1].setAdjacents(null, this.botones[3], this.botones[0], null);
 		this.botones[2].setAdjacents(this.botones[0], null, null, this.botones[3]);
@@ -323,7 +329,8 @@ export default class BattleScene extends Phaser.Scene {
 		// Si el enemigo sigue vivo hace su acción
 		if (!levelFailed(this.enemies[index]) && !this.enemies[index].isStuned()) {
 			this.dialogBox.clearText();                           // Borrar texto previo
-			this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' (' +  index + ')' +' ataca a Maria Pita');	// Enviar el nuevo texto
+			if (this.enemies.length <= 1) this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' ataca a Maria Pita'); // Enviar el nuevo texto
+			else this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' (' +  index + ')' +' ataca a Maria Pita');	
 			this.emitter.once('finishTexting', () => {						// Crea un evento para que el enemigo ataque
 				
 				// Guarda el daño hecho o el daño y un texto si se ha usado una habilidad
@@ -499,7 +506,7 @@ export default class BattleScene extends Phaser.Scene {
 			}
 		}
 		if(this.enemies.length === 0){
-			this.dialogBox.clearText();																	// Borrar texto previo				
+			this.dialogBox.clearText();																	// Borrar texto previo	
 				// Loot
 				this.EnableLoot();			
 			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});

@@ -52,7 +52,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 	constructor() {
 		super({ key: 'levelMenuScene' });
 
-        this.emitter = EventDispatcher.getInstance();
+		this.inventory;
 	}
 
 	/**
@@ -67,6 +67,10 @@ export default class LevelMenuScene extends Phaser.Scene {
 		}
 		else
 			this.inventory = data.inventory;
+
+		// Lanzar escena del inventario y pararla para dejarla de fondo
+		this.scene.launch('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory});
+		this.scene.sleep('inventoryScene');
 	}
 
 	/**
@@ -91,6 +95,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
+  
         // Se destruyen los eventos anteriores
         this.emitter.destroy();
         
@@ -112,8 +117,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 		// Botón de inventario
 		this.inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
-			this.scene.pause('levelMenuScene');
-			this.scene.launch('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory});
+			this.scene.sleep('levelMenuScene');							// Parar la escena de menú
+			this.scene.wake('inventoryScene', 'levelMenuScene');		// Reanudar la escena de inventario
 		});
 		this.inventoryButton.setScale(3, 3);
 
