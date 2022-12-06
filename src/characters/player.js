@@ -53,13 +53,12 @@ export default class Player extends Character {
             this.inventory.equipedWeapon.queLocura(this, enemies, index);
             this.healthController.scene.time.delayedCall(1000, () => {this.healthController.emitter.emit("finishTurn")});
         });
-        
     }
 
     receiveAttack(damage){
         // guardar en esta variable el calculo del daño
         this.receivedDamage = damage;
-        this.receivedDamage-=this.receivedDamage*this.inventory.equipedWeapon.defValue;
+        this.receivedDamage-=this.receivedDamage*(this.inventory.equipedWeapon.defValue/100);
         if(this.turnEffectController.defenseTurns > 0) { //Si quedan turnos de defensa
              this.receivedDamage -= this.receivedDamage * (0.15 * this._defenseBoost);  //Reduce el daño segun los turnos de defensa que se tengan
         }
