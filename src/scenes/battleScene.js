@@ -51,6 +51,8 @@ export default class BattleScene extends Phaser.Scene {
 
 		this.enemies = [];
 		this.selectedEnemy= null;
+    
+    	this.emitter = EventDispatcher.getInstance();
 	}
 
 	/**
@@ -148,6 +150,9 @@ export default class BattleScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
+        // Se destruyen los eventos anteriores
+        this.emitter.destroy();
+        
 		// Fondo
 		this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
@@ -196,8 +201,6 @@ export default class BattleScene extends Phaser.Scene {
 		this.emptyButton.setCrop(0, 0, 0, 0);
 		this.DisableQueLocura();
 		this.UpdateQueLocura(0);
-    
-    	this.emitter = EventDispatcher.getInstance();
 
 		// Transición
 		// FadeIn
@@ -496,7 +499,6 @@ export default class BattleScene extends Phaser.Scene {
 			}
 		}
 		if(this.enemies.length === 0){
-			this.emitter.destroy();
 			this.dialogBox.clearText();																	// Borrar texto previo				
 				// Loot
 				this.EnableLoot();			

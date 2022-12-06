@@ -91,6 +91,9 @@ export default class LevelMenuScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
+        // Se destruyen los eventos anteriores
+        this.emitter.destroy();
+        
 		const camera = this.cameras.main;
 
 		// Fade In
@@ -139,7 +142,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.emitter.once('levelSelected', (levelData) => {
 			this.add.sprite(1024, 768, 'fadeOut').setOrigin(1, 1).play('fOut');
 			this.time.delayedCall(1000, () => {this.scene.start('battleScene', levelData)});
-            this.emitter.destroy();
 		});
 	}
 

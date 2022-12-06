@@ -9,6 +9,8 @@ import EventDispatcher from '../combat/eventDispatcher.js';
 export default class GameOver extends Phaser.Scene {
     constructor() {
         super({ key: 'GameOverScene' });
+
+        this.emitter = EventDispatcher.getInstance();
     }
 
     init(data){
@@ -21,13 +23,18 @@ export default class GameOver extends Phaser.Scene {
 
         // Transición
         this.load.spritesheet('fadeOut', 'assets/scenes/transitions/fadeOutBattleTransition.png', {frameWidth: 1024, frameHeight: 768});
+        // Imagenes de fondo
         this.load.image('GameOver', 'assets/scenes/gameOver/GameOver.png');
         this.load.image('Maria_Dead', 'assets/scenes/gameOver/Maria_Muerta.png');
-        this.load.image('emptyButton', 'assets/scenes/battle/layers/emptyButton.png');
+
+        // Sprites de botones
+        this.load.spritesheet('retryButton', 'assets/scenes/gameOver/retryButton.png',{frameWidth: 235, frameHeight: 62});
+        this.load.spritesheet('exitButton', 'assets/scenes/gameOver/exitButton.png',{frameWidth: 235, frameHeight: 62});
     }
 
     create() {
-        this.emitter = EventDispatcher.getInstance();
+        // Se destruyen los eventos anteriores
+        this.emitter.destroy();
 
         // Letrero de GameOver
         this.add.image(575, 230, 'GameOver').setScale(5,5);
@@ -43,7 +50,8 @@ export default class GameOver extends Phaser.Scene {
             frameRate: 17,
             repeat: 0
         });
-        // Recoger el envento para cargar el siguiente nivel
+
+        // Recoger el evento para cargar el siguiente nivel
         this.emitter.once('levelSelected', (levelData) => {
             this.add.sprite(1024, 768, 'fadeOut').setOrigin(1, 1).play('fOut');
             this.time.delayedCall(1000, () => {this.scene.start('battleScene', levelData)});
@@ -56,14 +64,14 @@ export default class GameOver extends Phaser.Scene {
 
         this.keyboardInput = new KeyboardInput(this);
 
-        this.botones = [new Button(this, 375, 600, 'emptyButton', 0, 1, 2, this.keyboardInput, () => {this.scene.start('levelMenuScene', {inventory: this.inventory})}),
-                    new Button(this, 675, 600, 'emptyButton', 0, 1, 2, this.keyboardInput, () => {this.level.loadLevel(this, this.inventory);})
+        this.botones = [new Button(this, 375, 600, 'exitButton', 0, 1, 2, this.keyboardInput, () => {this.scene.start('levelMenuScene', {inventory: this.inventory})}),
+                    new Button(this, 675, 600, 'retryButton', 0, 1, 2, this.keyboardInput, () => {this.level.loadLevel(this.inventory);})
                     ];
 
-        this.buttonText1 = this.add.text(375, 597, 'Salir', {fontFamily: 'Silkscreen'}).setOrigin(0.5).setFontSize(20).setColor('black');
-        this.buttonText2 = this.add.text(675, 597, 'Reintentar', {fontFamily: 'Silkscreen'}).setOrigin(0.5).setFontSize(20).setColor('black');
-
         this.keyboardInput.setStartButton(this.botones[0]);
+
+        this.botones[0].setAdjacents(null, null, null, this.botones[1]);
+        this.botones[1].setAdjacents(null, null, this.botones[0], null);
     }
 
     update(t,dt) {
