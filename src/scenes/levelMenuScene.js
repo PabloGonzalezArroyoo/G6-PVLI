@@ -4,7 +4,6 @@ import Inventory from '../inventory/inventory.js';
 import { Level } from '../levels/level.js';
 import { KeyboardInput } from '../input/keyboardInput.js';
 import { Button } from '../input/button.js';
-import {listOfItems} from '../data/listOfItems.js';
 import {listOfLevels} from '../data/listOfLevels.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
 
@@ -48,9 +47,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 	 * Escena principal.
 	 * @extends Phaser.Scene
 	 */
-
 	constructor() {
-		super({ key: 'levelMenuScene' });
+		super({key: 'levelMenuScene'});
 
 		this.inventory;
 		this.emitter = EventDispatcher.getInstance();
@@ -79,7 +77,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 	 * 		- Imagen del mapa
 	 * 		- Botón de nivel seleccionar completado/sin completar
 	 */
-	preload(){
+	preload() {
 		// Fondo
 		this.load.spritesheet('waves', 'assets/scenes/levelsMenu/waves_anim.png', { frameWidth: 1024, frameHeight: 768 });
 		this.load.image('levelMap', 'assets/scenes/levelsMenu/emptyMap.png');
@@ -90,17 +88,31 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// Transición
 		this.load.spritesheet('fadeOut', 'assets/scenes/transitions/fadeOutLevelsMenuTransition.png', {frameWidth: 1024, frameHeight: 768});
+
+		// Música
+		this.load.audio('Travelling to the End of the Sea', ['assets/scenes/levelsMenu/Travelling to the End of the Sea - Vivu.mp3']);
 	}
 
 	/**
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-  
-        // Se destruyen los eventos anteriores
-        this.emitter.destroy();
-        
+		// Variables constantes y se destruyen los eventos anteriores
+		const self = this;
 		const camera = this.cameras.main;
+		this.emitter.destroy();
+
+		// Musica
+		const musicConfig = {
+			mute: false,
+			volume: 1,
+			detune: 0,
+			seek: 0,
+			loop: true,
+			delay: 0
+		}
+		var music = this.sound.add('Travelling to the End of the Sea');
+    	music.play(musicConfig);
 
 		// Fade In
 		camera.fadeIn(1000, 0, 0, 0);
@@ -115,28 +127,30 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.add.sprite(1024, 768).setOrigin(1,1).play('waves');
 		this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 
+		// Input de teclado
 		this.keyboardInput = new KeyboardInput(this);
+
 		// Botón de inventario
 		this.inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
+			music.setVolume(0.4);
 			this.scene.sleep('levelMenuScene');							// Parar la escena de menú
 			this.scene.wake('inventoryScene', 'levelMenuScene');		// Reanudar la escena de inventario
-		});
-		this.inventoryButton.setScale(3, 3);
+			this.events.on('wake', (scene) => {music.setVolume(1)});	// Evento al volver de la escena de inventario
+		}).setScale(3, 3);
 
 		// Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
     	let i = 0;
 		this.levelButtons = [];
 		levels.forEach(level => {
-			this.levelButtons[i] = new Button(this, level.x, level.y, level.spriteSheet, level.defaultFrame, level.frameOnOver, level.frameOnDown, this.keyboardInput, () => {
-				level.loadLevel(this.inventory);
-			});
+			this.levelButtons[i] = new Button(this, level.x, level.y, level.spriteSheet, level.defaultFrame, level.frameOnOver, level.frameOnDown, this.keyboardInput,
+				() => {level.loadLevel(this.inventory)});
       		i++;
 		});
-		this.inicializeLevelButtonConnections();
 
+		// Inicializar conexiones entre botones y el botón seleccionado por defecto
+		this.inicializeLevelButtonConnections();
 		this.keyboardInput.setStartButton(this.levelButtons[0]);
 
-		// Transición y elección de nivel
 		// FadeOut
 		this.anims.create({
 			key: 'fOut',
@@ -144,11 +158,27 @@ export default class LevelMenuScene extends Phaser.Scene {
 			frameRate: 17,
 			repeat: 0
 		});
+
 		// Recoger el envento para cargar el siguiente nivel
 		this.emitter.once('levelSelected', (levelData) => {
-			this.add.sprite(1024, 768, 'fadeOut').setOrigin(1, 1).play('fOut');
-			this.time.delayedCall(1000, () => {this.scene.start('battleScene', levelData)});
+			musicFadeOut();														// FadeOut de la música
+			this.add.sprite(1024, 768, 'fadeOut').setOrigin(1, 1).play('fOut'); // Animación de fadeout
+			this.time.delayedCall(1000, () => {									// Esperar un segundo
+				music.stop(); 													// Parar música
+				this.scene.start('battleScene', levelData);						// Cargar el nivel
+			});
+            this.emitter.destroy();												// Destruir evento
 		});
+
+		// Fadeout de la música
+		function musicFadeOut() {
+			self.tweens.add({
+				targets: music,
+				volume: -1,
+				ease: 'Linear',
+				duration: 2000,
+			});
+		}
 	}
 
 	update() {

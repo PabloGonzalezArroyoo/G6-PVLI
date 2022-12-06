@@ -8,13 +8,11 @@ import Inventory from '../inventory/inventory.js';
 import { KeyboardInput } from '../input/keyboardInput.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
 import {listOfEnemies} from '../data/listOfEnemies.js';
-import DamageInd from '../animations/indicator.js';
 import Indicator from '../animations/indicator.js';
-import { WeaponItem } from '../inventory/item.js';
 import { listOfItems, weaponsLevel1, weaponsLevel2, weaponsLevel3 } from '../data/listOfItems.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
-const levelCompleted = function(enemies){
+const levelCompleted = function (enemies) {
 	let completado = true;
 	let i = 0;
 	while (i < enemies.length && completado){
@@ -25,7 +23,7 @@ const levelCompleted = function(enemies){
 }
 
 // Comprueba si el jugador ha muerto
-const levelFailed = function(player) {
+const levelFailed = function (player) {
 	let muerto = false;
 	if (player.healthController.getCurrentHealth() <= 0) muerto = true;
 	return muerto;
@@ -52,7 +50,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.enemies = [];
 		this.selectedEnemy= null;
     
-    	this.emitter = EventDispatcher.getInstance();
+    this.emitter = EventDispatcher.getInstance();
 	}
 
 	/**
@@ -89,16 +87,17 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('player_whatAmadness', 'assets/characters/mariaPita/mariaPita_whatAmadness.png', {frameWidth: 50, frameHeight: 32})
 
 		// Enemy (Animaciones)
-		//this.load.spritesheet('enemy', 'assets/enemy.png', {frameWidth: 97, frameHeight: 97});
 		this.load.spritesheet('drunkRuffian', 'assets/characters/enemies/drunkRuffian.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('stinkyPirate', 'assets/characters/enemies/stinkyPirate.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('scurviedSailor', 'assets/characters/enemies/scurviedSailor.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('experiencedBuccaneer', 'assets/characters/enemies/experiencedBuccaneer.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('alienatedCorsair', 'assets/characters/enemies/alienatedCorsair.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('ensignDrake', 'assets/characters/enemies/ensignDrake.png', {frameWidth: 32, frameHeight:32});
+		
 		// Descripcion
 		this.load.image('description', 'assets/scenes/battle/dialogBox.png');
-		// Acciones
+		
+		// Acciones (botones)
 		this.load.image('cuadroAcciones', 'assets/scenes/battle/actionsBox.png');
 		this.load.spritesheet('botonAtaque', 'assets/scenes/battle/attackButton.png', {frameWidth: 241, frameHeight: 67});
 		this.load.spritesheet('botonDefensa', 'assets/scenes/battle/defenseButton.png', {frameWidth: 241, frameHeight: 67});
@@ -146,15 +145,30 @@ export default class BattleScene extends Phaser.Scene {
     
 		// Transición
 		this.load.spritesheet('fadeIn', 'assets/scenes/transitions/fadeInBattleTransition.png', {frameWidth: 1024, frameHeight: 768});
+
+		// Música -> CAMBIAR POR LA CORRECTA CUANDO LA HAYAMOS DECIDIDO
+		this.load.audio('Time to Fight!', ['assets/scenes/battle/Time to Fight! - Xenoblade Chronicles DE.mp3']);
 	}
 
 	/**
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-    // Se destruyen los eventos anteriores
-    this.emitter.destroy();
-        
+		// Variables constantes y se destruyen los eventos anteriores
+      this.emitter.destroy();
+		  this.camera = this.cameras.main;
+
+		// Musica
+		const musicConfig = {
+			mute: false,
+			volume: 1,
+			detune: 0,
+			seek: 0,
+			loop: true,
+			delay: 0
+		}
+		this.music = this.sound.add('Time to Fight!');
+    	this.music.play(musicConfig);
 		// Fondo
 		this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
@@ -163,6 +177,7 @@ export default class BattleScene extends Phaser.Scene {
     
 		this.enemies = []; //ARREGLO RAPIDO: quitar cuando se implemente una funcion para cuando muere un enemigo
 		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
+		
 		// Descripcion
 		this.add.image(0, 0, 'description').setOrigin(0, 0);
 
@@ -180,22 +195,34 @@ export default class BattleScene extends Phaser.Scene {
 		// Indicadores de daño
 		this.indicator = new Indicator(this, 300, 565,
 			{dmgInd: 'dmgInd', healInd: 'healInd', defInd: 'defInd', wpInd: 'wpInd', psnInd: 'psnInd', bleedInd: 'bleedInd'});
-    
+			
+		// Input
 		this.keyboardInput = new KeyboardInput(this);
-		this.botones = [new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('attack')}),
+
+		// Botones de acción
+		this.botones = 
+			// Botón de ataque
+			[new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('attack')}),
+			// Botón de inventario
 		 	new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this.keyboardInput, () => {
+				this.music.setVolume(0.4);										// Bajar la música
 				this.scene.sleep('battleScene');								// Parar la escena de batalla
 				this.scene.wake('inventoryScene', 'battleScene');				// Reanudar la escena de inventario
-				this.events.once('wake', (scene, item) => {this.useItem(item)})	// Evento al volver de la escena de inventario
+				this.events.once('wake', (scene, item) => {this.music.setVolume(1); this.useItem(item)})	// Evento al volver de la escena de inventario
 		 	}),
+			// Botón de defensa
 		 	new Button(this, 135, 697, 'botonDefensa', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('defense')}),
+			// Botón qué locura
 		 	new Button(this, 375, 697, 'botonQueLocura', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('queLocura')})];
 
-		this.botones[0].setAdjacents(null, this.botones[2], null, this.botones[1]);
-		this.botones[1].setAdjacents(null, this.botones[3], this.botones[0], null);
-		this.botones[2].setAdjacents(this.botones[0], null, null, this.botones[3]);
-		this.botones[3].setAdjacents(this.botones[1], null, this.botones[2], null);
+		// Inicializar conexiones entre botones y el botón seleccionado por defecto
+		this.inicializeLevelButtonConnections();
 		this.keyboardInput.setStartButton(this.botones[0]);
+		
+		// Botón de qué locura apagado
+		this.emptyButton = this.add.image(254.5, 663.5, 'emptyButton').setOrigin(0,0);
+		this.emptyButton.setCrop(0, 0, 0, 0);
+    
 		//Coloca los enemigos adyacentes
 		for(let i=0;i<this.enemies.length;i++)
 		{
@@ -203,12 +230,11 @@ export default class BattleScene extends Phaser.Scene {
 			else if(i==0)this.enemies[i].setAdjacents(null,null,this.enemies[this.enemies.length-1],this.enemies[i+1]);
 			else if(i==this.enemies.length-1) this.enemies[i].setAdjacents(null,null,this.enemies[i-1],this.enemies[0]);
 		}
-		this.emptyButton = this.add.image(254.5, 663.5, 'emptyButton').setOrigin(0,0);
-		this.emptyButton.setCrop(0, 0, 0, 0);
+
+    // Deshabilitar el botón de qué locura y resetear su contador
 		this.DisableQueLocura();
 		this.UpdateQueLocura(0);
 
-		// Transición
 		// FadeIn
 		this.anims.create({
 			key: 'transition',
@@ -232,7 +258,7 @@ export default class BattleScene extends Phaser.Scene {
 	}
 
 	// Metodo que efectua la accion del jugador cada turno
-	PlayerTurn(action, item){
+	PlayerTurn(action, item) {
 		this.DisableButtons();															// Desactiva los botones
 		switch (action){									
 			
@@ -280,7 +306,7 @@ export default class BattleScene extends Phaser.Scene {
 			
       		case 'object' : 																	// Si selecciona un objeto
 				this.dialogBox.clearText();														// Borrar texto previo
-				if(item.type === 'WEAPON') this.dialogBox.setTextToDisplay('Maria Pita ha cambiado de arma a ' + item.name);
+				if (item.type === 'WEAPON') this.dialogBox.setTextToDisplay('Maria Pita ha cambiado de arma a ' + item.name);
 				else this.dialogBox.setTextToDisplay('Maria Pita ha usado ' + item.name + ' y se curó ' + item.getHealthValue() + ' de vida');
 				this.emitter.once('finishTexting', () => {
 					this.player.useItem(item);
@@ -324,7 +350,7 @@ export default class BattleScene extends Phaser.Scene {
 	}
 
 	// Metodo que efectua la accion de los enemigos cada turno
-	EnemyTurn(index){
+	EnemyTurn(index) {
 		if (!index) index = 0;
 		// Si el enemigo sigue vivo hace su acción
 		if (!levelFailed(this.enemies[index]) && !this.enemies[index].isStuned()) {
@@ -345,7 +371,7 @@ export default class BattleScene extends Phaser.Scene {
 						this.dialogBox.clearText();																	// Borrar texto previo
 						this.time.delayedCall(2000,()=>{this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
 					}
-					else if(index < this.enemies.length) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} 	//Se llama al ataque de los demas enemigos
+					else if (index < this.enemies.length) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} 	//Se llama al ataque de los demas enemigos
 					else this.emitter.once('finishTurn', () => {this.UpdatePlayerEffects();})							// Evento que actualiza los estados del jugador en el turno
 				}
 				
@@ -357,7 +383,9 @@ export default class BattleScene extends Phaser.Scene {
 						index++;
 						if (levelFailed(this.player)) {
 							this.dialogBox.clearText();																	// Borrar texto previo
-							this.time.delayedCall(2000,()=>{this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
+							this.time.delayedCall(2000, () => {
+								this.music.stop();
+								this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
 						}
 						else if (index < this.enemies.length) this.EnemyTurn(index); 	//Se llama al ataque de los demas enemigos
 						else this.UpdatePlayerEffects();						// Evento que actualiza los estados del jugador en el turno
@@ -373,7 +401,7 @@ export default class BattleScene extends Phaser.Scene {
 	}
 
 	// Metodo que actualiza los efectos por turnos del jugador
-	UpdatePlayerEffects(){
+	UpdatePlayerEffects() {
 		// Si el jugador esta envenenado da feedback
 		if (this.player.isBleeding()){
 			this.dialogBox.clearText();
@@ -383,7 +411,9 @@ export default class BattleScene extends Phaser.Scene {
 				this.indicator.updateInd("player", "poison", this.player.getPosition(), this.player.getBleedDamage());
 				if (levelFailed(this.player)) {
 					this.dialogBox.clearText();																	// Borrar texto previo
-					this.time.delayedCall(2000,()=>{this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
+					this.time.delayedCall(2000, () => {
+						this.music.stop();
+						this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
 				}
 				else this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects()})});
 		}
@@ -394,7 +424,7 @@ export default class BattleScene extends Phaser.Scene {
 	}
 
 	// Metodo que actualiza los efectos por turnos de los enemigos
-	UpdateEnemyEffects(index){
+	UpdateEnemyEffects(index) {
 		if (!index) index = 0;
 		// Si el enemigo sigue vivo y esta sangrando da feedback
 		if (!levelFailed(this.enemies[index]) && this.enemies[index].isBleeding()){
@@ -405,10 +435,10 @@ export default class BattleScene extends Phaser.Scene {
 				this.indicator.updateInd("player", "bleed", this.enemies[index].getPosition(), this.enemies[index].getBleedDamage()); // Actualizar indicador
 				index++;
 				if (levelCompleted(this.enemies)){
-					this.dialogBox.clearText();																	// Borrar texto previo							// Si Maria Pita ha empezado a atacar
-					// Loot
-				  this.EnableLoot();
-          this.time.delayedCall(5000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
+					this.dialogBox.clearText();						// Borrar texto previo
+					this.EnableLoot(); 								// Loot
+          			this.time.delayedCall(5000, () => {
+						this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
 				}
 				// Si quedan enemigos se actualizan tambien
 				if (index > this.enemies.length) this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects(index);})
@@ -424,7 +454,7 @@ export default class BattleScene extends Phaser.Scene {
 	}
 
 	// Desactiva y vuelve invisible los botones
-	DisableButtons(){
+	DisableButtons() {
 		for(var i=0; i < this.botones.length; i++) {
 			this.botones[i].disableInteractive();
 			this.botones[i].visible = false;
@@ -437,12 +467,12 @@ export default class BattleScene extends Phaser.Scene {
 		for(var i=0; i < this.botones.length; i++) {
 			if(i === 3 && this.currentQueLocura < 100){
 				this.emptyButton.visible = true;
-			}else{
+			} else {
 				this.botones[i].setInteractive();
 				this.botones[i].visible = true;
 			}
 		}
-		if(this.player.inventory.getEquipedWeapon().imgID === 'puño'){
+		if (this.player.inventory.getEquipedWeapon().imgID === 'puño') {
 			this.botones[3].disableInteractive();
 			this.botones[3].visible = false;
 		}
@@ -450,41 +480,39 @@ export default class BattleScene extends Phaser.Scene {
 	}
 
 	// Impide seleccionar que locura y pone el contador a cero
-	DisableQueLocura(saveCounter = false){
+	DisableQueLocura(saveCounter = false) {
 		this.botones[1].setAdjacents(null, null, this.botones[0], null);
 		this.botones[2].setAdjacents(this.botones[0], null, null, null);
 		this.botones[3].disableInteractive();
 		this.botones[3].visible = false;
-		if(!saveCounter){
-			this.currentQueLocura = 0;
-		}
+		if (!saveCounter) this.currentQueLocura = 0;
 		this.UpdateQueLocura(0);
 	}
 
 	// Activa que locura y hace posible seleccionarla
-	EnableQueLocura(){
+	EnableQueLocura() {
 		this.botones[1].setAdjacents(null, this.botones[3], this.botones[0], null);
 		this.botones[2].setAdjacents(this.botones[0], null, null, this.botones[3]);
 		this.botones[3].setInteractive();
 	}
 
 	// Aumenta el contador segun el parametro dado y actializa la imagen
-	UpdateQueLocura(add){
-		if(this.player.inventory.getEquipedWeapon().imgID != 'puño'){
+	UpdateQueLocura(add) {
+		if (this.player.inventory.getEquipedWeapon().imgID != 'puño'){
 			this.currentQueLocura += add;
-			if(this.currentQueLocura >= 100){
+			if (this.currentQueLocura >= 100) {
 				this.EnableQueLocura();
-			}else{
-				this.emptyButton.setCrop(0,0, (this.emptyButton.width/100)*this.currentQueLocura, this.emptyButton.height);
+			} else {
+				this.emptyButton.setCrop(0,0, (this.emptyButton.width / 100) * this.currentQueLocura, this.emptyButton.height);
 			}
 		}
 	}
 
 	// Usa el item si hay, si no, no hace nada
-	useItem(item){
-		if(item !== 'none'){
+	useItem(item) {
+		if (item !== 'none') {
 			this.PlayerTurn('object', item);
-			if(item.imgID === 'puño')
+			if (item.imgID === 'puño')
 				this.DisableQueLocura(true);
 		}
 	}
@@ -505,17 +533,38 @@ export default class BattleScene extends Phaser.Scene {
 				this.enemies.splice(i , 1);
 			}
 		}
-		if(this.enemies.length === 0){
-			this.dialogBox.clearText();																	// Borrar texto previo	
-			// Loot
-			this.EnableLoot();			
-			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
+
+		var self = this;
+		if (this.enemies.length === 0){
+			this.emitter.destroy();
+			this.dialogBox.clearText();		// Borrar texto previo				
+			this.EnableLoot();				    // Loot
+			this.time.delayedCall(3000, () => {
+				musicFadeOut();				      // Fadeout de la música
+				this.camera.fadeOut(1000, 0, 0, 0); // fadeOut(time, R, G, B), 000 = Black
+				this.camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+					this.music.stop();		    // Parar música
+					this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory}); // Siguiente nivel
+				})
+			});
 		}
-		else{
-			if(!levelFailed(this.player)) this.EnemyTurn(); // Evento para que el enemigo ataque	
+		else {
+			if (!levelFailed(this.player)) this.EnemyTurn(); // Evento para que el enemigo ataque	
+		}
+
+		// Fadeout de la música
+		function musicFadeOut() {
+			self.tweens.add({
+				targets: self.music,
+				volume: -1,
+				ease: 'Linear',
+				repeat: 0,
+				duration: 2000,
+			});
 		}
 	}
-    
+	
+	// Gestión del loot que se le da al jugador al terminar un nivel
 	EnableLoot(){
 		this.DisableButtons();
 		this.dialogBox.clearText();
@@ -527,7 +576,7 @@ export default class BattleScene extends Phaser.Scene {
 		let randomSet = Math.floor(Math.random() * 100);
 		let weaponImgID; let weaponLoot = false; 
 
-		switch(true){
+		switch (true){
 			case randomSet <= this.level1prob: weaponImgID = weaponsLevel1[randomWeapon]; break;
 			case randomSet <= this.level1prob + this.level2prob: weaponImgID = weaponsLevel2[randomWeapon]; break;
 			default: weaponImgID = weaponsLevel3[randomWeapon]; break;
@@ -563,11 +612,13 @@ export default class BattleScene extends Phaser.Scene {
 			if (itemQuantity > 1) this.add.text(width/1.5 + 20, height/2 + 20, itemQuantity, {}).setScale(3,3);
 		}
 		
+		// Mostrar por texto el loot obtenido
 		let lootText = new DialogBox(this, 200, height/2 - 200, 750);
 		lootText.setTextToDisplay(text);
 		lootText.printText();
 	}
-  
+	
+	// Comprueba si el jugador está contra el jefe final y ejecuta la secuencia de María Pita obteniendo el asta de la bandera de Drake
 	CheckFinalWeapon() {
 		// Si no se tiene ya el asta
 		if (this.player.inventory.getEquipedWeapon().imgID !== 'asta') {
@@ -605,12 +656,19 @@ export default class BattleScene extends Phaser.Scene {
 							});
 						});
 					});
-					
 				}
 				else this.EnableButtons();
 			}
 			else this.EnableButtons();
 		}
 		else this.EnableButtons();
+	}
+
+	// Inicializa a qué botón te lleva pulsar cada dirección desde otro botón
+	inicializeLevelButtonConnections() {
+		this.botones[0].setAdjacents(null, this.botones[2], null, this.botones[1]);
+		this.botones[1].setAdjacents(null, this.botones[3], this.botones[0], null);
+		this.botones[2].setAdjacents(this.botones[0], null, null, this.botones[3]);
+		this.botones[3].setAdjacents(this.botones[1], null, this.botones[2], null);
 	}
 }

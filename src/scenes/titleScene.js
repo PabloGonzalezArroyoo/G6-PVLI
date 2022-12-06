@@ -1,9 +1,7 @@
 // Importaciones
-// Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
 import { Button } from '../input/button.js';
 import { KeyboardInput } from '../input/keyboardInput.js';
-import PlayerAnimator from '../animations/playerAnimator.js';
 
 /**
  * Escena de Pantalla de Título.
@@ -23,14 +21,13 @@ export default class TitleScene extends Phaser.Scene {
 	 */
 	preload(){
 		// Imagen fondo y logo
-		//this.load.image('background', 'assets/scenes/title/titleBackground.png');
 		this.load.image('title','assets/MariaPitasRevenge.png');
 		this.load.spritesheet('titleAnim','assets/scenes/title/TittleAnim.png',{frameWidth:1024, frameHeight: 768});
 
 		// Imagen de botones
 		this.load.spritesheet('play', 'assets/scenes/title/playButton.png', {frameWidth: 37, frameHeight: 14});
 
-		// Musica
+		// Música
 		this.load.audio('Pirates of the Atlantic', ['assets/scenes/title/Pirates of the Atlantic - Vivu.mp3']);
 	}
 
@@ -38,7 +35,7 @@ export default class TitleScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-
+		// Variables constantes
 		const self = this;
 		const camera = this.cameras.main;
 		
@@ -54,27 +51,26 @@ export default class TitleScene extends Phaser.Scene {
 		var music = this.sound.add('Pirates of the Atlantic');
     	music.play(musicConfig);
 
-		// Fondo
-		var back = this.add.sprite(0, 0).setOrigin(0, 0);
+		// Fondo 
 		this.anims.create({
 			key: 'titleAnim',
 			frames: this.anims.generateFrameNumbers('titleAnim', {start: 0, end: 6}),
 			frameRate: 6,
 			repeat: -1
 		})
-		back.play('titleAnim');
+		this.add.sprite(0, 0).setOrigin(0, 0).play('titleAnim');
 
 		// Logo del juego
-		var title = this.add.image(512, 100, 'title').setScale(0.25,0.25);
+		this.add.image(512, 100, 'title').setScale(0.25,0.25);
 
+		// Input de teclado
 		this.keyboardInput = new KeyboardInput(this);
-		// Botón "JUGAR"
-		//var self = this;
-		var button = new Button(this, 514, 690,'play', 0, 1, 2, this.keyboardInput, jumpToLevelMenuScene);
-		button.setScale(5, 5);
 
+		// Botón "JUGAR" 
+		var button = new Button(this, 514, 690,'play', 0, 1, 2, this.keyboardInput, jumpToLevelMenuScene).setScale(5, 5);
 		this.keyboardInput.setStartButton(button);
 
+		// Gestiona el fadeOut y el inicio de la escena de niveles
 		function jumpToLevelMenuScene() {
 			// Fade Out
 			button.setVisible(false);
@@ -86,6 +82,7 @@ export default class TitleScene extends Phaser.Scene {
 			})
 		}
 
+		// Fadeout de la música
 		function musicFadeOut() {
 			self.tweens.add({
 				targets: music,
@@ -94,21 +91,8 @@ export default class TitleScene extends Phaser.Scene {
 				duration: 2000,
 			});
 		}
-
-		// Teclado
-		//Para seleccionar botones con teclas, creamos el objeto tecla
-		//var Enter = this.scene.input.keyboard.addKeys('ENTER,Z');
-		//En este caso, cualquiera de los objetos destacaria el boton y el enter lanzaria la escena de cinematica
-		//keys.on('down', function () {/*Destaca el boton*/ });
-		//Ejemplo: Al pulsar el enter
-		//Enter.on('down', function () {self.scene.start('levelMenuScene')});
-		//Enter.on('up', function () {
-			//this.scene.start('cinematicScene'); /*Se cambia a la escena de batalla*/
-		//});
-		//Esc.on('down', function () {
-			//this.scene.start('optionsScene');//Se abre el menu de opciones
-		//});
 	}
+
 	update(){
 		this.keyboardInput.processInput();
 	}
