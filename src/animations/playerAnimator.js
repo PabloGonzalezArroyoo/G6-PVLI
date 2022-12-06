@@ -37,7 +37,14 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 		//animación de defensa
 		this.scene.anims.create({
 			key: 'defense',
-			frames: scene.anims.generateFrameNumbers('mariaPita_defendBack',{start:0, end:5}),
+			frames: scene.anims.generateFrameNumbers('player_defendBack',{start:0, end:5}),
+			frameRate: 7,
+			repeat: 0 
+		});
+
+		this.scene.anims.create({
+			key: 'whatAmadness',
+			frames: scene.anims.generateFrameNumbers('player_whatAmadness',{start:0, end:8}),
 			frameRate: 7,
 			repeat: 0 
 		});
@@ -66,8 +73,13 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 	playAttack(){
 		this.play('attack');
 	}
+
 	playDefense(){
 		this.play('defense');
+	}
+
+	playWhatAMadness(){
+		this.play('whatAmadness');
 	}
 
 	//pre-update que gestiona los posibles problemas de las animaciones

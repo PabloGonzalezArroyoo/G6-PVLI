@@ -77,12 +77,14 @@ export default class BattleScene extends Phaser.Scene {
 	preload() {
 		// Fondo
 		this.load.image('battleBackground', 'assets/scenes/battle/battleBackground.png');
+
 		// Maria Pita (Animaciones)
 		this.load.spritesheet('player_idle', 'assets/characters/mariaPita/mariaPita_idle.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('player_idleBack', 'assets/characters/mariaPita/mariaPita_idleBack.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('player_jump', 'assets/characters/mariaPita/mariaPita_jump.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('player_attack', 'assets/characters/mariaPita/mariaPita_attack.png', {frameWidth: 50, frameHeight: 32});
-		this.load.spritesheet('mariaPita_defendBack', 'assets/characters/mariaPita/mariaPita_defendBack.png', {frameWidth: 50, frameHeight: 32});
+		this.load.spritesheet('player_defendBack', 'assets/characters/mariaPita/mariaPita_defendBack.png', {frameWidth: 50, frameHeight: 32});
+		this.load.spritesheet('player_whatAmadness', 'assets/characters/mariaPita/mariaPita_whatAmadness.png', {frameWidth: 50, frameHeight: 32})
 
 		// Enemy (Animaciones)
 		//this.load.spritesheet('enemy', 'assets/enemy.png', {frameWidth: 97, frameHeight: 97});
@@ -291,7 +293,8 @@ export default class BattleScene extends Phaser.Scene {
 		// Si el enemigo sigue vivo hace su acción
 		if (!levelFailed(this.enemies[index]) && !this.enemies[index].isStuned()) {
 			this.dialogBox.clearText();                           // Borrar texto previo
-			this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' (' +  index + ')' +' ataca a Maria Pita');	// Enviar el nuevo texto
+			if (this.enemies.length <= 1) this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' ataca a Maria Pita'); // Enviar el nuevo texto
+			else this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' (' +  index + ')' +' ataca a Maria Pita');	
 			this.emitter.once('finishTexting', () => {						// Crea un evento para que el enemigo ataque
 				
 				// Guarda el daño hecho o el daño y un texto si se ha usado una habilidad
@@ -459,7 +462,7 @@ export default class BattleScene extends Phaser.Scene {
 		}
 		if(this.enemies.length === 0){
 			this.emitter.destroy();
-			this.dialogBox.clearText();																	// Borrar texto previo				
+			this.dialogBox.clearText();	// Borrar texto previo				
 				// Loot
 				this.EnableLoot();			
 			this.time.delayedCall(2000,()=>{this.scene.start('levelMenuScene', {level: this.level, inventory: this.player.inventory});});
