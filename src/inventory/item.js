@@ -54,7 +54,7 @@ export class WeaponItem extends Item {
 	static bleeding(percentage) {
 		return function(player, enemies, enemy){
 			enemy.turnEffectController.activateBleed(percentage, 3);
-			return player.attack(enemies[index]);
+			return player.attack(enemy);
 		}
 	}
 
@@ -68,7 +68,7 @@ export class WeaponItem extends Item {
 			}
 			console.log(activeTurns);
 			enemy.turnEffectController.activateStun(activeTurns);
-			return player.attack(enemies[index]);
+			return player.attack(enemy);
 		}
 	}
 
