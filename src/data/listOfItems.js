@@ -118,24 +118,24 @@ export var listOfItems = {
 		imgID: 'asta',
 		attack: 80,
 		defense: 15,
-		desc: "-"}
+		desc: "Un clásico. Harás poco daño pero la satisfacción que te dará matar con esta arma no te la dará cualquier otra"}
 	],
 
 	healths: [
 		{key: "Bolla de pan",
 		imgID: "bolla", 
 		heal: 20,
-		desc: "-"},
+		desc: "Bolla de pan calentita y crujiente. Cura 20 de vida"},
 
 		{key: "Caldo gallego",
 		imgID: "caldo", 
 		heal: 40,
-		desc: "-"},
+		desc: "Caldo gallego típico de la zona, de lo mejorcito que puedes encontrar. Cura 40 de vida"},
 		
 		{key: "Polbo á feira",
 		imgID: "polbo", 
 		heal: 60,
-		desc: "-"},
+		desc: "Polbo á feira, el plato tradicional por excelencia de la zona, un manjar en toda regla. Cura 60 de vida"},
 	]
 }
 
