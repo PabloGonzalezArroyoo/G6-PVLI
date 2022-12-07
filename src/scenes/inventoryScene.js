@@ -41,9 +41,9 @@ export default class InventoryScene extends Phaser.Scene {
 		this.load.image('dagOx', 'assets/scenes/inventory/weapons/dagaOxidada.png');
 		this.load.image('dagAf', 'assets/scenes/inventory/weapons/dagaAfilada.png');
 		this.load.image('dagEx', 'assets/scenes/inventory/weapons/dagaExcéntrica.png');
-		//this.load.image('alMb', 'assets/scenes/inventory/weapons/.png');
-		//this.load.image('alVrd', 'assets/scenes/inventory/weapons/.png');
-		//this.load.image('alDem', 'assets/scenes/inventory/weapons/.png');
+		this.load.image('alMb', 'assets/scenes/inventory/weapons/alabardaDeMentira.png');
+		this.load.image('alVrd', 'assets/scenes/inventory/weapons/alabardaDeVerdad.png');
+		this.load.image('alDem', 'assets/scenes/inventory/weapons/alabardaDemencial.png');
 		this.load.image('ropIng', 'assets/scenes/inventory/weapons/roperaInglesa.png');
 		this.load.image('ropCst', 'assets/scenes/inventory/weapons/roperaCastellana.png');
 		this.load.image('ropAl', 'assets/scenes/inventory/weapons/roperaAlocada.png');
