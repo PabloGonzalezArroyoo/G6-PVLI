@@ -274,6 +274,7 @@ export default class BattleScene extends Phaser.Scene {
 					});});
 					//Una vez se reciba confirmación del ataque y el enemigo seleccionado, se ataca.
 					this.emitter.once('enemyselected',() => {
+						this.keyboardInput.setStartButton(this.botones[0]);
 						this.DisableEnemy();
 						this.dialogBox.clearText();														// Borrar texto previo
 					  	this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
@@ -330,6 +331,7 @@ export default class BattleScene extends Phaser.Scene {
 					});});
 					//Una vez se reciba confirmación del ataque y el enemigo seleccionado, se ataca.
 					this.emitter.once('enemyselected',() => {
+						this.keyboardInput.setStartButton(this.botones[0]);
 						this.DisableEnemy();
 						this.dialogBox.clearText();														// Borrar texto previo
 						this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
@@ -476,7 +478,6 @@ export default class BattleScene extends Phaser.Scene {
 			this.botones[3].disableInteractive();
 			this.botones[3].visible = false;
 		}
-		this.keyboardInput.setStartButton(this.botones[0]);
 	}
 
 	// Impide seleccionar que locura y pone el contador a cero
