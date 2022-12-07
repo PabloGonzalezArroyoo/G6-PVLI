@@ -85,8 +85,8 @@ export default class InventoryScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 
 		// ARMA EQUIPADA
-		this.equiped = this.add.image(217, 325, this.inventory.getEquipedWeapon().imgID).setScale(8, 8);
-		this.equipedWeaponButton = new Button(this, 217, 325, 'selected', 0, 1, 2, 
+		this.equiped = this.add.image(217, 262, this.inventory.getEquipedWeapon().imgID).setScale(8, 8);
+		this.equipedWeaponButton = new Button(this, 217, 262, 'selected', 0, 1, 2, 
 			this.keyboardInput, () => {
 				if (this.inventory.getEquipedWeapon().imgID !== 'puño' && this.inventory.getEquipedWeapon().imgID !== 'asta')
 				this.selected(this.inventory.getWeapons()['puño'], "W")},
@@ -103,17 +103,18 @@ export default class InventoryScene extends Phaser.Scene {
 
 			if(itemID != 'puño' && itemID != 'asta'){
 				let x = val.i * 102 + width / 2 - 35;
-				let y = val.j * 60 + 140;/*
-				switch (true) {
-					case i >= 5 && i < 10: y = 1; break;
-					case i >= 10: y = 2; break;
-					default: y = 0; break;
-				}
-				y = y * 60 + 140;*/
+				let y = val.j * 60 + 140;
+				
 				if (val.owned) this.add.image(x, y, itemID).setScale(1.5,1.5);
 				this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput,
-					() => {this.selected(val, "W")},
-					()=>{if (val.owned) this.mostrarDescripcion(val.weapon);}).setScale(1.5,1.5);
+					() => {this.selected(val, "W")},							// OnClick
+					() => {														// OnPointerOver
+						if (val.owned){
+							this.mostrarDescripcion(val.weapon);
+							this.updateDefAtc(val.weapon);
+						}
+					},
+					() => {this.resetTextBox()}).setScale(1.5,1.5);				// OnPointerOut
 				i++;
 			}
 		});
@@ -129,8 +130,8 @@ export default class InventoryScene extends Phaser.Scene {
 			let x = val.i * 165 + width / 2; let y = 475;
 			if (val.amount) this.add.image(x, y, itemID).setScale(3, 3);
 			this.foodButtons[val.i] = new Button(this, x, y, 'selected', 0, 1, 2, this.keyboardInput,
-				() => {if (val.amount) this.selected(val.item, "H")},
-				() => {if (val.amount) this.mostrarDescripcion(val.item);}).setScale(3,3);
+				() => {if (val.amount) this.selected(val.item, "H")},			// OnClick
+				() => {if (val.amount) this.mostrarDescripcion(val.item);}).setScale(3,3); // OnPointerOver
 			if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
 			i++;
 		});
@@ -142,7 +143,10 @@ export default class InventoryScene extends Phaser.Scene {
 		
 		// Al pulsar la tecla ESC se sale de la escena de inventario
 		this.input.keyboard.once('keydown-ESC', () => { this.escape(); });
-		this.dialogBox = new DialogBox(this, 70, 620, 850).setColor('99582A');
+		this.dialogBox = new DialogBox(this, 80, 620, 850).setColor('65583c');
+
+		this.atcBox = this.add.text(110, 470, this.inventory.getEquipedWeapon().getAttack(), {fontFamily: 'Silkscreen', fontSize: 50, color: '#65583c'});
+		this.defBox = this.add.text(270, 470, this.inventory.getEquipedWeapon().getDefense(), {fontFamily: 'Silkscreen', fontSize: 50, color: '#65583c'});
 	}
 
 	// SALIDA DE LA ESCENA
@@ -157,9 +161,9 @@ export default class InventoryScene extends Phaser.Scene {
 
 	// Muestra la descripción de los objetos borrando el texto anterior y añadiendo el nuevo
 	mostrarDescripcion(item) {
-			this.dialogBox.clearText();
-			this.dialogBox.setTextToDisplay(item.getDesc());
-			this.dialogBox.printText();
+		this.dialogBox.clearText();
+		this.dialogBox.setTextToDisplay(item.getDesc());
+		this.dialogBox.printText();
 	}
 
 	// Gestiona si, al elegirse un arma, debe volver a la escena anterior haciendo el cambio en esa escena (battleScene) o si debe mantenerse 
@@ -174,8 +178,7 @@ export default class InventoryScene extends Phaser.Scene {
 				if (this.previousSceneName === 'battleScene') this.escape(val.weapon);
 				else this.inventory.setEquipedWeapon(val.weapon.imgID);
 			}
-		}
-		else {
+		} else {
 			// Usar el objeto curativo
 			if (this.previousSceneName === 'battleScene') this.escape(val);
 			else {
@@ -185,6 +188,31 @@ export default class InventoryScene extends Phaser.Scene {
 			};
 		}
 		
+	}
+
+	// Actualiza el texto de ataque y defensa del arma equipada para mostar la diferencia
+	updateDefAtc(weapon) {
+		var actual = this.inventory.getEquipedWeapon();
+
+		// Ataque
+		if (weapon.getAttack() > actual.getAttack()) this.atcBox.setColor('#248a00');
+		else if (weapon.getAttack() < actual.getAttack()) this.atcBox.setColor('#e63d00');
+
+		// Defensa
+		if (weapon.getDefense() > actual.getDefense()) this.defBox.setColor('#248a00');
+		else if (weapon.getDefense() < actual.getDefense()) this.defBox.setColor('#e63d00');
+
+		// Actualizar texto con el nuevo arma
+		this.atcBox.setText(weapon.getAttack());
+		this.defBox.setText(weapon.getDefense());
+	}
+
+	// Devuelve el texto de ataque y defensa a su estado inicial
+	resetTextBox() {
+		this.atcBox.setText(this.inventory.getEquipedWeapon().getAttack());
+		this.atcBox.setColor('#65583c');
+		this.defBox.setText(this.inventory.getEquipedWeapon().getDefense());
+		this.defBox.setColor('#65583c');
 	}
 
 	// Inicializar conexiones de los botones para el input por teclado

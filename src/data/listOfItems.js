@@ -111,14 +111,13 @@ export var listOfItems = {
 		imgID: "puño", 
 		attack: 15,
 		defense: 0,
-		defense: 10,
-		desc: "-"},
+		desc: "Un clásico. Harás poco daño pero la satisfacción que te dará matar con esta arma no te la dará cualquier otra"},
 
 		{key: "Asta de Bandera",
 		imgID: 'asta',
 		attack: 80,
 		defense: 15,
-		desc: "Un clásico. Harás poco daño pero la satisfacción que te dará matar con esta arma no te la dará cualquier otra"}
+		desc: "La ofensiva definitiva"}
 	],
 
 	healths: [
