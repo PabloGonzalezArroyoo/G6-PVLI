@@ -155,7 +155,7 @@ export default class InventoryScene extends Phaser.Scene {
 		this.keyboardInput.processInput();
 	}
 
-	// Muestra la descripción de los objetos borrando el texto anterior y añadiendo el nuevo
+	// Muestra la descripción de los objetos borrando el texto anterior y añadiendo elw nuevo
 	mostrarDescripcion(item) {
 			this.dialogBox.clearText();
 			this.dialogBox.setTextToDisplay(item.getDesc());

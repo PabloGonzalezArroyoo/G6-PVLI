@@ -5,12 +5,10 @@ import Inventory from '../inventory/inventory.js';
 
 export default class Player extends Character {
     constructor(scene, x, y, inventory) {
-        super(x, y, new PlayerAnimator(scene, x, y), new HealthController(scene, x, y - 150, 100));
+        super(x, y, new PlayerAnimator(scene, x, y), new HealthController(scene, x, y - 200, 100));
         this.inventory = inventory;
-        this._defenseBoost=0;
+        this._defenseBoost = 0;
         this.receivedDamage;
-        //this.inventory.addItem(listOfItems[6]);
-        //this.inventory.addItem(listOfItems[1]);         //Estas lineas es solo para comprobar
     }
 
     getDamage() { return this.inventory.getEquipedWeapon().getAttack(); }

@@ -76,7 +76,9 @@ export default class BattleScene extends Phaser.Scene {
 	 */
 	preload() {
 		// Fondo
-		this.load.image('battleBackground', 'assets/scenes/battle/battleBackground.png');
+		this.load.image('battleBackground1', 'assets/scenes/battle/battleBackground1.png');
+		this.load.image('battleBackground2', 'assets/scenes/battle/battleBackground2.png');
+		this.load.spritesheet('battleBackground3', 'assets/scenes/battle/battleBackground3.png', {frameWidth: 1024, frameHeight: 768});
 
 		// Maria Pita (Animaciones)
 		this.load.spritesheet('player_idle', 'assets/characters/mariaPita/mariaPita_idle.png', {frameWidth: 32, frameHeight: 32});
@@ -169,9 +171,22 @@ export default class BattleScene extends Phaser.Scene {
 		}
 		this.music = this.sound.add('Time to Fight!');
     	this.music.play(musicConfig);
-		// Fondo
-		this.add.image(0, 0, 'battleBackground').setOrigin(0, 0);
 
+		this.anims.create({
+			key: 'battleBackground3',
+			frames: this.anims.generateFrameNumbers('battleBackground3',{start:0, end:20}),
+			frameRate: 7,
+			repeat: -1
+		});
+
+		// Fondo
+		switch(true){
+			case this.level.state >= 1 && this.level.state <= 5: this.add.image(0, 0, 'battleBackground1').setOrigin(0, 0); break;
+			case this.level.state >= 6 && this.level.state <= 11: this.add.image(0, 0, 'battleBackground2').setOrigin(0, 0);break;
+			case this.level.state == 12: this.add.sprite(0,0).setOrigin(0,0).play('battleBackground3'); break;
+		}
+		
+		
 		// Maria Pita
 		this.player = new Player(this, 250, 475, this.inventory);
     
@@ -614,7 +629,7 @@ export default class BattleScene extends Phaser.Scene {
 		}
 		
 		// Mostrar por texto el loot obtenido
-		let lootText = new DialogBox(this, 200, height/2 - 200, 750).setAlign('center');
+		let lootText = new DialogBox(this, width / 2 - 200, height/2 - 200, this.lootBox.width).setAlign('center');
 		lootText.setTextToDisplay(text);
 		lootText.printText();
 	}

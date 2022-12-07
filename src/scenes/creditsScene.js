@@ -14,10 +14,6 @@ import DialogBox from '../animations/dialogBox.js';
         this.creditsTween;
 	}
 
-    preload() {
-
-    }
-
     create() {
         const width = this.scale.width;
         const height = this.scale.height;

@@ -6,7 +6,7 @@ import EventDispatcher from '../combat/eventDispatcher.js';
 // Clase base Enemy
 export class Enemy extends Character {
     constructor(scene, x, y, spritesheet, maxHealth, damage) {
-        super(x, y, new EnemyAnimator(scene, x, y, spritesheet), new HealthController(scene, x, y - 150, maxHealth), damage);
+        super(x, y, new EnemyAnimator(scene, x, y, spritesheet), new HealthController(scene, x, y - 200, maxHealth), damage);
         this.scene = scene;
         this.adjacent={};
         //Hacer al enemigo interactuable
@@ -23,7 +23,7 @@ export class Enemy extends Character {
 
     // método para añadir una escena si no tenía
     setScene(scene) {
-        this.healthController = new HealthController(scene, this.x, this.y - 150, this.maxHealth);
+        this.healthController = new HealthController(scene, this.x, this.y - 200, this.maxHealth);
         this.animator = new EnemyAnimator(scene, this.x, this.y, this.spritesheet);
     }
 

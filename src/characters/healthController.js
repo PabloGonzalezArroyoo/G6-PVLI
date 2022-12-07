@@ -39,10 +39,10 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
                     this.color = 0x00FF00; break; // Verde
                 }
                 case this.currentHealth <= 0.75 * this.maxHealth && this.currentHealth > 0.50 * this.maxHealth: {
-                    this.color = 0xff8000; break; // Naranja
+                    this.color = 0xffff00; break; // Amarillo
                 } 
                 case this.currentHealth <= 0.50 * this.maxHealth && this.currentHealth > 0.25 * this.maxHealth: {
-                    this.color = 0xffff00; break; // Amarillo
+                    this.color = 0xff8000; break; // Naranja
                 }
                 case this.currentHealth <= 0.25 * this.maxHealth && this.currentHealth > 0: {
                     this.color = 0xff0000; break; // Rojo
