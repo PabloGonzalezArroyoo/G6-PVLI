@@ -105,21 +105,21 @@ export class Enemy extends Character {
 // Rufián Embriagado
 export class DrunkRuffian extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'drunkRuffian', 100, 15);
+        super(scene, x, y, 'drunkRuffian', 100, 10);
     }
 }
 
 // Pirata maloliente
  export class StinkyPirate extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'stinkyPirate', 150, 25);
+        super(scene, x, y, 'stinkyPirate', 150, 20);
     }
 }
 
 // Marinero escorbutado
 export class ScurviedSailor extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'scurviedSailor', 200, 35);
+        super(scene, x, y, 'scurviedSailor', 200, 30);
     }
     
     // Atacar con un 15% de probabilidad de hacer su habilidad
@@ -136,7 +136,7 @@ export class ScurviedSailor extends Enemy {
 // Bucanero experimentado
  export class ExperiencedBuccaneer extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'experiencedBuccaneer', 250, 45);
+        super(scene, x, y, 'experiencedBuccaneer', 250, 40);
     }
 
     attack(player) {
@@ -160,7 +160,7 @@ export class ScurviedSailor extends Enemy {
 // Corsario enajenado
  export class AlienatedCorsair extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'alienatedCorsair', 300, 55);
+        super(scene, x, y, 'alienatedCorsair', 300, 50);
     }
     
     // Atacar con un 15% de probabilidad de hacer su habilidad
@@ -178,7 +178,7 @@ export class ScurviedSailor extends Enemy {
 // Alferez Drake (hermano) (BOSS FINAL)
  export class EnsignDrake extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'ensignDrake', 500, 50);
+        super(scene, x, y, 'ensignDrake', 500, 45);
     }
     
     attack(player) {
