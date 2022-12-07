@@ -142,7 +142,7 @@ export default class InventoryScene extends Phaser.Scene {
 		
 		// Al pulsar la tecla ESC se sale de la escena de inventario
 		this.input.keyboard.once('keydown-ESC', () => { this.escape(); });
-		this.dialogBox = new DialogBox(this, 70, 620, 850).setColor('99582A');
+		this.dialogBox = new DialogBox(this, 100, 620, 850).setColor('#67573d');
 	}
 
 	// SALIDA DE LA ESCENA

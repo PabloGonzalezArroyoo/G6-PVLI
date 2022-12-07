@@ -614,7 +614,7 @@ export default class BattleScene extends Phaser.Scene {
 		}
 		
 		// Mostrar por texto el loot obtenido
-		let lootText = new DialogBox(this, 200, height/2 - 200, 750);
+		let lootText = new DialogBox(this, 200, height/2 - 200, 750).setAlign('center');
 		lootText.setTextToDisplay(text);
 		lootText.printText();
 	}
@@ -639,7 +639,7 @@ export default class BattleScene extends Phaser.Scene {
 						this.lootBox.setVisible(true).setAlpha(0.85);
 						const width = this.scale.width;
 						const height = this.scale.height;
-						let lootText = new DialogBox(this, 200, height/2 - 200, 750);
+						let lootText = new DialogBox(this, 200, height/2 - 200, 750).setAlign('center');
 						lootText.setTextToDisplay('Maria Pita ha conseguido un asta de bandera.');
 						lootText.printText();
 						var item = this.add.image(width/2,height/2, this.player.inventory.getEquipedWeapon().imgID).setScale(6,6);
