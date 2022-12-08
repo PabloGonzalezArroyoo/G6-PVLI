@@ -72,27 +72,4 @@ export class Level {
         this.frameOnOver = this.frameOnOver % 3 + state * 3;
         this.frameOnDown = this.frameOnDown % 3 + state * 3;
     }
-
-    // No sé si funciona este método pero sería graciosísimo que sí
-    /*
-    // Devuelve un array con los items dropeados
-    dropLoot(n){
-        // copia del array de loot
-        let posibleLoot = this._loot;
-        let droppedLoot;
-        // bucle para añadir loot a devolver hasta que no se quiera más o no quede más
-        for(let i = 0; i < n && posibleLoot.length > 0; i++){
-            // obtener un elemento aleatorio de posibleLoot
-            let item = Math.floor(Math.random() * posibleLoot.length);
-            // añadir el item escogido al drop
-            droppedLoot[i] = posibleLoot[item];
-            // intercambiar el dropeado con el último
-            let temp = posibleLoot[item];
-            posibleLoot[item] = posibleLoot[posibleLoot.length - 1];
-            posibleLoos[posibleLoot.length - 1] = temp;
-            // descartar el último de los posibles items a dropear
-            posibleLoot.length--;
-        }
-        return dropLoot;
-    }*/
 }

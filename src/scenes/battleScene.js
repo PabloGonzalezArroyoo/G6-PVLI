@@ -171,6 +171,7 @@ export default class BattleScene extends Phaser.Scene {
 		else this.player = new Player(this, 250, 475, this.inventory);
 		
 		// Crea a todos los enemigos y los guarda en el array enemies
+		this.enemies = [];
 		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
 		
 		// Descripcion
@@ -363,7 +364,9 @@ export default class BattleScene extends Phaser.Scene {
 					
 					if (levelFailed(this.player)) {
 						this.dialogBox.clearText();					// Borrar texto previo
-						this.time.delayedCall(2000,()=>{this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
+						this.time.delayedCall(2000, () => {
+							this.music.setVolume(0.3);
+							this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory, music: this.music});});
 					}
 					else if (index < this.enemies.length) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} 	//Se llama al ataque de los demas enemigos
 					else this.emitter.once('finishTurn', () => {this.UpdatePlayerEffects();})							// Evento que actualiza los estados del jugador en el turno
@@ -378,8 +381,8 @@ export default class BattleScene extends Phaser.Scene {
 						if (levelFailed(this.player)) {
 							this.dialogBox.clearText();																	// Borrar texto previo
 							this.time.delayedCall(2000, () => {
-								this.music.stop();
-								this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
+								this.music.setVolume(0.3);
+								this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory, music: this.music});});
 						}
 						else if (index < this.enemies.length) this.EnemyTurn(index); 	//Se llama al ataque de los demas enemigos
 						else this.UpdatePlayerEffects();						// Evento que actualiza los estados del jugador en el turno
@@ -407,7 +410,7 @@ export default class BattleScene extends Phaser.Scene {
 					this.dialogBox.clearText();																	// Borrar texto previo
 					this.time.delayedCall(2000, () => {
 						this.music.stop();
-						this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
+						this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory, music: music});});
 				}
 				else this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects()})});
 		}

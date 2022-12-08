@@ -7,7 +7,7 @@ export default class DialogBox extends Phaser.GameObjects.Text {
 		super(scene,x,y);
 		this.scene.add.existing(this);
 		this.textToDisplay = ''; 		// El texto que va a escribir
-		this.timePerLetter = 20; 		// Tiempo entre letras en milisegundos
+		this.timePerLetter = 25; 		// Tiempo entre letras en milisegundos
 		this.isWritting = false; 		// Indica si actualmente esta escribiendo
 		this.letterPos = 0; 			// Indica la posicion actual de la letra que va a escribir
 
@@ -51,7 +51,7 @@ export default class DialogBox extends Phaser.GameObjects.Text {
 		this.updateText();
 		this.letterPos++;
 		if (this.textToDisplay.length <= this.letterPos) {
-			this.scene.time.delayedCall(1000, () => {this.emitter.emit('finishTexting')});
+			this.scene.time.delayedCall(700, () => {this.emitter.emit('finishTexting')});
 		}
 	}
 
@@ -68,7 +68,7 @@ export default class DialogBox extends Phaser.GameObjects.Text {
 		this.textToDisplay = '';
 		this.letterPos = 0;
 		this.isWritting = false;
-		this.timePerLetter = 40;
+		this.timePerLetter = 25;
 		this.updateText();
 	}
 }

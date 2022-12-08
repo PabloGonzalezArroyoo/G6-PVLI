@@ -18,6 +18,7 @@ export default class GameOver extends Phaser.Scene {
         this.level = data.level;
         this.inventoryBackup = data.inventoryBackup;
         this.inventory = data.inventory;
+        this.music = data.music;
     }
 
     preload(){
@@ -55,16 +56,21 @@ export default class GameOver extends Phaser.Scene {
         // Recoger el evento para cargar el siguiente nivel
         this.emitter.once('levelSelected', (levelData) => {
             this.add.sprite(1024, 768, 'fadeOut').setOrigin(1, 1).play('fOut');
-            this.time.delayedCall(1000, () => {this.scene.start('battleScene', levelData)});
+            this.time.delayedCall(1000,() => {
+                this.music.stop();
+                this.scene.start('battleScene', levelData)});
         });
 
         this.inventory.setInventory(this.inventoryBackup); // Devuelve los objetos perdidos durante el combate
 
         this.keyboardInput = new KeyboardInput(this);
 
-        this.botones = [new Button(this, 375, 600, 'exitButton', 0, 1, 2, this.keyboardInput, () => {this.scene.start('levelMenuScene', {inventory: this.inventory})}),
-                    new Button(this, 675, 600, 'retryButton', 0, 1, 2, this.keyboardInput, () => {this.level.loadLevel(this.inventory);})
-                    ];
+        this.botones = [new Button(this, 375, 600, 'exitButton', 0, 1, 2, this.keyboardInput, 
+        () => {
+            this.scene.start('levelMenuScene', {inventory: this.inventory});
+            this.music.stop();
+        }),
+            new Button(this, 675, 600, 'retryButton', 0, 1, 2, this.keyboardInput, () => {this.level.loadLevel(this.inventory);})];
 
         this.keyboardInput.setStartButton(this.botones[0]);
 
