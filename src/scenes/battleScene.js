@@ -128,7 +128,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('fadeIn', 'assets/scenes/transitions/fadeInBattleTransition.png', {frameWidth: 1024, frameHeight: 768});
 
 		// Música -> CAMBIAR POR LA CORRECTA CUANDO LA HAYAMOS DECIDIDO
-		this.load.audio('Time to Fight!', ['assets/scenes/battle/Time to Fight! - Xenoblade Chronicles DE.mp3']);
+		this.load.audio('Time to Fight!', ['assets/scenes/battle/vivivivivi - Mewlzebub.mp3']);
 	}
 
 	/**

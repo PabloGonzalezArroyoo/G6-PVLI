@@ -55,8 +55,9 @@ import EventDispatcher from '../combat/eventDispatcher.js';
         'Rafael Vilches Hernández\n' +
         '\nEncargada de arte\n' + 
         'Yi Wang Qiu\n' +
-        '\nCompositor musical\n' + 
-        'Javier Tirado Ríos (Vivu)\n'
+        '\nCompositores musicales\n' + 
+        'Javier Tirado Ríos (Vivu)\n' + 
+        'vivivivivi (@SocialVivi)\n'
         );
         
         this.creditsMusic = this.sound.add('Credits');
