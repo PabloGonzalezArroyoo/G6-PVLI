@@ -248,7 +248,6 @@ export default class BattleScene extends Phaser.Scene {
 	update(t,dt) {
 		super.update(t,dt);
 		this.previousLetterTime += dt; // Contador del tiempo transcurrido desde la ultima letra
-		this.keyboardInput.processInput();
 
 		// Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
 		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){

@@ -181,10 +181,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		}
 	}
 
-	update() {
-		this.keyboardInput.processInput(); 
-	}
-
 	// Inicializa a qué botón te lleva pulsar cada dirección desde otro botón
 	inicializeLevelButtonConnections() {
 		this.inventoryButton.setAdjacents(this.levelButtons[11], null, null, this.levelButtons[11]);

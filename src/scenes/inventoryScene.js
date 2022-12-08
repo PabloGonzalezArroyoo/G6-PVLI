@@ -151,10 +151,6 @@ export default class InventoryScene extends Phaser.Scene {
 		this.scene.wake(this.previousSceneName, item); 				// Reanuda la escena anterior
 	}
 
-	update(t,dt) {
-		this.keyboardInput.processInput();
-	}
-
 	// Muestra la descripción de los objetos borrando el texto anterior y añadiendo el nuevo
 	mostrarDescripcion(item) {
 			this.dialogBox.clearText();

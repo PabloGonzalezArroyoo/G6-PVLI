@@ -55,15 +55,10 @@ export default class Title extends Phaser.Scene {
         this.skipButton = new Button(this, 514, 690,'skip', 0, 1, 2, this.keyboardInput, ()=>{this.goToNextScene();}).setScale(5, 5);
         this.keyboardInput.setStartButton(this.skipButton);
     }
-
     goToNextScene() {
         if (this.cinematicKey === 'endCinematic'){
             // Lanzar escena de créditos
         }
         else this.scene.start('levelMenuScene', -1);
     }
-
-    /*update() {
-        this.keyboardInput.processInput();
-	}*/
 }
