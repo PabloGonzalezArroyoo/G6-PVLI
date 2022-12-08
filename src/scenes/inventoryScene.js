@@ -54,6 +54,8 @@ export default class InventoryScene extends Phaser.Scene {
 		this.load.image('caldo', 'assets/scenes/inventory/objects/caldoGallego.png');
 		this.load.image('polbo', 'assets/scenes/inventory/objects/pulpoALaGallega.png');
 		this.load.image('asta', 'assets/scenes/inventory/weapons/astaBandera.png');
+
+		// Recuadro de selección
 		this.load.spritesheet('selected', 'assets/scenes/inventory/selectedItem.png', {frameWidth: 32, frameHeight:32});
 	}
 
@@ -61,15 +63,19 @@ export default class InventoryScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-		this.emitter = EventDispatcher.getInstance();
 
 		// BORRAR ESTAS LÍNEAS PARA EL JUEGO FINAL
 		this.inventory.addWeapon('fouc');
 		this.inventory.addWeapon('dagEx');
 		this.inventory.addHealth('polbo');
+		this.inventory.addHealth('caldo');
+		this.inventory.addHealth('bolla');
 
 		// Guardar la escena de la que te han despertado
-		this.events.on('wake', (scene, prev) => {this.previousSceneName = prev});
+		this.events.on('wake', (scene, prev) => {
+			this.previousSceneName = prev;
+			this.keyboardInput.setStartButton(this.equipedWeaponButton);
+		});
 		
 		// Constantes
 		const width = this.scale.width;
@@ -86,11 +92,15 @@ export default class InventoryScene extends Phaser.Scene {
 
 		// ARMA EQUIPADA
 		this.equiped = this.add.image(217, 262, this.inventory.getEquipedWeapon().imgID).setScale(8, 8);
-		this.equipedWeaponButton = new Button(this, 217, 262, 'selected', 0, 1, 2, 
-			this.keyboardInput, () => {
-				if (this.inventory.getEquipedWeapon().imgID !== 'puño' && this.inventory.getEquipedWeapon().imgID !== 'asta')
-				this.selected(this.inventory.getWeapons()['puño'], "W")},
-			() => {this.mostrarDescripcion(this.inventory.getEquipedWeapon())}
+		this.equipedWeaponButton = new Button(this, 217, 262, 'selected', 0, 1, 2, this.keyboardInput,
+			() => {
+				if (this.inventory.getEquipedWeapon().imgID !== 'puño' && this.inventory.getEquipedWeapon().imgID !== 'asta') { // OnClick
+					this.selected(this.inventory.getWeapons()['puño'], "W");
+					this.updateUITexts(this.inventory.getWeapons()['puño'].weapon);
+				}
+			},
+			() => {this.mostrarDescripcion(this.inventory.getEquipedWeapon())},	// OnPointerOver
+			() => {this.resetStatsBox(); this.dialogBox.clearText();} // OnPointerOut
 		).setScale(8, 8);
 
 		this.weaponButtons = [];
@@ -108,18 +118,16 @@ export default class InventoryScene extends Phaser.Scene {
 				if (val.owned) this.add.image(x, y, itemID).setScale(1.5,1.5);
 				this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput,
 					() => {this.selected(val, "W")},							// OnClick
-					() => {														// OnPointerOver
-						if (val.owned){
-							this.mostrarDescripcion(val.weapon);
-							this.updateDefAtc(val.weapon);
-						}
-					},
-					() => {this.resetTextBox()}).setScale(1.5,1.5);				// OnPointerOut
+					() => {if (val.owned){ this.mostrarDescripcion(val.weapon); this.updateUITexts(val.weapon);}}, // OnPointerOver
+					() => {this.resetStatsBox(); this.dialogBox.clearText();} // OnPointerOut
+				).setScale(1.5,1.5);
 				i++;
 			}
 		});
 
 		this.foodButtons = [];
+		this.foodImages = [];
+		this.foodTexts = [];
 
 		i = 0;
 		// COMIDA
@@ -128,11 +136,13 @@ export default class InventoryScene extends Phaser.Scene {
 			let itemQuantity = val.amount;
 			
 			let x = val.i * 165 + width / 2; let y = 475;
-			if (val.amount) this.add.image(x, y, itemID).setScale(3, 3);
+			if (val.amount) this.foodImages[val.i] = this.add.image(x, y, itemID).setScale(3, 3);
 			this.foodButtons[val.i] = new Button(this, x, y, 'selected', 0, 1, 2, this.keyboardInput,
-				() => {if (val.amount) this.selected(val.item, "H")},			// OnClick
-				() => {if (val.amount) this.mostrarDescripcion(val.item);}).setScale(3,3); // OnPointerOver
-			if (itemQuantity > 1) this.add.text(x + 5, y + 5, itemQuantity, {}).setScale(3,3);
+				() => {if (val.amount) this.selected(val.item, "H", val.i)},   				// OnClick
+				() => {if (val.amount) { this.mostrarDescripcion(val.item); this.updateUITexts(val);}}, // OnPointerOver
+				() => {this.resetStatsBox(); this.dialogBox.clearText()}					// OnPointerOut
+			).setScale(3,3); 
+			if (val.amount) this.foodTexts[val.i] = this.add.text(x + 5, y + 5, itemQuantity, {fontFamily: 'Silkscreen', fontSize: 40});
 			i++;
 		});
 
@@ -145,8 +155,10 @@ export default class InventoryScene extends Phaser.Scene {
 		this.input.keyboard.once('keydown-ESC', () => { this.escape(); });
 		this.dialogBox = new DialogBox(this, 80, 620, 850).setColor('65583c');
 
+		// Texto de daño, defensa de armas e items de curación
 		this.atcBox = this.add.text(110, 470, this.inventory.getEquipedWeapon().getAttack(), {fontFamily: 'Silkscreen', fontSize: 50, color: '#65583c'});
 		this.defBox = this.add.text(270, 470, this.inventory.getEquipedWeapon().getDefense(), {fontFamily: 'Silkscreen', fontSize: 50, color: '#65583c'});
+		this.healthBox = this.add.text(820, 320, "", {fontFamily: 'Silkscreen', fontSize: 30, color: '#248a00'});
 	}
 
 	// SALIDA DE LA ESCENA
@@ -166,9 +178,10 @@ export default class InventoryScene extends Phaser.Scene {
 		this.dialogBox.printText();
 	}
 
-	// Gestiona si, al elegirse un arma, debe volver a la escena anterior haciendo el cambio en esa escena (battleScene) o si debe mantenerse 
-	// en la escena de inventario haciendo el cambio aquí (levelMenuScene)
-	selected(val, type) {
+	// Gestiona si, al elegirse un arma o un objeto curativo, debe volver a la escena anterior haciendo el cambio en esa escena (battleScene)
+	// o si debe mantenerse en la escena de inventario haciendo el cambio aquí (levelMenuScene)
+	selected(val, type, index = 0) {
+		 // ARMA
 		if (type === "W") {
 			if (val.owned && this.inventory.getEquipedWeapon().imgID !== val.weapon.imgID && this.inventory.getEquipedWeapon().imgID !== 'asta') {
 				// Cambiar imagen al haber elegido un arma	
@@ -178,41 +191,67 @@ export default class InventoryScene extends Phaser.Scene {
 				if (this.previousSceneName === 'battleScene') this.escape(val.weapon);
 				else this.inventory.setEquipedWeapon(val.weapon.imgID);
 			}
-		} else {
+		}
+
+		// CURACIÓN
+		else {
 			// Usar el objeto curativo
-			if (this.previousSceneName === 'battleScene') this.escape(val);
+			if (this.previousSceneName === 'battleScene') {
+				// Comprobar si hay en el inventario
+				if (this.inventory.healths[val.imgID].amount > 0) {	
+					// Eliminar del inventario
+					this.inventory.substractHealth(val.imgID);
+					
+					// Si el valor al reducir el tamaño es 0, borrar imagen y texto
+					if (this.inventory.healths[val.imgID].amount < 1) {
+						this.foodImages[index].destroy();
+						this.foodTexts[index].setText("");
+					}
+					// Si no, solo cambiamos el texto a la nueva cantidad
+					else this.foodTexts[index].setText(this.inventory.healths[val.imgID].amount);
+					
+					this.escape(val);
+				}
+			}
 			else {
 				// Evitar que el jugador use el obejto fuera de la escena de batalla
 				this.dialogBox.setTextToDisplay("Mejor no uses el/la " + val.name + " ahora, te será más útil en batalla");
 				this.dialogBox.printText();
 			};
 		}
-		
 	}
 
-	// Actualiza el texto de ataque y defensa del arma equipada para mostar la diferencia
-	updateDefAtc(weapon) {
-		var actual = this.inventory.getEquipedWeapon();
+	// Actualiza el texto de ataque y defensa del arma equipada para mostar la diferencia, o añade el texto de un item curativo
+	updateUITexts(item) {
+		// ARMA
+		if (item.type === "WEAPON") {
+			var actual = this.inventory.getEquipedWeapon();
+			var weapon = item;
 
-		// Ataque
-		if (weapon.getAttack() > actual.getAttack()) this.atcBox.setColor('#248a00');
-		else if (weapon.getAttack() < actual.getAttack()) this.atcBox.setColor('#e63d00');
+			// Ataque
+			if (weapon.getAttack() > actual.getAttack()) this.atcBox.setColor('#248a00');
+			else if (weapon.getAttack() < actual.getAttack()) this.atcBox.setColor('#e63d00');
 
-		// Defensa
-		if (weapon.getDefense() > actual.getDefense()) this.defBox.setColor('#248a00');
-		else if (weapon.getDefense() < actual.getDefense()) this.defBox.setColor('#e63d00');
+			// Defensa
+			if (weapon.getDefense() > actual.getDefense()) this.defBox.setColor('#248a00');
+			else if (weapon.getDefense() < actual.getDefense()) this.defBox.setColor('#e63d00');
 
-		// Actualizar texto con el nuevo arma
-		this.atcBox.setText(weapon.getAttack());
-		this.defBox.setText(weapon.getDefense());
+			// Actualizar texto con el nuevo arma
+			this.atcBox.setText(weapon.getAttack());
+			this.defBox.setText(weapon.getDefense());
+		}
+
+		// CURACIÓN
+		else this.healthBox.setText("+" + item.item.getHealthValue());
 	}
 
-	// Devuelve el texto de ataque y defensa a su estado inicial
-	resetTextBox() {
+	// Devuelve el texto de ataque, defensa y curación a su estado inicial
+	resetStatsBox() {
 		this.atcBox.setText(this.inventory.getEquipedWeapon().getAttack());
 		this.atcBox.setColor('#65583c');
 		this.defBox.setText(this.inventory.getEquipedWeapon().getDefense());
 		this.defBox.setColor('#65583c');
+		this.healthBox.setText("");
 	}
 
 	// Inicializar conexiones de los botones para el input por teclado

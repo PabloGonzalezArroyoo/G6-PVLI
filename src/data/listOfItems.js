@@ -124,17 +124,17 @@ export var listOfItems = {
 		{key: "Bolla de pan",
 		imgID: "bolla", 
 		heal: 20,
-		desc: "Bolla de pan calentita y crujiente. Cura 20 de vida"},
+		desc: "Bolla de pan calentita y crujiente"},
 
 		{key: "Caldo gallego",
 		imgID: "caldo", 
 		heal: 40,
-		desc: "Caldo gallego típico de la zona, de lo mejorcito que puedes encontrar. Cura 40 de vida"},
+		desc: "Caldo gallego típico de la zona, de lo mejorcito que puedes encontrar"},
 		
 		{key: "Polbo á feira",
 		imgID: "polbo", 
 		heal: 60,
-		desc: "Polbo á feira, el plato tradicional por excelencia de la zona, un manjar en toda regla. Cura 60 de vida"},
+		desc: "Polbo á feira, el plato tradicional por excelencia de la zona, un manjar en toda regla"},
 	]
 }
 

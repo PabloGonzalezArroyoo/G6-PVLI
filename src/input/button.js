@@ -35,9 +35,9 @@ export class Button extends Phaser.GameObjects.Sprite {
         this._functionToDo();
     }
     onOver() {
-        if (this._functionOnOver) this._functionOnOver();
         if (this.keyboardInput) this.keyboardInput.changeButton(this);
         else this.selectButton();
+        if (this._functionOnOver) this._functionOnOver();
     }
     onPointerOut() {
         if(this._functionOnOut) this._functionOnOut();

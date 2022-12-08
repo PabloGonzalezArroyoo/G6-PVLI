@@ -263,7 +263,7 @@ export default class BattleScene extends Phaser.Scene {
 		switch (action){									
 			
       		case 'attack' : 															// Se selecciona atacar
-				this.UpdateQueLocura(100)																
+				this.UpdateQueLocura(35)																
 				this.dialogBox.clearText();												// Borrar texto previo
 				if (this.enemies.length > 1) {											// Si hay más de un enemigo en escena
 					this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
@@ -356,10 +356,10 @@ export default class BattleScene extends Phaser.Scene {
 		if (!index) index = 0;
 		// Si el enemigo sigue vivo hace su acción
 		if (!levelFailed(this.enemies[index]) && !this.enemies[index].isStuned()) {
-			this.dialogBox.clearText();                           // Borrar texto previo
+			this.dialogBox.clearText();                           	// Borrar texto previo
 			if (this.enemies.length <= 1) this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' ataca a Maria Pita'); // Enviar el nuevo texto
 			else this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' (' +  index + ')' +' ataca a Maria Pita');	
-			this.emitter.once('finishTexting', () => {						// Crea un evento para que el enemigo ataque
+			this.emitter.once('finishTexting', () => {				// Crea un evento para que el enemigo ataque
 				
 				// Guarda el daño hecho o el daño y un texto si se ha usado una habilidad
 				let attack = this.enemies[index].attack(this.player);
@@ -370,7 +370,7 @@ export default class BattleScene extends Phaser.Scene {
 					index++;
 					
 					if (levelFailed(this.player)) {
-						this.dialogBox.clearText();																	// Borrar texto previo
+						this.dialogBox.clearText();					// Borrar texto previo
 						this.time.delayedCall(2000,()=>{this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
 					}
 					else if (index < this.enemies.length) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} 	//Se llama al ataque de los demas enemigos
