@@ -73,9 +73,4 @@ export default class GameOver extends Phaser.Scene {
         this.botones[0].setAdjacents(null, null, null, this.botones[1]);
         this.botones[1].setAdjacents(null, null, this.botones[0], null);
     }
-
-    update(t,dt) {
-        super.update(t,dt);
-        this.keyboardInput.processInput();
-    }
 }

@@ -50,9 +50,4 @@ export default class OptionsScene extends Phaser.Scene {
             this.scene.start('inventoryScene');
         });
 	}
-	
-
-	update() {
-
-	}
 }

@@ -111,6 +111,7 @@ export var listOfItems = {
 		imgID: "puño", 
 		attack: 15,
 		defense: 0,
+<<<<<<< balanceo-del-juego
 		defense: 0,
 		desc: "-"},
 
@@ -119,11 +120,21 @@ export var listOfItems = {
 		attack: 90,
 		defense: 25,
 		desc: "Un clásico. Harás poco daño pero la satisfacción que te dará matar con esta arma no te la dará cualquier otra"}
+=======
+		desc: "Un clásico. Harás poco daño pero la satisfacción que te dará matar con esta arma no te la dará cualquier otra"},
+
+		{key: "Asta de Bandera",
+		imgID: 'asta',
+		attack: 80,
+		defense: 15,
+		desc: "La ofensiva definitiva"}
+>>>>>>> JS
 	],
 
 	healths: [
 		{key: "Bolla de pan",
 		imgID: "bolla", 
+<<<<<<< balanceo-del-juego
 		heal: 35,
 		desc: "Bolla de pan calentita y crujiente. Cura 20 de vida"},
 
@@ -136,6 +147,20 @@ export var listOfItems = {
 		imgID: "polbo", 
 		heal: 90,
 		desc: "Polbo á feira, el plato tradicional por excelencia de la zona, un manjar en toda regla. Cura 60 de vida"},
+=======
+		heal: 20,
+		desc: "Bolla de pan calentita y crujiente"},
+
+		{key: "Caldo gallego",
+		imgID: "caldo", 
+		heal: 40,
+		desc: "Caldo gallego típico de la zona, de lo mejorcito que puedes encontrar"},
+		
+		{key: "Polbo á feira",
+		imgID: "polbo", 
+		heal: 60,
+		desc: "Polbo á feira, el plato tradicional por excelencia de la zona, un manjar en toda regla"},
+>>>>>>> JS
 	]
 }
 
