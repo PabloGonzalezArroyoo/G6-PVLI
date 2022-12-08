@@ -114,8 +114,9 @@ export var listOfLevels = [
 		x: 354,
 		y: 455.5,
 		enemies: [
-			{id: "drunkRuffian", x: 675, y: 200},
-			{id: "drunkRuffian", x: 775, y: 250}
+			{id: "stinkyPirate", x: 675, y: 200},
+			{id: "stinkyPirate", x: 775, y: 250},
+			{id: "alienatedCorsair", x: 825, y: 200}
 			],
 		level1prob: 0,
 		level2prob: 100,
@@ -126,8 +127,8 @@ export var listOfLevels = [
 		x: 292,
 		y: 363.5,
 		enemies: [
-			{id: "drunkRuffian", x: 675, y: 200},
-			{id: "drunkRuffian", x: 775, y: 250}
+			{id: "alienatedCorsair", x: 675, y: 200},
+			{id: "experiencedBuccaneer", x: 775, y: 250}
 			],
 		level1prob: 0,
 		level2prob: 40,
