@@ -95,7 +95,7 @@ export default class InventoryScene extends Phaser.Scene {
 					this.updateUITexts(this.inventory.getWeapons()['puño'].weapon);
 				}
 			},
-			() => {this.mostrarDescripcion(this.inventory.getEquipedWeapon())},	// OnPointerOver
+			() => {this.showDescription(this.inventory.getEquipedWeapon())},	// OnPointerOver
 			() => {this.resetStatsBox(); this.dialogBox.clearText();} // OnPointerOut
 		).setScale(8, 8);
 
@@ -117,7 +117,7 @@ export default class InventoryScene extends Phaser.Scene {
 				if (!val.owned) this.weaponsImages[val.i][val.j].setVisible(false);
 				this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput,
 					() => {this.selected(val, "W")},							// OnClick
-					() => {if (val.owned){ this.mostrarDescripcion(val.weapon); this.updateUITexts(val.weapon);}}, // OnPointerOver
+					() => {if (val.owned){ this.showDescription(val.weapon); this.updateUITexts(val.weapon);}}, // OnPointerOver
 					() => {this.resetStatsBox(); this.dialogBox.clearText();} // OnPointerOut
 				).setScale(1.5,1.5);
 				i++;
@@ -139,7 +139,7 @@ export default class InventoryScene extends Phaser.Scene {
 			if (!val.amount) this.foodImages[val.i].setVisible(false);
 			this.foodButtons[val.i] = new Button(this, x, y, 'selected', 0, 1, 2, this.keyboardInput,
 				() => {if (val.amount) this.selected(val.item, "H", val.i)},   				// OnClick
-				() => {if (val.amount) { this.mostrarDescripcion(val.item); this.updateUITexts(val);}}, // OnPointerOver
+				() => {if (val.amount) { this.showDescription(val.item); this.updateUITexts(val);}}, // OnPointerOver
 				() => {this.resetStatsBox(); this.dialogBox.clearText()}					// OnPointerOut
 			).setScale(3,3); 
 			this.foodTexts[val.i] = this.add.text(x + 5, y + 5, itemQuantity, {fontFamily: 'Silkscreen', fontSize: 40});
@@ -169,7 +169,7 @@ export default class InventoryScene extends Phaser.Scene {
 	}
   
 	// Muestra la descripción de los objetos borrando el texto anterior y añadiendo el nuevo
-	mostrarDescripcion(item) {
+	showDescription(item) {
 		this.dialogBox.clearText();
 		this.dialogBox.setTextToDisplay(item.getDesc());
 		this.dialogBox.printText();
