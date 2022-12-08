@@ -95,7 +95,7 @@ export class WeaponItem extends Item {
 	static endGame() {
 		return function (player) {
 			player.animator.scene.music.stop();
-			player.animator.scene.scene.start('cinematicScene', 'end');
+			player.animator.scene.scene.start('cinematicScene', {key: 'end'});
 		}
 	}
 }

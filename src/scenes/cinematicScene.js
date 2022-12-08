@@ -20,8 +20,9 @@ export default class Title extends Phaser.Scene {
     /**
 	 * Inicializa las variables
 	*/
-	init(key){
-        this.cinematicKey = key;
+	init(data){
+        this.inventory = data.inventory;
+        this.cinematicKey = data.key;
         this.cinematicKey += 'Cinematic';
 	}
     
@@ -59,6 +60,6 @@ export default class Title extends Phaser.Scene {
         if (this.cinematicKey === 'endCinematic'){
             // Lanzar escena de créditos
         }
-        else this.scene.start('levelMenuScene', -1);
+        else this.scene.start('levelMenuScene', {inventory: this.inventory});
     }
 }
