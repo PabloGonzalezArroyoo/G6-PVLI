@@ -19,6 +19,8 @@ export default class InventoryScene extends Phaser.Scene {
 		super({ key: 'inventoryScene' });
 		this.dialogBox;
 		this.previousSceneName;
+		this.emitter = EventDispatcher.getInstance();
+		this.handleLoot = false;
 	}
 
 	/**
@@ -41,9 +43,9 @@ export default class InventoryScene extends Phaser.Scene {
 		this.load.image('dagOx', 'assets/scenes/inventory/weapons/dagaOxidada.png');
 		this.load.image('dagAf', 'assets/scenes/inventory/weapons/dagaAfilada.png');
 		this.load.image('dagEx', 'assets/scenes/inventory/weapons/dagaExcéntrica.png');
-		//this.load.image('alMb', 'assets/scenes/inventory/weapons/.png');
-		//this.load.image('alVrd', 'assets/scenes/inventory/weapons/.png');
-		//this.load.image('alDem', 'assets/scenes/inventory/weapons/.png');
+		this.load.image('alMb', 'assets/scenes/inventory/weapons/alabardaDeMentira.png');
+		this.load.image('alVrd', 'assets/scenes/inventory/weapons/alabardaDeVerdad.png');
+		this.load.image('alDem', 'assets/scenes/inventory/weapons/alabardaDemencial.png');
 		this.load.image('ropIng', 'assets/scenes/inventory/weapons/roperaInglesa.png');
 		this.load.image('ropCst', 'assets/scenes/inventory/weapons/roperaCastellana.png');
 		this.load.image('ropAl', 'assets/scenes/inventory/weapons/roperaAlocada.png');
@@ -63,7 +65,7 @@ export default class InventoryScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-
+		console.log("ME CREÉ");
 		// BORRAR ESTAS LÍNEAS PARA EL JUEGO FINAL
 		this.inventory.addWeapon('fouc');
 		this.inventory.addWeapon('dagEx');
@@ -71,10 +73,13 @@ export default class InventoryScene extends Phaser.Scene {
 		this.inventory.addHealth('caldo');
 		this.inventory.addHealth('bolla');
 
-		// Guardar la escena de la que te han despertado
-		this.events.on('wake', (scene, prev) => {
-			this.previousSceneName = prev;
+		// Guardar la escena de la que te han despertado y aplicar cambios del inventario
+		this.events.on('wake', (scene, data) => {
+			this.inventory = data.inventory;
+			this.previousSceneName = data.scene;
 			this.keyboardInput.setStartButton(this.equipedWeaponButton);
+			if (this.handleLoot && data.scene !== 'battleScene') this.setImagesVisible();
+			else this.handleLoot = true;
 		});
 		
 		// Constantes
@@ -106,6 +111,8 @@ export default class InventoryScene extends Phaser.Scene {
 		this.weaponButtons = [];
 		for (let i = 0; i < 5; i++) this.weaponButtons[i] = [];
 
+		this.weaponsImages = []
+		for (let i = 0; i < 5; i++) this.weaponsImages[i] = [];
 		let i = 0;
 		// ARMAS
 		Object.values(armas).forEach(val => {
@@ -115,7 +122,8 @@ export default class InventoryScene extends Phaser.Scene {
 				let x = val.i * 102 + width / 2 - 35;
 				let y = val.j * 60 + 140;
 				
-				if (val.owned) this.add.image(x, y, itemID).setScale(1.5,1.5);
+				this.weaponsImages[val.i][val.j] = this.add.image(x, y, itemID).setScale(1.5,1.5);
+				if (!val.owned) this.weaponsImages[val.i][val.j].setVisible(false);
 				this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput,
 					() => {this.selected(val, "W")},							// OnClick
 					() => {if (val.owned){ this.mostrarDescripcion(val.weapon); this.updateUITexts(val.weapon);}}, // OnPointerOver
@@ -204,7 +212,7 @@ export default class InventoryScene extends Phaser.Scene {
 					
 					// Si el valor al reducir el tamaño es 0, borrar imagen y texto
 					if (this.inventory.healths[val.imgID].amount < 1) {
-						this.foodImages[index].destroy();
+						this.foodImages[index].setVisible(false);
 						this.foodTexts[index].setText("");
 					}
 					// Si no, solo cambiamos el texto a la nueva cantidad
@@ -215,7 +223,7 @@ export default class InventoryScene extends Phaser.Scene {
 			}
 			else {
 				// Evitar que el jugador use el obejto fuera de la escena de batalla
-				this.dialogBox.setTextToDisplay("Mejor no uses el/la " + val.name + " ahora, te será más útil en batalla");
+				this.dialogBox.setTextToDisplay("Mejor no comas ahora, te será más útil en batalla");
 				this.dialogBox.printText();
 			};
 		}
@@ -252,6 +260,27 @@ export default class InventoryScene extends Phaser.Scene {
 		this.defBox.setText(this.inventory.getEquipedWeapon().getDefense());
 		this.defBox.setColor('#65583c');
 		this.healthBox.setText("");
+	}
+
+	// Recorre los arrays de las imágenes de armas y comida para, tras leer el estado del inventario recibido al despertar la escena
+	// (si el jugador tiene un arma [owned] o si tiene comida [amount > 0]), poner las imágenes y el texto correctamente
+	setImagesVisible() {
+		for (let i = 0; i < 3; i++) {
+			// Armas
+			for (let j = 0; j < 5; j++) {
+				let armas = this.inventory.getWeapons();
+				if (armas[this.weaponsImages[j][i].texture.key].owned) {
+					this.weaponsImages[j][i].setVisible(true);
+				}
+			}
+
+			// Comida
+			let comida = this.inventory.getHealths();
+			if(comida[this.foodImages[i].texture.key].amount > 0) {
+				this.foodImages[i].setVisible(true);
+				this.foodTexts[i].setText(comida[this.foodImages[i].texture.key].amount);
+			}
+		}
 	}
 
 	// Inicializar conexiones de los botones para el input por teclado

@@ -207,7 +207,7 @@ export default class BattleScene extends Phaser.Scene {
 		 	new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this.keyboardInput, () => {
 				this.music.setVolume(0.4);										// Bajar la música
 				this.scene.sleep('battleScene');								// Parar la escena de batalla
-				this.scene.wake('inventoryScene', 'battleScene');				// Reanudar la escena de inventario
+				this.scene.wake('inventoryScene', {scene: 'battleScene', inventory: this.inventory});				// Reanudar la escena de inventario
 				this.events.once('wake', (scene, item) => {this.music.setVolume(1); this.useItem(item)})	// Evento al volver de la escena de inventario
 		 	}),
 			// Botón de defensa
