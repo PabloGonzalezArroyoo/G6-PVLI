@@ -1,41 +1,39 @@
-// Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
-import Inventory from '../inventory/inventory.js';
+import KeyboardInput from '../input/keyboardInput.js';
+import Button from '../input/button.js';
 import { Level } from '../levels/level.js';
-import { DrunkRuffian, StinkyPirate, ScurviedSailor, ExperiencedBuccaneer, AlienatedCosair, EnsignDrake } from '../characters/enemy.js'
-import { KeyboardInput } from '../input/keyboardInput.js';
-import { Button } from '../input/button.js';
-import {listOfItems} from '../data/listOfItemsANTIGUO.js';
+import { listOfLevels } from '../data/listOfLevels.js';
+import EventDispatcher from '../combat/eventDispatcher.js';
 
 // Array con todos los niveles del juego
-
-const levels = [new Level(272, 527.5, [new DrunkRuffian(null, 720, 200)], []), // Nivel 0
-				new Level(354, 455.5, [new DrunkRuffian(null, 700, 200), new DrunkRuffian(null, 750, 250)], []), // Nivel 1
-				new Level(292, 363.5, [], []),			// ... 2
-				new Level(405, 363.5, [], []),			// 3
-				new Level(354, 271.5, [], []),			// 4
-				new Level(507, 302, [], []),			// 5
-				new Level(548, 394.5, [], []),			// 6
-				new Level(589, 486.5, [], []),			// 7
-				new Level(630, 353.5, [], []),			// 8
-				new Level(610, 240.5, [], []),			// 9
-				new Level(702, 261, [], []),			// 10
-				new Level(814, 261, [], [])];			// 11
-
+const levels = [new Level(listOfLevels[0]),
+				new Level(listOfLevels[1]), // Nivel 1
+				new Level(listOfLevels[2]),			// ... 2
+				new Level(listOfLevels[3]),			// 3
+				new Level(listOfLevels[4]),			// 4
+				new Level(listOfLevels[5]),			// 5
+				new Level(listOfLevels[6]),			// 6
+				new Level(listOfLevels[7]),			// 7
+				new Level(listOfLevels[8]),			// 8
+				new Level(listOfLevels[9]),			// 9
+				new Level(listOfLevels[10]),			// 10
+				new Level(listOfLevels[11])];			// 11
+				
+				// Desbloquear el primer nivel
 				levels[0].setUnlocked();
 				
 				// Especificar los niveles que se desbloquean tras completar cada nivel
 				levels[0].setNextLevels([levels[1]]);
-				levels[1].setNextLevels([levels[2], levels[3]]);
-				levels[2].setNextLevels(null);
-				levels[3].setNextLevels([levels[4], levels[5], levels[6]]);
-				levels[4].setNextLevels(null);
-				levels[5].setNextLevels(null);
-				levels[6].setNextLevels([levels[7], levels[8]]);
-				levels[7].setNextLevels(null);
-				levels[8].setNextLevels([levels[9], levels[10]]);
-				levels[9].setNextLevels(null);
-				levels[10].setNextLevels([levels[11]]);
+				levels[1].setNextLevels([levels[2]]);
+				levels[2].setNextLevels([levels[3], levels[4]]);
+				levels[3].setNextLevels(null);
+				levels[4].setNextLevels([levels[5], levels[6], levels[7]]);
+				levels[5].setNextLevels([null]);
+				levels[6].setNextLevels([null]);
+				levels[7].setNextLevels([levels[8], levels[9]]);
+				levels[8].setNextLevels(null);
+				levels[9].setNextLevels([levels[10], levels[11]]);
+				levels[10].setNextLevels(null);
 				levels[11].setNextLevels(null);
 
 /**
@@ -43,124 +41,137 @@ const levels = [new Level(272, 527.5, [new DrunkRuffian(null, 720, 200)], []), /
  * @extends Phaser.Scene
  */
 export default class LevelMenuScene extends Phaser.Scene {
-	/**
-	 * Escena principal.
-	 * @extends Phaser.Scene
-	 */
-
 	constructor() {
-		super({ key: 'levelMenuScene' });
+		super({key: 'levelMenuScene'});
+
+		this.inventory;
+		this.emitter = EventDispatcher.getInstance();
 	}
 
-	/**
-	 * Actualizar niveles desbloqueados
-	*/
 	init(data) {
 		if(typeof(data.level) === 'object') {
 			data.level.setCompleted();
 		}
-		if(data.inventory === undefined)
-			this.inventory = new Inventory(listOfItems[0],   // Quitar array para el juego final y dejar el constructor por defecto
-            [listOfItems[1],
-            listOfItems[2],
-            listOfItems[5],
-            listOfItems[6],
-            listOfItems[7],
-            listOfItems[8],
-            listOfItems[9]]
-            );
-		else
-			this.inventory = data.inventory;
+		this.inventory = data.inventory;
+		this.scene.wake('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory})
+		this.scene.sleep('inventoryScene');
 	}
 
-	/**
-	 * Cargamos todos los assets que vamos a necesitar
-	 * 		- Imagen del mapa
-	 * 		- Botón de nivel seleccionar completado/sin completar
-	 */
-	preload(){
+	preload() {
 		// Fondo
-		this.load.spritesheet('levelMap', 'assets/scenes/levelsMenu/wavesMap_anim.png', { frameWidth: 1024, frameHeight: 768 });
+		this.load.spritesheet('waves', 'assets/scenes/levelsMenu/waves_anim.png', { frameWidth: 1024, frameHeight: 768 });
+		this.load.image('levelMap', 'assets/scenes/levelsMenu/emptyMap.png');
 		
 		// Imagen de botones
 		this.load.spritesheet('level', 'assets/scenes/levelsMenu/levelsButtons.png', {frameWidth: 51, frameHeight: 51});
 		this.load.spritesheet('inventory', 'assets/scenes/levelsMenu/inventoryButtons.png', {frameWidth: 30, frameHeight: 18});
+
+		// Transición
+		this.load.spritesheet('fadeOut', 'assets/scenes/transitions/fadeOutLevelsMenuTransition.png', {frameWidth: 1024, frameHeight: 768});
+
+		// Música
+		this.load.audio('Travelling to the End of the Sea', ['assets/scenes/levelsMenu/Travelling to the End of the Sea - Vivu.mp3']);
 	}
 
-	/**
-	* Creación de los elementos de la escena principal de juego
-	*/
 	create() {
-
+		// Variables constantes y se destruyen los eventos anteriores
 		const self = this;
 		const camera = this.cameras.main;
+		this.emitter.destroy();
+
+		// Musica
+		const musicConfig = {
+			mute: false,
+			volume: 1,
+			detune: 0,
+			seek: 0,
+			loop: true,
+			delay: 0
+		}
+		var music = this.sound.add('Travelling to the End of the Sea');
+    	music.play(musicConfig);
 
 		// Fade In
 		camera.fadeIn(1000, 0, 0, 0);
 
 		// Fondo
 		this.anims.create({
-			key: 'levelMap',
-			frames: this.anims.generateFrameNumbers('levelMap', {start: 0, end: 9}),
-			frameRate: 10,
+			key: 'waves',
+			frames: this.anims.generateFrameNumbers('waves', {start: 0, end: 9}),
+			frameRate: 12,
 			repeat: -1
 		});
-		this.add.sprite(1024, 768).setOrigin(1,1).play('levelMap');
+		this.add.sprite(1024, 768).setOrigin(1,1).play('waves');
+		this.add.image(0,0, 'levelMap').setOrigin(0, 0);
 
+		// Input de teclado
 		this.keyboardInput = new KeyboardInput(this);
+
 		// Botón de inventario
 		this.inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
-			this.scene.pause('levelMenuScene');
-			this.scene.launch('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory});
-		});
-		this.inventoryButton.setScale(3, 3);
+			music.setVolume(0.4);
+			this.scene.sleep('levelMenuScene');							// Parar la escena de menú
+			this.scene.wake('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory}); // Reanudar la escena de inventario
+			this.events.on('wake', (scene) => {music.setVolume(1)});	// Evento al volver de la escena de inventario
+		}).setScale(3, 3);
 
 		// Para seleccionar botones con teclas, creamos el objeto tecla y un int al que se apunta actualmente
     	let i = 0;
 		this.levelButtons = [];
 		levels.forEach(level => {
-			this.levelButtons[i] = new Button(this, level.x, level.y, level.spriteSheet, level.defaultFrame, level.frameOnOver, level.frameOnDown, this.keyboardInput, () => {
-				level.loadLevel(this, this.inventory);
-			});
+			this.levelButtons[i] = new Button(this, level.x, level.y, level.spriteSheet, level.defaultFrame, level.frameOnOver, level.frameOnDown, this.keyboardInput,
+				() => {level.loadLevel(this.inventory)});
       		i++;
 		});
-		this.inicializeLevelButtonConnections();
 
+		// Inicializar conexiones entre botones y el botón seleccionado por defecto
+		this.inicializeLevelButtonConnections();
 		this.keyboardInput.setStartButton(this.levelButtons[0]);
-		
-		//Ejemplo: Al pulsar la flecha izquierda
-		//keys.LEFT.on('down', function () {/*Destaca el boton de la izquierda al actual y desdestaca el actual*/ });
-		
-		//Ejemplo: Al pulsar el enter
-		//Enter.on('down', function () {/*Marca el botón*/ });
-		//Enter.on('up', function () {
-			//this.scene.start('battleScene'); //Cambiamos a la escena de combate correspondiente al nivel seleccionado
-		//});
-		//Esc.on('down', function () {
-			//this.scene.start('optionsScene');//Se abre el menu de opciones
-		//});
-    
-		const width = this.scale.width;
-    	const height = this.scale.height;
-	}
-	update() {
-		this.keyboardInput.processInput();  
+
+		// FadeOut
+		this.anims.create({
+			key: 'fOut',
+			frames: this.anims.generateFrameNumbers('fadeOut', {start: 0, end: 5}),
+			frameRate: 17,
+			repeat: 0
+		});
+
+		// Recoger el envento para cargar el siguiente nivel
+		this.emitter.once('levelSelected', (levelData) => {
+			musicFadeOut();														// FadeOut de la música
+			this.add.sprite(1024, 768, 'fadeOut').setOrigin(1, 1).play('fOut'); // Animación de fadeout
+			this.time.delayedCall(1000, () => {									// Esperar un segundo
+				music.stop(); 													// Parar música
+				this.scene.start('battleScene', levelData);						// Cargar el nivel
+			});
+            this.emitter.destroy();												// Destruir evento
+		});
+
+		// Fadeout de la música
+		function musicFadeOut() {
+			self.tweens.add({
+				targets: music,
+				volume: -1,
+				ease: 'Linear',
+				duration: 2000,
+			});
+		}
 	}
 
 	// Inicializa a qué botón te lleva pulsar cada dirección desde otro botón
 	inicializeLevelButtonConnections() {
-		this.inventoryButton.setAdjacents(this.levelButtons[0], null, null, this.levelButtons[0])
-		this.levelButtons[0].setAdjacents(this.levelButtons[1], this.inventoryButton, this.inventoryButton, this.levelButtons[1]);
-		this.levelButtons[1].setAdjacents(this.levelButtons[3], this.levelButtons[0], this.levelButtons[2], this.levelButtons[3]);
-		this.levelButtons[2].setAdjacents(null, this.levelButtons[1], null, this.levelButtons[1]);
-		this.levelButtons[3].setAdjacents(this.levelButtons[5], this.levelButtons[1], this.levelButtons[4], this.levelButtons[6]);
-		this.levelButtons[4].setAdjacents(null, this.levelButtons[3], null, this.levelButtons[3]);
-		this.levelButtons[5].setAdjacents(null, this.levelButtons[3], this.levelButtons[3], null);
-		this.levelButtons[6].setAdjacents(this.levelButtons[8], this.levelButtons[7], this.levelButtons[3], this.levelButtons[8]);
-		this.levelButtons[7].setAdjacents(this.levelButtons[6], null, this.levelButtons[6], null);
-		this.levelButtons[8].setAdjacents(this.levelButtons[9], this.levelButtons[6], this.levelButtons[6],this.levelButtons[10]);
-		this.levelButtons[9].setAdjacents(null, this.levelButtons[8], null, null);
-		this.levelButtons[10].setAdjacents(null, this.levelButtons[8], this.levelButtons[8], this.levelButtons[11]);
-		this.levelButtons[11].setAdjacents(null, null, this.levelButtons[10], null);
+		this.inventoryButton.setAdjacents(this.levelButtons[11], null, null, this.levelButtons[11]);
+		this.levelButtons[0].setAdjacents(null, null, this.levelButtons[1], null);
+		this.levelButtons[1].setAdjacents(null, this.levelButtons[2], this.levelButtons[2], this.levelButtons[0]);
+		this.levelButtons[2].setAdjacents(this.levelButtons[3], this.levelButtons[4], this.levelButtons[4], this.levelButtons[1]);
+		this.levelButtons[3].setAdjacents(null, this.levelButtons[2], null, null);
+		this.levelButtons[4].setAdjacents(this.levelButtons[6], this.levelButtons[5], this.levelButtons[7], this.levelButtons[2]);
+		this.levelButtons[5].setAdjacents(this.levelButtons[4], null, this.levelButtons[4], null);
+		this.levelButtons[6].setAdjacents(null, this.levelButtons[4], null, this.levelButtons[4] );
+		this.levelButtons[7].setAdjacents(this.levelButtons[8], this.levelButtons[9], this.levelButtons[9], this.levelButtons[4]);
+		this.levelButtons[8].setAdjacents(null, this.levelButtons[7], null, this.levelButtons[7]);
+		this.levelButtons[9].setAdjacents(this.levelButtons[7], this.levelButtons[11], this.levelButtons[10], this.levelButtons[7]);
+		this.levelButtons[10].setAdjacents(null, this.levelButtons[9], null, this.levelButtons[9]);
+		this.levelButtons[11].setAdjacents(this.levelButtons[9], this.inventoryButton, null, this.levelButtons[9]);
 	}
 }
