@@ -25,7 +25,7 @@ La vida siempre será de 100 puntos, mientras que la defensa y el ataque depende
 
 - **Selección de nivel** : Entre combates, el jugador accederá a un mapa donde se le irán desbloqueando niveles que puede seleccionar hasta llegar al final. Estos niveles son rejugables para obtener más objetos.
 
-- **Equipamiento:** En el mapa de selección de niveles habrá un botón desde el cual el jugador podrá ver los objetos que tenga y el arma que tenga equipada.
+- **Equipamiento:**  En el mapa de selección de niveles habrá un botón desde el cual el jugador podrá ver los objetos que tenga (tanto armas como íiems curativos) y el arma equipada.
 
 ## 4. Dinámica
 El objetivo del juego es animar al jugador a pensar en cada movimiento que haga para poder avanzar, desarrollando una estrategia que le permita llegar al final y pasarse el juego. 
@@ -35,6 +35,8 @@ También se busca un grado de acción y tensión al poner al jugador frente a co
 
 Al jugador se le dará la oportunidad de rejugar niveles que ya haya pasado para obtener más objetos y armás que se adapten más a su estilo de combate. Junto a esto, los enemigos formarán parte fundamental de la experiencia de juego, ya que habrá enemigos variados con habilidades diferentes y que serán reconocibles por el jugador, permitiendo a este formar una estrategia teniendo en cuenta estos enemigos y formar una lista de prioridades a la hora de atacar y defender.
 
+Se busca también que, de perder un combate, el jugador pueda reintentarlo inmediatamente para fomentar que afronte el combate con una nueva estrategia. 
+
 ## 5. Contenido
 ### Objetos
 Habrá dos tipos de objetos:
@@ -43,11 +45,13 @@ Habrá dos tipos de objetos:
 
 | **Nombre del objeto** | **Puntos curativos** |
 | :---: | :---: |
-| Polbo á feira (pulpo a la gallega) | 60 |
-| Caldo gallego | 40 |
-| Bolla de pan | 20 |
+| Polbo á feira (pulpo a la gallega) | 90 |
+| Caldo gallego | 60 |
+| Bolla de pan | 35 |
 
-- ***Armas:*** las armas serán objetos de distintas clases las cuales permitirán al jugador hacer más daño. Estas son:
+- ***Armas:*** las armas serán objetos de distintas clases las cuales permitirán al jugador hacer más daño. El jugador, al principio del juego, de base contará con el "Puño", un arma con 10 de ataque, 0 de defensa y ninuna habilidad especial.
+
+Durante la partida se podrá encontrar con más armas que se le añadirán automáticamente al inventario, las cuales son:
 
 | **Nivel** | **Cimitarra** | **Daga** | **Alabarda** | **Ropera** | **Sacho** |
 | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -66,15 +70,17 @@ Adicionalmente, contará con una habilidad llamada "**¡Qué locura!**" con las 
 
 Además existe un arma que se obtiene al final de la aventura y que es necesaria para el último combate: **El asta de bandera** (una bandera inglesa con una punta de lanza). Se usará para poder acabar con el **Hermano de Drake** y cuyo “**¡Qué locura!**” será un ataque del 200% y que aumenta un 30% el ataque durante el resto del combate.
 
+Cabe destacar que el jugador podrá cambiar de arma en todo momento (menú de niveles y combate), con la principal diferencia de que cambiar de arma en el menú de opciones no supondrá ninguna penalización, mientras que durante el combate *deberá gastar un turno* para hacerlo.
+
 ### Enemigos
 | **Enemigo** | **Vida** | **Ataque** | **Habilidad especial** |
 | :---: | :---: | :---: | :--- |
-| ***Rufián embriagado*** | 100 | 15 | - |
-| ***Pirata maloliente*** | 150 | 25 | - |
-| ***Marinero escorbutado*** | 200 | 35 | Tiene una probabilidad del 15% de envenenar en cada ataque (ver sangrado de tier I) |
-| ***Bucanero experimentado*** | 250 | 45 | Probabilidad del 15% de golpear con daño crítico, aumentado un 40% el daño |
-| ***Corsario enajenado*** | 300 | 55 | Probabilidad del 15% de robar un 50% del daño infligido |
-| ***Alférez Drake (hermano)*** | 500 | 50 | Probabilidad del 20% de hacer aleatoriamente alguna de las otras tres habilidades especiales que tienen los otros enemigos |
+| ***Rufián embriagado*** | 100 | 10 | - |
+| ***Pirata maloliente*** | 150 | 20 | - |
+| ***Marinero escorbutado*** | 200 | 30 | Tiene una probabilidad del 15% de envenenar en cada ataque (ver sangrado de tier I) |
+| ***Bucanero experimentado*** | 250 | 40 | Probabilidad del 15% de golpear con daño crítico, aumentado un 40% el daño |
+| ***Corsario enajenado*** | 300 | 50 | Probabilidad del 15% de robar un 50% del daño infligido |
+| ***Alférez Drake (hermano)*** | 500 | 45 | Probabilidad del 20% de hacer aleatoriamente alguna de las otras tres habilidades especiales que tienen los otros enemigos |
 
 ### Diseño de niveles
 Los niveles estarán compuestos por un único combate diferente en cada uno, en dificultad creciente hasta llegar al último nivel. La siguiente distribución de los niveles es orientativa y está sujeta a cambios tras el testing.
@@ -95,6 +101,8 @@ Los niveles estarán compuestos por un único combate diferente en cada uno, en 
 - **Nivel 7:** Este combate será contra un ME y un BE, en el que el jugador probará un combate contra dos enemigos con habilidades especiales por primera vez, pero al ser solo dos, todavía no resultará un desafío mayor.
 - **Nivel 8:** En este punto, se entiende que el jugador ya ha ido recolectando varios objetos curativos y armas poderosas, por lo que los combates a partir de este punto serán algo más desafiantes, presentando al CE y enfrentando además a dos ME.
 - **Nivel 9:** Este combate será contra un CE, un ME y un BE, donde el jugador deberá tener en cuenta que ahora son 3 enemigos con habilidades especiales diferentes, con lo que se quiere lograr un aumento del requerimiento de estrategia en un combate.
+- **Nivel 10:** Este combate será con 2 PM y 1 CE para bajar un poco la dificultad hasta el momento y dar al jugador una recompensa de nivel alto por una batalla de un nivel inferior.
+- **Nivel 11:** Este combate será contra 1 CE y un BE para, al igual que el anterior, ir dándole al jugador la oportunidad de recolectar un buen botín antes del jefe final sin mucho esfuerzo.
 
 ### Historia
 En 1589, los ingleses llegan a A Coruña bajo la orden de atacar el reino. Durante este periodo, asesinan al marido de María Pita, y esta, por venganza, comienza a enfrentarse contra ellos hasta llegar al hermano del capitán que dirigía el ataque, Francis Drake, y asesinarlo con una lanza que les había arrebatado.
@@ -109,6 +117,8 @@ El HUD mostrará la vida restante de los enemigos y del jugador, así como un cu
 
 ### Entre combates
 Para ir de combate a combate, el jugador debe navegar a través de un mapa de puntos (estilo árbol). Cada punto del mapa se desbloquea de forma progresiva según se vaya avanzando en los combates, habiendo bifurcaciones por el camino con más combates.
+
+Estas bifurcaciones no son obligatorias, ya que el jugador puede perfectamente seguir el camino que lleva hasta el final sin pasar por ellas. Aun así, librar los combates opcionales permitirá al jugador hacerse con un más/mejores armas y más items de curación.
 
 ![ImagenDiagramaMapa](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/mapa.jpg)
 
