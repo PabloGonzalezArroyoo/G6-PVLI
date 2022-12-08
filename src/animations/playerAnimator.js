@@ -1,8 +1,7 @@
 export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 	// Name es el nombre del spritesheet
 	constructor(scene, x, y){
-		if (scene.level.state === 12) super(scene, x, 400, 'player');
-		else super(scene, x, y, 'player');
+		super(scene, x, y, 'player');
 		this.defaultAnimation = 'idleBack';
 		this.scene.add.existing(this);
 

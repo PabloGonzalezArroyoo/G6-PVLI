@@ -186,9 +186,9 @@ export default class BattleScene extends Phaser.Scene {
 			case this.level.state == 12: this.add.sprite(0,0).setOrigin(0,0).play('battleBackground3'); break;
 		}
 		
-		
 		// Maria Pita
-		this.player = new Player(this, 250, 475, this.inventory);
+		if (this.level.state === 12) this.player = new Player(this, 250, 400, this.inventory);
+		else this.player = new Player(this, 250, 475, this.inventory);
     
 		this.enemies = []; //ARREGLO RAPIDO: quitar cuando se implemente una funcion para cuando muere un enemigo
 		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
