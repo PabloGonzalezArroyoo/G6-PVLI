@@ -50,7 +50,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.enemies = [];
 		this.selectedEnemy= null;
     
-    this.emitter = EventDispatcher.getInstance();
+    	this.emitter = EventDispatcher.getInstance();
 	}
 
 	/**

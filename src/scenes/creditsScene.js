@@ -1,5 +1,6 @@
 import Phaser from '../lib/phaser.js';
 import DialogBox from '../animations/dialogBox.js';
+import EventDispatcher from '../combat/eventDispatcher.js';
 
 /**
  * Escena de Crédtips.
@@ -11,8 +12,15 @@ import DialogBox from '../animations/dialogBox.js';
 		super({ key: 'CreditsScene' });
         this.dialogBox;
         this.previousLetterTime = 0;
-        this.creditsTween;
+        this.creditsText;
+        this.creditsMusic;
+        this.fadeOutTime = 5000;
+        this.emitter = EventDispatcher.getInstance();
 	}
+
+    preload() {
+        this.load.audio('Credits', ['assets/scenes/credits/A New Dawn for Inglazona - Vivu.mp3']);
+    }
 
     create() {
         const width = this.scale.width;
@@ -44,26 +52,52 @@ import DialogBox from '../animations/dialogBox.js';
             'Javier Tirado Ríos (Vivu)\n'
             );
         
-        this.creditsTween = this.tweens.add({
+        this.creditsText = this.tweens.add({
             targets: this.dialogBox,            
-            y:  - height * 1.5,
+            y:  - height * 1.75,
             ease: 'Linear',
             duration: 30000
         });
 
-        this.creditsTween.once('complete', () => { 
+        this.creditsMusic = this.sound.add('Credits');
+        this.creditsMusic.play();
+
+        const self = this;
+        this.creditsText.once('complete', () => { 
             this.dialogBox.x -= 200
             this.dialogBox.y = height / 2 - 50;
             
             this.dialogBox.clearText();
-            this.dialogBox.setTextToDisplay('Basado en la historia y la estatua de María Pita en A Coruña\n♥ María Pita (1565-1643) ♥');});
+            this.dialogBox.setTextToDisplay('Basado en la historia y la estatua de María Pita en A Coruña\n♥ María Pita (1565-1643) ♥');
+
+            this.emitter.once('finishTexting', ()=>{
+                var creditsMusicTween = this.tweens.add({
+                    targets: this.creditsMusic,
+                    ease: 'Linear', 
+                    volume: 0,
+                    duration: this.fadeOutTime
+                });
+                this.tweens.add({
+                    targets: this.dialogBox,
+                    ease: 'Linear', 
+                    alpha: 0,
+                    duration: this.fadeOutTime
+                });
+                creditsMusicTween.once('complete', ()=> {
+                    this.creditsMusic.stop();
+                    //this.dialogBox.clearText();
+                    //this.dialogBox.setAlpha(1);
+                    //this.dialogBox.setTextToDisplay('¡Muchas gracias por jugar a nuestro juego!');
+                });
+            });
+        });
     }
 
     update(t,dt) {
         super.update(t,dt);
 
         this.previousLetterTime += dt;
-        if (this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){
+        if (this.dialogBox.isWritting && 40 <= this.previousLetterTime){
 			this.dialogBox.write();
 			this.previousLetterTime = 0;
 		}
