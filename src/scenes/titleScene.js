@@ -77,7 +77,6 @@ export default class TitleScene extends Phaser.Scene {
 
 		// Gestiona el fadeOut y el inicio de la escena de niveles
 		function jumpToLevelMenuScene() {
-			console.log(self.inventory);
 			// Fade Out
 			button.setVisible(false);
 			musicFadeOut();

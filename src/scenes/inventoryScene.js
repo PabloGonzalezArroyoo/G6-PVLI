@@ -65,7 +65,6 @@ export default class InventoryScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-		console.log("ME CREÉ");
 		// BORRAR ESTAS LÍNEAS PARA EL JUEGO FINAL
 		this.inventory.addWeapon('fouc');
 		this.inventory.addWeapon('dagEx');
