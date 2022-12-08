@@ -5,7 +5,7 @@ import Battle from './scenes/battleScene.js'
 import Inventory from './scenes/inventoryScene.js'
 import Cinematic from './scenes/cinematicScene.js'
 import GameOver from './scenes/gameOverScene.js'
-import Credits from './scenes/CreditsScene.js'
+import Credits from './scenes/creditsScene.js'
 
 // Archivo de configuración del juego
 let config = {
