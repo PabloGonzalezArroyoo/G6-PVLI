@@ -1,11 +1,12 @@
-// Importaciones
-// Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
-import { KeyboardInput } from '../input/keyboardInput.js';
-import {Button} from '../input/button.js';
+import KeyboardInput from '../input/keyboardInput.js';
+import Button from '../input/button.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
 
-
+/**
+ * Escena de GameOver.
+ * @extends Phaser.Scene
+ */
 export default class GameOver extends Phaser.Scene {
     constructor() {
         super({ key: 'GameOverScene' });
@@ -20,12 +21,12 @@ export default class GameOver extends Phaser.Scene {
     }
 
     preload(){
-
         // Transición
         this.load.spritesheet('fadeOut', 'assets/scenes/transitions/fadeOutBattleTransition.png', {frameWidth: 1024, frameHeight: 768});
+
         // Imagenes de fondo
         this.load.image('GameOver', 'assets/scenes/gameOver/GameOver.png');
-        this.load.image('Maria_Dead', 'assets/scenes/gameOver/Maria_Muerta.png');
+        this.load.image('player_dead', 'assets/scenes/gameOver/mariaPita_dead.png');
 
         // Sprites de botones
         this.load.spritesheet('retryButton', 'assets/scenes/gameOver/retryButton.png',{frameWidth: 235, frameHeight: 62});
@@ -40,7 +41,7 @@ export default class GameOver extends Phaser.Scene {
         this.add.image(575, 230, 'GameOver').setScale(5,5);
 
         // Imagen de maria pita muerta
-        this.add.image(512, 425, 'Maria_Dead').setScale(7,7);
+        this.add.image(512, 425, 'player_dead').setScale(7,7);
 
         // Transición y elección de nivel
         // FadeOut
@@ -57,10 +58,7 @@ export default class GameOver extends Phaser.Scene {
             this.time.delayedCall(1000, () => {this.scene.start('battleScene', levelData)});
         });
 
-        const width = this.scale.width;
-        const height = this.scale.height;
-
-        this.inventory.setInventory(this.inventoryBackup);                                                   // Devuelve los objetos perdidos durante el combate
+        this.inventory.setInventory(this.inventoryBackup); // Devuelve los objetos perdidos durante el combate
 
         this.keyboardInput = new KeyboardInput(this);
 

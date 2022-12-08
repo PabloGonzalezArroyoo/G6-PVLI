@@ -1,15 +1,12 @@
-// Importaciones
-//import { Character } from '../character.js';
-import {Button} from '../input/button.js';
 import Phaser from '../lib/phaser.js';
-import Player from '../characters/player.js';
+import KeyboardInput from '../input/keyboardInput.js';
+import Button from '../input/button.js';
 import DialogBox from '../animations/dialogBox.js';
-import Inventory from '../inventory/inventory.js';
-import { KeyboardInput } from '../input/keyboardInput.js';
-import EventDispatcher from '../combat/eventDispatcher.js';
-import {listOfEnemies} from '../data/listOfEnemies.js';
 import Indicator from '../animations/indicator.js';
+import { listOfEnemies } from '../data/listOfEnemies.js';
 import { listOfItems, weaponsLevel1, weaponsLevel2, weaponsLevel3 } from '../data/listOfItems.js';
+import Player from '../characters/player.js';
+import EventDispatcher from '../combat/eventDispatcher.js';
 
 // Comprueba si han muerto todos los enemigos para marcar el nivel como completado
 const levelCompleted = function (enemies) {
@@ -34,10 +31,6 @@ const levelFailed = function (player) {
  * @extends Phaser.Scene
  */
 export default class BattleScene extends Phaser.Scene {
-	/**
-	 * Escena principal.
-	 * @extends Phaser.Scene
-	 */
 	constructor() {
 		super({ key: 'battleScene' });
 		this.dialogBox;
@@ -53,11 +46,6 @@ export default class BattleScene extends Phaser.Scene {
     	this.emitter = EventDispatcher.getInstance();
 	}
 
-	/**
-	 * Inicializa variables
-	 * - Cargar nivel seleccionado.
-	 * @param {[Level, Inventory]} data los niveles a cargar
-	*/
 	init(data) {
 		this.level = data.level;
 		this.enemiesData = data.level.enemies;
@@ -68,12 +56,6 @@ export default class BattleScene extends Phaser.Scene {
 		this.level3prob = data.level.level3prob;
 	}
 
-	/**
-	 * Cargamos todos los assets que vamos a necesitar:
-	 * 		- Fondo
-	 * 		- Hud
-	 * 		- Personajes
-	 */
 	preload() {
 		// Fondo
 		this.load.image('battleBackground1', 'assets/scenes/battle/battleBackground1.png');
@@ -81,9 +63,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('battleBackground3', 'assets/scenes/battle/battleBackground3.png', {frameWidth: 1024, frameHeight: 768});
 
 		// Maria Pita (Animaciones)
-		this.load.spritesheet('player_idle', 'assets/characters/mariaPita/mariaPita_idle.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('player_idleBack', 'assets/characters/mariaPita/mariaPita_idleBack.png', {frameWidth: 32, frameHeight: 32});
-		this.load.spritesheet('player_jump', 'assets/characters/mariaPita/mariaPita_jump.png', {frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('player_attack', 'assets/characters/mariaPita/mariaPita_attack.png', {frameWidth: 50, frameHeight: 32});
 		this.load.spritesheet('player_defendBack', 'assets/characters/mariaPita/mariaPita_defendBack.png', {frameWidth: 50, frameHeight: 32});
 		this.load.spritesheet('player_whatAmadness', 'assets/characters/mariaPita/mariaPita_whatAmadness.png', {frameWidth: 50, frameHeight: 32})
@@ -105,11 +85,10 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('botonDefensa', 'assets/scenes/battle/defenseButton.png', {frameWidth: 241, frameHeight: 67});
 		this.load.spritesheet('botonObjetos', 'assets/scenes/battle/objectsButton.png', {frameWidth: 241, frameHeight: 67});
 		this.load.spritesheet('botonQueLocura', 'assets/scenes/battle/queLocuraButton.png', {frameWidth: 241, frameHeight: 67});
-		this.load.image('emptyButton', 'assets/scenes/battle/layers/emptyButton.png');
+		this.load.image('emptyButton', 'assets/scenes/battle/emptyButton.png');
 		
 		// Barra de vida
 		this.load.image('lifeBar', 'assets/ui/lifeBar38x8sinCorazon.png');
-		this.load.spritesheet('lifeBarColors', 'assets/ui/lifeBarColors16x4.png', {frameWidth: 4, frameHeight: 4});
 
 		// Indicador
 		this.load.spritesheet('dmgInd', 'assets/scenes/battle/indicator/dmgInd.png', { frameWidth: 37, frameHeight: 28});
@@ -157,8 +136,8 @@ export default class BattleScene extends Phaser.Scene {
 	*/
 	create() {
 		// Variables constantes y se destruyen los eventos anteriores
-      this.emitter.destroy();
-		  this.camera = this.cameras.main;
+      	this.emitter.destroy();
+		this.camera = this.cameras.main;
 
 		// Musica
 		const musicConfig = {
@@ -172,6 +151,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.music = this.sound.add('Time to Fight!');
     	this.music.play(musicConfig);
 
+		// Animación de la batalla final
 		this.anims.create({
 			key: 'battleBackground3',
 			frames: this.anims.generateFrameNumbers('battleBackground3',{start:0, end:20}),
@@ -189,8 +169,8 @@ export default class BattleScene extends Phaser.Scene {
 		// Maria Pita
 		if (this.level.state === 12) this.player = new Player(this, 250, 400, this.inventory);
 		else this.player = new Player(this, 250, 475, this.inventory);
-    
-		this.enemies = []; //ARREGLO RAPIDO: quitar cuando se implemente una funcion para cuando muere un enemigo
+		
+		// Crea a todos los enemigos y los guarda en el array enemies
 		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
 		
 		// Descripcion
@@ -238,15 +218,14 @@ export default class BattleScene extends Phaser.Scene {
 		this.emptyButton = this.add.image(254.5, 663.5, 'emptyButton').setOrigin(0,0);
 		this.emptyButton.setCrop(0, 0, 0, 0);
     
-		//Coloca los enemigos adyacentes
-		for(let i=0;i<this.enemies.length;i++)
-		{
-			if(i!=0 && i!=this.enemies.length-1)this.enemies[i].setAdjacents(null,null,this.enemies[i-1],this.enemies[i+1]);
-			else if(i==0)this.enemies[i].setAdjacents(null,null,this.enemies[this.enemies.length-1],this.enemies[i+1]);
-			else if(i==this.enemies.length-1) this.enemies[i].setAdjacents(null,null,this.enemies[i-1],this.enemies[0]);
+		// Coloca los enemigos adyacentes
+		for (let i = 0; i < this.enemies.length; i++) {
+			if (i !== 0 && i !== this.enemies.length-1) this.enemies[i].setAdjacents(null, null, this.enemies[i - 1], this.enemies[i + 1]);
+			else if (i === 0) this.enemies[i].setAdjacents(null, null, this.enemies[this.enemies.length - 1], this.enemies[i + 1]);
+			else if(i === this.enemies.length - 1) this.enemies[i].setAdjacents(null, null, this.enemies[i - 1], this.enemies[0]);
 		}
 
-    // Deshabilitar el botón de qué locura y resetear su contador
+    	// Deshabilitar el botón de qué locura y resetear su contador
 		this.DisableQueLocura();
 		this.UpdateQueLocura(0);
 
@@ -279,35 +258,34 @@ export default class BattleScene extends Phaser.Scene {
       		case 'attack' : 															// Se selecciona atacar
 				this.UpdateQueLocura(35)																
 				this.dialogBox.clearText();												// Borrar texto previo
-				if (this.enemies.length > 1) {											// Si hay más de un enemigo en escena
+				if (this.enemies.length > 1) {
 					this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
-					//Se hace a todos los enemigos interactuables
+					// Se hace a todos los enemigos interactuables
 					this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {
 						Element.animator.setInteractive();
 						this.keyboardInput.setStartButton(this.enemies[0]);	
 					});});
-					//Una vez se reciba confirmación del ataque y el enemigo seleccionado, se ataca.
 					this.emitter.once('enemyselected',() => {
-						this.keyboardInput.setStartButton(this.botones[0]);
-						this.DisableEnemy();
-						this.dialogBox.clearText();														// Borrar texto previo
+					this.keyboardInput.setStartButton(this.botones[0]);
+					this.DisableEnemy();
+					this.dialogBox.clearText();														// Borrar texto previo
 					  	this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
-					 	  	' con ' + this.player.inventory.getEquipedWeapon().name);
-						  	this.emitter.once('finishTexting', () => {
-								this.player.attack(this.selectedEnemy);
-              					this.indicator.updateInd("player", "damage", this.selectedEnemy.getPosition(), this.player.getDamage()); // Actualizar indicador
-							});
-						});	
+						   ' con ' + this.player.inventory.getEquipedWeapon().name);
+						this.emitter.once('finishTexting', () => {
+							this.player.attack(this.selectedEnemy);
+							this.indicator.updateInd("player", "damage", this.selectedEnemy.healthController.getPosition(), this.player.getDamage()); // Actualizar indicador
+						});
+					});	
 				} else {																                // Si solo hay uno
 					this.selectedEnemy = this.enemies[0];
 					this.dialogBox.clearText();														// Borrar texto previo
 					this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
-					' con ' + this.player.inventory.getEquipedWeapon().name);
+						' con ' + this.player.inventory.getEquipedWeapon().name);
 					this.emitter.once('finishTexting', () => {
 						this.player.attack(this.enemies[0]);
-            			this.indicator.updateInd("player", "damage", this.enemies[0].getPosition(), this.player.getDamage()); // Actualizar indicador
+						this.indicator.updateInd("player", "damage", this.selectedEnemy.healthController.getPosition(), this.player.getDamage()); // Actualizar indicador
 					});
-				}
+				}			
 				break;			
 			
       		case 'defense': 																	// Si selecciona defenderse
@@ -315,7 +293,7 @@ export default class BattleScene extends Phaser.Scene {
 				this.dialogBox.setTextToDisplay('Maria Pita aumenta su defensa durante 3 turnos');
 				this.emitter.once('finishTexting', () => {
 					this.player.defense()
-					this.indicator.updateInd("player", "def", this.player.getPosition(), ""); 	// Actualizar indicador
+					this.indicator.updateInd('player', 'def', this.player.healthController.getPosition(), ""); 	// Actualizar indicador
 				});
 				break;
 			
@@ -327,8 +305,8 @@ export default class BattleScene extends Phaser.Scene {
 					this.player.useItem(item);
 
 					// Actualizar indicador
-					if (item.type === "HEALTH") this.indicator.updateInd("player", "health" , this.player.getPosition(), item.getHealthValue());
-					else this.indicator.updateInd("player", "weapon", this.player.getPosition(), item.getAttack());
+					if (item.type === "HEALTH") this.indicator.updateInd("player", "health" , this.player.healthController.getPosition(), item.getHealthValue());
+					else this.indicator.updateInd("player", "weapon", this.player.healthController.getPosition(), item.getAttack());
 					});
 				break;
 			
@@ -377,7 +355,7 @@ export default class BattleScene extends Phaser.Scene {
 				
 				// Guarda el daño hecho o el daño y un texto si se ha usado una habilidad
 				let attack = this.enemies[index].attack(this.player);
-				this.indicator.updateInd("enemy", "damage", this.player.getPosition(), this.player.receivedDamage); // Actualizar indicador
+				this.indicator.updateInd("enemy", "damage", this.player.healthController.getPosition(), this.player.receivedDamage); // Actualizar indicador
 				
 				// Si el ataque no ha sido con habilidad pasar al siguiente turno
 				if (typeof attack == 'number'){
@@ -424,7 +402,7 @@ export default class BattleScene extends Phaser.Scene {
 			this.dialogBox.setTextToDisplay('Maria Pita pierde vida por el veneno');
 			this.emitter.once('finishTexting', () => {
 				this.player.updateTurn();
-				this.indicator.updateInd("player", "poison", this.player.getPosition(), this.player.getBleedDamage());
+				this.indicator.updateInd("player", "poison", this.player.healthController.getPosition(), this.player.getBleedDamage());
 				if (levelFailed(this.player)) {
 					this.dialogBox.clearText();																	// Borrar texto previo
 					this.time.delayedCall(2000, () => {
@@ -448,7 +426,7 @@ export default class BattleScene extends Phaser.Scene {
 			this.dialogBox.setTextToDisplay('Enemigo pierde vida por el sangrado');
 			this.emitter.once('finishTexting', () => {
 				this.enemies[index].updateTurn();
-				this.indicator.updateInd("player", "bleed", this.enemies[index].getPosition(), this.enemies[index].getBleedDamage()); // Actualizar indicador
+				this.indicator.updateInd("player", "bleed", this.enemies[index].healthController.getPosition(), this.enemies[index].getBleedDamage()); // Actualizar indicador
 				index++;
 				if (levelCompleted(this.enemies)){
 					this.dialogBox.clearText();						// Borrar texto previo

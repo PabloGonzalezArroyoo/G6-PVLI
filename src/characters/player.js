@@ -3,6 +3,7 @@ import PlayerAnimator from '../animations/playerAnimator.js';
 import HealthController from './healthController.js';
 import Inventory from '../inventory/inventory.js';
 
+// Esta clase es la que contiene todos los metodos y variables exclusivas del jugador como la defensa
 export default class Player extends Character {
     constructor(scene, x, y, inventory) {
         super(x, y, new PlayerAnimator(scene, x, y), new HealthController(scene, x, y - 200, 100));
@@ -11,8 +12,10 @@ export default class Player extends Character {
         this.receivedDamage;
     }
 
+    // Devuelve el daño del arma equipada
     getDamage() { return this.inventory.getEquipedWeapon().getAttack(); }
 
+    // Ataque al enemigo
     attack(enemy){
         // Animacion de ataque
         this.animator.playAttack();
@@ -21,17 +24,19 @@ export default class Player extends Character {
             () => {enemy.healthController.changeHealth(-this.getDamage())});
     }
 
+    // Animación, activación y cálculo de turnos de la defensa
     defense(){
         this.turnEffectController.activateDefense(3);
         if (this._defenseBoost < 4) this._defenseBoost++;
         this.animator.playDefense();
         this.animator.once("animationcomplete-defense",()=>{
-                this.healthController.scene.time.delayedCall(1000, () => {
+                this.healthController.scene.time.delayedCall(800, () => {
                     this.healthController.emitter.emit("finishTurn")
                 })
             });
     }
 
+    // Usa el item según el tipo
     useItem(item){
         //Cambia de arma equipada si el item es un arma
         if(item.type === 'WEAPON')
@@ -41,10 +46,11 @@ export default class Player extends Character {
             this.healthController.changeHealth(item.getHealthValue());
             this.inventory.substractHealth(item.imgID);
         }
-        this.healthController.scene.time.delayedCall(1000,
+        this.healthController.scene.time.delayedCall(800,
             () => {this.healthController.emitter.emit("finishTurn")});
     }
 
+    // Animación y ejecución del qué locura
     quelocura(enemies, index){
         this.animator.playWhatAMadness();
         this.animator.once("animationcomplete-whatAmadness",()=>{
@@ -52,6 +58,7 @@ export default class Player extends Character {
         });
     }
 
+    // Calcula el ataque recibido según el arma equipada y los efectos secundarios
     receiveAttack(damage){
         // guardar en esta variable el calculo del daño
         this.receivedDamage = damage;
@@ -63,6 +70,6 @@ export default class Player extends Character {
         return this.receivedDamage;
     }
 
+    // Devuelve el daño calculado por el método anterior
     getRecievedDamage() { this.receivedDamage; }
-
 }

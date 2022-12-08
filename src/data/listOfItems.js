@@ -1,5 +1,5 @@
 import {WeaponItem} from '../inventory/item.js';
-
+//Es una lista con todos los datos de todos los objetos del juego
 export var listOfItems = {
 	weapons: [
 		{key: "Cimitarra de madera",

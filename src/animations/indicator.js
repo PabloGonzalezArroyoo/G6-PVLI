@@ -1,5 +1,8 @@
 import EventDispatcher from "../combat/eventDispatcher.js";
 
+// Objeto que funciona como contenedor de un sprite y un texto. En él se escribirá un texto y se pintará un sprite con una animación
+// en concreto según la situación; además de moverse entre jugador ni enemigos. Por ejemplo, si Maria Pita recibe 10 puntos de daño,
+// el indicador se posicionará al lado de la barra de Maria Pita, reproducirá la animación de daño y escribirá por encima "-10"
 export default class Indicator extends Phaser.GameObjects.GameObject {
     constructor(scene, x, y, spriteSheets) {
         super(scene, x, y);
@@ -77,11 +80,6 @@ export default class Indicator extends Phaser.GameObjects.GameObject {
         this.setIndTex(value, type);                                        // Cambiar texto
         this.spriteObj.play(type);                                          // Reproducir animación
         this.scene.time.delayedCall(1200, () => {this.deactivateInd()});    // Desactivar después de un tiempo
-
-        // this.emitter.once("animationcomplete-attack", () => {
-        //    this.setIndPosition(position, type);
-        //    this.setIndTex(value, type);
-        // })
     }
     
     // Hace que el indicador sea invisible
@@ -106,11 +104,11 @@ export default class Indicator extends Phaser.GameObjects.GameObject {
         else {                                              // Si no es un ataque del jugador o es el ataque del enemigo, posición del jugador
             this.textObj.x = position.x + 90;
             if (type === "damage"|| type === "def") this.spriteObj.x = this.textObj.x + 20;
-            else if (type === "health" || type === "weapon") this.spriteObj.x = this.textObj.x + 23;
+            else if (type === "health" || type === "weapon") this.spriteObj.x = this.textObj.x + 25;
         }
         
         // Posición en Y
-        this.textObj.y = position.y - 165;
+        this.textObj.y = position.y - 18;
         if (type == "damage" || type === "weapon") this.spriteObj.y = this.textObj.y + 15; // Si es un ataque o se está cambiando de arma
         else this.spriteObj.y = this.textObj.y + 18;        // Si es de curación, sangrado o veneno
     }

@@ -1,20 +1,15 @@
-// Importaciones
 import Phaser from '../lib/phaser.js';
-import { Button } from '../input/button.js';
-import Inventory from '../inventory/inventory.js';
-import EventDispatcher from '../combat/eventDispatcher.js';
-import { KeyboardInput } from '../input/keyboardInput.js';
+import KeyboardInput from '../input/keyboardInput.js';
+import Button from '../input/button.js';
 import DialogBox from '../animations/dialogBox.js';
+import EventDispatcher from '../combat/eventDispatcher.js';
+
 
 /**
  * Escena de Inventario.
  * @extends Phaser.Scene
  */
 export default class InventoryScene extends Phaser.Scene {
-	/**
-	 * Escena principal.
-	 * @extends Phaser.Scene
-	 */
 	constructor() {
 		super({ key: 'inventoryScene' });
 		this.dialogBox;
@@ -65,12 +60,8 @@ export default class InventoryScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-		// BORRAR ESTAS LÍNEAS PARA EL JUEGO FINAL
-		this.inventory.addWeapon('fouc');
-		this.inventory.addWeapon('dagEx');
 		this.inventory.addHealth('polbo');
-		this.inventory.addHealth('caldo');
-		this.inventory.addHealth('bolla');
+		this.inventory.addWeapon('dagEx');
 
 		// Guardar la escena de la que te han despertado y aplicar cambios del inventario
 		this.events.on('wake', (scene, data) => {
@@ -92,6 +83,7 @@ export default class InventoryScene extends Phaser.Scene {
 		let armas = this.inventory.getWeapons();
 		let comida = this.inventory.getHealths();
 
+		// Input
 		this.keyboardInput = new KeyboardInput(this);
 
 		// ARMA EQUIPADA
@@ -143,13 +135,15 @@ export default class InventoryScene extends Phaser.Scene {
 			let itemQuantity = val.amount;
 			
 			let x = val.i * 165 + width / 2; let y = 475;
-			if (val.amount) this.foodImages[val.i] = this.add.image(x, y, itemID).setScale(3, 3);
+			this.foodImages[val.i] = this.add.image(x, y, itemID).setScale(3, 3);
+			if (!val.amount) this.foodImages[val.i].setVisible(false);
 			this.foodButtons[val.i] = new Button(this, x, y, 'selected', 0, 1, 2, this.keyboardInput,
 				() => {if (val.amount) this.selected(val.item, "H", val.i)},   				// OnClick
 				() => {if (val.amount) { this.mostrarDescripcion(val.item); this.updateUITexts(val);}}, // OnPointerOver
 				() => {this.resetStatsBox(); this.dialogBox.clearText()}					// OnPointerOut
 			).setScale(3,3); 
-			if (val.amount) this.foodTexts[val.i] = this.add.text(x + 5, y + 5, itemQuantity, {fontFamily: 'Silkscreen', fontSize: 40});
+			this.foodTexts[val.i] = this.add.text(x + 5, y + 5, itemQuantity, {fontFamily: 'Silkscreen', fontSize: 40});
+			if (!val.amount) this.foodTexts[val.i].setVisible(false);
 			i++;
 		});
 
@@ -271,7 +265,7 @@ export default class InventoryScene extends Phaser.Scene {
 
 			// Comida
 			let comida = this.inventory.getHealths();
-			if(comida[this.foodImages[i].texture.key].amount > 0) {
+			if (comida[this.foodImages[i].texture.key].amount > 0) {
 				this.foodImages[i].setVisible(true);
 				this.foodTexts[i].setText(comida[this.foodImages[i].texture.key].amount);
 			}

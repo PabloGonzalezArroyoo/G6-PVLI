@@ -1,7 +1,6 @@
-// Importaciones
 import Phaser from '../lib/phaser.js';
-import { Button } from '../input/button.js';
-import { KeyboardInput } from '../input/keyboardInput.js';
+import Button from '../input/button.js';
+import KeyboardInput from '../input/keyboardInput.js';
 import Inventory from '../inventory/inventory.js';
 
 /**
@@ -9,20 +8,17 @@ import Inventory from '../inventory/inventory.js';
  * @extends Phaser.Scene
  */
 export default class TitleScene extends Phaser.Scene {
-	/**
-	 * Escena principal.
-	 * @extends Phaser.Scene
-	 */
 	constructor() {
 		super({ key: 'titleScene' });
 	}
 
-	/**
-	 * Cargamos todos los assets que vamos a necesitar
-	 */
-	preload(){
+	init(data) {
+		if (data.inventory) this.inventory = data.inventory;
+	}
+
+	preload() {
 		// Imagen fondo y logo
-		this.load.image('title','assets/MariaPitasRevenge.png');
+		this.load.image('title','assets/scenes/title/MariaPitasRevenge.png');
 		this.load.spritesheet('titleAnim','assets/scenes/title/TittleAnim.png',{frameWidth:1024, frameHeight: 768});
 
 		// Imagen de botones
@@ -33,9 +29,6 @@ export default class TitleScene extends Phaser.Scene {
 		this.load.audio('Pirates of the Atlantic', ['assets/scenes/title/Pirates of the Atlantic - Vivu.mp3']);
 	}
 
-	/**
-	* Creación de los elementos de la escena principal de juego
-	*/
 	create() {
 		// Variables constantes
 		const self = this;
@@ -73,9 +66,9 @@ export default class TitleScene extends Phaser.Scene {
 		this.keyboardInput.setStartButton(button);
 
 		// Inventario del jugador
-		this.inventory = new Inventory();
+		if (!this.inventory) this.inventory = new Inventory();
 
-		// Gestiona el fadeOut y el inicio de la escena de niveles
+		// Gestiona el fadeOut y el inicio de la escena de niveles y la escena de inventario en paralelo
 		function jumpToLevelMenuScene() {
 			// Fade Out
 			button.setVisible(false);

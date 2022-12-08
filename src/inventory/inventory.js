@@ -1,18 +1,21 @@
 import {listOfItems} from '../data/listOfItems.js'
 import {HealthItem, WeaponItem} from './item.js'
 
+// Esta clase controla y crea el inventario del jugador
 export default class Inventory{
 	constructor() {
 		let count = 0;
 		this.weapons = {};
 		listOfItems.weapons.forEach(object => {
-			Object.defineProperty(this.weapons, object.imgID, {enumerable: true, value: {weapon: new WeaponItem(object), owned: false, i: Math.floor(count / 3), j: count % 3}});
+			Object.defineProperty(this.weapons, object.imgID, {enumerable: true, 
+				value: {weapon: new WeaponItem(object), owned: false, i: Math.floor(count / 3), j: count % 3}});
 			count++;
 		});
 		count = 0;
 		this.healths = {};
 		listOfItems.healths.forEach(object => {
-			Object.defineProperty(this.healths, object.imgID, {enumerable: true, value: {item: new HealthItem(object), amount: 0, i: count }});
+			Object.defineProperty(this.healths, object.imgID, {enumerable: true, 
+				value: {item: new HealthItem(object), amount: 0, i: count }});
 			count++;
 		});
 		this.addWeapon('puño');

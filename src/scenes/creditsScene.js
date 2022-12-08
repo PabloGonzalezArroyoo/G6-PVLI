@@ -3,11 +3,10 @@ import DialogBox from '../animations/dialogBox.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
 
 /**
- * Escena de Crédtips.
+ * Escena de Créditos.
  * @extends Phaser.Scene
  */
  export default class Credits extends Phaser.Scene {
-
     constructor() {
 		super({ key: 'CreditsScene' });
 
@@ -19,6 +18,10 @@ import EventDispatcher from '../combat/eventDispatcher.js';
         this.fadeOutTime = 5000;
         this.emitter = EventDispatcher.getInstance();
 	}
+
+    init(data) {
+        this.inventory = data.inventory;
+    }
 
     preload() {
         this.load.audio('Credits', ['assets/scenes/credits/A New Dawn for Inglazona - Vivu.mp3']);
@@ -92,6 +95,7 @@ import EventDispatcher from '../combat/eventDispatcher.js';
                         let creditsMusicTween = this.musicFadeOut();
                         creditsMusicTween.once('complete', ()=> {
                             this.creditsMusic.stop();
+                            this.scene.start('titleScene', {inventory: this.inventory});
                         });
                     });
                  });

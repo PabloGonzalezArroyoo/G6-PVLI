@@ -1,10 +1,8 @@
-// Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
-import Inventory from '../inventory/inventory.js';
+import KeyboardInput from '../input/keyboardInput.js';
+import Button from '../input/button.js';
 import { Level } from '../levels/level.js';
-import { KeyboardInput } from '../input/keyboardInput.js';
-import { Button } from '../input/button.js';
-import {listOfLevels} from '../data/listOfLevels.js';
+import { listOfLevels } from '../data/listOfLevels.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
 
 // Array con todos los niveles del juego
@@ -43,10 +41,6 @@ const levels = [new Level(listOfLevels[0]),
  * @extends Phaser.Scene
  */
 export default class LevelMenuScene extends Phaser.Scene {
-	/**
-	 * Escena principal.
-	 * @extends Phaser.Scene
-	 */
 	constructor() {
 		super({key: 'levelMenuScene'});
 
@@ -54,9 +48,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.emitter = EventDispatcher.getInstance();
 	}
 
-	/**
-	 * Actualizar niveles desbloqueados
-	*/
 	init(data) {
 		if(typeof(data.level) === 'object') {
 			data.level.setCompleted();
@@ -66,11 +57,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.scene.sleep('inventoryScene');
 	}
 
-	/**
-	 * Cargamos todos los assets que vamos a necesitar
-	 * 		- Imagen del mapa
-	 * 		- Botón de nivel seleccionar completado/sin completar
-	 */
 	preload() {
 		// Fondo
 		this.load.spritesheet('waves', 'assets/scenes/levelsMenu/waves_anim.png', { frameWidth: 1024, frameHeight: 768 });
@@ -87,9 +73,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.load.audio('Travelling to the End of the Sea', ['assets/scenes/levelsMenu/Travelling to the End of the Sea - Vivu.mp3']);
 	}
 
-	/**
-	* Creación de los elementos de la escena principal de juego
-	*/
 	create() {
 		// Variables constantes y se destruyen los eventos anteriores
 		const self = this;

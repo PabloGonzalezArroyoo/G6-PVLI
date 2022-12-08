@@ -1,3 +1,5 @@
+// Lista de los datos de cada nivel
+
 export var listOfLevels = [
 	// Level 1
 	{

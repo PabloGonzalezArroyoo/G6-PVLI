@@ -1,6 +1,6 @@
 import phaser from "../lib/phaser.js";
-export class KeyboardInput
-{
+
+export default class KeyboardInput {
     constructor(scene) {
         this._scene = scene;
         this.arrows = scene.input.keyboard.addKeys('left, up, right, down, enter');
@@ -11,7 +11,7 @@ export class KeyboardInput
     setStartButton(button) {
         this.button = button;
     }
-
+    // Llama a la funcion al salir del boton sin la necesidad del evento de raton
     unselectButton() {
         this.button.onPointerOut();
     }

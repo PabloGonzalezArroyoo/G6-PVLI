@@ -1,3 +1,5 @@
+//Esta clase es una libreria con las animaciones de los enemigos.
+//Permite a los enemigos tener una animacion
 export default class EnemyAnimator extends Phaser.GameObjects.Sprite{
 	// Name es el nombre del spritesheet
 	constructor(scene, x, y, spritesheet){
