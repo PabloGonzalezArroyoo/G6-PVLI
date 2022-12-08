@@ -9,6 +9,7 @@ import Options from './scenes/optionsScene.js'
 import Inventory from './scenes/inventoryScene.js'
 import Cinematic from './scenes/cinematicScene.js'
 import GameOver from './scenes/gameOverScene.js'
+import Credits from './scenes/CreditsScene.js'
 
 // Archivo de configuración del juego
 let config = {
@@ -36,7 +37,7 @@ let config = {
 		zoom: 1
     },
     // El orden de las escenas es la  siguiente
-    scene: [Title, Battle, Levels, Options, Inventory, Cinematic, GameOver],//[Title, Battle, Levels, Options, Inventory, Cinematic, GameOver],
+    scene: [Title, Battle, Levels, Options, Inventory, Cinematic, GameOver, Credits]
 };
 
 // Crea nuevo juego Phaser con la configuración dada

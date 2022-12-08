@@ -4,7 +4,7 @@ export var listOfLevels = [
 		x: 814,
 		y: 261,
 		enemies: [
-			{id: "drunkRuffian", x: 700, y: 200},
+			{id: "drunkRuffian", x: 725, y: 200},
 			],
 		level1prob: 100,
 		level2prob: 0,
@@ -138,7 +138,7 @@ export var listOfLevels = [
 		x: 272,
 		y: 527.5,
 		enemies: [
-			{id: "drunkRuffian", x: 700, y: 200}
+			{id: "ensignDrake", x: 725, y: 400},
 			],
 		level1prob: 0,
 		level2prob: 0,

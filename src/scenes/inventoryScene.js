@@ -160,7 +160,7 @@ export default class InventoryScene extends Phaser.Scene {
 		
 		// Al pulsar la tecla ESC se sale de la escena de inventario
 		this.input.keyboard.once('keydown-ESC', () => { this.escape(); });
-		this.dialogBox = new DialogBox(this, 80, 620, 850).setColor('65583c');
+		this.dialogBox = new DialogBox(this, 80, 620, 850).setColor('#65583c');
 
 		// Texto de daño, defensa de armas e items de curación
 		this.atcBox = this.add.text(110, 470, this.inventory.getEquipedWeapon().getAttack(), {fontFamily: 'Silkscreen', fontSize: 50, color: '#65583c'});
@@ -173,7 +173,7 @@ export default class InventoryScene extends Phaser.Scene {
 		this.scene.sleep('inventoryScene'); 						// Para la escena de inventario
 		this.scene.wake(this.previousSceneName, item); 				// Reanuda la escena anterior
 	}
-
+  
 	// Muestra la descripción de los objetos borrando el texto anterior y añadiendo el nuevo
 	mostrarDescripcion(item) {
 		this.dialogBox.clearText();

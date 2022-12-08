@@ -26,6 +26,7 @@ export default class EnemyAnimator extends Phaser.GameObjects.Sprite{
 		});
 		
 		if (this.spritesheet === 'ensignDrake') {
+			this.setScale(10,10);
 			this.noFlag = false;
 			//animacion idle sin bandera
 			this.scene.anims.create({
