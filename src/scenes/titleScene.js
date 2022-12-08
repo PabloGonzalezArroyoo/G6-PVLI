@@ -92,8 +92,4 @@ export default class TitleScene extends Phaser.Scene {
 			});
 		}
 	}
-
-	update(){
-		this.keyboardInput.processInput();
-	}
 }

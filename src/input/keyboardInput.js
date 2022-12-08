@@ -7,6 +7,8 @@ export class KeyboardInput
         this.arrows = scene.input.keyboard.addKeys('left, up, right, down, enter');
         //this._cursorPositionX = scene.input.mousePointer.x;
         //this._cursorPositionY = scene.input.mousePointer.y;
+
+        scene.input.keyboard.on('keydown', ()=>{this.processInput();});
     }
 
     // Asigna un boton inicial
