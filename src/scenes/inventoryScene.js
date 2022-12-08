@@ -60,9 +60,9 @@ export default class InventoryScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-		this.inventory.addHealth('polbo');
-		this.inventory.addWeapon('dagEx');
 
+		this.inventory.addHealth('bolla');
+		
 		// Guardar la escena de la que te han despertado y aplicar cambios del inventario
 		this.events.on('wake', (scene, data) => {
 			this.inventory = data.inventory;
