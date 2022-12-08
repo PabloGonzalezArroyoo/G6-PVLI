@@ -11,9 +11,10 @@ vida de las tropas inglesas hasta llegar a este alférez.
 
 #### Capturas del juego
 
-![PantallaDeTitulo](https://cdn.discordapp.com/attachments/403552979589791746/1035166109646725140/Pantalla_de_titulo.png)
-![MenuNiveles](https://cdn.discordapp.com/attachments/403552979589791746/1035166109315371098/Escena_mapa.png)
-![EscenaBatalla](https://cdn.discordapp.com/attachments/403552979589791746/1035166108975644774/Escena_de_batalla.png)
+![PantallaDeTitulo](https://media.discordapp.net/attachments/1022912551731875930/1050512921970626610/image.png?width=898&height=671)
+![MenuNiveles](https://media.discordapp.net/attachments/1022912551731875930/1050513042263244800/image.png?width=891&height=671)
+![EscenaBatalla](https://media.discordapp.net/attachments/1022912551731875930/1050513124240916510/image.png?width=893&height=671)
+![Inventario](https://media.discordapp.net/attachments/1022912551731875930/1050515694346829944/image.png?width=896&height=671)
 
 [Click aquí para ver nuestro juego en proceso](https://pablogonzalezarroyoo.github.io/G6-PVLI/)
 
