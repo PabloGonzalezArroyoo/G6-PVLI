@@ -478,6 +478,13 @@ export default class BattleScene extends Phaser.Scene {
 			this.botones[3].disableInteractive();
 			this.botones[3].visible = false;
 		}
+		else if (this.currentQueLocura >= 100 && this.player.inventory.getEquipedWeapon().imgID === 'asta') {
+			for (let i = 0; i < 3; ++i) {
+				this.botones[i].disableInteractive();
+				this.botones[i].visible = false;
+			}
+			this.keyboardInput.changeButton(this.botones[3]);
+		}
 	}
 
 	// Impide seleccionar que locura y pone el contador a cero
