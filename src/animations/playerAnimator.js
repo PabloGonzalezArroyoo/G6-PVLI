@@ -39,6 +39,21 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 			repeat: 0 
 		});
 
+
+		// Animacion con bandera
+		this.flag = false;
+
+		// Animación de defensa
+		this.scene.anims.create({
+			key: 'idle_finalWeapon',
+			frames: scene.anims.generateFrameNumbers('player_finalWhatAMadness',{start:0, end:5}),
+			frameRate: 7,
+			repeat: -1 
+		});
+		
+
+
+
 		// Inicia con la animacion idle
 		this.play('idleBack');
 		this.setScale(10,10);
@@ -46,7 +61,8 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 
 	//cambia a la animacion IdleBack
 	playIdleBack() {
-		this.play('idleBack');
+		if (!this.flag) this.play('idleBack');
+		else this.play('idle_finalWeapon');
 	}
 
 	//cambia a la animacion Attack
@@ -68,7 +84,7 @@ export default class PlayerAnimator extends Phaser.GameObjects.Sprite{
 
 		//si no hay animacion vuelve a la animacion por defecto
 		if (this.anims.isPlaying === false){
-			this.play(this.defaultAnimation);
+			this.playIdleBack();
 		}
 	}
 } 

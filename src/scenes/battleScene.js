@@ -67,6 +67,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('player_attack', 'assets/characters/mariaPita/mariaPita_attack.png', {frameWidth: 50, frameHeight: 32});
 		this.load.spritesheet('player_defendBack', 'assets/characters/mariaPita/mariaPita_defendBack.png', {frameWidth: 50, frameHeight: 32});
 		this.load.spritesheet('player_whatAmadness', 'assets/characters/mariaPita/mariaPita_whatAmadness.png', {frameWidth: 50, frameHeight: 32})
+		this.load.spritesheet('player_finalWhatAMadness', 'assets/characters/mariaPita/mariaPita_finalWhatAMadness.png', {frameWidth: 50, frameHeight: 32})
 
 		// Enemy (Animaciones)
 		this.load.spritesheet('drunkRuffian', 'assets/characters/enemies/drunkRuffian.png', {frameWidth: 32, frameHeight:32});
@@ -633,7 +634,9 @@ export default class BattleScene extends Phaser.Scene {
 					this.dialogBox.clearText();
 					this.dialogBox.setTextToDisplay('Maria Pita ha ido a por Drake y ha robado su bandera.');
 					this.emitter.once('finishTexting', () => { 
+						// Robar bandera (sprites)
 						this.enemies[0].stealFlag();
+						this.player.getFlag();
 
 						// Menú de recibir loot con el arma final
 						this.lootBox.setVisible(true).setAlpha(0.85);

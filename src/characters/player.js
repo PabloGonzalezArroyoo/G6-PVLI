@@ -21,7 +21,7 @@ export default class Player extends Character {
         this.animator.playAttack();
         // Le baja vida al enemigo
         this.animator.once("animationcomplete-attack",
-            () => {enemy.healthController.changeHealth(-this.getDamage())});
+            () => {enemy.receiveDamage(-this.getDamage());});
     }
 
     // Animación, activación y cálculo de turnos de la defensa
@@ -72,4 +72,9 @@ export default class Player extends Character {
 
     // Devuelve el daño calculado por el método anterior
     getRecievedDamage() { this.receivedDamage; }
+
+    getFlag() { 
+        this.animator.flag = true;
+        this.animator.playIdleBack();
+    }
 }
