@@ -15,6 +15,7 @@ export class Level {
         this.level2prob = levelData.level2prob;
         this.level3prob = levelData.level3prob;
         this.enemies = levelData.enemies; // array con todos los enemigos del nivel
+        this.bgKey = levelData.bgKey;
 
         this.spriteSheet = 'level';
         this.defaultFrame = 0 + this.state * 3;

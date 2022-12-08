@@ -21,6 +21,7 @@ const levels = [new Level(listOfLevels[0]),
 				
 				// Desbloquear el primer nivel
 				levels[0].setUnlocked();
+				levels[11].setUnlocked();
 				
 				// Especificar los niveles que se desbloquean tras completar cada nivel
 				levels[0].setNextLevels([levels[1]]);

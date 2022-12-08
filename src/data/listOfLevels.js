@@ -10,7 +10,8 @@ export var listOfLevels = [
 			],
 		level1prob: 100,
 		level2prob: 0,
-		level3prob: 0
+		level3prob: 0,
+		bgKey: 'bg1'
 	},
 	// Level 2
 	{
@@ -22,7 +23,8 @@ export var listOfLevels = [
 			],
 		level1prob: 100,
 		level2prob: 0,
-		level3prob: 0
+		level3prob: 0,
+		bgKey: 'bg1'
 	},
 	// Level 3
 	{
@@ -34,7 +36,8 @@ export var listOfLevels = [
 			],
 		level1prob: 100,
 		level2prob: 0,
-		level3prob: 0
+		level3prob: 0,
+		bgKey: 'bg1'
 	},
 	// Level 4
 	{
@@ -47,7 +50,8 @@ export var listOfLevels = [
 			],
 		level1prob: 40,
 		level2prob: 60,
-		level3prob: 0
+		level3prob: 0,
+		bgKey: 'bg1'
 	},
 	// Level 5
 	{
@@ -59,7 +63,8 @@ export var listOfLevels = [
 			],
 		level1prob: 100,
 		level2prob: 0,
-		level3prob: 0
+		level3prob: 0,
+		bgKey: 'bg1'
 	},
 	// Level 6
 	{
@@ -71,7 +76,8 @@ export var listOfLevels = [
 			],
 		level1prob: 0,
 		level2prob: 40,
-		level3prob: 60
+		level3prob: 60,
+		bgKey: 'bg2'
 	},
 	// Level 7
 	{
@@ -83,7 +89,8 @@ export var listOfLevels = [
 			],
 		level1prob: 40,
 		level2prob: 60,
-		level3prob: 0
+		level3prob: 0,
+		bgKey: 'bg2'
 	},
 	// Level 8
 	{
@@ -96,7 +103,8 @@ export var listOfLevels = [
 			],
 		level1prob: 0,
 		level2prob: 100,
-		level3prob: 0
+		level3prob: 0,
+		bgKey: 'bg2'
 	},
 	// Level 9
 	{
@@ -109,7 +117,8 @@ export var listOfLevels = [
 			],
 		level1prob: 0,
 		level2prob: 40,
-		level3prob: 60
+		level3prob: 60,
+		bgKey: 'bg2'
 	},
 	// Level 10
 	{
@@ -122,7 +131,8 @@ export var listOfLevels = [
 			],
 		level1prob: 0,
 		level2prob: 100,
-		level3prob: 0
+		level3prob: 0,
+		bgKey: 'bg2'
 	},
 	// Level 11
 	{
@@ -134,7 +144,8 @@ export var listOfLevels = [
 			],
 		level1prob: 0,
 		level2prob: 40,
-		level3prob: 60
+		level3prob: 60,
+		bgKey: 'bg2'
 	},
 	// Level 12
 	{
@@ -145,6 +156,7 @@ export var listOfLevels = [
 			],
 		level1prob: 0,
 		level2prob: 0,
-		level3prob: 100
+		level3prob: 100,
+		bgKey: 'bg3'
 	}
 ]

@@ -68,7 +68,7 @@ export default class InventoryScene extends Phaser.Scene {
 			this.inventory = data.inventory;
 			this.previousSceneName = data.scene;
 			this.keyboardInput.setStartButton(this.equipedWeaponButton);
-			if (this.handleLoot && data.scene !== 'battleScene') this.setImagesVisible();
+			if (this.handleLoot) this.setImagesVisible();
 			else this.handleLoot = true;
 		});
 		
@@ -257,7 +257,7 @@ export default class InventoryScene extends Phaser.Scene {
 		for (let i = 0; i < 3; i++) {
 			// Armas
 			for (let j = 0; j < 5; j++) {
-				let armas = this.inventory.getWeapons();
+				var armas = this.inventory.getWeapons();
 				if (armas[this.weaponsImages[j][i].texture.key].owned) {
 					this.weaponsImages[j][i].setVisible(true);
 				}
@@ -270,6 +270,13 @@ export default class InventoryScene extends Phaser.Scene {
 				this.foodTexts[i].setText(comida[this.foodImages[i].texture.key].amount);
 			}
 		}
+
+		// Arma equipada
+		if (armas['asta'].owned) {
+			this.equiped.destroy();
+			this.equiped = this.add.sprite(217, 262, 'asta').setScale(8, 8);
+		}
+
 	}
 
 	// Inicializar conexiones de los botones para el input por teclado

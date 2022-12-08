@@ -58,9 +58,9 @@ export default class BattleScene extends Phaser.Scene {
 
 	preload() {
 		// Fondo
-		this.load.image('battleBackground1', 'assets/scenes/battle/battleBackground1.png');
-		this.load.image('battleBackground2', 'assets/scenes/battle/battleBackground2.png');
-		this.load.spritesheet('battleBackground3', 'assets/scenes/battle/battleBackground3.png', {frameWidth: 1024, frameHeight: 768});
+		this.load.image('bg1', 'assets/scenes/battle/battleBackground1.png');
+		this.load.image('bg2', 'assets/scenes/battle/battleBackground2.png');
+		this.load.spritesheet('bg3', 'assets/scenes/battle/battleBackground3.png', {frameWidth: 1024, frameHeight: 768});
 
 		// Maria Pita (Animaciones)
 		this.load.spritesheet('player_idleBack', 'assets/characters/mariaPita/mariaPita_idleBack.png', {frameWidth: 32, frameHeight: 32});
@@ -154,20 +154,17 @@ export default class BattleScene extends Phaser.Scene {
 		// Animación de la batalla final
 		this.anims.create({
 			key: 'battleBackground3',
-			frames: this.anims.generateFrameNumbers('battleBackground3',{start:0, end:20}),
+			frames: this.anims.generateFrameNumbers('bg3', {start: 0, end: 20}),
 			frameRate: 7,
 			repeat: -1
 		});
 
 		// Fondo
-		switch(true){
-			case this.level.state >= 1 && this.level.state <= 5: this.add.image(0, 0, 'battleBackground1').setOrigin(0, 0); break;
-			case this.level.state >= 6 && this.level.state <= 11: this.add.image(0, 0, 'battleBackground2').setOrigin(0, 0);break;
-			case this.level.state == 12: this.add.sprite(0,0).setOrigin(0,0).play('battleBackground3'); break;
-		}
-		
-		// Maria Pita
-		if (this.level.state === 12) this.player = new Player(this, 250, 400, this.inventory);
+		let bg = this.add.sprite(0, 0, this.level.bgKey).setOrigin(0, 0);
+		if (this.level.bgKey === 'bg3') {
+			bg.anims.play('battleBackground3');
+			this.player = new Player(this, 250, 400, this.inventory);
+		} 
 		else this.player = new Player(this, 250, 475, this.inventory);
 		
 		// Crea a todos los enemigos y los guarda en el array enemies
@@ -631,6 +628,7 @@ export default class BattleScene extends Phaser.Scene {
 				if (this.enemies[0].healthController.getCurrentHealth() < this.enemies[0].healthController.getMaxHealth() / 2) {
 					// Poner asta como el arma equipada
 					this.player.inventory.setEquipedWeapon('asta');
+					this.player.inventory.addWeapon('asta');
 					
 					this.dialogBox.clearText();
 					this.dialogBox.setTextToDisplay('Maria Pita ha ido a por Drake y ha robado su bandera.');
@@ -655,6 +653,8 @@ export default class BattleScene extends Phaser.Scene {
 							this.dialogBox.clearText();
 							this.dialogBox.setTextToDisplay('Maria Pita se ha equipado el asta de la bandera.');	// Enviar el nuevo texto
 							this.emitter.once('finishTexting', () => {
+								this.scene.wake('inventoryScene', {scene: 'battleScene', inventory: this.inventory});
+								this.scene.sleep('inventoryScene');
 								this.EnableButtons();
 							});
 						});
