@@ -88,7 +88,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.image('emptyButton', 'assets/scenes/battle/emptyButton.png');
 		
 		// Barra de vida
-		this.load.image('lifeBar', 'assets/ui/lifeBar38x8sinCorazon.png');
+		this.load.image('lifeBar', 'assets/scenes/battle/lifeBar38x8sinCorazon.png');
 
 		// Indicador
 		this.load.spritesheet('dmgInd', 'assets/scenes/battle/indicator/dmgInd.png', { frameWidth: 37, frameHeight: 28});
