@@ -83,7 +83,7 @@ export default class TitleScene extends Phaser.Scene {
 			camera.fadeOut(1000, 0, 0, 0); // fadeOut(time, R, G, B), 000 = Black
 			camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
 				music.stop();
-				self.scene.start('levelMenuScene', {inventory: self.inventory});
+				self.scene.start('cinematicScene', {inventory: self.inventory, key: 'start'});
 			})
 			self.scene.launch('inventoryScene', {scene: 'levelMenuScene', inventory: self.inventory});
 			self.scene.sleep('inventoryScene');
