@@ -2,6 +2,7 @@
 import Phaser from '../lib/phaser.js';
 import { Button } from '../input/button.js';
 import { KeyboardInput } from '../input/keyboardInput.js';
+import Inventory from '../inventory/inventory.js';
 
 /**
  * Escena de Pantalla de Título.
@@ -26,6 +27,7 @@ export default class TitleScene extends Phaser.Scene {
 
 		// Imagen de botones
 		this.load.spritesheet('play', 'assets/scenes/title/playButton.png', {frameWidth: 37, frameHeight: 14});
+		this.load.spritesheet('inventory', 'assets/scenes/levelsMenu/inventoryButtons.png', {frameWidth: 30, frameHeight: 18});
 
 		// Música
 		this.load.audio('Pirates of the Atlantic', ['assets/scenes/title/Pirates of the Atlantic - Vivu.mp3']);
@@ -70,6 +72,9 @@ export default class TitleScene extends Phaser.Scene {
 		var button = new Button(this, 514, 690,'play', 0, 1, 2, this.keyboardInput, jumpToLevelMenuScene).setScale(5, 5);
 		this.keyboardInput.setStartButton(button);
 
+		// Inventario del jugador
+		this.inventory = new Inventory();
+
 		// Gestiona el fadeOut y el inicio de la escena de niveles
 		function jumpToLevelMenuScene() {
 			// Fade Out
@@ -78,8 +83,10 @@ export default class TitleScene extends Phaser.Scene {
 			camera.fadeOut(1000, 0, 0, 0); // fadeOut(time, R, G, B), 000 = Black
 			camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
 				music.stop();
-				self.scene.start('cinematicScene', 'start');
+				self.scene.start('cinematicScene', {inventory: self.inventory, key: 'start'});
 			})
+			self.scene.launch('inventoryScene', {scene: 'levelMenuScene', inventory: self.inventory});
+			self.scene.sleep('inventoryScene');
 		}
 
 		// Fadeout de la música
