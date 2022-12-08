@@ -61,14 +61,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 		if(typeof(data.level) === 'object') {
 			data.level.setCompleted();
 		}
-		if(data.inventory === undefined){
-			this.inventory = new Inventory();
-		}
-		else
-			this.inventory = data.inventory;
-
-		// Lanzar escena del inventario y pararla para dejarla de fondo
-		this.scene.launch('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory});
+		this.inventory = data.inventory;
+		this.scene.wake('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory})
 		this.scene.sleep('inventoryScene');
 	}
 
@@ -134,7 +128,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
 			music.setVolume(0.4);
 			this.scene.sleep('levelMenuScene');							// Parar la escena de menú
-			this.scene.wake('inventoryScene', 'levelMenuScene');		// Reanudar la escena de inventario
+			this.scene.wake('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory}); // Reanudar la escena de inventario
 			this.events.on('wake', (scene) => {music.setVolume(1)});	// Evento al volver de la escena de inventario
 		}).setScale(3, 3);
 
@@ -179,10 +173,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 				duration: 2000,
 			});
 		}
-	}
-
-	update() {
-		this.keyboardInput.processInput(); 
 	}
 
 	// Inicializa a qué botón te lleva pulsar cada dirección desde otro botón

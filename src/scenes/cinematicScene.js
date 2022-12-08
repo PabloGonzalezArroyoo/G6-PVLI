@@ -2,6 +2,7 @@
 // Importación de Librería Phaser
 import Phaser from '../lib/phaser.js';
 import { Button } from '../input/button.js';
+import {KeyboardInput} from '../input/keyboardInput.js';
 
 /**
  * Escena de Cinemática.
@@ -19,8 +20,10 @@ export default class Title extends Phaser.Scene {
     /**
 	 * Inicializa las variables
 	*/
-	init(){
-
+	init(data){
+        this.inventory = data.inventory;
+        this.cinematicKey = data.key;
+        this.cinematicKey += 'Cinematic';
 	}
     
     /**
@@ -30,34 +33,33 @@ export default class Title extends Phaser.Scene {
      */
     preload(){
         // Vídeo
-
+        this.load.video(this.cinematicKey, 'assets/scenes/cinematic/' + this.cinematicKey + '.mp4')
         // Botón
-        //this.load.image('skip', 'assets/GUI/skip.png');
+        this.load.spritesheet('skip', 'assets/scenes/cinematic/skipButton.png', {frameWidth: 37, frameHeight: 14});
     }
 
     /**
     * Creación de los elementos de la escena
     */
     create() {
-        //Reproducimos la cinemática
-        
-        //var self = this;
-        //Pintamos el botón de saltar cinemática
-        //var sprite = new Button(this, this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, 'skip', 0, 0, 0, function(){self.scene.start('levelMenuScene')});
-
         const width = this.scale.width;
         const height = this.scale.height;
 
-		this.add.text(width * 0.5, height * 0.5, 'Cinematic Scene', {})
-        .setOrigin(0.5);
+        this.keyboardInput = new KeyboardInput(this);
 
-		this.input.keyboard.once('keydown-SPACE', () => {
-            this.scene.start('GameOverScene');
-        });
+        //Reproducimos la cinemática
+        this.cinematic = this.add.video(width / 2, height / 7 * 3, this.cinematicKey).setScale(0.6, 0.6);
+        this.cinematic.on('complete', ()=>{this.goToNextScene();});
+        this.cinematic.play();
 
+        //Pintamos el botón de saltar cinemática
+        this.skipButton = new Button(this, 514, 690,'skip', 0, 1, 2, this.keyboardInput, ()=>{this.goToNextScene();}).setScale(5, 5);
+        this.keyboardInput.setStartButton(this.skipButton);
     }
-
-    update() {
-
-	}
+    goToNextScene() {
+        if (this.cinematicKey === 'endCinematic'){
+            // Lanzar escena de créditos
+        }
+        else this.scene.start('levelMenuScene', {inventory: this.inventory});
+    }
 }

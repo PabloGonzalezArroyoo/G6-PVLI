@@ -130,9 +130,9 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.image('dagOx', 'assets/scenes/inventory/weapons/dagaOxidada.png');
 		this.load.image('dagAf', 'assets/scenes/inventory/weapons/dagaAfilada.png');
 		this.load.image('dagEx', 'assets/scenes/inventory/weapons/dagaExcéntrica.png');
-		//this.load.image('alMb', 'assets/scenes/inventory/weapons/.png');
-		//this.load.image('alVrd', 'assets/scenes/inventory/weapons/.png');
-		//this.load.image('alDem', 'assets/scenes/inventory/weapons/.png');
+		this.load.image('alMb', 'assets/scenes/inventory/weapons/alabardaDeMentira.png');
+		this.load.image('alVrd', 'assets/scenes/inventory/weapons/alabardaDeVerdad.png');
+		this.load.image('alDem', 'assets/scenes/inventory/weapons/alabardaDemencial.png');
 		this.load.image('ropIng', 'assets/scenes/inventory/weapons/roperaInglesa.png');
 		this.load.image('ropCst', 'assets/scenes/inventory/weapons/roperaCastellana.png');
 		this.load.image('ropAl', 'assets/scenes/inventory/weapons/roperaAlocada.png');
@@ -222,7 +222,7 @@ export default class BattleScene extends Phaser.Scene {
 		 	new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this.keyboardInput, () => {
 				this.music.setVolume(0.4);										// Bajar la música
 				this.scene.sleep('battleScene');								// Parar la escena de batalla
-				this.scene.wake('inventoryScene', 'battleScene');				// Reanudar la escena de inventario
+				this.scene.wake('inventoryScene', {scene: 'battleScene', inventory: this.inventory});				// Reanudar la escena de inventario
 				this.events.once('wake', (scene, item) => {this.music.setVolume(1); this.useItem(item)})	// Evento al volver de la escena de inventario
 		 	}),
 			// Botón de defensa
@@ -263,7 +263,6 @@ export default class BattleScene extends Phaser.Scene {
 	update(t,dt) {
 		super.update(t,dt);
 		this.previousLetterTime += dt; // Contador del tiempo transcurrido desde la ultima letra
-		this.keyboardInput.processInput();
 
 		// Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
 		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){
@@ -278,7 +277,7 @@ export default class BattleScene extends Phaser.Scene {
 		switch (action){									
 			
       		case 'attack' : 															// Se selecciona atacar
-				this.UpdateQueLocura(100)																
+				this.UpdateQueLocura(35)																
 				this.dialogBox.clearText();												// Borrar texto previo
 				if (this.enemies.length > 1) {											// Si hay más de un enemigo en escena
 					this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
@@ -371,10 +370,10 @@ export default class BattleScene extends Phaser.Scene {
 		if (!index) index = 0;
 		// Si el enemigo sigue vivo hace su acción
 		if (!levelFailed(this.enemies[index]) && !this.enemies[index].isStuned()) {
-			this.dialogBox.clearText();                           // Borrar texto previo
+			this.dialogBox.clearText();                           	// Borrar texto previo
 			if (this.enemies.length <= 1) this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' ataca a Maria Pita'); // Enviar el nuevo texto
 			else this.dialogBox.setTextToDisplay(this.enemies[index].getName() + ' (' +  index + ')' +' ataca a Maria Pita');	
-			this.emitter.once('finishTexting', () => {						// Crea un evento para que el enemigo ataque
+			this.emitter.once('finishTexting', () => {				// Crea un evento para que el enemigo ataque
 				
 				// Guarda el daño hecho o el daño y un texto si se ha usado una habilidad
 				let attack = this.enemies[index].attack(this.player);
@@ -385,7 +384,7 @@ export default class BattleScene extends Phaser.Scene {
 					index++;
 					
 					if (levelFailed(this.player)) {
-						this.dialogBox.clearText();																	// Borrar texto previo
+						this.dialogBox.clearText();					// Borrar texto previo
 						this.time.delayedCall(2000,()=>{this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory});});
 					}
 					else if (index < this.enemies.length) {this.emitter.once('finishTurn', () => {this.EnemyTurn(index)});} 	//Se llama al ataque de los demas enemigos
@@ -492,6 +491,13 @@ export default class BattleScene extends Phaser.Scene {
 		if (this.player.inventory.getEquipedWeapon().imgID === 'puño') {
 			this.botones[3].disableInteractive();
 			this.botones[3].visible = false;
+		}
+		else if (this.currentQueLocura >= 100 && this.player.inventory.getEquipedWeapon().imgID === 'asta') {
+			for (let i = 0; i < 3; ++i) {
+				this.botones[i].disableInteractive();
+				this.botones[i].visible = false;
+			}
+			this.keyboardInput.changeButton(this.botones[3]);
 		}
 	}
 

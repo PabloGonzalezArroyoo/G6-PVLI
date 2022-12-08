@@ -4,6 +4,7 @@ export class KeyboardInput
     constructor(scene) {
         this._scene = scene;
         this.arrows = scene.input.keyboard.addKeys('left, up, right, down, enter');
+        scene.input.keyboard.on('keydown', ()=>{this.processInput();});
     }
 
     // Asigna un boton inicial
@@ -35,8 +36,7 @@ export class KeyboardInput
 
     // Procesa el input
     processInput() {
-        if (this.button.isEnabled()){
-            
+        if (this.button.isEnabled()) {
             if (phaser.Input.Keyboard.JustDown(this.arrows.up) && this.button.adjacent.up) 
                 this.onPressedKey(() => {
                     this.changeButton(this.button.adjacent.up);
