@@ -631,7 +631,7 @@ export default class BattleScene extends Phaser.Scene {
 			text = '¡Has conseguido ' + this.inventory.weapons[weaponImgID].weapon.name + ' y \n' + itemQuantity + ' de ' + listOfItems.healths[randomFood].key + ' !';
 			this.add.image(width/3, height/2, weaponImgID).setScale(6,6);
 			this.add.image(width/1.5, height/2, foodImgID).setScale(6,6);
-			if (itemQuantity > 1) this.add.text(width/1.5 + 20, height/2 + 20, itemQuantity, {}).setScale(3,3);
+			if (itemQuantity > 1) this.add.text(width/1.5 + 20, height/2 + 20, itemQuantity, {}).setScale(3,3).setFontFamily('Silkscreen');
 		}
 		
 		// Mostrar por texto el loot obtenido
