@@ -536,9 +536,17 @@ export default class BattleScene extends Phaser.Scene {
 	// Comprueba si hay enemigos que matar y pasa al siguiente turno o termina la partida si no quedan emeigos
 	checkEnemies(){
 		for (var i = 0; i < this.enemies.length; i++){
+			// Si el enemigo muere
 			if (this.enemies[i].healthController.getCurrentHealth() === 0){
-				this.enemies[i].destroy(); 
+				//Destruyelo y sacalo del array
+				this.enemies[i].destroy();  
 				this.enemies.splice(i , 1);
+				//Reconecta para el input de teclado
+				for (var i = 0; i < this.enemies.length; i++){
+					if (i !== 0 && i !== this.enemies.length-1) this.enemies[i].setAdjacents(null, null, this.enemies[i - 1], this.enemies[i + 1]);
+					else if (i === 0) this.enemies[i].setAdjacents(null, null, this.enemies[this.enemies.length - 1], this.enemies[i + 1]);
+					else if(i === this.enemies.length - 1) this.enemies[i].setAdjacents(null, null, this.enemies[i - 1], this.enemies[0]);
+				}
 			}
 		}
 
