@@ -29,7 +29,8 @@ export default class TurnEffectController{
 	updateTurn(){
 		if (this.bleedTurns > 0){
 			this.bleedTurns--; // Resta un turno de sangrado
-			this.character.healthController.changeHealth(-this.bleedDamage); //Aplica el daño de sangrado
+			if (this.character.animator.spritesheet === 'player') this.character.healthController.changeHealth(-this.bleedDamage);
+			else this.character.receiveAttack(-this.bleedDamage); //Aplica el daño de sangrado
 		}
 		if (this.stunTurns > 0) this.stunTurns--; // Resta el turno de aturdimiento
 		if (this.defenseTurns > 0) this.defenseTurns--; // Reduce los turnos de defensa restantes

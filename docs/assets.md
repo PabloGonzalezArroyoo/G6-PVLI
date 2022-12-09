@@ -16,3 +16,6 @@ La gran mayoría de los assets son propios y originales, creados por Pantheon St
 
 A continuación se listan los assets restantes utilizados en el proyecto, provenientes de fuentes externas a nuestro equipo. Así pues, de no aparecer en esta lista un asset en concretro, es de autoridad de Pantheon Studios:
 - [Pirates of the Atlantic](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/scenes/title/Pirates%20of%20the%20Atlantic%20-%20Vivu.mp3) creada por Vivu (alumno de 1ºGV) - *Canción de pantalla de título*.
+- [Travelling to the End of the Sea](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/scenes/levelsMenu/Travelling%20to%20the%20End%20of%20the%20Sea%20-%20Vivu.mp3) creada por Vivu (alumno de 1ºGV) - *Canción de menú de niveles*.
+- [A New Dawn for Inglazona](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/scenes/credits/A%20New%20Dawn%20for%20Inglazona%20-%20Vivu.mp3) creada por Vivu (alumno de 1ºGV) - *Canción de créditos*.
+- [Mewlzebub](https://youtu.be/-vJ0NMOH2vA) creada por vivivivivi (@SocialVivi) - *Canción de batalla*.

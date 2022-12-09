@@ -84,8 +84,6 @@ export class Enemy extends Character {
     
     // Devuelve el daño
     getDamage() { return this.damage; }
-
-    receiveDamage(damage) { this.healthController.changeHealth(damage); }
    
     // Asigna los enemigos adjacentes a este (usado para acceder a estos a traves del input de teclado)
     setAdjacents(up, down, left, right) {
@@ -210,8 +208,8 @@ export class ScurviedSailor extends Enemy {
         this.animator.playIdle();
     }
 
-    receiveDamage(damage) {
-        super.receiveDamage(damage);
+    receiveAttack(damage) {
+        super.receiveAttack(damage);
         if (this.healthController.getCurrentHealth() <= 0) this.healthController.changeHealth(1);
     }
 }

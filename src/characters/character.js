@@ -20,6 +20,8 @@ export default class Character{
         this.turnEffectController.updateTurn();
     }
 
+    receiveAttack(damage) { this.healthController.changeHealth(damage); }
+
     // Devuelve el daño hecho por el sangrado
     getBleedDamage() { return this.turnEffectController.getBleedDamage(); }
 

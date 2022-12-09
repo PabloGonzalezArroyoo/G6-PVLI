@@ -21,7 +21,7 @@ export default class Player extends Character {
         this.animator.playAttack();
         // Le baja vida al enemigo
         this.animator.once("animationcomplete-attack",
-            () => {enemy.receiveDamage(-this.getDamage());});
+            () => {enemy.receiveAttack(-this.getDamage());});
     }
 
     // Animación, activación y cálculo de turnos de la defensa

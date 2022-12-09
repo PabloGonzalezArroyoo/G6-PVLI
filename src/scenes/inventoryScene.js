@@ -60,14 +60,12 @@ export default class InventoryScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-
-		this.inventory.addHealth('bolla');
 		
 		// Guardar la escena de la que te han despertado y aplicar cambios del inventario
 		this.events.on('wake', (scene, data) => {
 			this.inventory = data.inventory;
 			this.previousSceneName = data.scene;
-			this.keyboardInput.setStartButton(this.equipedWeaponButton);
+			this.keyboardInput.changeButton(this.equipedWeaponButton);
 			if (this.handleLoot) this.setImagesVisible();
 			else this.handleLoot = true;
 		});
@@ -207,6 +205,8 @@ export default class InventoryScene extends Phaser.Scene {
 					// Si no, solo cambiamos el texto a la nueva cantidad
 					else this.foodTexts[index].setText(this.inventory.healths[val.imgID].amount);
 					
+					this.inventory.addHealth(val.imgID);
+
 					this.escape(val);
 				}
 			}
@@ -268,6 +268,7 @@ export default class InventoryScene extends Phaser.Scene {
 			if (comida[this.foodImages[i].texture.key].amount > 0) {
 				this.foodImages[i].setVisible(true);
 				this.foodTexts[i].setText(comida[this.foodImages[i].texture.key].amount);
+				this.foodTexts[i].setVisible(true);
 			}
 		}
 

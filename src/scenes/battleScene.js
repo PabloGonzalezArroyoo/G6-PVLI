@@ -236,6 +236,9 @@ export default class BattleScene extends Phaser.Scene {
 			repeat: 0
 		});
 		this.add.sprite(1024, 768, 'fadeIn').setOrigin(1, 1).play('transition');
+
+		this.dialogBox.clearText();
+		this.dialogBox.printText('Escoge una acción');
 	}
 
 	update(t,dt) {
@@ -262,10 +265,10 @@ export default class BattleScene extends Phaser.Scene {
 					// Se hace a todos los enemigos interactuables
 					this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {
 						Element.animator.setInteractive();
-						this.keyboardInput.setStartButton(this.enemies[0]);	
+						this.keyboardInput.changeButton(this.enemies[0]);	
 					});});
 					this.emitter.once('enemyselected',() => {
-					this.keyboardInput.setStartButton(this.botones[0]);
+					this.keyboardInput.changeButton(this.botones[0]);
 					this.DisableEnemy();
 					this.dialogBox.clearText();														// Borrar texto previo
 					  	this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
@@ -318,11 +321,11 @@ export default class BattleScene extends Phaser.Scene {
 					//Se hace a todos los enemigos interactuables
 					this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {
 						Element.animator.setInteractive();
-						this.keyboardInput.setStartButton(this.enemies[0]);	
+						this.keyboardInput.changeButton(this.enemies[0]);	
 					});});
 					//Una vez se reciba confirmación del ataque y el enemigo seleccionado, se ataca.
 					this.emitter.once('enemyselected',() => {
-						this.keyboardInput.setStartButton(this.botones[0]);
+						this.keyboardInput.changeButton(this.botones[0]);
 						this.DisableEnemy();
 						this.dialogBox.clearText();														// Borrar texto previo
 						this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
@@ -459,6 +462,10 @@ export default class BattleScene extends Phaser.Scene {
 
 	// Activa y vuelve visible los botones
 	EnableButtons(){
+		// Texto de escoger accion
+		this.dialogBox.clearText();
+		this.dialogBox.printText('Escoge una acción');
+
 		for(var i=0; i < this.botones.length; i++) {
 			if(i === 3 && this.currentQueLocura < 100){
 				this.emptyButton.visible = true;
@@ -593,12 +600,13 @@ export default class BattleScene extends Phaser.Scene {
 		let randomFood = Math.floor(Math.random() * 3);
 		let randomQuantity = Math.floor(Math.random() * 3) + 3;
 		let foodImgID = listOfItems.healths[randomFood].imgID;
-		this.inventory.healths[foodImgID].amount += randomQuantity;
+		//this.inventory.healths[foodImgID].amount += randomQuantity;
+		this.inventory.addHealth(foodImgID, randomQuantity);
 
 		// Looteo parte visual
 		const width = this.scale.width;
 		const height = this.scale.height;
-		const itemQuantity = this.inventory.healths[foodImgID].amount;
+		const itemQuantity = randomQuantity;
 		var text;
 		// Si no me ha tocado arma
 		if (!weaponLoot) {
