@@ -117,6 +117,7 @@ export var listOfItems = {
 		imgID: 'asta',
 		attack: 90,
 		defense: 25,
+		queLocura: WeaponItem.endGame(),
 		desc: "La ofensiva definitiva"}
 	],
 

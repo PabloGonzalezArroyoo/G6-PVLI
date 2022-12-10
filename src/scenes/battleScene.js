@@ -322,18 +322,20 @@ export default class BattleScene extends Phaser.Scene {
 					this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {
 						Element.animator.setInteractive();
 						this.keyboardInput.changeButton(this.enemies[0]);	
-					});});
+					});
+				});
 					//Una vez se reciba confirmación del ataque y el enemigo seleccionado, se ataca.
 					this.emitter.once('enemyselected',() => {
 						this.keyboardInput.changeButton(this.botones[0]);
 						this.DisableEnemy();
-						this.dialogBox.clearText();														// Borrar texto previo
+						this.dialogBox.clearText();													// Borrar texto previo
 						this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 						this.emitter.once('finishTexting', () => {
 								this.player.quelocura(this.enemies, this.selectedEnemy);
 							});
 						});	
-				} else {																                // Si solo hay uno
+				} else {
+					this.keyboardInput.changeButton(this.botones[0]);						        // Si solo hay uno
 					this.dialogBox.clearText();														// Borrar texto previo
 					this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 					this.emitter.once('finishTexting', () => {
