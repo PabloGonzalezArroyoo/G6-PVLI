@@ -28,8 +28,8 @@ const levels = [new Level(listOfLevels[0]),
 				levels[2].setNextLevels([levels[3], levels[4]]);
 				levels[3].setNextLevels(null);
 				levels[4].setNextLevels([levels[5], levels[6], levels[7]]);
-				levels[5].setNextLevels([null]);
-				levels[6].setNextLevels([null]);
+				levels[5].setNextLevels(null);
+				levels[6].setNextLevels(null);
 				levels[7].setNextLevels([levels[8], levels[9]]);
 				levels[8].setNextLevels(null);
 				levels[9].setNextLevels([levels[10], levels[11]]);

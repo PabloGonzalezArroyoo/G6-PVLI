@@ -3,7 +3,7 @@ import EventDispatcher from "../combat/eventDispatcher.js";
 // Objeto que funciona como contenedor de un sprite y un texto. En él se escribirá un texto y se pintará un sprite con una animación
 // en concreto según la situación; además de moverse entre jugador ni enemigos. Por ejemplo, si Maria Pita recibe 10 puntos de daño,
 // el indicador se posicionará al lado de la barra de Maria Pita, reproducirá la animación de daño y escribirá por encima "-10"
-export default class Indicator extends Phaser.GameObjects.GameObject {
+export default class Indicator extends Phaser.GameObjects.Container {
     constructor(scene, x, y, spriteSheets) {
         super(scene, x, y);
         this.textObj = new Phaser.GameObjects.Text(scene, x, y, "indicador", {fontFamily: 'Silkscreen', fontSize: 20});
