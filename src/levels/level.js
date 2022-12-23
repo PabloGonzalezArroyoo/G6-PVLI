@@ -57,7 +57,7 @@ export class Level {
 
     // Marca el nivel como desbloqueado y cambia el sprite
     setUnlocked() {
-        if(this.state === State.locked)this.changeState(State.unlocked);
+        if(this.state === State.locked) this.changeState(State.unlocked);
     }
 
     // Marca el nivel como completado y cambia el sprite

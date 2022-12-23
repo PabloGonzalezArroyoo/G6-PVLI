@@ -56,7 +56,11 @@ export default class InventoryScene extends Phaser.Scene {
 		// Recuadro de selección
 		this.load.spritesheet('selected', 'assets/scenes/inventory/selectedItem.png', {frameWidth: 32, frameHeight:32});
 
+		// Recuadro de nombre de las armas
 		this.load.spritesheet('info', 'assets/scenes/inventory/invInfo.png', {frameWidth: 30, frameHeight: 8});
+
+		// Icónos de qué locura
+		this.load.spritesheet('icons', 'assets/scenes/inventory/icons.png', {frameWidth: 16, frameHeight: 8});
 	}
 
 	/**
@@ -65,6 +69,21 @@ export default class InventoryScene extends Phaser.Scene {
 	create() {
 		// Loot inicial
 		this.inventory.addHealth('bolla');
+		this.inventory.addWeapon('cimMad');
+		this.inventory.addWeapon('cimAc');
+		this.inventory.addWeapon('cimLoc');
+		this.inventory.addWeapon('dagOx');
+		this.inventory.addWeapon('dagAf');
+		this.inventory.addWeapon('dagEx');
+		this.inventory.addWeapon('alMb');
+		this.inventory.addWeapon('alVrd');
+		this.inventory.addWeapon('alDem');
+		this.inventory.addWeapon('ropIng');
+		this.inventory.addWeapon('ropCst');
+		this.inventory.addWeapon('ropAl');
+		this.inventory.addWeapon('sacho');
+		this.inventory.addWeapon('fouc');
+		this.inventory.addWeapon('guad');
 		
 		// Guardar la escena de la que te han despertado y aplicar cambios del inventario
 		this.events.on('wake', (scene, data) => {
@@ -95,12 +114,13 @@ export default class InventoryScene extends Phaser.Scene {
 			() => {
 				if (this.inventory.getEquipedWeapon().imgID !== 'puño' && this.inventory.getEquipedWeapon().imgID !== 'asta') { // OnClick
 					this.selected(this.inventory.getWeapons()['puño'], "W");
-					this.updateUITexts(this.inventory.getWeapons()['puño'].weapon);
+					this.updateUIInfo(this.inventory.getWeapons()['puño'].weapon);
 				}
 			},
 			() => {														// OnPointerOver
 				this.showDescription(this.inventory.getEquipedWeapon());
 				this.indicator.updateInd('inventory', 'inventory', {x: 280, y: 140}, this.inventory.getEquipedWeapon().name);
+				this.updateUIInfo(this.inventory.getEquipedWeapon());
 			},	
 			() => {this.resetStatsBox(); this.dialogBox.clearText(); this.indicator.deactivateInd();} // OnPointerOut
 		).setScale(8, 8);
@@ -125,7 +145,7 @@ export default class InventoryScene extends Phaser.Scene {
 					() => {this.selected(val, "W")},							// OnClick
 					() => {if (val.owned) {										// OnPointerOver
 						this.showDescription(val.weapon);
-						this.updateUITexts(val.weapon);
+						this.updateUIInfo(val.weapon);
 						this.indicator.updateInd('inventory', 'inventory', {x: x, y: y}, val.weapon.name);
 					}}, 
 					() => {this.resetStatsBox(); this.dialogBox.clearText(); this.indicator.deactivateInd();} // OnPointerOut
@@ -151,7 +171,7 @@ export default class InventoryScene extends Phaser.Scene {
 				() => {if (val.amount) this.selected(val.item, "H", val.i)},   				// OnClick
 				() => {if (val.amount) { 													// OnPointerOver
 					this.showDescription(val.item); 
-					this.updateUITexts(val);
+					this.updateUIInfo(val);
 					this.indicator.updateInd('inventory', 'inventory', {x: x, y: y}, val.item.name);
 				}}, 
 				() => {this.resetStatsBox(); this.dialogBox.clearText(); this.indicator.deactivateInd();} // OnPointerOut
@@ -177,6 +197,10 @@ export default class InventoryScene extends Phaser.Scene {
 
 		// Indicador para el nombre de las armas
 		this.indicator = new Indicator(this, 0, 0, 'info');
+
+		// Imagen de qué locura
+		this.queLocuraBox = this.add.sprite(855, 56, 'icons').setScale(5, 5);
+		this.queLocuraBox.setVisible(false);
 	}
 
 	// SALIDA DE LA ESCENA
@@ -238,7 +262,7 @@ export default class InventoryScene extends Phaser.Scene {
 	}
 
 	// Actualiza el texto de ataque y defensa del arma equipada para mostar la diferencia, o añade el texto de un item curativo
-	updateUITexts(item) {
+	updateUIInfo(item) {
 		// ARMA
 		if (item.type === "WEAPON") {
 			var actual = this.inventory.getEquipedWeapon();
@@ -255,6 +279,15 @@ export default class InventoryScene extends Phaser.Scene {
 			// Actualizar texto con el nuevo arma
 			this.atcBox.setText(weapon.getAttack());
 			this.defBox.setText(weapon.getDefense());
+
+			// Actualizar qué locura
+			if (weapon.imgID === "cimMad" || weapon.imgID === "cimAc" || weapon.imgID === "cimLoc") this.queLocuraBox.setFrame(0);
+			else if (weapon.imgID === "alMb" || weapon.imgID === "alVrd" || weapon.imgID === "alDem") this.queLocuraBox.setFrame(1);
+			else if (weapon.imgID === "sacho" || weapon.imgID === "fouc" || weapon.imgID === "guad") this.queLocuraBox.setFrame(2);
+			else if (weapon.imgID === "dagOx" || weapon.imgID === "dagAf" || weapon.imgID === "dagEx") this.queLocuraBox.setFrame(2);
+			else if (weapon.imgID === "ropIng" || weapon.imgID === "ropCst" || weapon.imgID === "ropAl") this.queLocuraBox.setFrame(4);
+			else if (weapon.imgID === "asta") this.queLocuraBox.setFrame(5);
+			if (weapon.imgID !== "puño") this.queLocuraBox.setVisible(true);
 		}
 
 		// CURACIÓN
@@ -268,6 +301,7 @@ export default class InventoryScene extends Phaser.Scene {
 		this.defBox.setText(this.inventory.getEquipedWeapon().getDefense());
 		this.defBox.setColor('#65583c');
 		this.healthBox.setText("");
+		this.queLocuraBox.setVisible(false);
 	}
 
 	// Recorre los arrays de las imágenes de armas y comida para, tras leer el estado del inventario recibido al despertar la escena
