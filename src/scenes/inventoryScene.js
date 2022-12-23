@@ -3,6 +3,7 @@ import KeyboardInput from '../input/keyboardInput.js';
 import Button from '../input/button.js';
 import DialogBox from '../animations/dialogBox.js';
 import EventDispatcher from '../combat/eventDispatcher.js';
+import Indicator from '../animations/indicator.js';
 
 
 /**
@@ -54,6 +55,8 @@ export default class InventoryScene extends Phaser.Scene {
 
 		// Recuadro de selección
 		this.load.spritesheet('selected', 'assets/scenes/inventory/selectedItem.png', {frameWidth: 32, frameHeight:32});
+
+		this.load.spritesheet('info', 'assets/scenes/inventory/invInfo.png', {frameWidth: 30, frameHeight: 8});
 	}
 
 	/**
@@ -95,8 +98,11 @@ export default class InventoryScene extends Phaser.Scene {
 					this.updateUITexts(this.inventory.getWeapons()['puño'].weapon);
 				}
 			},
-			() => {this.showDescription(this.inventory.getEquipedWeapon())},	// OnPointerOver
-			() => {this.resetStatsBox(); this.dialogBox.clearText();} // OnPointerOut
+			() => {														// OnPointerOver
+				this.showDescription(this.inventory.getEquipedWeapon());
+				this.indicator.updateInd('inventory', 'inventory', {x: 280, y: 140}, this.inventory.getEquipedWeapon().name);
+			},	
+			() => {this.resetStatsBox(); this.dialogBox.clearText(); this.indicator.deactivateInd();} // OnPointerOut
 		).setScale(8, 8);
 
 		this.weaponButtons = [];
@@ -117,8 +123,12 @@ export default class InventoryScene extends Phaser.Scene {
 				if (!val.owned) this.weaponsImages[val.i][val.j].setVisible(false);
 				this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput,
 					() => {this.selected(val, "W")},							// OnClick
-					() => {if (val.owned){ this.showDescription(val.weapon); this.updateUITexts(val.weapon);}}, // OnPointerOver
-					() => {this.resetStatsBox(); this.dialogBox.clearText();} // OnPointerOut
+					() => {if (val.owned) {										// OnPointerOver
+						this.showDescription(val.weapon);
+						this.updateUITexts(val.weapon);
+						this.indicator.updateInd('inventory', 'inventory', {x: x, y: y}, val.weapon.name);
+					}}, 
+					() => {this.resetStatsBox(); this.dialogBox.clearText(); this.indicator.deactivateInd();} // OnPointerOut
 				).setScale(1.5,1.5);
 				i++;
 			}
@@ -139,8 +149,12 @@ export default class InventoryScene extends Phaser.Scene {
 			if (!val.amount) this.foodImages[val.i].setVisible(false);
 			this.foodButtons[val.i] = new Button(this, x, y, 'selected', 0, 1, 2, this.keyboardInput,
 				() => {if (val.amount) this.selected(val.item, "H", val.i)},   				// OnClick
-				() => {if (val.amount) { this.showDescription(val.item); this.updateUITexts(val);}}, // OnPointerOver
-				() => {this.resetStatsBox(); this.dialogBox.clearText()}					// OnPointerOut
+				() => {if (val.amount) { 													// OnPointerOver
+					this.showDescription(val.item); 
+					this.updateUITexts(val);
+					this.indicator.updateInd('inventory', 'inventory', {x: x, y: y}, val.item.name);
+				}}, 
+				() => {this.resetStatsBox(); this.dialogBox.clearText(); this.indicator.deactivateInd();} // OnPointerOut
 			).setScale(3,3); 
 			this.foodTexts[val.i] = this.add.text(x + 5, y + 5, itemQuantity, {fontFamily: 'Silkscreen', fontSize: 40});
 			if (!val.amount) this.foodTexts[val.i].setVisible(false);
@@ -160,6 +174,9 @@ export default class InventoryScene extends Phaser.Scene {
 		this.atcBox = this.add.text(110, 470, this.inventory.getEquipedWeapon().getAttack(), {fontFamily: 'Silkscreen', fontSize: 50, color: '#65583c'});
 		this.defBox = this.add.text(270, 470, this.inventory.getEquipedWeapon().getDefense(), {fontFamily: 'Silkscreen', fontSize: 50, color: '#65583c'});
 		this.healthBox = this.add.text(820, 320, "", {fontFamily: 'Silkscreen', fontSize: 30, color: '#248a00'});
+
+		// Indicador para el nombre de las armas
+		this.indicator = new Indicator(this, 0, 0, 'info');
 	}
 
 	// SALIDA DE LA ESCENA
