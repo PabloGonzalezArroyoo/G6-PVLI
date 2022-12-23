@@ -148,7 +148,7 @@ export default class InventoryScene extends Phaser.Scene {
 		});
 
 		// Pintamos botón de salir
-		this.inventoryButton = new Button(this, width - 50, 46, 'inventory', 2, 0, 1, this.keyboardInput, () => {this.escape()}).setScale(3, 3);
+		this.inventoryButton = new Button(this, width - 56, 43, 'inventory', 2, 0, 1, this.keyboardInput, () => {this.escape()}).setScale(3, 3);
 		this.keyboardInput.setStartButton(this.equipedWeaponButton);
 		this.inicializeButtonConnections()
 		

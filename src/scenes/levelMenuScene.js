@@ -108,7 +108,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 
 		// Botón de inventario
-		this.inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
+		this.inventoryButton = new Button(this, 968, 43, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
 			music.setVolume(0.4);
 			this.scene.sleep('levelMenuScene');							// Parar la escena de menú
 			this.scene.wake('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory}); // Reanudar la escena de inventario
@@ -160,8 +160,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 	// Inicializa a qué botón te lleva pulsar cada dirección desde otro botón
 	inicializeLevelButtonConnections() {
-		this.inventoryButton.setAdjacents(this.levelButtons[11], null, null, this.levelButtons[11]);
-		this.levelButtons[0].setAdjacents(null, null, this.levelButtons[1], null);
+		this.inventoryButton.setAdjacents(null, this.levelButtons[0], this.levelButtons[0], null);
+		this.levelButtons[0].setAdjacents(this.inventoryButton, null, this.levelButtons[1], this.inventoryButton);
 		this.levelButtons[1].setAdjacents(null, this.levelButtons[2], this.levelButtons[2], this.levelButtons[0]);
 		this.levelButtons[2].setAdjacents(this.levelButtons[3], this.levelButtons[4], this.levelButtons[4], this.levelButtons[1]);
 		this.levelButtons[3].setAdjacents(null, this.levelButtons[2], null, null);
@@ -172,6 +172,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.levelButtons[8].setAdjacents(null, this.levelButtons[7], null, this.levelButtons[7]);
 		this.levelButtons[9].setAdjacents(this.levelButtons[7], this.levelButtons[11], this.levelButtons[10], this.levelButtons[7]);
 		this.levelButtons[10].setAdjacents(null, this.levelButtons[9], null, this.levelButtons[9]);
-		this.levelButtons[11].setAdjacents(this.levelButtons[9], this.inventoryButton, null, this.levelButtons[9]);
+		this.levelButtons[11].setAdjacents(this.levelButtons[9], null, null, this.levelButtons[9]);
 	}
 }
