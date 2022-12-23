@@ -78,7 +78,7 @@ export default class TitleScene extends Phaser.Scene {
 				music.stop();
 				self.scene.start('cinematicScene', {inventory: self.inventory, key: 'start'});
 			})
-			self.scene.launch('inventoryScene', {scene: 'levelMenuScene', inventory: self.inventory});
+			self.scene.launch('inventoryScene', {scene: 'titleScene', inventory: self.inventory});
 			self.scene.sleep('inventoryScene');
 		}
 

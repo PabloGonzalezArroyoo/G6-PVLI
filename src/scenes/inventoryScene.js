@@ -25,6 +25,7 @@ export default class InventoryScene extends Phaser.Scene {
 	*/
 	init(data) {
 		this.inventory = data.inventory;
+		this.previousSceneName = data.scene;
 	}
 
 	preload(){
@@ -69,21 +70,21 @@ export default class InventoryScene extends Phaser.Scene {
 	create() {
 		// Loot inicial
 		this.inventory.addHealth('bolla');
-		this.inventory.addWeapon('cimMad');
-		this.inventory.addWeapon('cimAc');
-		this.inventory.addWeapon('cimLoc');
-		this.inventory.addWeapon('dagOx');
-		this.inventory.addWeapon('dagAf');
-		this.inventory.addWeapon('dagEx');
-		this.inventory.addWeapon('alMb');
-		this.inventory.addWeapon('alVrd');
-		this.inventory.addWeapon('alDem');
-		this.inventory.addWeapon('ropIng');
-		this.inventory.addWeapon('ropCst');
-		this.inventory.addWeapon('ropAl');
-		this.inventory.addWeapon('sacho');
-		this.inventory.addWeapon('fouc');
-		this.inventory.addWeapon('guad');
+		// this.inventory.addWeapon('cimMad');
+		// this.inventory.addWeapon('cimAc');
+		// this.inventory.addWeapon('cimLoc');
+		// this.inventory.addWeapon('dagOx');
+		// this.inventory.addWeapon('dagAf');
+		// this.inventory.addWeapon('dagEx');
+		// this.inventory.addWeapon('alMb');
+		// this.inventory.addWeapon('alVrd');
+		// this.inventory.addWeapon('alDem');
+		// this.inventory.addWeapon('ropIng');
+		// this.inventory.addWeapon('ropCst');
+		// this.inventory.addWeapon('ropAl');
+		// this.inventory.addWeapon('sacho');
+		// this.inventory.addWeapon('fouc');
+		// this.inventory.addWeapon('guad');
 		
 		// Guardar la escena de la que te han despertado y aplicar cambios del inventario
 		this.events.on('wake', (scene, data) => {
@@ -187,7 +188,7 @@ export default class InventoryScene extends Phaser.Scene {
 		this.inicializeButtonConnections()
 		
 		// Al pulsar la tecla ESC se sale de la escena de inventario
-		this.input.keyboard.once('keydown-ESC', () => { this.escape(); });
+		this.input.keyboard.on('keydown-ESC', () => { if (this.previousSceneName !== 'titleScene') this.escape(); });
 		this.dialogBox = new DialogBox(this, 80, 620, 850).setColor('#65583c');
 
 		// Texto de daño, defensa de armas e items de curación
@@ -281,11 +282,11 @@ export default class InventoryScene extends Phaser.Scene {
 			this.defBox.setText(weapon.getDefense());
 
 			// Actualizar qué locura
-			if (weapon.imgID === "cimMad" || weapon.imgID === "cimAc" || weapon.imgID === "cimLoc") this.queLocuraBox.setFrame(0);
+			if (weapon.imgID === "cimMad" || weapon.imgID === "cimAc" || weapon.imgID === "cimLoc") this.queLocuraBox.setFrame(4);
+			else if (weapon.imgID === "dagOx" || weapon.imgID === "dagAf" || weapon.imgID === "dagEx") this.queLocuraBox.setFrame(3);
 			else if (weapon.imgID === "alMb" || weapon.imgID === "alVrd" || weapon.imgID === "alDem") this.queLocuraBox.setFrame(1);
+			else if (weapon.imgID === "ropIng" || weapon.imgID === "ropCst" || weapon.imgID === "ropAl") this.queLocuraBox.setFrame(0);
 			else if (weapon.imgID === "sacho" || weapon.imgID === "fouc" || weapon.imgID === "guad") this.queLocuraBox.setFrame(2);
-			else if (weapon.imgID === "dagOx" || weapon.imgID === "dagAf" || weapon.imgID === "dagEx") this.queLocuraBox.setFrame(2);
-			else if (weapon.imgID === "ropIng" || weapon.imgID === "ropCst" || weapon.imgID === "ropAl") this.queLocuraBox.setFrame(4);
 			else if (weapon.imgID === "asta") this.queLocuraBox.setFrame(5);
 			if (weapon.imgID !== "puño") this.queLocuraBox.setVisible(true);
 		}
