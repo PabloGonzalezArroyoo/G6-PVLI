@@ -109,7 +109,7 @@ export var listOfItems = {
 	
 		{key: "Puño",
 		imgID: "puño", 
-		attack: 15,
+		attack: 150,
 		defense: 0,
 		desc: "Un clásico. Harás poco daño pero la satisfacción que te dará matar con esta arma no te la dará cualquier otra"},
 

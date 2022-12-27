@@ -66,7 +66,19 @@ export default class TitleScene extends Phaser.Scene {
 		this.keyboardInput.setStartButton(button);
 
 		// Inventario del jugador
-		if (!this.inventory) this.inventory = new Inventory();
+		if (!this.inventory){
+			this.inventory = new Inventory();
+			for(var i=0;i<window.localStorage.length;i++)
+			{
+				if(window.localStorage.key(i).split("_")[0]==="weapon"){
+					this.inventory.addWeapon(window.localStorage.key(i).split("_")[1]);
+				}
+				else if(window.localStorage.key(i).split("_")[0]==="item"){
+					this.inventory.addHealth(window.localStorage.key(i).split("_")[1],
+						window.localStorage.getItem(window.localStorage.key(i)));
+				}
+			}
+		} 
 
 		// Gestiona el fadeOut y el inicio de la escena de niveles y la escena de inventario en paralelo
 		function jumpToLevelMenuScene() {
