@@ -70,14 +70,20 @@ export default class TitleScene extends Phaser.Scene {
 			this.inventory = new Inventory();
 			for(var i=0;i<window.localStorage.length;i++)
 			{
+				//Si tenias el arma antes, cargala
 				if(window.localStorage.key(i).split("_")[0]==="weapon"){
 					this.inventory.addWeapon(window.localStorage.key(i).split("_")[1]);
 				}
-				/*else if(window.localStorage.key(i).split("_")[0]==="item"){
-					console.log(this.inventory.healths[window.localStorage.key(i).split("_")[1]].amount);
-					this.inventory.healths[window.localStorage.key(i).split("_")[1]].amount=
-					window.localStorage.getItem('item_'+window.localStorage.key(i).split("_")[1]);
-				}*/
+				//Carga la cantidad de items que tenias
+				else if(window.localStorage.key(i).split("_")[0]==="item"){	
+					//Como la bolla empieza con 1, si lo recargas, tienes que restar ese item	
+					if(window.localStorage.key(i).split("_")[1]==="bolla"){
+						this.inventory.addHealth(window.localStorage.key(i).split("_")[1],
+							parseInt(window.localStorage.getItem('item_'+window.localStorage.key(i).split("_")[1]))-1);
+					}
+					else this.inventory.addHealth(window.localStorage.key(i).split("_")[1],
+						parseInt(window.localStorage.getItem('item_'+window.localStorage.key(i).split("_")[1])));
+				}
 			}
 		} 
 

@@ -198,8 +198,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 			}
 		}
 		for (var prop in this.inventory.healths) {
-			console.log(this.inventory.healths[prop].amount);
 			if (Object.prototype.hasOwnProperty.call(this.inventory.healths, prop)) {
+				window.localStorage.removeItem("item_"+prop);
 				window.localStorage.setItem("item_"+prop,this.inventory.healths[prop].amount);
 			}
 		}
