@@ -46,6 +46,9 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		this.inventory;
 		this.emitter = EventDispatcher.getInstance();
+		window.addEventListener("beforeunload", event => {
+			this.saveData();
+		});
 	}
 
 	init(data) {
@@ -53,7 +56,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 			data.level.setCompleted();
 		}
 		this.inventory = data.inventory;
-		this.saveData();
 		this.scene.wake('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory})
 		this.scene.sleep('inventoryScene');
 		for(var i=0;i<window.localStorage.length;i++)
@@ -198,7 +200,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		for (var prop in this.inventory.healths) {
 			console.log(this.inventory.healths[prop].amount);
 			if (Object.prototype.hasOwnProperty.call(this.inventory.healths, prop)) {
-				window.localStorage.removeItem("item_"+prop);
 				window.localStorage.setItem("item_"+prop,this.inventory.healths[prop].amount);
 			}
 		}

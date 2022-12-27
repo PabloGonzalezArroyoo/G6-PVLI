@@ -73,10 +73,11 @@ export default class TitleScene extends Phaser.Scene {
 				if(window.localStorage.key(i).split("_")[0]==="weapon"){
 					this.inventory.addWeapon(window.localStorage.key(i).split("_")[1]);
 				}
-				else if(window.localStorage.key(i).split("_")[0]==="item"){
-					this.inventory.addHealth(window.localStorage.key(i).split("_")[1],
-						window.localStorage.getItem(window.localStorage.key(i)));
-				}
+				/*else if(window.localStorage.key(i).split("_")[0]==="item"){
+					console.log(this.inventory.healths[window.localStorage.key(i).split("_")[1]].amount);
+					this.inventory.healths[window.localStorage.key(i).split("_")[1]].amount=
+					window.localStorage.getItem('item_'+window.localStorage.key(i).split("_")[1]);
+				}*/
 			}
 		} 
 
