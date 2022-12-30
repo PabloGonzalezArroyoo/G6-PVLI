@@ -388,6 +388,7 @@ export default class BattleScene extends Phaser.Scene {
 				
 				// Si el ataque ha sido con habilidad dar feedback y pasar al siguiente turno
 				else {
+					this.descriptionBox.setInteractive();
 					this.dialogBox.clearText();
 					this.dialogBox.setTextToDisplay('Enemigo ' + attack[1] + ' a Maria Pita');
 					this.emitter.once('finishTexting', () => {
