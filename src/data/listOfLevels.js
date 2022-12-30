@@ -45,8 +45,8 @@ export var listOfLevels = [
 		y: 240.5,
 		enemies: [
 			{id: "stinkyPirate", x: 625, y: 200},
-			{id: "drunkRuffian", x: 725, y: 250},
-			{id: "drunkRuffian", x: 825, y: 200}
+			{id: "drunkRuffian", x: 825, y: 200},
+			{id: "drunkRuffian", x: 725, y: 250}
 			],
 		level1prob: 40,
 		level2prob: 60,
@@ -98,8 +98,8 @@ export var listOfLevels = [
 		y: 363.5,
 		enemies: [
 			{id: "alienatedCorsair", x: 625, y: 200},
-			{id: "scurviedSailor", x: 725, y: 250},
-			{id: "scurviedSailor", x: 825, y: 200}
+			{id: "scurviedSailor", x: 825, y: 200},
+			{id: "scurviedSailor", x: 725, y: 250}
 			],
 		level1prob: 0,
 		level2prob: 100,
@@ -112,8 +112,8 @@ export var listOfLevels = [
 		y: 271.5,
 		enemies: [
 			{id: "alienatedCorsair", x: 625, y: 200},
-			{id: "scurviedSailor", x: 725, y: 250},
-			{id: "experiencedBuccaneer", x: 825, y: 200}
+			{id: "experiencedBuccaneer", x: 825, y: 200},
+			{id: "scurviedSailor", x: 725, y: 250}
 			],
 		level1prob: 0,
 		level2prob: 40,
@@ -126,8 +126,8 @@ export var listOfLevels = [
 		y: 455.5,
 		enemies: [
 			{id: "stinkyPirate", x: 675, y: 200},
-			{id: "stinkyPirate", x: 775, y: 250},
-			{id: "alienatedCorsair", x: 825, y: 200}
+			{id: "alienatedCorsair", x: 825, y: 200},
+			{id: "stinkyPirate", x: 775, y: 250}
 			],
 		level1prob: 0,
 		level2prob: 100,

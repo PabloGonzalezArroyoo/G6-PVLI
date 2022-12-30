@@ -39,6 +39,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.lootDuration = 3000;
 		this.indicator;
 		this.previousLetterTime = 0;
+		this.queLocuraBackground;
 
 		this.enemies = [];
 		this.selectedEnemy= null;
@@ -195,6 +196,9 @@ export default class BattleScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 
 		// Botones de acción
+		
+		// Fondo boton QUE LOCURA sin cargar
+		this.queLocuraBackground = this.add.image(375, 697, 'botonQueLocura', 3);
 		this.botones = 
 			// Botón de ataque
 			[new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('attack')}),
@@ -215,8 +219,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.keyboardInput.setStartButton(this.botones[0]);
 		
 		// Botón de qué locura apagado
-		this.emptyButton = this.add.image(254.5, 663.5, 'emptyButton').setOrigin(0,0);
-		this.emptyButton.setCrop(0, 0, 0, 0);
+		this.queLocuraBar = this.add.image(254.5, 663.5, 'botonQueLocura', 0).setOrigin(0,0);
+		this.queLocuraBar.setCrop(0, 0, 0, 0);
     
 		// Coloca los enemigos adyacentes
 		for (let i = 0; i < this.enemies.length; i++) {
@@ -456,11 +460,12 @@ export default class BattleScene extends Phaser.Scene {
 
 	// Desactiva y vuelve invisible los botones
 	DisableButtons() {
+		this.queLocuraBackground.visible = false;
 		for(var i=0; i < this.botones.length; i++) {
 			this.botones[i].disableInteractive();
 			this.botones[i].visible = false;
 		}
-		this.emptyButton.visible = false;
+		this.queLocuraBar.visible = false;
 	}
 
 	// Activa y vuelve visible los botones
@@ -469,9 +474,10 @@ export default class BattleScene extends Phaser.Scene {
 		this.dialogBox.clearText();
 		this.dialogBox.printText('Escoge una acción');
 
+		this.queLocuraBackground.visible = true;
 		for(var i=0; i < this.botones.length; i++) {
 			if(i === 3 && this.currentQueLocura < 100){
-				this.emptyButton.visible = true;
+				this.queLocuraBar.visible = true;
 			} else {
 				this.botones[i].setInteractive();
 				this.botones[i].visible = true;
@@ -514,7 +520,7 @@ export default class BattleScene extends Phaser.Scene {
 			if (this.currentQueLocura >= 100) {
 				this.EnableQueLocura();
 			} else {
-				this.emptyButton.setCrop(0,0, (this.emptyButton.width / 100) * this.currentQueLocura, this.emptyButton.height);
+				this.queLocuraBar.setCrop(0,0, (this.queLocuraBar.width / 100) * this.currentQueLocura, this.queLocuraBar.height);
 			}
 		}
 	}
