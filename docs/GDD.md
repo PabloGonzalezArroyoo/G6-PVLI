@@ -11,7 +11,7 @@
 | **Modo de juego** | 1 jugador |
 
 ## 2. Descripción
-Maria Pita's Revenge es un RPG de combates por turnos ubicado en La Coruña del siglo XVI. En él encarnas a María Pita, la mujer que acabó con la vida de un alférez inglés con su propia bandera después de que los ingleses asesinaran a su marido. Así pues, el jugador debe ir derrotando a las tropas inglesas hasta llegar a este alférez.
+Maria Pita's Revenge es un RPG de combates por turnos ubicado en A Coruña del siglo XVI. En él encarnas a María Pita, la mujer que acabó con la vida de un alférez inglés con su propia bandera después de que los ingleses asesinaran a su marido. El jugador deberá ir derrotando a las tropas inglesas hasta llegar a este alférez.
 
 ## 3. **Mecánicas**
 - **Personaje:** María Pita cuenta con unos valores de vida, defensa y ataque. 
