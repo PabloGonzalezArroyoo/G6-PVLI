@@ -177,7 +177,10 @@ export default class BattleScene extends Phaser.Scene {
 		
 		// Descripcion
 		this.descriptionBox = this.add.image(width/2, height - 225, 'box').setOrigin(0, 0).setInteractive();
-		this.descriptionBox.on('pointerdown', ()=> {this.dialogBox.printText()});
+		this.descriptionBox.on('pointerdown', ()=> { 
+			this.dialogBox.printText();
+			this.descriptionBox.disableInteractive();
+		});
 
 		// Cuadro de dialogo
 		this.dialogBox = new DialogBox(this, 545, 565, 450); 
@@ -259,9 +262,10 @@ export default class BattleScene extends Phaser.Scene {
 
 	// Metodo que efectua la accion del jugador cada turno
 	PlayerTurn(action, item) {
+		this.descriptionBox.setInteractive();
 		this.DisableButtons();															// Desactiva los botones
+		//this.descriptionBox.setInteractive();
 		switch (action){									
-			
       		case 'attack' : 															// Se selecciona atacar
 				this.UpdateQueLocura(35)																
 				this.dialogBox.clearText();												// Borrar texto previo
@@ -354,6 +358,8 @@ export default class BattleScene extends Phaser.Scene {
 
 	// Metodo que efectua la accion de los enemigos cada turno
 	EnemyTurn(index) {
+		this.descriptionBox.setInteractive();
+
 		if (!index) index = 0;
 		// Si el enemigo sigue vivo hace su acción
 		if (!levelFailed(this.enemies[index]) && !this.enemies[index].isStuned()) {
