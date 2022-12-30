@@ -413,6 +413,7 @@ export default class BattleScene extends Phaser.Scene {
 
 	// Metodo que actualiza los efectos por turnos del jugador
 	UpdatePlayerEffects() {
+		this.descriptionBox.setInteractive();
 		// Si el jugador esta envenenado da feedback
 		if (this.player.isBleeding()){
 			this.dialogBox.clearText();
@@ -436,6 +437,7 @@ export default class BattleScene extends Phaser.Scene {
 
 	// Metodo que actualiza los efectos por turnos de los enemigos
 	UpdateEnemyEffects(index) {
+		this.descriptionBox.setInteractive();
 		if (!index) index = 0;
 		// Si el enemigo sigue vivo y esta sangrando da feedback
 		if (!levelFailed(this.enemies[index]) && this.enemies[index].isBleeding()){
