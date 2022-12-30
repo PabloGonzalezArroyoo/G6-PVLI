@@ -424,7 +424,7 @@ export default class BattleScene extends Phaser.Scene {
 					this.dialogBox.clearText();																	// Borrar texto previo
 					this.time.delayedCall(2000, () => {
 						this.music.stop();
-						this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory, music: music});});
+						this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory, music: this.music});});
 				}
 				else this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects()})});
 		}
