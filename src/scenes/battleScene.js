@@ -35,8 +35,8 @@ export default class BattleScene extends Phaser.Scene {
 		super({ key: 'battleScene' });
 		this.dialogBox;
 		this.descriptionBox;
-		this.actionBox;
 		this.lootBox;
+		this.lootDuration = 3000;
 		this.indicator;
 		this.previousLetterTime = 0;
 
@@ -77,11 +77,10 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('alienatedCorsair', 'assets/characters/enemies/alienatedCorsair.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('ensignDrake', 'assets/characters/enemies/ensignDrake.png', {frameWidth: 32, frameHeight:32});
 		
-		// Descripcion
-		this.load.image('description', 'assets/scenes/battle/dialogBox.png');
+		// Caja de descripción y acciones
+		this.load.image('box', 'assets/scenes/battle/box.png');
 		
 		// Acciones (botones)
-		this.load.image('cuadroAcciones', 'assets/scenes/battle/actionsBox.png');
 		this.load.spritesheet('botonAtaque', 'assets/scenes/battle/attackButton.png', {frameWidth: 241, frameHeight: 67});
 		this.load.spritesheet('botonDefensa', 'assets/scenes/battle/defenseButton.png', {frameWidth: 241, frameHeight: 67});
 		this.load.spritesheet('botonObjetos', 'assets/scenes/battle/objectsButton.png', {frameWidth: 241, frameHeight: 67});
@@ -136,6 +135,9 @@ export default class BattleScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
+		const width = this.scale.width;
+    	const height = this.scale.height;
+
 		// Variables constantes y se destruyen los eventos anteriores
       	this.emitter.destroy();
 		this.camera = this.cameras.main;
@@ -173,17 +175,16 @@ export default class BattleScene extends Phaser.Scene {
 		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
 		
 		// Descripcion
-		this.add.image(0, 0, 'description').setOrigin(0, 0);
+		this.descriptionBox = this.add.image(width/2, height - 225, 'box').setOrigin(0, 0).setInteractive();
+		this.descriptionBox.on('pointerdown', ()=> {this.dialogBox.printText()});
 
 		// Cuadro de dialogo
 		this.dialogBox = new DialogBox(this, 545, 565, 450); 
 
 		// Acciones
-		this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
+		this.add.image(3, height - 225, 'box').setOrigin(0, 0);
 		
 		// Loot
-		const width = this.scale.width;
-    	const height = this.scale.height;
 		this.lootBox = this.add.image(width/2, height/2, 'lootBox').setScale(2,2).setVisible(false);
 
 		// Indicadores de daño
@@ -526,6 +527,7 @@ export default class BattleScene extends Phaser.Scene {
 				this.DisableQueLocura(true);
 		}
 	}
+
 	DisableEnemy()
 	{
 		this.enemies.forEach(Element => {
@@ -557,7 +559,7 @@ export default class BattleScene extends Phaser.Scene {
 			this.emitter.destroy();
 			this.dialogBox.clearText();		// Borrar texto previo				
 			this.EnableLoot();				    // Loot
-			this.time.delayedCall(3000, () => {
+			this.time.delayedCall(this.lootDuration, () => {
 				musicFadeOut();				      // Fadeout de la música
 				this.camera.fadeOut(1000, 0, 0, 0); // fadeOut(time, R, G, B), 000 = Black
 				this.camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
@@ -621,13 +623,13 @@ export default class BattleScene extends Phaser.Scene {
 		// Si no me ha tocado arma
 		if (!weaponLoot) {
 			text = '¡Has conseguido ' + listOfItems.healths[randomFood].key + ' !';
-			this.add.image(width/2,height/2, foodImgID).setScale(6,6);
+			this.add.image(width/2,height/2 + 50, foodImgID).setScale(6,6);
 		}
 		// Si me ha tocado arma
 		else {
 			text = '¡Has conseguido ' + this.inventory.weapons[weaponImgID].weapon.name + ' y \n' + itemQuantity + ' de ' + listOfItems.healths[randomFood].key + ' !';
-			this.add.image(width/3, height/2, weaponImgID).setScale(6,6);
-			this.add.image(width/1.5, height/2, foodImgID).setScale(6,6);
+			this.add.image(width/3, height/2 + 50, weaponImgID).setScale(6,6);
+			this.add.image(width/1.5, height/2 + 50, foodImgID).setScale(6,6);
 			if (itemQuantity > 1) this.add.text(width/1.5 + 20, height/2 + 20, itemQuantity, {}).setScale(3,3).setFontFamily('Silkscreen');
 		}
 		
