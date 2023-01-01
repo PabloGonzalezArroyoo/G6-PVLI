@@ -26,7 +26,7 @@ export default class Player extends Character {
 
     // Animación, activación y cálculo de turnos de la defensa
     defense(){
-        this.turnEffectController.activateDefense(3);
+        this.turnEffectController.activateDefense(5);
         if (this._defenseBoost < 4) this._defenseBoost++;
         this.animator.playDefense();
         this.animator.once("animationcomplete-defense",()=>{

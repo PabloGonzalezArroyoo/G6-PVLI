@@ -292,7 +292,7 @@ export default class BattleScene extends Phaser.Scene {
 			
       		case 'defense': 																	// Si selecciona defenderse
 				this.dialogBox.clearText();														// Borrar texto previo
-				this.dialogBox.setTextToDisplay('Maria Pita aumenta su defensa durante 3 turnos');
+				this.dialogBox.setTextToDisplay('Maria Pita aumenta su defensa durante 5 turnos');
 				this.emitter.once('finishTexting', () => {
 					this.player.defense()
 					this.indicator.updateInd('player', 'def', this.player.healthController.getPosition(), ""); 	// Actualizar indicador
