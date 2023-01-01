@@ -247,6 +247,14 @@ export default class BattleScene extends Phaser.Scene {
 
 		this.dialogBox.clearText();
 		this.dialogBox.printText('Escoge una acción');
+
+		// Skip texto con teclado
+		this.input.keyboard.on('keydown-ENTER', (event) => {
+			if (this.descriptionBox.input.enabled && !this.keyboardInput.button.isEnabled()) {
+				this.dialogBox.printText();
+				this.descriptionBox.disableInteractive();
+			}
+		});
 	}
 
 	update(t,dt) {
