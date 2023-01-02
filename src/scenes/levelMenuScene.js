@@ -186,6 +186,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 	}
 	saveData()
 	{
+		window.localStorage.clear();
+		window.localStorage.setItem("equipped_"+this.inventory.getEquipedWeapon().imgID,1);
 		for(var i = 0;i<levels.length;i++)
 		{
 			if(levels[i].getState()=== 2) window.localStorage.setItem("level_"+i,1);
@@ -199,7 +201,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		}
 		for (var prop in this.inventory.healths) {
 			if (Object.prototype.hasOwnProperty.call(this.inventory.healths, prop)) {
-				window.localStorage.removeItem("item_"+prop);
 				window.localStorage.setItem("item_"+prop,this.inventory.healths[prop].amount);
 			}
 		}
