@@ -81,6 +81,10 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// Música
 		this.load.audio('Travelling to the End of the Sea', ['assets/scenes/levelsMenu/Travelling to the End of the Sea - Vivu.mp3']);
+
+		// Efectos de sonido
+		this.load.audio('menu', ['assets/scenes/levelsMenu/sfx/menu.mp3']);
+		this.load.audio('open', ['assets/scenes/inventory/sfx/open.mp3']);
 	}
 
 	create() {
@@ -101,6 +105,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 		var music = this.sound.add('Travelling to the End of the Sea');
     	music.play(musicConfig);
 
+		this.open = this.sound.add('open');
+
 		// Fade In
 		camera.fadeIn(1000, 0, 0, 0);
 
@@ -119,6 +125,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// Botón de inventario
 		this.inventoryButton = new Button(this, 968, 43, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
+			this.open.play();
 			music.setVolume(0.4);
 			this.scene.sleep('levelMenuScene');							// Parar la escena de menú
 			this.scene.wake('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory}); // Reanudar la escena de inventario

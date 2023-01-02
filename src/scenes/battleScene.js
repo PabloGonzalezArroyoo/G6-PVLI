@@ -128,8 +128,18 @@ export default class BattleScene extends Phaser.Scene {
 		// Transición
 		this.load.spritesheet('fadeIn', 'assets/scenes/transitions/fadeInBattleTransition.png', {frameWidth: 1024, frameHeight: 768});
 
-		// Música -> CAMBIAR POR LA CORRECTA CUANDO LA HAYAMOS DECIDIDO
-		this.load.audio('Time to Fight!', ['assets/scenes/battle/vivivivivi - Mewlzebub.mp3']);
+		// Música
+		this.load.audio('Mewlzebub', ['assets/scenes/battle/vivivivivi - Mewlzebub.mp3']);
+
+		// Efectos de sonido
+		this.load.audio('hit', ['assets/scenes/battle/sfx/hit.mp3']);
+		this.load.audio('heal', ['assets/scenes/battle/sfx/heal.mp3']);
+		this.load.audio('weapon', ['assets/scenes/battle/sfx/weapon.mp3']);
+		this.load.audio('charge', ['assets/scenes/battle/sfx/charge.mp3']);
+		this.load.audio('discharge', ['assets/scenes/battle/sfx/discharge.mp3']);
+		this.load.audio('poisonOrBleed', ['assets/scenes/battle/sfx/poisonOrBleed.mp3']);
+		this.load.audio('open', ['assets/scenes/inventory/sfx/open.mp3']);
+		this.load.audio('menu', ['assets/scenes/battle/sfx/menu.mp3']);
 	}
 
 	/**
@@ -152,8 +162,18 @@ export default class BattleScene extends Phaser.Scene {
 			loop: true,
 			delay: 0
 		}
-		this.music = this.sound.add('Time to Fight!');
+		this.music = this.sound.add('Mewlzebub');
     	this.music.play(musicConfig);
+
+		// Efectos de sonido
+		this.hit = this.sound.add('hit');
+		this.heal = this.sound.add('heal');
+		this.charge = this.sound.add('charge');
+		this.discharge = this.sound.add('discharge');
+		this.weapon = this.sound.add('weapon');
+		this.poisonOrBleed = this.sound.add('poisonOrBleed');
+		this.open = this.sound.add('open');
+		this.menu = this.sound.add('menu');
 
 		// Animación de la batalla final
 		this.anims.create({
@@ -207,6 +227,7 @@ export default class BattleScene extends Phaser.Scene {
 			[new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('attack')}),
 			// Botón de inventario
 		 	new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this.keyboardInput, () => {
+				this.open.play();
 				this.music.setVolume(0.4);										// Bajar la música
 				this.scene.sleep('battleScene');								// Parar la escena de batalla
 				this.scene.wake('inventoryScene', {scene: 'battleScene', inventory: this.inventory});				// Reanudar la escena de inventario
@@ -245,7 +266,7 @@ export default class BattleScene extends Phaser.Scene {
 		});
 		this.add.sprite(1024, 768, 'fadeIn').setOrigin(1, 1).play('transition');
 
-		
+		// Texto inicial
 		this.dialogBox.clearText();
 		this.dialogBox.setTextToDisplay('Escoge una acción');
 		this.dialogBox.printText();
@@ -297,19 +318,21 @@ export default class BattleScene extends Phaser.Scene {
 						   ' con ' + this.player.inventory.getEquipedWeapon().name);
 						this.emitter.once('finishTexting', () => {
 							this.player.attack(this.selectedEnemy);
+							this.hit.play();	
 							this.indicator.updateInd("player", "damage", this.selectedEnemy.healthController.getPosition(), this.player.getDamage()); // Actualizar indicador
 						});
 					});	
-				} else {																                // Si solo hay uno
+				} else {																// Si solo hay uno
 					this.selectedEnemy = this.enemies[0];
-					this.dialogBox.clearText();														// Borrar texto previo
+					this.dialogBox.clearText();											// Borrar texto previo
 					this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
 						' con ' + this.player.inventory.getEquipedWeapon().name);
 					this.emitter.once('finishTexting', () => {
 						this.player.attack(this.enemies[0]);
+						this.hit.play();	
 						this.indicator.updateInd("player", "damage", this.selectedEnemy.healthController.getPosition(), this.player.getDamage()); // Actualizar indicador
 					});
-				}			
+				}		
 				break;			
 			
       		case 'defense': 																	// Si selecciona defenderse
@@ -321,7 +344,7 @@ export default class BattleScene extends Phaser.Scene {
 				});
 				break;
 			
-      		case 'object' : 																	// Si selecciona un objeto
+      		case 'object': 																		// Si selecciona un objeto
 				this.dialogBox.clearText();														// Borrar texto previo
 				if (item.type === 'WEAPON') this.dialogBox.setTextToDisplay('Maria Pita ha cambiado de arma a ' + item.name);
 				else this.dialogBox.setTextToDisplay('Maria Pita ha usado ' + item.name + ' y se curó ' + item.getHealthValue() + ' de vida');
@@ -329,8 +352,14 @@ export default class BattleScene extends Phaser.Scene {
 					this.player.useItem(item);
 
 					// Actualizar indicador
-					if (item.type === "HEALTH") this.indicator.updateInd("player", "health" , this.player.healthController.getPosition(), item.getHealthValue());
-					else this.indicator.updateInd("player", "weapon", this.player.healthController.getPosition(), item.getAttack());
+					if (item.type === "HEALTH") {
+						this.indicator.updateInd("player", "health" , this.player.healthController.getPosition(), item.getHealthValue());
+						this.heal.play();
+					} 
+					else {
+						this.indicator.updateInd("player", "weapon", this.player.healthController.getPosition(), item.getAttack());
+						this.weapon.play();
+					}
 					});
 				break;
 			
@@ -354,6 +383,7 @@ export default class BattleScene extends Phaser.Scene {
 						this.descriptionBox.setInteractive();
 						this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 						this.emitter.once('finishTexting', () => {
+								this.charge.play();
 								this.player.quelocura(this.enemies, this.selectedEnemy);
 							});
 						});	
@@ -362,7 +392,8 @@ export default class BattleScene extends Phaser.Scene {
 					this.dialogBox.clearText();														// Borrar texto previo
 					this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 					this.emitter.once('finishTexting', () => {
-						this.player.quelocura(this.enemies, this.enemies[0]);
+						this.charge.play();
+						this.player.quelocura(this.enemies, this.enemies[0], this.discharge);
 					});
 				}
 				break;
@@ -388,6 +419,7 @@ export default class BattleScene extends Phaser.Scene {
 				
 				// Si el ataque no ha sido con habilidad pasar al siguiente turno
 				if (typeof attack == 'number'){
+					this.hit.play();
 					index++;
 					
 					if (levelFailed(this.player)) {
@@ -430,12 +462,13 @@ export default class BattleScene extends Phaser.Scene {
 	UpdatePlayerEffects() {
 		this.descriptionBox.setInteractive();
 		// Si el jugador esta envenenado da feedback
-		if (this.player.isBleeding()){
+		if (this.player.isBleeding()) {
 			this.dialogBox.clearText();
 			this.dialogBox.setTextToDisplay('Maria Pita pierde vida por el veneno');
 			this.emitter.once('finishTexting', () => {
 				this.player.updateTurn();
 				this.indicator.updateInd("player", "poison", this.player.healthController.getPosition(), this.player.getBleedDamage());
+				this.poisonOrBleed.play();
 				if (levelFailed(this.player)) {
 					this.dialogBox.clearText();																	// Borrar texto previo
 					this.time.delayedCall(2000, () => {
@@ -461,6 +494,7 @@ export default class BattleScene extends Phaser.Scene {
 			this.emitter.once('finishTexting', () => {
 				this.enemies[index].updateTurn();
 				this.indicator.updateInd("player", "bleed", this.enemies[index].healthController.getPosition(), this.enemies[index].getBleedDamage()); // Actualizar indicador
+				this.poisonOrBleed.play();
 				index++;
 				if (levelCompleted(this.enemies)){
 					this.dialogBox.clearText();						// Borrar texto previo

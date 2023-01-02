@@ -51,11 +51,12 @@ export default class Player extends Character {
     }
 
     // Animación y ejecución del qué locura
-    quelocura(enemies, index){
+    quelocura(enemies, index, sound){
         this.animator.playWhatAMadness();
         this.animator.once("animationcomplete-whatAmadness",()=>{
             this.inventory.equipedWeapon.queLocura(this, enemies, index);
         });
+        this.animator.once("animationcomplete-attack", () => {sound.play()});
     }
 
     // Calcula el ataque recibido según el arma equipada y los efectos secundarios

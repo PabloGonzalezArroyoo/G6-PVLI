@@ -27,6 +27,9 @@ export default class TitleScene extends Phaser.Scene {
 
 		// Música
 		this.load.audio('Pirates of the Atlantic', ['assets/scenes/title/Pirates of the Atlantic - Vivu.mp3']);
+
+		// Efectos de sonido
+		this.load.audio('select', ['assets/scenes/select.mp3']);
 	}
 
 	create() {

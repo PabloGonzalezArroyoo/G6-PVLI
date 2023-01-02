@@ -62,6 +62,9 @@ export default class InventoryScene extends Phaser.Scene {
 
 		// Icónos de qué locura
 		this.load.spritesheet('icons', 'assets/scenes/inventory/icons.png', {frameWidth: 16, frameHeight: 8});
+
+		// Efectos de sonido
+		this.load.audio('menu', ['assets/scenes/inventory/sfx/menu.mp3']);
 	}
 
 	/**
@@ -85,7 +88,7 @@ export default class InventoryScene extends Phaser.Scene {
 		// this.inventory.addWeapon('sacho');
 		// this.inventory.addWeapon('fouc');
 		// this.inventory.addWeapon('guad');
-		
+
 		// Guardar la escena de la que te han despertado y aplicar cambios del inventario
 		this.events.on('wake', (scene, data) => {
 			this.inventory = data.inventory;
