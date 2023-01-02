@@ -245,8 +245,10 @@ export default class BattleScene extends Phaser.Scene {
 		});
 		this.add.sprite(1024, 768, 'fadeIn').setOrigin(1, 1).play('transition');
 
+		
 		this.dialogBox.clearText();
-		this.dialogBox.printText('Escoge una acción');
+		this.dialogBox.setTextToDisplay('Escoge una acción');
+		this.dialogBox.printText();
 
 		// Skip texto con teclado
 		this.input.keyboard.on('keydown-ENTER', (event) => {
@@ -278,16 +280,19 @@ export default class BattleScene extends Phaser.Scene {
 				this.UpdateQueLocura(35)																
 				this.dialogBox.clearText();												// Borrar texto previo
 				if (this.enemies.length > 1) {
-					this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
-					// Se hace a todos los enemigos interactuables
-					this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {
-						Element.animator.setInteractive();
-						this.keyboardInput.changeButton(this.enemies[0]);	
-					});});
-					this.emitter.once('enemyselected',() => {
-					this.keyboardInput.changeButton(this.botones[0]);
-					this.DisableEnemy();
-					this.dialogBox.clearText();														// Borrar texto previo
+						this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
+						// Se hace a todos los enemigos interactuables
+						this.emitter.once('finishTexting', () => {
+							this.enemies.forEach(Element => {
+								Element.animator.setInteractive();
+								this.keyboardInput.changeButton(this.enemies[0]);	
+							});
+						});
+						this.emitter.once('enemyselected',() => {
+						this.keyboardInput.changeButton(this.botones[0]);
+						this.DisableEnemy();
+						this.dialogBox.clearText();										// Borrar texto previo
+						this.descriptionBox.setInteractive();
 					  	this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
 						   ' con ' + this.player.inventory.getEquipedWeapon().name);
 						this.emitter.once('finishTexting', () => {
@@ -332,8 +337,8 @@ export default class BattleScene extends Phaser.Scene {
       		case 'queLocura' : 																	// Si selecciona QueLocura
 				this.DisableQueLocura(); 																	
 				this.dialogBox.clearText();														// Borrar texto previo
-				if (this.enemies.length > 1 && (this.player.inventory.getEquipedWeapon().imgID !== 'cimMad'||
-						this.player.inventory.getEquipedWeapon().imgID !== 'CimAc'||this.player.inventory.getEquipedWeapon().imgID !== 'cimLoc')) {											// Si hay más de un enemigo en escena
+				if (this.enemies.length > 1 && (this.player.inventory.getEquipedWeapon().imgID !== 'cimMad'&&
+						this.player.inventory.getEquipedWeapon().imgID !== 'cimAc'&& this.player.inventory.getEquipedWeapon().imgID !== 'cimLoc')) {											// Si hay más de un enemigo en escena
 					this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
 					//Se hace a todos los enemigos interactuables
 					this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {
@@ -346,6 +351,7 @@ export default class BattleScene extends Phaser.Scene {
 						this.keyboardInput.changeButton(this.botones[0]);
 						this.DisableEnemy();
 						this.dialogBox.clearText();													// Borrar texto previo
+						this.descriptionBox.setInteractive();
 						this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 						this.emitter.once('finishTexting', () => {
 								this.player.quelocura(this.enemies, this.selectedEnemy);
@@ -487,10 +493,6 @@ export default class BattleScene extends Phaser.Scene {
 
 	// Activa y vuelve visible los botones
 	EnableButtons(){
-		// Texto de escoger accion
-		this.dialogBox.clearText();
-		this.dialogBox.printText('Escoge una acción');
-
 		this.queLocuraBackground.visible = true;
 		for(var i=0; i < this.botones.length; i++) {
 			if(i === 3 && this.currentQueLocura < 100){
@@ -511,6 +513,11 @@ export default class BattleScene extends Phaser.Scene {
 			}
 			this.keyboardInput.changeButton(this.botones[3]);
 		}
+
+		// Texto de escoger accion
+		this.dialogBox.clearText();
+		this.dialogBox.setTextToDisplay('Escoge una acción');
+		this.dialogBox.printText();
 	}
 
 	// Impide seleccionar que locura y pone el contador a cero
