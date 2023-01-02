@@ -6,7 +6,8 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
         /* Animación */
         // Sprite en la UI
         super(scene, x, y, 'lifeBar');
-
+        
+        this.colorBarDuration = 500;
         this.barScaleX = this.barScaleY = 4; // Cambiar este valor para cambiar el tamaño de la barra de vida
         this.colorBarScaleX = this.barScaleX * 36;
         this.colorBarScaleY = this.barScaleX * 5;
@@ -60,7 +61,7 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
                     width: this.colorBarScaleX * (this.currentHealth/this.maxHealth),
                     fillColor: this.color,
                     ease: 'Linear',
-                    duration: 2000,
+                    duration: this.colorBarDuration,
                 });
             }
 
