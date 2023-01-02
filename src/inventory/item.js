@@ -82,11 +82,11 @@ export class WeaponItem extends Item {
 			let dmg = player.getDamage();
 			dmg = dmg * 60 / 100;
 			for (let i = 0; i < times; i++)
-				enemy.healthController.changeHealth(-dmg);
+				player.attack(enemy, dmg);
 			return dmg * times;
 		}
 	}
-	// Convierte un porcentaje del daño ifligido a vida
+	// Convierte un porcentaje del daño infligido a vida
 	static lifeAbsorption(percentage) {
 		return function (player, enemies, enemy) {
 			let dmg = player.getDamage();

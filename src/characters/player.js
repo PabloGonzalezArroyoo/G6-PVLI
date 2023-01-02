@@ -16,12 +16,12 @@ export default class Player extends Character {
     getDamage() { return this.inventory.getEquipedWeapon().getAttack(); }
 
     // Ataque al enemigo
-    attack(enemy){
+    attack(enemy, dmg = this.getDamage()){
         // Animacion de ataque
         this.animator.playAttack();
         // Le baja vida al enemigo
         this.animator.once("animationcomplete-attack",
-            () => {enemy.receiveAttack(-this.getDamage());});
+            () => {enemy.receiveAttack(-dmg);});
     }
 
     // Animación, activación y cálculo de turnos de la defensa
