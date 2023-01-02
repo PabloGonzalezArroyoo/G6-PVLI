@@ -112,14 +112,14 @@ export class DrunkRuffian extends Enemy {
 // Pirata maloliente
  export class StinkyPirate extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'stinkyPirate', 100, 20);
+        super(scene, x, y, 'stinkyPirate', 100, 15);
     }
 }
 
 // Marinero escorbutado
 export class ScurviedSailor extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'scurviedSailor', 150, 30);
+        super(scene, x, y, 'scurviedSailor', 150, 20);
     }
     
     // Atacar con un 15% de probabilidad de hacer su habilidad
@@ -137,7 +137,7 @@ export class ScurviedSailor extends Enemy {
 // Bucanero experimentado
  export class ExperiencedBuccaneer extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'experiencedBuccaneer', 200, 40);
+        super(scene, x, y, 'experiencedBuccaneer', 200, 30);
     }
 
     // Atacar con un 15% de probabilidad de hacer su habilidad
@@ -162,7 +162,7 @@ export class ScurviedSailor extends Enemy {
 // Corsario enajenado
  export class AlienatedCorsair extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'alienatedCorsair', 250, 50);
+        super(scene, x, y, 'alienatedCorsair', 250, 35);
     }
     
     // Atacar con un 15% de probabilidad de hacer su habilidad
