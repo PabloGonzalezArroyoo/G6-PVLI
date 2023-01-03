@@ -64,7 +64,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 				levels[window.localStorage.key(i).split("_")[1]].setCompleted();
 			}
 		}
-
 	}
 
 	preload() {
@@ -193,7 +192,22 @@ export default class LevelMenuScene extends Phaser.Scene {
 	}
 	saveData()
 	{
-		window.localStorage.clear();
+		if(this.inventory){
+		var x = 0
+		var found=false;
+		while(x<window.localStorage.length && !found)
+		{
+			var name=window.localStorage.key(x);
+			if(window.localStorage.key(x).split("_")[0]==="equipped")
+			{
+				
+				window.localStorage.removeItem(window.localStorage.key(x));
+				found=true;
+			}
+			x++;
+		}
+	}
+		
 		window.localStorage.setItem("equipped_"+this.inventory.getEquipedWeapon().imgID,1);
 		for(var i = 0;i<levels.length;i++)
 		{
