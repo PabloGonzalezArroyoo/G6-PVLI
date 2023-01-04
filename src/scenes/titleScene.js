@@ -22,7 +22,9 @@ export default class TitleScene extends Phaser.Scene {
 		this.load.spritesheet('titleAnim','assets/scenes/title/TittleAnim.png',{frameWidth:1024, frameHeight: 768});
 
 		// Imagen de botones
-		this.load.spritesheet('play', 'assets/scenes/title/playButton.png', {frameWidth: 37, frameHeight: 14});
+		//this.load.spritesheet('play', 'assets/scenes/title/playButton.png', {frameWidth: 37, frameHeight: 14});
+		this.load.spritesheet('newGame', 'assets/scenes/title/newGameButton.png', {frameWidth: 108, frameHeight: 14});
+		this.load.spritesheet('continueGame', 'assets/scenes/title/continueGameButton.png', {frameWidth: 108, frameHeight: 14});
 		this.load.spritesheet('inventory', 'assets/scenes/levelsMenu/inventoryButtons.png', {frameWidth: 30, frameHeight: 18});
 
 		// Música
@@ -65,8 +67,14 @@ export default class TitleScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 
 		// Botón "JUGAR" 
-		var button = new Button(this, 514, 690,'play', 0, 1, 2, this.keyboardInput, jumpToLevelMenuScene).setScale(5, 5);
-		this.keyboardInput.setStartButton(button);
+		this.botones = [];
+		this.botones.push(new Button(this, this.scale.width/2, this.scale.height - 150,'newGame', 0, 1, 2, this.keyboardInput, newGame).setScale(5, 5));
+		this.keyboardInput.setStartButton(this.botones[0]);
+
+		if (window.localStorage.length > 0) {
+			this.botones.push(new Button(this, this.scale.width/2, this.scale.height - 70,'continueGame', 0, 1, 2, this.keyboardInput, jumpToLevelMenuScene).setScale(5, 5));
+			this.inicializeTitleButtonConnections();
+		}
 
 		// Inventario del jugador
 		if (!this.inventory){
@@ -94,19 +102,30 @@ export default class TitleScene extends Phaser.Scene {
 				}
 			}
 		} 
-
+		
 		// Gestiona el fadeOut y el inicio de la escena de niveles y la escena de inventario en paralelo
-		function jumpToLevelMenuScene() {
+		function jumpToLevelMenuScene(state = 'continue') {
 			// Fade Out
-			button.setVisible(false);
 			musicFadeOut();
 			camera.fadeOut(1000, 0, 0, 0); // fadeOut(time, R, G, B), 000 = Black
-			camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+			camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
 				music.stop();
-				self.scene.start('cinematicScene', {inventory: self.inventory, key: 'start'});
+				if (state === 'addCinematic') jumpToCinematicScene(state);
+				else self.scene.start('levelMenuScene', {inventory: self.inventory});
 			})
 			self.scene.launch('inventoryScene', {scene: 'titleScene', inventory: self.inventory});
 			self.scene.sleep('inventoryScene');
+		}
+
+		function jumpToCinematicScene() {
+			self.scene.start('cinematicScene', {inventory: self.inventory, key: 'start'});
+		}
+
+		function newGame() {
+			if (!this.inventory) {
+				window.localStorage.clear();
+			}
+			jumpToLevelMenuScene('addCinematic');
 		}
 
 		// Fadeout de la música
@@ -118,5 +137,10 @@ export default class TitleScene extends Phaser.Scene {
 				duration: 2000,
 			});
 		}
+	}
+
+	inicializeTitleButtonConnections() {
+		this.botones[0].setAdjacents(null, this.botones[1], null, null);
+		this.botones[1].setAdjacents(this.botones[0], null, null, null);
 	}
 }
