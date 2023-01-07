@@ -384,7 +384,7 @@ export default class BattleScene extends Phaser.Scene {
 						this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 						this.emitter.once('finishTexting', () => {
 								this.charge.play();
-								this.player.quelocura(this.enemies, this.selectedEnemy);
+								this.player.quelocura(this.enemies, this.selectedEnemy, this.discharge);
 							});
 						});	
 				} else {

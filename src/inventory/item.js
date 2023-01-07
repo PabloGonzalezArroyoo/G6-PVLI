@@ -49,7 +49,7 @@ export class WeaponItem extends Item {
 			let dmg = player.getDamage();
 			dmg /= enemies.length; //Divide el daño a realizar entre los enemigos de la escena
 			dmg += player.getDamage()*(percentage/100); //Le suma un porcentaje según el nivel del arma
-			enemies.forEach(enemy => {enemy.healthController.changeHealth(-dmg);}); // Le resta dicha vida a cada enemigo 
+			enemies.forEach(enemy => {player.attack(enemy, dmg);}); // Le resta dicha vida a cada enemigo 
 			return dmg;		
 		}
 	}
