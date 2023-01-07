@@ -77,28 +77,28 @@ export default class TitleScene extends Phaser.Scene {
 		}
 
 		// Inventario del jugador
-		if (!this.inventory){
+		if (!this.inventory) {
 			this.inventory = new Inventory();
-			for(var i=0;i<window.localStorage.length;i++)
-			{
+			for (var i = 0; i < window.localStorage.length; i++) {
 				//Carga el arma equipada
-				if(window.localStorage.key(i).split("_")[0]==="equipped")
-				{
+				if (window.localStorage.key(i).split("_")[0] === "equipped") {
 					this.inventory.setEquipedWeapon(window.localStorage.key(i).split("_")[1]);
 				}
+
 				//Si tenias el arma antes, cargala
-				if(window.localStorage.key(i).split("_")[0]==="weapon"){
+				if (window.localStorage.key(i).split("_")[0] === "weapon") {
 					this.inventory.addWeapon(window.localStorage.key(i).split("_")[1]);
 				}
+
 				//Carga la cantidad de items que tenias
-				else if(window.localStorage.key(i).split("_")[0]==="item"){	
+				else if (window.localStorage.key(i).split("_")[0] === "item") {	
 					//Como la bolla empieza con 1, si lo recargas, tienes que restar ese item	
-					if(window.localStorage.key(i).split("_")[1]==="bolla"){
+					if (window.localStorage.key(i).split("_")[1] === "bolla") {
 						this.inventory.addHealth(window.localStorage.key(i).split("_")[1],
-							parseInt(window.localStorage.getItem('item_'+window.localStorage.key(i).split("_")[1]))-1);
+							parseInt(window.localStorage.getItem('item_' + window.localStorage.key(i).split("_")[1])) - 1);
 					}
 					else this.inventory.addHealth(window.localStorage.key(i).split("_")[1],
-						parseInt(window.localStorage.getItem('item_'+window.localStorage.key(i).split("_")[1])));
+						parseInt(window.localStorage.getItem('item_' + window.localStorage.key(i).split("_")[1])));
 				}
 			}
 		} 
@@ -122,9 +122,8 @@ export default class TitleScene extends Phaser.Scene {
 		}
 
 		function newGame() {
-			if (!this.inventory) {
-				window.localStorage.clear();
-			}
+			window.localStorage.clear();
+			self.inventory = new Inventory();
 			jumpToLevelMenuScene('addCinematic');
 		}
 
