@@ -61,9 +61,8 @@ export default class InventoryScene extends Phaser.Scene {
 		this.load.image('info', 'assets/scenes/inventory/invInfo.png');
 
 		// Recuadro y botón info de qué locuras
-		this.load.spritesheet('infoButton', 'assets/scenes/inventory/infoButton.png', {frameWidth: 28, frameHeight: 28})
-		this.load.image('leyenda1', 'assets/scenes/inventory/infoBox1.png');
-		this.load.image('leyenda2', 'assets/scenes/inventory/infoBox2.png');
+		this.load.spritesheet('infoButton', 'assets/scenes/inventory/infoButton.png', {frameWidth: 12, frameHeight: 12});
+		this.load.image('leyenda', 'assets/scenes/inventory/infoBox.png');
 
 		// Icónos de qué locura
 		this.load.spritesheet('icons', 'assets/scenes/inventory/icons.png', {frameWidth: 16, frameHeight: 8});
@@ -77,22 +76,7 @@ export default class InventoryScene extends Phaser.Scene {
 	*/
 	create() {
 		// Loot inicial
-		this.inventory.addHealth('bolla');
-		this.inventory.addWeapon('cimMad');
-		// this.inventory.addWeapon('cimAc');
-		// this.inventory.addWeapon('cimLoc');
-		this.inventory.addWeapon('dagOx');
-		// this.inventory.addWeapon('dagAf');
-		// this.inventory.addWeapon('dagEx');
-		this.inventory.addWeapon('alMb');
-		// this.inventory.addWeapon('alVrd');
-		// this.inventory.addWeapon('alDem');
-		this.inventory.addWeapon('ropIng');
-		// this.inventory.addWeapon('ropCst');
-		// this.inventory.addWeapon('ropAl');
-		this.inventory.addWeapon('sacho');
-		// this.inventory.addWeapon('fouc');
-		// this.inventory.addWeapon('guad');
+		//this.inventory.addHealth('bolla');
 
 		// Guardar la escena de la que te han despertado y aplicar cambios del inventario
 		this.events.on('wake', (scene, data) => {
@@ -193,10 +177,8 @@ export default class InventoryScene extends Phaser.Scene {
 		// Botón de salir
 		this.inventoryButton = new Button(this, width - 56, 43, 'inventory', 2, 0, 1, this.keyboardInput, () => {
 			this.escape(); 
-			this.leyendBox1.setVisible(false); 
-			this.leyendBox2.setVisible(false);}).setScale(3, 3);
+			this.leyendBox.setVisible(false);}).setScale(3, 3);
 		this.keyboardInput.setStartButton(this.equipedWeaponButton);
-		this.inicializeButtonConnections()
 		
 		// Al pulsar la tecla ESC se sale de la escena de inventario
 		this.input.keyboard.on('keydown-ESC', () => { if (this.previousSceneName !== 'titleScene') this.escape(); });
@@ -214,22 +196,32 @@ export default class InventoryScene extends Phaser.Scene {
 		this.queLocuraBox = this.add.sprite(855, 56, 'icons').setScale(5, 5);
 		this.queLocuraBox.setVisible(false);
 
-		// Recuadro de leyende
-		this.leyendBox1 = this.add.image(0, 0, 'leyenda1').setOrigin(0, 0);
-		this.leyendBox2 = this.add.image(0, 0, 'leyenda2').setOrigin(0, 0);
-		this.leyendBox1.setVisible(false);
-		this.leyendBox2.setVisible(false);
+		// Recuadro de leyenda
+		this.leyendBox = this.add.image(0, 0, 'leyenda').setOrigin(0, 0);
+		this.leyendBox.setVisible(false);
+		
 
 		// Botón info que locuras
-		this.infoButton = new Button(this, width - 38, height - 50, 'infoButton', 0, 1, 2, this.keyboardInput,
-			() => { 																// OnClick
-				if (!this.leyendBox1.visible && !this.leyendBox2.visible) {
-						if (this.inventory.getEquipedWeapon().imgID !== "asta") this.leyendBox1.setVisible(true);
-						else this.leyendBox2.setVisible(true);
+		this.infoButton = new Button(this, width - 325, 57, 'infoButton', 0, 1, 2, this.keyboardInput,
+			() => {
+				if (this.leyendBox.visible) {
+					this.leyendBox.visible = false;
+					this.infoButton.x = width - 325;
+					this.infoButton.y = 57;
+					this.infoButton.setAdjacents(null, this.weaponButtons[2][0], null, this.inventoryButton);
+					this.unlockButtons();
 				}
-				else {this.leyendBox1.setVisible(false); this.leyendBox2.setVisible(false);}
-			}, 
-			() => {}, () => {}).setScale(2.5, 2.5); // OnPointerOver y OnPointerOut
+				else {
+					this.leyendBox.visible = true;
+					this.infoButton.x = width - 170;
+					this.infoButton.y = height - 120;
+					this.infoButton.setAdjacents(null, null, null, null);
+					this.lockButtons();
+				}
+			}).setScale(6, 6);
+
+
+		this.inicializeButtonConnections();
 	}
 
 	// SALIDA DE LA ESCENA
@@ -365,7 +357,8 @@ export default class InventoryScene extends Phaser.Scene {
 	// Inicializar conexiones de los botones para el input por teclado
 	inicializeButtonConnections(){
 		// Salir
-		this.inventoryButton.setAdjacents(null, this.weaponButtons[4][0], this.weaponButtons[4][0], null);
+		this.inventoryButton.setAdjacents(null, this.weaponButtons[4][0], this.infoButton, null);
+		this.infoButton.setAdjacents(null, this.weaponButtons[2][0], null, this.inventoryButton);
 		// Armas
 		this.equipedWeaponButton.setAdjacents(null, null, null, this.weaponButtons[0][0]);
 		for (let i = 0; i < 3; i++) this.weaponButtons[0][i].setAdjacents(this.weaponButtons[0][i-1], this.weaponButtons[0][i+1], this.equipedWeaponButton, this.weaponButtons[1][i]);
@@ -374,11 +367,38 @@ export default class InventoryScene extends Phaser.Scene {
 				this.weaponButtons[j][i].setAdjacents(this.weaponButtons[j][i-1], this.weaponButtons[j][i+1], this.weaponButtons[j - 1][i], this.weaponButtons[j + 1][i]);
 		for (let i = 0; i < 3; i++) this.weaponButtons[4][i].setAdjacents(this.weaponButtons[4][i-1], this.weaponButtons[4][i+1], this.weaponButtons[3][i], null);
 		this.weaponButtons[4][0].setAdjacent(this.inventoryButton, 'up');
+		for (let i = 0; i < 4; i++) this.weaponButtons[i][0].setAdjacent(this.infoButton, 'up');
 		this.weaponButtons[4][0].setAdjacent(this.inventoryButton, 'right');
 		for (let i = 0; i < 5; i++) this.weaponButtons[i][2].setAdjacent(this.foodButtons[Math.floor(i/2)], 'down');
 		// Comida
 		this.foodButtons[0].setAdjacents(this.weaponButtons[0][2], null, this.equipedWeaponButton, this.foodButtons[1]);
 		this.foodButtons[1].setAdjacents(this.weaponButtons[2][2], null, this.foodButtons[0], this.foodButtons[2]);
 		this.foodButtons[2].setAdjacents(this.weaponButtons[4][2], null, this.foodButtons[1], null);
+	}
+
+	lockButtons(){
+		this.inventoryButton.visible = false;
+		this.weaponButtons.forEach(array => {
+			array.forEach(button => {
+				button.visible = false;
+			});
+		});
+		this.foodButtons.forEach(tal => {
+			tal.visible = false;
+		});
+		this.equipedWeaponButton.visible = false;
+	}
+
+	unlockButtons(){
+		this.inventoryButton.visible = true;
+		this.weaponButtons.forEach(array => {
+			array.forEach(button => {
+				button.visible = true;
+			});
+		});
+		this.foodButtons.forEach(tal => {
+			tal.visible = true;
+		});
+		this.equipedWeaponButton.visible = true;
 	}
 }
