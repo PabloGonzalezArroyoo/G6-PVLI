@@ -27,7 +27,7 @@ export default class Player extends Character {
     // Animación, activación y cálculo de turnos de la defensa
     defense(){
         this.turnEffectController.activateDefense(3);
-        if (this._defenseBoost < 3) this._defenseBoost++;
+        if (this._defenseBoost < 4) this._defenseBoost++;
         this.animator.playDefense();
         this.animator.once("animationcomplete-defense",()=>{
                 this.healthController.scene.time.delayedCall(800, () => {
@@ -65,7 +65,7 @@ export default class Player extends Character {
         this.receivedDamage = damage;
         this.receivedDamage-=this.receivedDamage*(this.inventory.equipedWeapon.defValue/100);
         if(this.turnEffectController.defenseTurns > 0) { //Si quedan turnos de defensa
-             this.receivedDamage -= this.receivedDamage * (0.20 * this._defenseBoost);  //Reduce el daño segun los turnos de defensa que se tengan
+             this.receivedDamage -= this.receivedDamage * (0.15 * this._defenseBoost);  //Reduce el daño segun los turnos de defensa que se tengan
         }
         this.healthController.changeHealth(-this.receivedDamage);
         return this.receivedDamage;
