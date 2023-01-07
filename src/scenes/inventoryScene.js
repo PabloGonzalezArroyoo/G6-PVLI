@@ -55,10 +55,15 @@ export default class InventoryScene extends Phaser.Scene {
 		this.load.image('asta', 'assets/scenes/inventory/weapons/astaBandera.png');
 
 		// Recuadro de selección
-		this.load.spritesheet('selected', 'assets/scenes/inventory/selectedItem.png', {frameWidth: 32, frameHeight:32});
+		this.load.spritesheet('selected', 'assets/scenes/inventory/selectedItem.png', {frameWidth: 32, frameHeight: 32});
 
 		// Recuadro de nombre de las armas
-		this.load.spritesheet('info', 'assets/scenes/inventory/invInfo.png', {frameWidth: 30, frameHeight: 8});
+		this.load.image('info', 'assets/scenes/inventory/invInfo.png');
+
+		// Recuadro y botón info de qué locuras
+		this.load.spritesheet('infoButton', 'assets/scenes/inventory/infoButton.png', {frameWidth: 28, frameHeight: 28})
+		this.load.image('leyenda1', 'assets/scenes/inventory/infoBox1.png');
+		this.load.image('leyenda2', 'assets/scenes/inventory/infoBox2.png');
 
 		// Icónos de qué locura
 		this.load.spritesheet('icons', 'assets/scenes/inventory/icons.png', {frameWidth: 16, frameHeight: 8});
@@ -73,19 +78,19 @@ export default class InventoryScene extends Phaser.Scene {
 	create() {
 		// Loot inicial
 		this.inventory.addHealth('bolla');
-		// this.inventory.addWeapon('cimMad');
+		this.inventory.addWeapon('cimMad');
 		// this.inventory.addWeapon('cimAc');
 		// this.inventory.addWeapon('cimLoc');
-		// this.inventory.addWeapon('dagOx');
+		this.inventory.addWeapon('dagOx');
 		// this.inventory.addWeapon('dagAf');
 		// this.inventory.addWeapon('dagEx');
-		// this.inventory.addWeapon('alMb');
+		this.inventory.addWeapon('alMb');
 		// this.inventory.addWeapon('alVrd');
 		// this.inventory.addWeapon('alDem');
-		// this.inventory.addWeapon('ropIng');
+		this.inventory.addWeapon('ropIng');
 		// this.inventory.addWeapon('ropCst');
 		// this.inventory.addWeapon('ropAl');
-		// this.inventory.addWeapon('sacho');
+		this.inventory.addWeapon('sacho');
 		// this.inventory.addWeapon('fouc');
 		// this.inventory.addWeapon('guad');
 
@@ -185,8 +190,11 @@ export default class InventoryScene extends Phaser.Scene {
 			i++;
 		});
 
-		// Pintamos botón de salir
-		this.inventoryButton = new Button(this, width - 56, 43, 'inventory', 2, 0, 1, this.keyboardInput, () => {this.escape()}).setScale(3, 3);
+		// Botón de salir
+		this.inventoryButton = new Button(this, width - 56, 43, 'inventory', 2, 0, 1, this.keyboardInput, () => {
+			this.escape(); 
+			this.leyendBox1.setVisible(false); 
+			this.leyendBox2.setVisible(false);}).setScale(3, 3);
 		this.keyboardInput.setStartButton(this.equipedWeaponButton);
 		this.inicializeButtonConnections()
 		
@@ -205,6 +213,23 @@ export default class InventoryScene extends Phaser.Scene {
 		// Imagen de qué locura
 		this.queLocuraBox = this.add.sprite(855, 56, 'icons').setScale(5, 5);
 		this.queLocuraBox.setVisible(false);
+
+		// Recuadro de leyende
+		this.leyendBox1 = this.add.image(0, 0, 'leyenda1').setOrigin(0, 0);
+		this.leyendBox2 = this.add.image(0, 0, 'leyenda2').setOrigin(0, 0);
+		this.leyendBox1.setVisible(false);
+		this.leyendBox2.setVisible(false);
+
+		// Botón info que locuras
+		this.infoButton = new Button(this, width - 38, height - 50, 'infoButton', 0, 1, 2, this.keyboardInput,
+			() => { 																// OnClick
+				if (!this.leyendBox1.visible && !this.leyendBox2.visible) {
+						if (this.inventory.getEquipedWeapon().imgID !== "asta") this.leyendBox1.setVisible(true);
+						else this.leyendBox2.setVisible(true);
+				}
+				else {this.leyendBox1.setVisible(false); this.leyendBox2.setVisible(false);}
+			}, 
+			() => {}, () => {}).setScale(2.5, 2.5); // OnPointerOver y OnPointerOut
 	}
 
 	// SALIDA DE LA ESCENA
