@@ -31,6 +31,10 @@ export default class Button extends Phaser.GameObjects.Sprite {
     // Click
     onClick() {
         this.setFrame(this._frameOnDown);
+        if (this.scene.scene.key === 'titleScene' || this.scene.scene.key === 'cinematicScene' || this.scene.scene.key === 'inventoryScene') {
+            this.select = this.scene.sound.add('select');
+            this.select.play();
+        }
     }
 
     // Al dejar de clicar

@@ -16,12 +16,12 @@ export default class Player extends Character {
     getDamage() { return this.inventory.getEquipedWeapon().getAttack(); }
 
     // Ataque al enemigo
-    attack(enemy){
+    attack(enemy, dmg = this.getDamage()){
         // Animacion de ataque
         this.animator.playAttack();
         // Le baja vida al enemigo
         this.animator.once("animationcomplete-attack",
-            () => {enemy.receiveAttack(-this.getDamage());});
+            () => {enemy.receiveAttack(-dmg);});
     }
 
     // Animación, activación y cálculo de turnos de la defensa
@@ -51,11 +51,12 @@ export default class Player extends Character {
     }
 
     // Animación y ejecución del qué locura
-    quelocura(enemies, index){
+    quelocura(enemies, index, sound){
         this.animator.playWhatAMadness();
         this.animator.once("animationcomplete-whatAmadness",()=>{
             this.inventory.equipedWeapon.queLocura(this, enemies, index);
         });
+        this.animator.once("animationcomplete-attack", () => {sound.play()});
     }
 
     // Calcula el ataque recibido según el arma equipada y los efectos secundarios

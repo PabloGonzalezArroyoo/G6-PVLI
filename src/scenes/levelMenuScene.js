@@ -64,7 +64,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 				levels[window.localStorage.key(i).split("_")[1]].setCompleted();
 			}
 		}
-
 	}
 
 	preload() {
@@ -81,6 +80,10 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// Música
 		this.load.audio('Travelling to the End of the Sea', ['assets/scenes/levelsMenu/Travelling to the End of the Sea - Vivu.mp3']);
+
+		// Efectos de sonido
+		this.load.audio('menu', ['assets/scenes/levelsMenu/sfx/menu.mp3']);
+		this.load.audio('open', ['assets/scenes/inventory/sfx/open.mp3']);
 	}
 
 	create() {
@@ -101,6 +104,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 		var music = this.sound.add('Travelling to the End of the Sea');
     	music.play(musicConfig);
 
+		this.open = this.sound.add('open');
+
 		// Fade In
 		camera.fadeIn(1000, 0, 0, 0);
 
@@ -119,6 +124,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// Botón de inventario
 		this.inventoryButton = new Button(this, 968, 43, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
+			this.open.play();
 			music.setVolume(0.4);
 			this.scene.sleep('levelMenuScene');							// Parar la escena de menú
 			this.scene.wake('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory}); // Reanudar la escena de inventario
@@ -184,8 +190,25 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.levelButtons[10].setAdjacents(null, this.levelButtons[9], null, this.levelButtons[9]);
 		this.levelButtons[11].setAdjacents(this.levelButtons[9], null, null, this.levelButtons[9]);
 	}
-	saveData()
-	{
+
+	saveData() {
+		if(this.inventory){
+			var x = 0
+			var found=false;
+			while(x<window.localStorage.length && !found)
+			{
+				var name=window.localStorage.key(x);
+				if(window.localStorage.key(x).split("_")[0]==="equipped")
+				{
+					
+					window.localStorage.removeItem(window.localStorage.key(x));
+					found=true;
+				}
+				x++;
+			}
+		}
+		
+		window.localStorage.setItem("equipped_"+this.inventory.getEquipedWeapon().imgID,1);
 		for(var i = 0;i<levels.length;i++)
 		{
 			if(levels[i].getState()=== 2) window.localStorage.setItem("level_"+i,1);
@@ -199,7 +222,6 @@ export default class LevelMenuScene extends Phaser.Scene {
 		}
 		for (var prop in this.inventory.healths) {
 			if (Object.prototype.hasOwnProperty.call(this.inventory.healths, prop)) {
-				window.localStorage.removeItem("item_"+prop);
 				window.localStorage.setItem("item_"+prop,this.inventory.healths[prop].amount);
 			}
 		}
