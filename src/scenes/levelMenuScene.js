@@ -82,7 +82,7 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.load.audio('Travelling to the End of the Sea', ['assets/scenes/levelsMenu/Travelling to the End of the Sea - Vivu.mp3']);
 
 		// Efectos de sonido
-		this.load.audio('menu', ['assets/scenes/levelsMenu/sfx/menu.mp3']);
+		this.load.audio('menu', ['assets/scenes/battle/sfx/menu.mp3']);
 		this.load.audio('open', ['assets/scenes/inventory/sfx/open.mp3']);
 	}
 

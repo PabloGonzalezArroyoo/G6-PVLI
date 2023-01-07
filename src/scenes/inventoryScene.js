@@ -17,6 +17,7 @@ export default class InventoryScene extends Phaser.Scene {
 		this.previousSceneName;
 		this.emitter = EventDispatcher.getInstance();
 		this.handleLoot = false;
+		this.buttons = [];
 	}
 
 	/**
@@ -62,13 +63,11 @@ export default class InventoryScene extends Phaser.Scene {
 
 		// Recuadro y botón info de qué locuras
 		this.load.spritesheet('infoButton', 'assets/scenes/inventory/infoButton.png', {frameWidth: 12, frameHeight: 12});
+		this.load.spritesheet('closeButton', 'assets/scenes/inventory/closeButton.png', {frameWidth: 12, frameHeight: 12});
 		this.load.image('leyenda', 'assets/scenes/inventory/infoBox.png');
 
 		// Icónos de qué locura
 		this.load.spritesheet('icons', 'assets/scenes/inventory/icons.png', {frameWidth: 16, frameHeight: 8});
-
-		// Efectos de sonido
-		this.load.audio('menu', ['assets/scenes/inventory/sfx/menu.mp3']);
 	}
 
 	/**
@@ -76,10 +75,11 @@ export default class InventoryScene extends Phaser.Scene {
 	*/
 	create() {
 		// Loot inicial
-		//this.inventory.addHealth('bolla');
+		this.inventory.addHealth('bolla');
 
 		// Guardar la escena de la que te han despertado y aplicar cambios del inventario
 		this.events.on('wake', (scene, data) => {
+			this.activateButtons();
 			this.inventory = data.inventory;
 			this.previousSceneName = data.scene;
 			this.keyboardInput.changeButton(this.equipedWeaponButton);
@@ -103,7 +103,7 @@ export default class InventoryScene extends Phaser.Scene {
 
 		// ARMA EQUIPADA
 		this.equiped = this.add.image(217, 262, this.inventory.getEquipedWeapon().imgID).setScale(8, 8);
-		this.equipedWeaponButton = new Button(this, 217, 262, 'selected', 0, 1, 2, this.keyboardInput,
+		this.buttons.push(this.equipedWeaponButton = new Button(this, 217, 262, 'selected', 0, 1, 2, this.keyboardInput,
 			() => {
 				if (this.inventory.getEquipedWeapon().imgID !== 'puño' && this.inventory.getEquipedWeapon().imgID !== 'asta') { // OnClick
 					this.selected(this.inventory.getWeapons()['puño'], "W");
@@ -116,7 +116,7 @@ export default class InventoryScene extends Phaser.Scene {
 				this.updateUIInfo(this.inventory.getEquipedWeapon());
 			},	
 			() => {this.resetStatsBox(); this.dialogBox.clearText(); this.indicator.deactivateInd();} // OnPointerOut
-		).setScale(8, 8);
+		).setScale(8, 8));
 
 		this.weaponButtons = [];
 		for (let i = 0; i < 5; i++) this.weaponButtons[i] = [];
@@ -134,7 +134,7 @@ export default class InventoryScene extends Phaser.Scene {
 				
 				this.weaponsImages[val.i][val.j] = this.add.image(x, y, itemID).setScale(1.5,1.5);
 				if (!val.owned) this.weaponsImages[val.i][val.j].setVisible(false);
-				this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput,
+				this.buttons.push(this.weaponButtons[val.i][val.j] = new Button(this, x , y, 'selected', 0, 1, 2, this.keyboardInput,
 					() => {this.selected(val, "W")},							// OnClick
 					() => {if (val.owned) {										// OnPointerOver
 						this.showDescription(val.weapon);
@@ -142,7 +142,7 @@ export default class InventoryScene extends Phaser.Scene {
 						this.indicator.updateInd('inventory', 'inventory', {x: x, y: y}, val.weapon.name);
 					}}, 
 					() => {this.resetStatsBox(); this.dialogBox.clearText(); this.indicator.deactivateInd();} // OnPointerOut
-				).setScale(1.5,1.5);
+				).setScale(1.5,1.5));
 				i++;
 			}
 		});
@@ -160,7 +160,7 @@ export default class InventoryScene extends Phaser.Scene {
 			let x = val.i * 165 + width / 2; let y = 475;
 			this.foodImages[val.i] = this.add.image(x, y, itemID).setScale(3, 3);
 			if (!val.amount) this.foodImages[val.i].setVisible(false);
-			this.foodButtons[val.i] = new Button(this, x, y, 'selected', 0, 1, 2, this.keyboardInput,
+			this.buttons.push(this.foodButtons[val.i] = new Button(this, x, y, 'selected', 0, 1, 2, this.keyboardInput,
 				() => {if (val.amount) this.selected(val.item, "H", val.i)},   				// OnClick
 				() => {if (val.amount) { 													// OnPointerOver
 					this.showDescription(val.item); 
@@ -168,7 +168,7 @@ export default class InventoryScene extends Phaser.Scene {
 					this.indicator.updateInd('inventory', 'inventory', {x: x, y: y}, val.item.name);
 				}}, 
 				() => {this.resetStatsBox(); this.dialogBox.clearText(); this.indicator.deactivateInd();} // OnPointerOut
-			).setScale(3,3); 
+			).setScale(3,3)); 
 			this.foodTexts[val.i] = this.add.text(x + 5, y + 5, itemQuantity, {fontFamily: 'Silkscreen', fontSize: 40});
 			if (!val.amount) this.foodTexts[val.i].setVisible(false);
 			i++;
@@ -181,7 +181,13 @@ export default class InventoryScene extends Phaser.Scene {
 		this.keyboardInput.setStartButton(this.equipedWeaponButton);
 		
 		// Al pulsar la tecla ESC se sale de la escena de inventario
-		this.input.keyboard.on('keydown-ESC', () => { if (this.previousSceneName !== 'titleScene') this.escape(); });
+		this.input.keyboard.on('keydown-ESC', () => { 
+			/*COSITAS*/
+			if (this.leyendBox.visible) { 
+				this.deactivateInfo();
+			}
+			else if (this.previousSceneName !== 'titleScene') this.escape();
+		});
 		this.dialogBox = new DialogBox(this, 80, 620, 850).setColor('#65583c');
 
 		// Texto de daño, defensa de armas e items de curación
@@ -205,23 +211,15 @@ export default class InventoryScene extends Phaser.Scene {
 		this.infoButton = new Button(this, width - 325, 57, 'infoButton', 0, 1, 2, this.keyboardInput,
 			() => {
 				if (this.leyendBox.visible) {
-					this.leyendBox.visible = false;
-					this.infoButton.x = width - 325;
-					this.infoButton.y = 57;
-					this.infoButton.setAdjacents(null, this.weaponButtons[2][0], null, this.inventoryButton);
-					this.unlockButtons();
+					this.deactivateInfo();
 				}
 				else {
-					this.leyendBox.visible = true;
-					this.infoButton.x = width - 170;
-					this.infoButton.y = height - 120;
-					this.infoButton.setAdjacents(null, null, null, null);
-					this.lockButtons();
+					this.activateInfo();
 				}
-			}).setScale(6, 6);
-
+			}).setScale(4, 4);
 
 		this.inicializeButtonConnections();
+		this.deactiveButtons();
 	}
 
 	// SALIDA DE LA ESCENA
@@ -400,5 +398,31 @@ export default class InventoryScene extends Phaser.Scene {
 			tal.visible = true;
 		});
 		this.equipedWeaponButton.visible = true;
+	}
+
+	deactiveButtons(){
+		for (var i = 0; i < this.buttons.length; i++) this.buttons[i].setVisible(false);
+	}	
+
+	activateButtons(){
+		for (var i = 0; i < this.buttons.length; i++) this.buttons[i].setVisible(true);
+	}
+
+	deactivateInfo(){
+		this.leyendBox.visible = false;
+		this.infoButton.setTexture('infoButton');
+		this.infoButton.x = this.scale.width - 325;
+		this.infoButton.y = 57;
+		this.infoButton.setAdjacents(null, this.weaponButtons[2][0], null, this.inventoryButton);
+		this.unlockButtons();
+	}
+
+	activateInfo(){
+		this.leyendBox.visible = true;
+		this.infoButton.setTexture('closeButton');
+		this.infoButton.x = this.scale.width - 90;
+		this.infoButton.y = 120;
+		this.infoButton.setAdjacents(null, null, null, null);
+		this.lockButtons();
 	}
 }

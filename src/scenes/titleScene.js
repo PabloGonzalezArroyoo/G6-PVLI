@@ -10,6 +10,7 @@ import Inventory from '../inventory/inventory.js';
 export default class TitleScene extends Phaser.Scene {
 	constructor() {
 		super({ key: 'titleScene' });
+		this.buttons = [];
 	}
 
 	init(data) {
@@ -67,12 +68,11 @@ export default class TitleScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 
 		// Botón "JUGAR" 
-		this.botones = [];
-		this.botones.push(new Button(this, this.scale.width/2, this.scale.height - 150,'newGame', 0, 1, 2, this.keyboardInput, newGame).setScale(5, 5));
-		this.keyboardInput.setStartButton(this.botones[0]);
+		this.buttons.push(new Button(this, this.scale.width/2, this.scale.height - 150,'newGame', 0, 1, 2, this.keyboardInput, newGame).setScale(5, 5));
+		this.keyboardInput.setStartButton(this.buttons[0]);
 
 		if (window.localStorage.length > 0) {
-			this.botones.push(new Button(this, this.scale.width/2, this.scale.height - 70,'continueGame', 0, 1, 2, this.keyboardInput, jumpToLevelMenuScene).setScale(5, 5));
+			this.buttons.push(new Button(this, this.scale.width/2, this.scale.height - 70,'continueGame', 0, 1, 2, this.keyboardInput, jumpToLevelMenuScene).setScale(5, 5));
 			this.inicializeTitleButtonConnections();
 		}
 
@@ -105,7 +105,8 @@ export default class TitleScene extends Phaser.Scene {
 		
 		// Gestiona el fadeOut y el inicio de la escena de niveles y la escena de inventario en paralelo
 		function jumpToLevelMenuScene(state = 'continue') {
-			// Fade Out
+			for (var i = 0; i < self.buttons.length; i++) self.buttons[i].setVisible(false);
+			// Fade Out 
 			musicFadeOut();
 			camera.fadeOut(1000, 0, 0, 0); // fadeOut(time, R, G, B), 000 = Black
 			camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
@@ -139,7 +140,7 @@ export default class TitleScene extends Phaser.Scene {
 	}
 
 	inicializeTitleButtonConnections() {
-		this.botones[0].setAdjacents(null, this.botones[1], null, null);
-		this.botones[1].setAdjacents(this.botones[0], null, null, null);
+		this.buttons[0].setAdjacents(null, this.buttons[1], null, null);
+		this.buttons[1].setAdjacents(this.buttons[0], null, null, null);
 	}
 }
