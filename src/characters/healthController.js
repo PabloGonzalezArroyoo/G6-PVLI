@@ -65,7 +65,7 @@ export default class HealthController extends Phaser.GameObjects.Sprite {
                 });
             }
 
-            this.healthText.setText(Math.round(this.currentHealth));
+            this.healthText.setText(this.currentHealth);
         }
     
         if (finish) {

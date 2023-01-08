@@ -67,6 +67,7 @@ export default class Player extends Character {
         if(this.turnEffectController.defenseTurns > 0) { //Si quedan turnos de defensa
              this.receivedDamage -= this.receivedDamage * (0.15 * this._defenseBoost);  //Reduce el daño segun los turnos de defensa que se tengan
         }
+        this.receivedDamage = Math.round(this.receivedDamage);
         this.healthController.changeHealth(-this.receivedDamage);
         return this.receivedDamage;
     }
