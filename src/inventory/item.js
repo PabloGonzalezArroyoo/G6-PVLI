@@ -49,6 +49,7 @@ export class WeaponItem extends Item {
 			let dmg = player.getDamage();
 			dmg /= enemies.length; //Divide el daño a realizar entre los enemigos de la escena
 			dmg += player.getDamage()*(percentage/100); //Le suma un porcentaje según el nivel del arma
+			dmg = Math.round(dmg);
 			enemies.forEach(enemy => {player.attack(enemy, dmg);}); // Le resta dicha vida a cada enemigo 
 			return dmg;		
 		}
@@ -58,7 +59,6 @@ export class WeaponItem extends Item {
 		return function(player, enemies, enemy){
 			enemy.turnEffectController.activateBleed(percentage, 3);
 			return player.attack(enemy);
-           
 		}
 	}
 	// Impide atacar al enemigo durante los turnos que el arma dicte
@@ -81,6 +81,7 @@ export class WeaponItem extends Item {
 		return function(player, enemies, enemy) {
 			let dmg = player.getDamage();
 			dmg = dmg * 60 / 100;
+			dmg = Math.round(dmg);
 			for (let i = 0; i < times; i++)
 				player.attack(enemy, dmg);
 			return dmg * times;
@@ -91,7 +92,7 @@ export class WeaponItem extends Item {
 		return function (player, enemies, enemy) {
 			let dmg = player.getDamage();
 			player.attack(enemy);
-			player.healthController.changeHealth(dmg*percentage/100);
+			player.healthController.changeHealth(Math.round(dmg*percentage/100));
 		}
 	}
 	// Exclusivo del asta, determina el final del juego
