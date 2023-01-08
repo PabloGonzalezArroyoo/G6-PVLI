@@ -13,9 +13,10 @@ export class Enemy extends Character {
         this.adjacent={};
         // Hace al enemigo interactuable
         this.emmiter = EventDispatcher.getInstance();
-        this.animator.on('pointerover',()=>{this.selectButton()});
-        this.animator.on('pointerout',()=>{this.onPointerOut()});
-        this.animator.on('pointerdown',()=>{this.onReleaseClick()});
+        this.animator.on('pointerover',()=>{this.selectButton();});
+        this.animator.on('pointerout',()=>{this.onPointerOut();});
+        this.animator.on('pointerover',()=>{this.onOver();});
+        this.animator.on('pointerdown',()=>{this.onReleaseClick();});
     }
 
     // Destruye el animator y el healthcontroller
@@ -59,16 +60,22 @@ export class Enemy extends Character {
         this.emmiter.emit('enemyselected');
     }
     // Devuelve al enemigo a su estado inicial
-    onPointerOut() { this.animator.setScale(6) }
+    onPointerOut() { this.animator.setScale(6); }
 
     // Detecta si el enemigo está ya seleccionado o no
-    isSelected() { return this.animator.scale === 7 }
+    isSelected() { return this.animator.scale === 7; }
     
     // Selecciona al enemigo
-    selectButton() { this.animator.setScale(7) }
+    selectButton() { this.animator.setScale(7); }
+
+    // Cambia el enemigo seleccionado a este
+    onOver() {
+        if (this.scene.keyboardInput) this.scene.keyboardInput.changeButton(this);
+        else this.selectButton();
+    }
 
     // Devuelve si el animator está disponible
-    isEnabled() { return this.animator.input.enabled }
+    isEnabled() { return this.animator.input.enabled; }
     
     // Devuelve el nombre del enemigo
     getName() { 
