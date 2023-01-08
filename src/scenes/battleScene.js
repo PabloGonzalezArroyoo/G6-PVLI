@@ -22,7 +22,14 @@ const levelCompleted = function (enemies) {
 // Comprueba si el jugador ha muerto
 const levelFailed = function (player) {
 	let muerto = false;
-	if (player.healthController.getCurrentHealth() <= 0) muerto = true;
+	if (player.healthController.getCurrentHealth() <= 0){
+		muerto = true;
+		// Si pierdes con el asta equipada la pierdes
+		if (player.inventory && player.inventory.getEquipedWeapon().imgID === 'asta'){
+			player.inventory.substractWeapon('asta');
+			player.inventory.setEquipedWeapon('puño');
+		}
+	}
 	return muerto;
 }
 

@@ -348,12 +348,9 @@ export default class InventoryScene extends Phaser.Scene {
 		}
 
 		// Arma equipada
-		if (armas['asta'].owned) {
-			//this.equiped.destroy();
-			//this.equiped = this.add.sprite(217, 262, 'asta').setScale(8, 8);
-			this.equiped.setTexture('asta');
+		if (this.equiped.texture !== this.inventory.getEquipedWeapon().imgID) {
+			this.equiped.setTexture(this.inventory.getEquipedWeapon().imgID);
 		}
-
 	}
 
 	// Inicializar conexiones de los botones para el input por teclado
