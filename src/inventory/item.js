@@ -98,6 +98,8 @@ export class WeaponItem extends Item {
 	// Exclusivo del asta, determina el final del juego
 	static endGame() {
 		return function (player) {
+			player.inventory.substractWeapon('asta');
+			player.inventory.setEquipedWeapon('puño');
 			player.animator.scene.music.stop();
 			player.animator.scene.scene.start('cinematicScene', {inventory: player.animator.scene.inventory, key: 'end'});
 		}

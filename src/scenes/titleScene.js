@@ -14,7 +14,10 @@ export default class TitleScene extends Phaser.Scene {
 	}
 
 	init(data) {
-		if (data.inventory) this.inventory = data.inventory;
+		if (data.inventory){
+			this.inventory = data.inventory;
+			this.oldInventory = true;
+		}
 	}
 
 	preload() {
@@ -122,8 +125,10 @@ export default class TitleScene extends Phaser.Scene {
 				if (state === 'addCinematic') jumpToCinematicScene(state);
 				else self.scene.start('levelMenuScene', {inventory: self.inventory});
 			})
-			self.scene.launch('inventoryScene', {scene: 'titleScene', inventory: self.inventory});
-			self.scene.sleep('inventoryScene');
+			if (!self.oldInventory){
+				self.scene.launch('inventoryScene', {scene: 'titleScene', inventory: self.inventory});
+				self.scene.sleep('inventoryScene');
+			}
 		}
 
 		function jumpToCinematicScene() {
