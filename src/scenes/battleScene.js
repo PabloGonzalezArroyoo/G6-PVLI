@@ -219,7 +219,6 @@ export default class BattleScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 
 		// Botones de acción
-		
 		// Fondo boton QUE LOCURA sin cargar
 		this.queLocuraBackground = this.add.image(375, 697, 'botonQueLocura', 3);
 		this.botones = 

@@ -88,12 +88,14 @@ export default class TitleScene extends Phaser.Scene {
 			for (var i = 0; i < window.localStorage.length; i++) {
 				//Carga el arma equipada
 				if (window.localStorage.key(i).split("_")[0] === "equipped") {
-					this.inventory.setEquipedWeapon(window.localStorage.key(i).split("_")[1]);
+					if (window.localStorage.key(i).split("_")[1] === "asta") this.inventory.setEquipedWeapon("puño");
+					else this.inventory.setEquipedWeapon(window.localStorage.key(i).split("_")[1]);
 				}
 
 				//Si tenias el arma antes, cargala
 				if (window.localStorage.key(i).split("_")[0] === "weapon") {
-					this.inventory.addWeapon(window.localStorage.key(i).split("_")[1]);
+					if (window.localStorage.key(i).split("_")[1] === "asta") window.localStorage.removeItem(window.localStorage.key(i));
+					else this.inventory.addWeapon(window.localStorage.key(i).split("_")[1]);
 				}
 
 				//Carga la cantidad de items que tenias

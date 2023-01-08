@@ -74,6 +74,7 @@ export default class InventoryScene extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
+
 		// Loot inicial
 		this.inventory.addHealth('bolla');
 
@@ -81,6 +82,7 @@ export default class InventoryScene extends Phaser.Scene {
 		this.events.on('wake', (scene, data) => {
 			this.activateButtons();
 			this.inventory = data.inventory;
+			//console.log(this.inventory);
 			this.previousSceneName = data.scene;
 			this.keyboardInput.changeButton(this.equipedWeaponButton);
 			if (this.handleLoot) this.setImagesVisible();
@@ -326,10 +328,11 @@ export default class InventoryScene extends Phaser.Scene {
 	// Recorre los arrays de las imágenes de armas y comida para, tras leer el estado del inventario recibido al despertar la escena
 	// (si el jugador tiene un arma [owned] o si tiene comida [amount > 0]), poner las imágenes y el texto correctamente
 	setImagesVisible() {
+		var armas = this.inventory.getWeapons();
+
 		for (let i = 0; i < 3; i++) {
 			// Armas
 			for (let j = 0; j < 5; j++) {
-				var armas = this.inventory.getWeapons();
 				if (armas[this.weaponsImages[j][i].texture.key].owned) {
 					this.weaponsImages[j][i].setVisible(true);
 				}
@@ -346,8 +349,9 @@ export default class InventoryScene extends Phaser.Scene {
 
 		// Arma equipada
 		if (armas['asta'].owned) {
-			this.equiped.destroy();
-			this.equiped = this.add.sprite(217, 262, 'asta').setScale(8, 8);
+			//this.equiped.destroy();
+			//this.equiped = this.add.sprite(217, 262, 'asta').setScale(8, 8);
+			this.equiped.setTexture('asta');
 		}
 
 	}
