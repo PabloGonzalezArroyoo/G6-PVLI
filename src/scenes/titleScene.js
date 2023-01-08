@@ -68,11 +68,17 @@ export default class TitleScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 
 		// Botón "JUGAR" 
-		this.buttons.push(new Button(this, this.scale.width/2, this.scale.height - 150,'newGame', 0, 1, 2, this.keyboardInput, newGame).setScale(5, 5));
+		this.buttons.push(new Button(this, this.scale.width/2, this.scale.height - 150,'newGame', 0, 1, 2, this.keyboardInput, () => {
+			this.buttons.forEach(button => {button.visible = false;});
+			newGame();
+		}).setScale(5, 5));
 		this.keyboardInput.setStartButton(this.buttons[0]);
 
 		if (window.localStorage.length > 0) {
-			this.buttons.push(new Button(this, this.scale.width/2, this.scale.height - 70,'continueGame', 0, 1, 2, this.keyboardInput, jumpToLevelMenuScene).setScale(5, 5));
+			this.buttons.push(new Button(this, this.scale.width/2, this.scale.height - 70,'continueGame', 0, 1, 2, this.keyboardInput,() => {
+				this.buttons.forEach(button => {button.visible = false;});
+				jumpToLevelMenuScene();
+			}).setScale(5, 5));
 			this.inicializeTitleButtonConnections();
 		}
 
