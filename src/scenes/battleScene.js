@@ -735,6 +735,8 @@ export default class BattleScene extends Phaser.Scene {
 						this.enemies[0].stealFlag();
 						this.player.getFlag();
 
+						this.dfsIndicator.spriteObj.setVisible(false);
+						this.dfsIndicator.textObj.setVisible(false);
 						// Menú de recibir loot con el arma final
 						this.lootBox.setVisible(true).setAlpha(0.85);
 						const width = this.scale.width;
@@ -745,6 +747,8 @@ export default class BattleScene extends Phaser.Scene {
 						var item = this.add.image(width/2,height/2, this.player.inventory.getEquipedWeapon().imgID).setScale(6,6);
 
 						this.time.delayedCall(3000,()=>{
+							this.dfsIndicator.spriteObj.setVisible(true);
+							this.dfsIndicator.textObj.setVisible(true);
 							this.lootBox.setVisible(false);
 							lootText.setVisible(false);
 							item.setVisible(false);
