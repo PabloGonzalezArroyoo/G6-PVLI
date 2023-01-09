@@ -79,4 +79,12 @@ export default class Player extends Character {
         this.animator.flag = true;
         this.animator.playIdleBack();
     }
+    isDefending()
+    {
+        return this.turnEffectController.defenseTurns>0;
+    }
+    defenseTurns()
+    {
+        return this.turnEffectController.defenseTurns;
+    }
 }

@@ -105,7 +105,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('wpInd', 'assets/scenes/battle/indicator/wpInd.png', {frameWidth: 37, frameHeight: 28});
 		this.load.spritesheet('psnInd', 'assets/scenes/battle/indicator/psnInd.png', {frameWidth: 37, frameHeight: 28});
 		this.load.spritesheet('bleedInd', 'assets/scenes/battle/indicator/bleedInd.png', {frameWidth: 37, frameHeight: 28});
-
+		this.load.spritesheet('dfsInd', 'assets/scenes/battle/defenseSpritesheet33x28.png', { frameWidth: 33, frameHeight: 28});
 		// Cuadro de Loot
 		this.load.image('lootBox', 'assets/scenes/battle/itemBox.png')
 		
@@ -218,10 +218,10 @@ export default class BattleScene extends Phaser.Scene {
 		// Loot
 		this.lootBox = this.add.image(width/2, height/2, 'lootBox').setScale(2,2).setVisible(false);
 
-		// Indicadores de daño
+		// Indicadores de daño y defensa
 		this.indicator = new Indicator(this, 300, 565,
 			{dmgInd: 'dmgInd', healInd: 'healInd', defInd: 'defInd', wpInd: 'wpInd', psnInd: 'psnInd', bleedInd: 'bleedInd'});
-			
+		this.dfsIndicator = new Indicator(this, 140, 260,'dfsInd',true);	
 		// Input
 		this.keyboardInput = new KeyboardInput(this);
 
@@ -347,6 +347,8 @@ export default class BattleScene extends Phaser.Scene {
 				this.emitter.once('finishTexting', () => {
 					this.player.defense()
 					this.indicator.updateInd('player', 'def', this.player.healthController.getPosition(), ""); 	// Actualizar indicador
+					this.dfsIndicator.activeInd();
+					this.dfsIndicator.showDefense(this.player);
 				});
 				break;
 			
@@ -487,6 +489,8 @@ export default class BattleScene extends Phaser.Scene {
 			this.player.updateTurn();
 			this.UpdateEnemyEffects();
 		}
+		if(this.player.isDefending())this.dfsIndicator.showDefense(this.player);
+		else this.dfsIndicator.deactivateInd();
 	}
 
 	// Metodo que actualiza los efectos por turnos de los enemigos
