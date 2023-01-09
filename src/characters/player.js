@@ -15,6 +15,10 @@ export default class Player extends Character {
     // Devuelve el daño del arma equipada
     getDamage() { return this.inventory.getEquipedWeapon().getAttack(); }
 
+    getAreaDamage() { return this.inventory.getEquipedWeapon().getAreaDamage(); }
+
+    getHealthAbsortion() { return this.inventory.getEquipedWeapon().getHealthAbsortion(); }
+
     // Ataque al enemigo
     attack(enemy, dmg = this.getDamage()){
         // Animacion de ataque
@@ -51,10 +55,20 @@ export default class Player extends Character {
     }
 
     // Animación y ejecución del qué locura
-    quelocura(enemies, index, sound){
+    quelocura(enemies, index, sound, indicator, player){
         this.animator.playWhatAMadness();
         this.animator.once("animationcomplete-whatAmadness",()=>{
             this.inventory.equipedWeapon.queLocura(this, enemies, index);
+
+            // Actualizar indicador
+            if (player.inventory.getEquipedWeapon().imgID === 'cimMad' || player.inventory.getEquipedWeapon().imgID === 'cimAc'|| player.inventory.getEquipedWeapon().imgID === 'cimLoc') {
+                indicator.updateInd("player", "damage", index.healthController.getPosition(), player.getAreaDamage());
+            }
+            else indicator.updateInd("player", "damage", index.healthController.getPosition(), player.getDamage()); // Actualizar indicador
+
+            if (player.inventory.getEquipedWeapon().imgID === 'sacho' || player.inventory.getEquipedWeapon().imgID === 'fouc'|| player.inventory.getEquipedWeapon().imgID === 'guad') {
+                this.healthController.scene.time.delayedCall(600, () => {indicator.updateInd("player", "health", this.healthController.getPosition(), player.getHealthAbsortion())});
+            }
         });
         this.animator.once("animationcomplete-attack", () => {sound.play()});
     }
