@@ -77,9 +77,6 @@ export default class InventoryScene extends Phaser.Scene {
 
 		// Loot inicial
 		this.inventory.addHealth('bolla');
-		this.inventory.addWeapon('cimMad');
-		this.inventory.addWeapon('dagOx');
-		this.inventory.addWeapon('sacho');
 
 		// Guardar la escena de la que te han despertado y aplicar cambios del inventario
 		this.events.on('wake', (scene, data) => {
