@@ -37,11 +37,17 @@ export class WeaponItem extends Item {
 		this.attackValue = itemData.attack; // Recibe el valor de ataque
 		this.defValue = itemData.defense; // Recibe el valor de defensa
 		this.queLocura = itemData.queLocura; //Recibe el tipo de ¡Que Locura! del arma
+		this.areaDamage = itemData.attack;
+		this.healthAbsortion;
 	}
 
 	getAttack() { return this.attackValue; }
 	
 	getDefense() { return this.defValue; }
+
+	getAreaDamage() { return this.areaDamage; }
+
+	getHealthAbsortion() { return this.healthAbsortion; }
 
   // Ataque en area
 	static areaAttack(percentage) {
@@ -50,6 +56,7 @@ export class WeaponItem extends Item {
 			dmg /= enemies.length; //Divide el daño a realizar entre los enemigos de la escena
 			dmg += player.getDamage()*(percentage/100); //Le suma un porcentaje según el nivel del arma
 			dmg = Math.round(dmg);
+			this.areaDamage = dmg;
 			enemies.forEach(enemy => {player.attack(enemy, dmg);}); // Le resta dicha vida a cada enemigo 
 			return dmg;		
 		}
@@ -92,7 +99,9 @@ export class WeaponItem extends Item {
 		return function (player, enemies, enemy) {
 			let dmg = player.getDamage();
 			player.attack(enemy);
-			player.healthController.changeHealth(Math.round(dmg*percentage/100));
+			let health = Math.round(dmg*percentage/100);
+			this.healthAbsortion = health;
+			player.healthController.changeHealth(health);
 		}
 	}
 	// Exclusivo del asta, determina el final del juego

@@ -304,7 +304,7 @@ export default class BattleScene extends Phaser.Scene {
 		//this.descriptionBox.setInteractive();
 		switch (action){									
       		case 'attack' : 															// Se selecciona atacar
-				this.UpdateQueLocura(35)																
+				this.UpdateQueLocura(100)																
 				this.dialogBox.clearText();												// Borrar texto previo
 				if (this.enemies.length > 1) {
 						this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
@@ -392,7 +392,7 @@ export default class BattleScene extends Phaser.Scene {
 						this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 						this.emitter.once('finishTexting', () => {
 								this.charge.play();
-								this.player.quelocura(this.enemies, this.selectedEnemy, this.discharge);
+								this.player.quelocura(this.enemies, this.selectedEnemy, this.discharge, this.indicator, this.player);
 							});
 						});	
 				} else {
@@ -401,7 +401,7 @@ export default class BattleScene extends Phaser.Scene {
 					this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 					this.emitter.once('finishTexting', () => {
 						this.charge.play();
-						this.player.quelocura(this.enemies, this.enemies[0], this.discharge);
+						this.player.quelocura(this.enemies, this.enemies[0], this.discharge, this.indicator, this.player);
 					});
 				}
 				break;
