@@ -4,14 +4,19 @@ import EventDispatcher from "../combat/eventDispatcher.js";
 // en concreto según la situación; además de moverse entre jugador ni enemigos. Por ejemplo, si Maria Pita recibe 10 puntos de daño,
 // el indicador se posicionará al lado de la barra de Maria Pita, reproducirá la animación de daño y escribirá por encima "-10"
 export default class Indicator extends Phaser.GameObjects.Container {
-    constructor(scene, x, y, spriteSheets) {
+    constructor(scene, x, y, spriteSheets, defenseInd=false) {
         super(scene, x, y);
         this.textObj = new Phaser.GameObjects.Text(scene, x, y, "indicador", {fontFamily: 'Silkscreen', fontSize: 20});
         this.spriteObj = new Phaser.GameObjects.Sprite(scene, x, y, spriteSheets.dmgInd);
         this.scene.add.existing(this);
+        this.defenseInd=defenseInd;
 
-        // Si estoy en la escena de batalla, cargar las animaciones y el sprite del indicador correcto
-        if (scene.scene.key === 'battleScene') {
+        if(defenseInd)
+        {
+            this.spriteObj = new Phaser.GameObjects.Sprite(scene, x, y, spriteSheets).setScale(1, 1);
+        }
+        // Si estoy en la escena de batalla y no soy indicador de defensa, cargar las animaciones y el sprite del indicador correcto
+        else if (scene.scene.key === 'battleScene'&& !defenseInd) {
 
             // Indicador
             this.spriteObj = new Phaser.GameObjects.Sprite(scene, x, y, spriteSheets.dmgInd).setScale(2, 2);
@@ -161,5 +166,10 @@ export default class Indicator extends Phaser.GameObjects.Container {
         // Asignar las dimensiones y posiciones del texto al sprite
         this.spriteObj.x = this.textObj.x + this.textObj.width / 2;
         this.spriteObj.displayWidth = this.textObj.width + 30;
+    }
+    showDefense(player)
+    {
+        this.spriteObj.setFrame(3-player._defenseBoost);
+        this.textObj.text= player.defenseTurns();
     }
 }
