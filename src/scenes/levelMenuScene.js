@@ -21,15 +21,15 @@ const levels = [new Level(listOfLevels[0]),
 				
 				// Desbloquear el primer nivel
 				levels[0].setUnlocked();
-				
+
 				// Especificar los niveles que se desbloquean tras completar cada nivel
 				levels[0].setNextLevels([levels[1]]);
 				levels[1].setNextLevels([levels[2]]);
 				levels[2].setNextLevels([levels[3], levels[4]]);
 				levels[3].setNextLevels(null);
 				levels[4].setNextLevels([levels[5], levels[6], levels[7]]);
-				levels[5].setNextLevels([null]);
-				levels[6].setNextLevels([null]);
+				levels[5].setNextLevels(null);
+				levels[6].setNextLevels(null);
 				levels[7].setNextLevels([levels[8], levels[9]]);
 				levels[8].setNextLevels(null);
 				levels[9].setNextLevels([levels[10], levels[11]]);
@@ -46,6 +46,9 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		this.inventory;
 		this.emitter = EventDispatcher.getInstance();
+		window.addEventListener("beforeunload", event => {
+			this.saveData();
+		});
 	}
 
 	init(data) {
@@ -55,6 +58,12 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.inventory = data.inventory;
 		this.scene.wake('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory})
 		this.scene.sleep('inventoryScene');
+		for(var i=0;i<window.localStorage.length;i++)
+		{
+			if(window.localStorage.key(i).split("_")[0]==="level"){
+				levels[window.localStorage.key(i).split("_")[1]].setCompleted();
+			}
+		}
 	}
 
 	preload() {
@@ -71,6 +80,10 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 		// Música
 		this.load.audio('Travelling to the End of the Sea', ['assets/scenes/levelsMenu/Travelling to the End of the Sea - Vivu.mp3']);
+
+		// Efectos de sonido
+		this.load.audio('menu', ['assets/scenes/battle/sfx/menu.mp3']);
+		this.load.audio('open', ['assets/scenes/inventory/sfx/open.mp3']);
 	}
 
 	create() {
@@ -91,6 +104,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 		var music = this.sound.add('Travelling to the End of the Sea');
     	music.play(musicConfig);
 
+		this.open = this.sound.add('open');
+
 		// Fade In
 		camera.fadeIn(1000, 0, 0, 0);
 
@@ -108,7 +123,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 
 		// Botón de inventario
-		this.inventoryButton = new Button(this, 46, 730, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
+		this.inventoryButton = new Button(this, 968, 43, 'inventory', 0, 1, 2, this.keyboardInput, () =>{
+			this.open.play();
 			music.setVolume(0.4);
 			this.scene.sleep('levelMenuScene');							// Parar la escena de menú
 			this.scene.wake('inventoryScene', {scene: 'levelMenuScene', inventory: this.inventory}); // Reanudar la escena de inventario
@@ -160,8 +176,8 @@ export default class LevelMenuScene extends Phaser.Scene {
 
 	// Inicializa a qué botón te lleva pulsar cada dirección desde otro botón
 	inicializeLevelButtonConnections() {
-		this.inventoryButton.setAdjacents(this.levelButtons[11], null, null, this.levelButtons[11]);
-		this.levelButtons[0].setAdjacents(null, null, this.levelButtons[1], null);
+		this.inventoryButton.setAdjacents(null, this.levelButtons[0], this.levelButtons[0], null);
+		this.levelButtons[0].setAdjacents(this.inventoryButton, null, this.levelButtons[1], this.inventoryButton);
 		this.levelButtons[1].setAdjacents(null, this.levelButtons[2], this.levelButtons[2], this.levelButtons[0]);
 		this.levelButtons[2].setAdjacents(this.levelButtons[3], this.levelButtons[4], this.levelButtons[4], this.levelButtons[1]);
 		this.levelButtons[3].setAdjacents(null, this.levelButtons[2], null, null);
@@ -172,6 +188,43 @@ export default class LevelMenuScene extends Phaser.Scene {
 		this.levelButtons[8].setAdjacents(null, this.levelButtons[7], null, this.levelButtons[7]);
 		this.levelButtons[9].setAdjacents(this.levelButtons[7], this.levelButtons[11], this.levelButtons[10], this.levelButtons[7]);
 		this.levelButtons[10].setAdjacents(null, this.levelButtons[9], null, this.levelButtons[9]);
-		this.levelButtons[11].setAdjacents(this.levelButtons[9], this.inventoryButton, null, this.levelButtons[9]);
+		this.levelButtons[11].setAdjacents(this.levelButtons[9], null, null, this.levelButtons[9]);
 	}
+
+	saveData() {
+		if(this.inventory){
+			var x = 0
+			var found=false;
+			while(x<window.localStorage.length && !found)
+			{
+				var name=window.localStorage.key(x);
+				if(window.localStorage.key(x).split("_")[0]==="equipped")
+				{
+					
+					window.localStorage.removeItem(window.localStorage.key(x));
+					found=true;
+				}
+				x++;
+			}
+		}
+		
+		window.localStorage.setItem("equipped_"+this.inventory.getEquipedWeapon().imgID,1);
+		for(var i = 0;i<levels.length;i++)
+		{
+			if(levels[i].getState()=== 2) window.localStorage.setItem("level_"+i,1);
+		}
+		for (var prop in this.inventory.weapons) {
+			if (Object.prototype.hasOwnProperty.call(this.inventory.weapons, prop)) {
+				if(this.inventory.weapons[prop].owned){
+					window.localStorage.setItem("weapon_"+prop,1);
+				} 
+			}
+		}
+		for (var prop in this.inventory.healths) {
+			if (Object.prototype.hasOwnProperty.call(this.inventory.healths, prop)) {
+				window.localStorage.setItem("item_"+prop,this.inventory.healths[prop].amount);
+			}
+		}
+	}
+
 }

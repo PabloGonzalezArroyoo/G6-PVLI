@@ -12,7 +12,8 @@ export default class TurnEffectController{
 	activateBleed(turns, damagePercentage){
 		if (this.bleedTurns <= 0){
 			this.bleedTurns = turns;
-			this.bleedDamage = (this.character.healthController.getMaxHealth() / 100) * damagePercentage;			
+			this.bleedDamage = (this.character.healthController.getMaxHealth() / 100) * damagePercentage;
+			this.bleedDamage = Math.round(this.bleedDamage);
 		}
 	}
 	// Impide que el personaje ataque durante los turnos dados

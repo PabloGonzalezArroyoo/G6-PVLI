@@ -60,6 +60,7 @@ export default class DialogBox extends Phaser.GameObjects.Text {
 		this.text = this.textToDisplay;
 		this.updateText();
 		this.isWritting = false;
+		this.scene.time.delayedCall(700, () => {this.emitter.emit('finishTexting')});
 	}
 
 	// Limpia el texto escrito y el texto a escribir ¡¡IMPORTANTE LLAMAR A LA FUNCION CADA VEZ QUE SE QUIERA ESCRIBIR UN NUEVO TEXTO!!

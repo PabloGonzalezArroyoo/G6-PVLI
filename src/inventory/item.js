@@ -37,11 +37,17 @@ export class WeaponItem extends Item {
 		this.attackValue = itemData.attack; // Recibe el valor de ataque
 		this.defValue = itemData.defense; // Recibe el valor de defensa
 		this.queLocura = itemData.queLocura; //Recibe el tipo de ¡Que Locura! del arma
+		this.areaDamage = itemData.attack;
+		this.healthAbsortion;
 	}
 
 	getAttack() { return this.attackValue; }
 	
 	getDefense() { return this.defValue; }
+
+	getAreaDamage() { return this.areaDamage; }
+
+	getHealthAbsortion() { return this.healthAbsortion; }
 
   // Ataque en area
 	static areaAttack(percentage) {
@@ -49,7 +55,9 @@ export class WeaponItem extends Item {
 			let dmg = player.getDamage();
 			dmg /= enemies.length; //Divide el daño a realizar entre los enemigos de la escena
 			dmg += player.getDamage()*(percentage/100); //Le suma un porcentaje según el nivel del arma
-			enemies.forEach(enemy => {enemy.healthController.changeHealth(-dmg);}); // Le resta dicha vida a cada enemigo 
+			dmg = Math.round(dmg);
+			this.areaDamage = dmg;
+			enemies.forEach(enemy => {player.attack(enemy, dmg);}); // Le resta dicha vida a cada enemigo 
 			return dmg;		
 		}
 	}
@@ -58,7 +66,6 @@ export class WeaponItem extends Item {
 		return function(player, enemies, enemy){
 			enemy.turnEffectController.activateBleed(percentage, 3);
 			return player.attack(enemy);
-           
 		}
 	}
 	// Impide atacar al enemigo durante los turnos que el arma dicte
@@ -81,22 +88,27 @@ export class WeaponItem extends Item {
 		return function(player, enemies, enemy) {
 			let dmg = player.getDamage();
 			dmg = dmg * 60 / 100;
+			dmg = Math.round(dmg);
 			for (let i = 0; i < times; i++)
-				enemy.healthController.changeHealth(-dmg);
+				player.attack(enemy, dmg);
 			return dmg * times;
 		}
 	}
-	// Convierte un porcentaje del daño ifligido a vida
+	// Convierte un porcentaje del daño infligido a vida
 	static lifeAbsorption(percentage) {
 		return function (player, enemies, enemy) {
 			let dmg = player.getDamage();
 			player.attack(enemy);
-			player.healthController.changeHealth(dmg*percentage/100);
+			let health = Math.round(dmg*percentage/100);
+			this.healthAbsortion = health;
+			player.healthController.changeHealth(health);
 		}
 	}
 	// Exclusivo del asta, determina el final del juego
 	static endGame() {
 		return function (player) {
+			player.inventory.substractWeapon('asta');
+			player.inventory.setEquipedWeapon('puño');
 			player.animator.scene.music.stop();
 			player.animator.scene.scene.start('cinematicScene', {inventory: player.animator.scene.inventory, key: 'end'});
 		}

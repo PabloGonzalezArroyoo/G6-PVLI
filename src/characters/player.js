@@ -15,19 +15,23 @@ export default class Player extends Character {
     // Devuelve el daño del arma equipada
     getDamage() { return this.inventory.getEquipedWeapon().getAttack(); }
 
+    getAreaDamage() { return this.inventory.getEquipedWeapon().getAreaDamage(); }
+
+    getHealthAbsortion() { return this.inventory.getEquipedWeapon().getHealthAbsortion(); }
+
     // Ataque al enemigo
-    attack(enemy){
+    attack(enemy, dmg = this.getDamage()){
         // Animacion de ataque
         this.animator.playAttack();
         // Le baja vida al enemigo
         this.animator.once("animationcomplete-attack",
-            () => {enemy.receiveAttack(-this.getDamage());});
+            () => {enemy.receiveAttack(-dmg);});
     }
 
     // Animación, activación y cálculo de turnos de la defensa
     defense(){
-        this.turnEffectController.activateDefense(3);
-        if (this._defenseBoost < 4) this._defenseBoost++;
+        this.turnEffectController.activateDefense(5);
+        if (this._defenseBoost < 3) this._defenseBoost++;
         this.animator.playDefense();
         this.animator.once("animationcomplete-defense",()=>{
                 this.healthController.scene.time.delayedCall(800, () => {
@@ -51,11 +55,22 @@ export default class Player extends Character {
     }
 
     // Animación y ejecución del qué locura
-    quelocura(enemies, index){
+    quelocura(enemies, index, sound, indicator, player){
         this.animator.playWhatAMadness();
         this.animator.once("animationcomplete-whatAmadness",()=>{
             this.inventory.equipedWeapon.queLocura(this, enemies, index);
+
+            // Actualizar indicador
+            if (player.inventory.getEquipedWeapon().imgID === 'cimMad' || player.inventory.getEquipedWeapon().imgID === 'cimAc'|| player.inventory.getEquipedWeapon().imgID === 'cimLoc') {
+                indicator.updateInd("player", "damage", index.healthController.getPosition(), player.getAreaDamage());
+            }
+            else indicator.updateInd("player", "damage", index.healthController.getPosition(), player.getDamage()); // Actualizar indicador
+
+            if (player.inventory.getEquipedWeapon().imgID === 'sacho' || player.inventory.getEquipedWeapon().imgID === 'fouc'|| player.inventory.getEquipedWeapon().imgID === 'guad') {
+                this.healthController.scene.time.delayedCall(600, () => {indicator.updateInd("player", "health", this.healthController.getPosition(), player.getHealthAbsortion())});
+            }
         });
+        this.animator.once("animationcomplete-attack", () => {sound.play()});
     }
 
     // Calcula el ataque recibido según el arma equipada y los efectos secundarios
@@ -64,8 +79,9 @@ export default class Player extends Character {
         this.receivedDamage = damage;
         this.receivedDamage-=this.receivedDamage*(this.inventory.equipedWeapon.defValue/100);
         if(this.turnEffectController.defenseTurns > 0) { //Si quedan turnos de defensa
-             this.receivedDamage -= this.receivedDamage * (0.15 * this._defenseBoost);  //Reduce el daño segun los turnos de defensa que se tengan
+             this.receivedDamage -= this.receivedDamage * (0.20 * this._defenseBoost);  //Reduce el daño segun los turnos de defensa que se tengan
         }
+        this.receivedDamage = Math.round(this.receivedDamage);
         this.healthController.changeHealth(-this.receivedDamage);
         return this.receivedDamage;
     }
@@ -76,5 +92,13 @@ export default class Player extends Character {
     getFlag() { 
         this.animator.flag = true;
         this.animator.playIdleBack();
+    }
+    isDefending()
+    {
+        return this.turnEffectController.defenseTurns>0;
+    }
+    defenseTurns()
+    {
+        return this.turnEffectController.defenseTurns;
     }
 }

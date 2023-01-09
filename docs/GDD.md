@@ -11,7 +11,7 @@
 | **Modo de juego** | 1 jugador |
 
 ## 2. Descripción
-Maria Pita's Revenge es un RPG de combates por turnos ubicado en La Coruña del siglo XVI. En él encarnas a María Pita, la mujer que acabó con la vida de un alférez inglés con su propia bandera después de que los ingleses asesinaran a su marido. Así pues, el jugador debe ir derrotando a las tropas inglesas hasta llegar a este alférez.
+Maria Pita's Revenge es un RPG de combates por turnos ubicado en A Coruña del siglo XVI. En él encarnas a María Pita, la mujer que acabó con la vida de un alférez inglés con su propia bandera después de que los ingleses asesinaran a su marido. El jugador deberá ir derrotando a las tropas inglesas hasta llegar a este alférez.
 
 ## 3. **Mecánicas**
 - **Personaje:** María Pita cuenta con unos valores de vida, defensa y ataque. 
@@ -26,6 +26,36 @@ La vida siempre será de 100 puntos, mientras que la defensa y el ataque depende
 - **Selección de nivel** : Entre combates, el jugador accederá a un mapa donde se le irán desbloqueando niveles que puede seleccionar hasta llegar al final. Estos niveles son rejugables para obtener más objetos.
 
 - **Equipamiento:**  En el mapa de selección de niveles habrá un botón desde el cual el jugador podrá ver los objetos que tenga (tanto armas como íiems curativos) y el arma equipada.
+
+- **Fin de combate:** Hay dos desenlaces:
+  - ***Perder el combate:*** aparecerá una escena de Game Over en la que se podrá decidir si quiere salir al mapa de niveles o reintentar el combate.
+  
+  ![ImagenGameOver](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/gameOver.png)
+  
+  - ***Ganar el combate:*** se recompensará al jugador con un posible arma de cierto nivel dependiendo del nivel en el que se encuentre y con comida (explicación de la probabilidad de cada arma en el siguiente punto).
+
+  ![ImagenWin](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/win.png)
+  
+- **Sistema de recompensas:** siempre se recompensa al jugador con comida con una cantidad aleatoria entre 1 y 5. Luego, también le puede tocar un arma si es que no la posee. En cada nivel, hay diferentes probabilidades de que toque arma de nivel I, nivel II y nivel III (las armas de diferentes niveles se describen más abajo):
+
+![ImagenProbMap](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/probmap.png)
+
+Viendo la imagen del mapa, los números en negro representan el mayor nivel de arma que puede llegar a tocar. Los círculos negros señalan los niveles opcionales (niveles por los cuales no es obligatorio pasar por ellos para finalizar el juego) contienen mayores niveles de armas.
+
+La lógica interna del sistema consiste en elegir un número aleatorio entre 0 y 100 que determina el nivel del arma teniendo en cuenta las probabilidades especificadas y otro número aleatorio entre 0 y 4 para determinar un arma en concreto de ese nivel. Si se da la casualidad de que el jugador ya tiene ese arma, solo se le da comida. Los rango de estas posibilidades (en porcentaje) son:
+
+| **Nivel** | **Tier I** | **Tier II** | **Tier III** |
+| :---: | :---: | :---: | :---: |
+| 1-2-3-5 | 100 | 0 | 0 |
+| 4-7 | 40 | 60 | 0 |
+| 6-9-11 | 0 | 40 | 60 |
+| 8-10 | 0 | 100 | 0 |
+| 12 | 0 | 0 | 100 |
+
+Siempre al completar un nivel se dará comida, habiendo la misma probabilidad de:
+- Recibir cualquiera de las 3 comidas disponibles.
+- Recibir de 3 a 5 piezas de la misma.
+
 
 ## 4. Dinámica
 El objetivo del juego es animar al jugador a pensar en cada movimiento que haga para poder avanzar, desarrollando una estrategia que le permita llegar al final y pasarse el juego. 
@@ -109,7 +139,7 @@ En 1589, los ingleses llegan a A Coruña bajo la orden de atacar el reino. Duran
 
 ## 6. HUD
 ### En combate
-Los combates serán en un entorno estático. Se verá de la siguiente forma:
+Los combates serán en un entorno estático y se verán de la siguiente forma:
 
 ![ImagenDiagramaCombate](https://github.com/PabloGonzalezArroyoo/G6-PVLI/blob/main/assets/gdd/combate.jpg)
 

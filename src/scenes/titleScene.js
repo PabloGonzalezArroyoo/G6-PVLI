@@ -10,10 +10,14 @@ import Inventory from '../inventory/inventory.js';
 export default class TitleScene extends Phaser.Scene {
 	constructor() {
 		super({ key: 'titleScene' });
+		this.buttons = [];
 	}
 
 	init(data) {
-		if (data.inventory) this.inventory = data.inventory;
+		if (data.inventory){
+			this.inventory = data.inventory;
+			this.oldInventory = true;
+		}
 	}
 
 	preload() {
@@ -22,11 +26,16 @@ export default class TitleScene extends Phaser.Scene {
 		this.load.spritesheet('titleAnim','assets/scenes/title/TittleAnim.png',{frameWidth:1024, frameHeight: 768});
 
 		// Imagen de botones
-		this.load.spritesheet('play', 'assets/scenes/title/playButton.png', {frameWidth: 37, frameHeight: 14});
+		//this.load.spritesheet('play', 'assets/scenes/title/playButton.png', {frameWidth: 37, frameHeight: 14});
+		this.load.spritesheet('newGame', 'assets/scenes/title/newGameButton.png', {frameWidth: 108, frameHeight: 14});
+		this.load.spritesheet('continueGame', 'assets/scenes/title/continueGameButton.png', {frameWidth: 108, frameHeight: 14});
 		this.load.spritesheet('inventory', 'assets/scenes/levelsMenu/inventoryButtons.png', {frameWidth: 30, frameHeight: 18});
 
 		// Música
 		this.load.audio('Pirates of the Atlantic', ['assets/scenes/title/Pirates of the Atlantic - Vivu.mp3']);
+
+		// Efectos de sonido
+		this.load.audio('select', ['assets/scenes/select.mp3']);
 	}
 
 	create() {
@@ -62,24 +71,74 @@ export default class TitleScene extends Phaser.Scene {
 		this.keyboardInput = new KeyboardInput(this);
 
 		// Botón "JUGAR" 
-		var button = new Button(this, 514, 690,'play', 0, 1, 2, this.keyboardInput, jumpToLevelMenuScene).setScale(5, 5);
-		this.keyboardInput.setStartButton(button);
+		this.buttons.push(new Button(this, this.scale.width/2, this.scale.height - 150,'newGame', 0, 1, 2, this.keyboardInput, () => {
+			this.buttons.forEach(button => {button.visible = false;});
+			newGame();
+		}).setScale(5, 5));
+		this.keyboardInput.setStartButton(this.buttons[0]);
+
+		if (window.localStorage.length > 0) {
+			this.buttons.push(new Button(this, this.scale.width/2, this.scale.height - 70,'continueGame', 0, 1, 2, this.keyboardInput,() => {
+				this.buttons.forEach(button => {button.visible = false;});
+				jumpToLevelMenuScene();
+			}).setScale(5, 5));
+			this.inicializeTitleButtonConnections();
+		}
 
 		// Inventario del jugador
-		if (!this.inventory) this.inventory = new Inventory();
+		if (!this.inventory) {
+			this.inventory = new Inventory();
+			for (var i = 0; i < window.localStorage.length; i++) {
+				//Carga el arma equipada
+				if (window.localStorage.key(i).split("_")[0] === "equipped") {
+					if (window.localStorage.key(i).split("_")[1] === "asta") this.inventory.setEquipedWeapon("puño");
+					else this.inventory.setEquipedWeapon(window.localStorage.key(i).split("_")[1]);
+				}
 
+				//Si tenias el arma antes, cargala
+				if (window.localStorage.key(i).split("_")[0] === "weapon") {
+					if (window.localStorage.key(i).split("_")[1] === "asta") window.localStorage.removeItem(window.localStorage.key(i));
+					else this.inventory.addWeapon(window.localStorage.key(i).split("_")[1]);
+				}
+
+				//Carga la cantidad de items que tenias
+				else if (window.localStorage.key(i).split("_")[0] === "item") {	
+					//Como la bolla empieza con 1, si lo recargas, tienes que restar ese item	
+					if (window.localStorage.key(i).split("_")[1] === "bolla") {
+						this.inventory.addHealth(window.localStorage.key(i).split("_")[1],
+							parseInt(window.localStorage.getItem('item_' + window.localStorage.key(i).split("_")[1])) - 1);
+					}
+					else this.inventory.addHealth(window.localStorage.key(i).split("_")[1],
+						parseInt(window.localStorage.getItem('item_' + window.localStorage.key(i).split("_")[1])));
+				}
+			}
+		} 
+		
 		// Gestiona el fadeOut y el inicio de la escena de niveles y la escena de inventario en paralelo
-		function jumpToLevelMenuScene() {
-			// Fade Out
-			button.setVisible(false);
+		function jumpToLevelMenuScene(state = 'continue') {
+			for (var i = 0; i < self.buttons.length; i++) self.buttons[i].setVisible(false);
+			// Fade Out 
 			musicFadeOut();
 			camera.fadeOut(1000, 0, 0, 0); // fadeOut(time, R, G, B), 000 = Black
-			camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+			camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
 				music.stop();
-				self.scene.start('cinematicScene', {inventory: self.inventory, key: 'start'});
+				if (state === 'addCinematic') jumpToCinematicScene(state);
+				else self.scene.start('levelMenuScene', {inventory: self.inventory});
 			})
-			self.scene.launch('inventoryScene', {scene: 'levelMenuScene', inventory: self.inventory});
-			self.scene.sleep('inventoryScene');
+			if (!self.oldInventory){
+				self.scene.launch('inventoryScene', {scene: 'titleScene', inventory: self.inventory});
+				self.scene.sleep('inventoryScene');
+			}
+		}
+
+		function jumpToCinematicScene() {
+			self.scene.start('cinematicScene', {inventory: self.inventory, key: 'start'});
+		}
+
+		function newGame() {
+			window.localStorage.clear();
+			self.inventory = new Inventory();
+			jumpToLevelMenuScene('addCinematic');
 		}
 
 		// Fadeout de la música
@@ -91,5 +150,10 @@ export default class TitleScene extends Phaser.Scene {
 				duration: 2000,
 			});
 		}
+	}
+
+	inicializeTitleButtonConnections() {
+		this.buttons[0].setAdjacents(null, this.buttons[1], null, null);
+		this.buttons[1].setAdjacents(this.buttons[0], null, null, null);
 	}
 }

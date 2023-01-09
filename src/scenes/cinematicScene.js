@@ -18,7 +18,6 @@ export default class Title extends Phaser.Scene {
 	}
 
     preload(){
-
         // Vídeo
         this.load.video(this.cinematicKey, 'assets/scenes/cinematic/' + this.cinematicKey + '.mp4')
 
@@ -32,14 +31,15 @@ export default class Title extends Phaser.Scene {
 
         this.keyboardInput = new KeyboardInput(this);
 
-        //Reproducimos la cinemática
+        // Reproducimos la cinemática
         this.cinematic = this.add.video(width / 2, height / 7 * 3, this.cinematicKey).setScale(0.6, 0.6);
         this.cinematic.on('complete', ()=>{this.goToNextScene();});
         this.cinematic.play();
 
-        //Pintamos el botón de saltar cinemática
+        // Pintamos el botón de saltar cinemática
         this.skipButton = new Button(this, 514, 690,'skip', 0, 1, 2, this.keyboardInput, ()=>{this.goToNextScene();}).setScale(5, 5);
         this.keyboardInput.setStartButton(this.skipButton);
+        this.input.keyboard.once('keydown-ESC', () => {this.goToNextScene();});
     }
 
     goToNextScene() {

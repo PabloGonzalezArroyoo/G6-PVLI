@@ -22,7 +22,14 @@ const levelCompleted = function (enemies) {
 // Comprueba si el jugador ha muerto
 const levelFailed = function (player) {
 	let muerto = false;
-	if (player.healthController.getCurrentHealth() <= 0) muerto = true;
+	if (player.healthController.getCurrentHealth() <= 0){
+		muerto = true;
+		// Si pierdes con el asta equipada la pierdes
+		if (player.inventory && player.inventory.getEquipedWeapon().imgID === 'asta'){
+			player.inventory.substractWeapon('asta');
+			player.inventory.setEquipedWeapon('puño');
+		}
+	}
 	return muerto;
 }
 
@@ -35,10 +42,11 @@ export default class BattleScene extends Phaser.Scene {
 		super({ key: 'battleScene' });
 		this.dialogBox;
 		this.descriptionBox;
-		this.actionBox;
 		this.lootBox;
+		this.lootDuration = 3000;
 		this.indicator;
 		this.previousLetterTime = 0;
+		this.queLocuraBackground;
 
 		this.enemies = [];
 		this.selectedEnemy= null;
@@ -77,11 +85,10 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('alienatedCorsair', 'assets/characters/enemies/alienatedCorsair.png', {frameWidth: 32, frameHeight:32});
 		this.load.spritesheet('ensignDrake', 'assets/characters/enemies/ensignDrake.png', {frameWidth: 32, frameHeight:32});
 		
-		// Descripcion
-		this.load.image('description', 'assets/scenes/battle/dialogBox.png');
+		// Caja de descripción y acciones
+		this.load.image('box', 'assets/scenes/battle/box.png');
 		
 		// Acciones (botones)
-		this.load.image('cuadroAcciones', 'assets/scenes/battle/actionsBox.png');
 		this.load.spritesheet('botonAtaque', 'assets/scenes/battle/attackButton.png', {frameWidth: 241, frameHeight: 67});
 		this.load.spritesheet('botonDefensa', 'assets/scenes/battle/defenseButton.png', {frameWidth: 241, frameHeight: 67});
 		this.load.spritesheet('botonObjetos', 'assets/scenes/battle/objectsButton.png', {frameWidth: 241, frameHeight: 67});
@@ -98,7 +105,7 @@ export default class BattleScene extends Phaser.Scene {
 		this.load.spritesheet('wpInd', 'assets/scenes/battle/indicator/wpInd.png', {frameWidth: 37, frameHeight: 28});
 		this.load.spritesheet('psnInd', 'assets/scenes/battle/indicator/psnInd.png', {frameWidth: 37, frameHeight: 28});
 		this.load.spritesheet('bleedInd', 'assets/scenes/battle/indicator/bleedInd.png', {frameWidth: 37, frameHeight: 28});
-
+		this.load.spritesheet('dfsInd', 'assets/scenes/battle/defenseSpritesheet33x28.png', { frameWidth: 33, frameHeight: 28});
 		// Cuadro de Loot
 		this.load.image('lootBox', 'assets/scenes/battle/itemBox.png')
 		
@@ -128,14 +135,27 @@ export default class BattleScene extends Phaser.Scene {
 		// Transición
 		this.load.spritesheet('fadeIn', 'assets/scenes/transitions/fadeInBattleTransition.png', {frameWidth: 1024, frameHeight: 768});
 
-		// Música -> CAMBIAR POR LA CORRECTA CUANDO LA HAYAMOS DECIDIDO
-		this.load.audio('Time to Fight!', ['assets/scenes/battle/vivivivivi - Mewlzebub.mp3']);
+		// Música
+		this.load.audio('Mewlzebub', ['assets/scenes/battle/vivivivivi - Mewlzebub.mp3']);
+
+		// Efectos de sonido
+		this.load.audio('hit', ['assets/scenes/battle/sfx/hit.mp3']);
+		this.load.audio('heal', ['assets/scenes/battle/sfx/heal.mp3']);
+		this.load.audio('weapon', ['assets/scenes/battle/sfx/weapon.mp3']);
+		this.load.audio('charge', ['assets/scenes/battle/sfx/charge.mp3']);
+		this.load.audio('discharge', ['assets/scenes/battle/sfx/discharge.mp3']);
+		this.load.audio('poisonOrBleed', ['assets/scenes/battle/sfx/poisonOrBleed.mp3']);
+		this.load.audio('open', ['assets/scenes/inventory/sfx/open.mp3']);
+		this.load.audio('menu', ['assets/scenes/battle/sfx/menu.mp3']);
 	}
 
 	/**
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
+		const width = this.scale.width;
+    	const height = this.scale.height;
+
 		// Variables constantes y se destruyen los eventos anteriores
       	this.emitter.destroy();
 		this.camera = this.cameras.main;
@@ -149,8 +169,18 @@ export default class BattleScene extends Phaser.Scene {
 			loop: true,
 			delay: 0
 		}
-		this.music = this.sound.add('Time to Fight!');
+		this.music = this.sound.add('Mewlzebub');
     	this.music.play(musicConfig);
+
+		// Efectos de sonido
+		this.hit = this.sound.add('hit');
+		this.heal = this.sound.add('heal');
+		this.charge = this.sound.add('charge');
+		this.discharge = this.sound.add('discharge');
+		this.weapon = this.sound.add('weapon');
+		this.poisonOrBleed = this.sound.add('poisonOrBleed');
+		this.open = this.sound.add('open');
+		this.menu = this.sound.add('menu');
 
 		// Animación de la batalla final
 		this.anims.create({
@@ -173,32 +203,40 @@ export default class BattleScene extends Phaser.Scene {
 		this.enemiesData.forEach(enemy => this.enemies.push(listOfEnemies[enemy.id](this, enemy.x, enemy.y)));
 		
 		// Descripcion
-		this.add.image(0, 0, 'description').setOrigin(0, 0);
+		this.descriptionBox = this.add.image(width/2, height - 225, 'box').setOrigin(0, 0).setInteractive();
+		this.descriptionBox.on('pointerdown', ()=> { 
+			this.dialogBox.printText();
+			this.descriptionBox.disableInteractive();
+		});
 
 		// Cuadro de dialogo
 		this.dialogBox = new DialogBox(this, 545, 565, 450); 
 
 		// Acciones
-		this.add.image(0, 0, 'cuadroAcciones').setOrigin(0, 0);
+		this.add.image(3, height - 225, 'box').setOrigin(0, 0);
 		
 		// Loot
-		const width = this.scale.width;
-    	const height = this.scale.height;
 		this.lootBox = this.add.image(width/2, height/2, 'lootBox').setScale(2,2).setVisible(false);
 
-		// Indicadores de daño
+		// Indicadores de daño y defensa
 		this.indicator = new Indicator(this, 300, 565,
 			{dmgInd: 'dmgInd', healInd: 'healInd', defInd: 'defInd', wpInd: 'wpInd', psnInd: 'psnInd', bleedInd: 'bleedInd'});
-			
+
+		if (this.level.bgKey === 'bg3')	this.dfsIndicator = new Indicator(this, 150, 200,'dfsInd',true);
+		else this.dfsIndicator = new Indicator(this, 150, 275,'dfsInd',true);	
+
 		// Input
 		this.keyboardInput = new KeyboardInput(this);
 
 		// Botones de acción
+		// Fondo boton QUE LOCURA sin cargar
+		this.queLocuraBackground = this.add.image(375, 697, 'botonQueLocura', 3);
 		this.botones = 
 			// Botón de ataque
 			[new Button(this, 135, 617, 'botonAtaque', 0, 1, 2, this.keyboardInput, () => {this.PlayerTurn('attack')}),
 			// Botón de inventario
 		 	new Button(this, 375, 617, 'botonObjetos', 0, 1, 2, this.keyboardInput, () => {
+				this.open.play();
 				this.music.setVolume(0.4);										// Bajar la música
 				this.scene.sleep('battleScene');								// Parar la escena de batalla
 				this.scene.wake('inventoryScene', {scene: 'battleScene', inventory: this.inventory});				// Reanudar la escena de inventario
@@ -214,8 +252,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.keyboardInput.setStartButton(this.botones[0]);
 		
 		// Botón de qué locura apagado
-		this.emptyButton = this.add.image(254.5, 663.5, 'emptyButton').setOrigin(0,0);
-		this.emptyButton.setCrop(0, 0, 0, 0);
+		this.queLocuraBar = this.add.image(254.5, 663.5, 'botonQueLocura', 0).setOrigin(0,0);
+		this.queLocuraBar.setCrop(0, 0, 0, 0);
     
 		// Coloca los enemigos adyacentes
 		for (let i = 0; i < this.enemies.length; i++) {
@@ -237,8 +275,18 @@ export default class BattleScene extends Phaser.Scene {
 		});
 		this.add.sprite(1024, 768, 'fadeIn').setOrigin(1, 1).play('transition');
 
+		// Texto inicial
 		this.dialogBox.clearText();
-		this.dialogBox.printText('Escoge una acción');
+		this.dialogBox.setTextToDisplay('Escoge una acción');
+		this.dialogBox.printText();
+
+		// Skip texto con teclado
+		this.input.keyboard.on('keydown-ENTER', (event) => {
+			if (this.descriptionBox.input.enabled && !this.keyboardInput.button.isEnabled()) {
+				this.dialogBox.printText();
+				this.descriptionBox.disableInteractive();
+			}
+		});
 	}
 
 	update(t,dt) {
@@ -254,52 +302,60 @@ export default class BattleScene extends Phaser.Scene {
 
 	// Metodo que efectua la accion del jugador cada turno
 	PlayerTurn(action, item) {
+		this.descriptionBox.setInteractive();
 		this.DisableButtons();															// Desactiva los botones
+		//this.descriptionBox.setInteractive();
 		switch (action){									
-			
       		case 'attack' : 															// Se selecciona atacar
-				this.UpdateQueLocura(35)																
+				this.UpdateQueLocura(100)																
 				this.dialogBox.clearText();												// Borrar texto previo
 				if (this.enemies.length > 1) {
-					this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
-					// Se hace a todos los enemigos interactuables
-					this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {
-						Element.animator.setInteractive();
-						this.keyboardInput.changeButton(this.enemies[0]);	
-					});});
-					this.emitter.once('enemyselected',() => {
-					this.keyboardInput.changeButton(this.botones[0]);
-					this.DisableEnemy();
-					this.dialogBox.clearText();														// Borrar texto previo
+						this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
+						// Se hace a todos los enemigos interactuables
+						this.emitter.once('finishTexting', () => {
+							this.enemies.forEach(Element => {
+								Element.animator.setInteractive();
+								this.keyboardInput.changeButton(this.enemies[0]);	
+							});
+						});
+						this.emitter.once('enemyselected',() => {
+						this.keyboardInput.changeButton(this.botones[0]);
+						this.DisableEnemy();
+						this.dialogBox.clearText();										// Borrar texto previo
+						this.descriptionBox.setInteractive();
 					  	this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
 						   ' con ' + this.player.inventory.getEquipedWeapon().name);
 						this.emitter.once('finishTexting', () => {
 							this.player.attack(this.selectedEnemy);
+							this.hit.play();	
 							this.indicator.updateInd("player", "damage", this.selectedEnemy.healthController.getPosition(), this.player.getDamage()); // Actualizar indicador
 						});
 					});	
-				} else {																                // Si solo hay uno
+				} else {																// Si solo hay uno
 					this.selectedEnemy = this.enemies[0];
-					this.dialogBox.clearText();														// Borrar texto previo
+					this.dialogBox.clearText();											// Borrar texto previo
 					this.dialogBox.setTextToDisplay('Maria Pita ataca al ' + this.selectedEnemy.getName() +
 						' con ' + this.player.inventory.getEquipedWeapon().name);
 					this.emitter.once('finishTexting', () => {
 						this.player.attack(this.enemies[0]);
+						this.hit.play();	
 						this.indicator.updateInd("player", "damage", this.selectedEnemy.healthController.getPosition(), this.player.getDamage()); // Actualizar indicador
 					});
-				}			
+				}		
 				break;			
 			
       		case 'defense': 																	// Si selecciona defenderse
 				this.dialogBox.clearText();														// Borrar texto previo
-				this.dialogBox.setTextToDisplay('Maria Pita aumenta su defensa durante 3 turnos');
+				this.dialogBox.setTextToDisplay('Maria Pita aumenta su defensa durante 5 turnos');
 				this.emitter.once('finishTexting', () => {
 					this.player.defense()
 					this.indicator.updateInd('player', 'def', this.player.healthController.getPosition(), ""); 	// Actualizar indicador
+					this.dfsIndicator.activeInd();
+					this.dfsIndicator.showDefense(this.player);
 				});
 				break;
 			
-      		case 'object' : 																	// Si selecciona un objeto
+      		case 'object': 																		// Si selecciona un objeto
 				this.dialogBox.clearText();														// Borrar texto previo
 				if (item.type === 'WEAPON') this.dialogBox.setTextToDisplay('Maria Pita ha cambiado de arma a ' + item.name);
 				else this.dialogBox.setTextToDisplay('Maria Pita ha usado ' + item.name + ' y se curó ' + item.getHealthValue() + ' de vida');
@@ -307,16 +363,22 @@ export default class BattleScene extends Phaser.Scene {
 					this.player.useItem(item);
 
 					// Actualizar indicador
-					if (item.type === "HEALTH") this.indicator.updateInd("player", "health" , this.player.healthController.getPosition(), item.getHealthValue());
-					else this.indicator.updateInd("player", "weapon", this.player.healthController.getPosition(), item.getAttack());
+					if (item.type === "HEALTH") {
+						this.indicator.updateInd("player", "health" , this.player.healthController.getPosition(), item.getHealthValue());
+						this.heal.play();
+					} 
+					else {
+						this.indicator.updateInd("player", "weapon", this.player.healthController.getPosition(), item.getAttack());
+						this.weapon.play();
+					}
 					});
 				break;
 			
       		case 'queLocura' : 																	// Si selecciona QueLocura
 				this.DisableQueLocura(); 																	
 				this.dialogBox.clearText();														// Borrar texto previo
-				if (this.enemies.length > 1 && (this.player.inventory.getEquipedWeapon().imgID !== 'cimMad'||
-						this.player.inventory.getEquipedWeapon().imgID !== 'CimAc'||this.player.inventory.getEquipedWeapon().imgID !== 'cimLoc')) {											// Si hay más de un enemigo en escena
+				if (this.enemies.length > 1 && (this.player.inventory.getEquipedWeapon().imgID !== 'cimMad'&&
+						this.player.inventory.getEquipedWeapon().imgID !== 'cimAc'&& this.player.inventory.getEquipedWeapon().imgID !== 'cimLoc')) {											// Si hay más de un enemigo en escena
 					this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
 					//Se hace a todos los enemigos interactuables
 					this.emitter.once('finishTexting', () => {this.enemies.forEach(Element => {
@@ -329,9 +391,11 @@ export default class BattleScene extends Phaser.Scene {
 						this.keyboardInput.changeButton(this.botones[0]);
 						this.DisableEnemy();
 						this.dialogBox.clearText();													// Borrar texto previo
+						this.descriptionBox.setInteractive();
 						this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 						this.emitter.once('finishTexting', () => {
-								this.player.quelocura(this.enemies, this.selectedEnemy);
+								this.charge.play();
+								this.player.quelocura(this.enemies, this.selectedEnemy, this.discharge, this.indicator, this.player);
 							});
 						});	
 				} else {
@@ -339,7 +403,8 @@ export default class BattleScene extends Phaser.Scene {
 					this.dialogBox.clearText();														// Borrar texto previo
 					this.dialogBox.setTextToDisplay('¡MARIA PITA DESATA TODO SU PODER!');
 					this.emitter.once('finishTexting', () => {
-						this.player.quelocura(this.enemies, this.enemies[0]);
+						this.charge.play();
+						this.player.quelocura(this.enemies, this.enemies[0], this.discharge, this.indicator, this.player);
 					});
 				}
 				break;
@@ -349,6 +414,8 @@ export default class BattleScene extends Phaser.Scene {
 
 	// Metodo que efectua la accion de los enemigos cada turno
 	EnemyTurn(index) {
+		this.descriptionBox.setInteractive();
+
 		if (!index) index = 0;
 		// Si el enemigo sigue vivo hace su acción
 		if (!levelFailed(this.enemies[index]) && !this.enemies[index].isStuned()) {
@@ -363,6 +430,7 @@ export default class BattleScene extends Phaser.Scene {
 				
 				// Si el ataque no ha sido con habilidad pasar al siguiente turno
 				if (typeof attack == 'number'){
+					this.hit.play();
 					index++;
 					
 					if (levelFailed(this.player)) {
@@ -377,6 +445,7 @@ export default class BattleScene extends Phaser.Scene {
 				
 				// Si el ataque ha sido con habilidad dar feedback y pasar al siguiente turno
 				else {
+					this.descriptionBox.setInteractive();
 					this.dialogBox.clearText();
 					this.dialogBox.setTextToDisplay('Enemigo ' + attack[1] + ' a Maria Pita');
 					this.emitter.once('finishTexting', () => {
@@ -402,18 +471,20 @@ export default class BattleScene extends Phaser.Scene {
 
 	// Metodo que actualiza los efectos por turnos del jugador
 	UpdatePlayerEffects() {
+		this.descriptionBox.setInteractive();
 		// Si el jugador esta envenenado da feedback
-		if (this.player.isBleeding()){
+		if (this.player.isBleeding()) {
 			this.dialogBox.clearText();
 			this.dialogBox.setTextToDisplay('Maria Pita pierde vida por el veneno');
 			this.emitter.once('finishTexting', () => {
 				this.player.updateTurn();
 				this.indicator.updateInd("player", "poison", this.player.healthController.getPosition(), this.player.getBleedDamage());
+				this.poisonOrBleed.play();
 				if (levelFailed(this.player)) {
 					this.dialogBox.clearText();																	// Borrar texto previo
 					this.time.delayedCall(2000, () => {
 						this.music.stop();
-						this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory, music: music});});
+						this.scene.start('GameOverScene', {level: this.level, inventoryBackup: this.inventoryBackup, inventory: this.player.inventory, music: this.music});});
 				}
 				else this.emitter.once('finishTurn', () => {this.UpdateEnemyEffects()})});
 		}
@@ -421,10 +492,13 @@ export default class BattleScene extends Phaser.Scene {
 			this.player.updateTurn();
 			this.UpdateEnemyEffects();
 		}
+		if(this.player.isDefending())this.dfsIndicator.showDefense(this.player);
+		else this.dfsIndicator.deactivateInd();
 	}
 
 	// Metodo que actualiza los efectos por turnos de los enemigos
 	UpdateEnemyEffects(index) {
+		this.descriptionBox.setInteractive();
 		if (!index) index = 0;
 		// Si el enemigo sigue vivo y esta sangrando da feedback
 		if (!levelFailed(this.enemies[index]) && this.enemies[index].isBleeding()){
@@ -433,6 +507,7 @@ export default class BattleScene extends Phaser.Scene {
 			this.emitter.once('finishTexting', () => {
 				this.enemies[index].updateTurn();
 				this.indicator.updateInd("player", "bleed", this.enemies[index].healthController.getPosition(), this.enemies[index].getBleedDamage()); // Actualizar indicador
+				this.poisonOrBleed.play();
 				index++;
 				if (levelCompleted(this.enemies)){
 					this.dialogBox.clearText();						// Borrar texto previo
@@ -455,22 +530,20 @@ export default class BattleScene extends Phaser.Scene {
 
 	// Desactiva y vuelve invisible los botones
 	DisableButtons() {
+		this.queLocuraBackground.visible = false;
 		for(var i=0; i < this.botones.length; i++) {
 			this.botones[i].disableInteractive();
 			this.botones[i].visible = false;
 		}
-		this.emptyButton.visible = false;
+		this.queLocuraBar.visible = false;
 	}
 
 	// Activa y vuelve visible los botones
 	EnableButtons(){
-		// Texto de escoger accion
-		this.dialogBox.clearText();
-		this.dialogBox.printText('Escoge una acción');
-
+		this.queLocuraBackground.visible = true;
 		for(var i=0; i < this.botones.length; i++) {
 			if(i === 3 && this.currentQueLocura < 100){
-				this.emptyButton.visible = true;
+				this.queLocuraBar.visible = true;
 			} else {
 				this.botones[i].setInteractive();
 				this.botones[i].visible = true;
@@ -487,6 +560,11 @@ export default class BattleScene extends Phaser.Scene {
 			}
 			this.keyboardInput.changeButton(this.botones[3]);
 		}
+
+		// Texto de escoger accion
+		this.dialogBox.clearText();
+		this.dialogBox.setTextToDisplay('Escoge una acción');
+		this.dialogBox.printText();
 	}
 
 	// Impide seleccionar que locura y pone el contador a cero
@@ -513,7 +591,7 @@ export default class BattleScene extends Phaser.Scene {
 			if (this.currentQueLocura >= 100) {
 				this.EnableQueLocura();
 			} else {
-				this.emptyButton.setCrop(0,0, (this.emptyButton.width / 100) * this.currentQueLocura, this.emptyButton.height);
+				this.queLocuraBar.setCrop(0,0, (this.queLocuraBar.width / 100) * this.currentQueLocura, this.queLocuraBar.height);
 			}
 		}
 	}
@@ -526,6 +604,7 @@ export default class BattleScene extends Phaser.Scene {
 				this.DisableQueLocura(true);
 		}
 	}
+
 	DisableEnemy()
 	{
 		this.enemies.forEach(Element => {
@@ -557,7 +636,7 @@ export default class BattleScene extends Phaser.Scene {
 			this.emitter.destroy();
 			this.dialogBox.clearText();		// Borrar texto previo				
 			this.EnableLoot();				    // Loot
-			this.time.delayedCall(3000, () => {
+			this.time.delayedCall(this.lootDuration, () => {
 				musicFadeOut();				      // Fadeout de la música
 				this.camera.fadeOut(1000, 0, 0, 0); // fadeOut(time, R, G, B), 000 = Black
 				this.camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
@@ -587,6 +666,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.DisableButtons();
 		this.dialogBox.clearText();
 		this.dialogBox.setVisible(false);
+		this.dfsIndicator.spriteObj.setVisible(false);
+		this.dfsIndicator.textObj.setVisible(false);
 		this.lootBox.setVisible(true).setAlpha(0.85);
 
 		// Looteo arma
@@ -621,14 +702,15 @@ export default class BattleScene extends Phaser.Scene {
 		// Si no me ha tocado arma
 		if (!weaponLoot) {
 			text = '¡Has conseguido ' + listOfItems.healths[randomFood].key + ' !';
-			this.add.image(width/2,height/2, foodImgID).setScale(6,6);
+			this.add.image(width/2,height/2 + 50, foodImgID).setScale(6,6);
+			if (itemQuantity > 1) this.add.text(width/2 + 40, height/2 + 60, itemQuantity, {}).setScale(3,3).setFontFamily('Silkscreen');
 		}
 		// Si me ha tocado arma
 		else {
 			text = '¡Has conseguido ' + this.inventory.weapons[weaponImgID].weapon.name + ' y \n' + itemQuantity + ' de ' + listOfItems.healths[randomFood].key + ' !';
-			this.add.image(width/3, height/2, weaponImgID).setScale(6,6);
-			this.add.image(width/1.5, height/2, foodImgID).setScale(6,6);
-			if (itemQuantity > 1) this.add.text(width/1.5 + 20, height/2 + 20, itemQuantity, {}).setScale(3,3).setFontFamily('Silkscreen');
+			this.add.image(width/3, height/2 + 50, weaponImgID).setScale(6,6);
+			this.add.image(width/1.5, height/2 + 50, foodImgID).setScale(6,6);
+			if (itemQuantity > 1) this.add.text(width/1.5 + 40, height/2 + 60, itemQuantity, {}).setScale(3,3).setFontFamily('Silkscreen');
 		}
 		
 		// Mostrar por texto el loot obtenido
@@ -656,6 +738,8 @@ export default class BattleScene extends Phaser.Scene {
 						this.enemies[0].stealFlag();
 						this.player.getFlag();
 
+						this.dfsIndicator.spriteObj.setVisible(false);
+						this.dfsIndicator.textObj.setVisible(false);
 						// Menú de recibir loot con el arma final
 						this.lootBox.setVisible(true).setAlpha(0.85);
 						const width = this.scale.width;
@@ -666,6 +750,8 @@ export default class BattleScene extends Phaser.Scene {
 						var item = this.add.image(width/2,height/2, this.player.inventory.getEquipedWeapon().imgID).setScale(6,6);
 
 						this.time.delayedCall(3000,()=>{
+							this.dfsIndicator.spriteObj.setVisible(true);
+							this.dfsIndicator.textObj.setVisible(true);
 							this.lootBox.setVisible(false);
 							lootText.setVisible(false);
 							item.setVisible(false);
