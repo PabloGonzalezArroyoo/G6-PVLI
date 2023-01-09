@@ -104,7 +104,7 @@ export default class Indicator extends Phaser.GameObjects.Container {
     // Hace que el indicador sea visible
     activeInd() {
         this.spriteObj.setVisible(true);
-        if (this.scene.scene.key !== 'inventoryScene'|| !this.defenseInd)
+        if (this.scene.scene.key !== 'inventoryScene')
             this.scene.time.delayedCall(200, ()=> {this.textObj.setVisible(true)}); // Sincronizar con animación
         else this.textObj.setVisible(true);
     }
