@@ -184,7 +184,6 @@ export default class InventoryScene extends Phaser.Scene {
 		
 		// Al pulsar la tecla ESC se sale de la escena de inventario
 		this.input.keyboard.on('keydown-ESC', () => { 
-			/*COSITAS*/
 			if (this.leyendBox.visible) { 
 				this.deactivateInfo();
 			}
