@@ -663,6 +663,8 @@ export default class BattleScene extends Phaser.Scene {
 		this.DisableButtons();
 		this.dialogBox.clearText();
 		this.dialogBox.setVisible(false);
+		this.dfsIndicator.spriteObj.setVisible(false);
+		this.dfsIndicator.textObj.setVisible(false);
 		this.lootBox.setVisible(true).setAlpha(0.85);
 
 		// Looteo arma
