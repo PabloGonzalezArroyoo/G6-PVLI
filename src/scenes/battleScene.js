@@ -307,7 +307,7 @@ export default class BattleScene extends Phaser.Scene {
 		//this.descriptionBox.setInteractive();
 		switch (action){									
       		case 'attack' : 															// Se selecciona atacar
-				this.UpdateQueLocura(100)																
+				this.UpdateQueLocura(35)																
 				this.dialogBox.clearText();												// Borrar texto previo
 				if (this.enemies.length > 1) {
 						this.dialogBox.setTextToDisplay('Selecciona a un enemigo');	
