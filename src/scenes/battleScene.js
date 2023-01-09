@@ -221,7 +221,10 @@ export default class BattleScene extends Phaser.Scene {
 		// Indicadores de daño y defensa
 		this.indicator = new Indicator(this, 300, 565,
 			{dmgInd: 'dmgInd', healInd: 'healInd', defInd: 'defInd', wpInd: 'wpInd', psnInd: 'psnInd', bleedInd: 'bleedInd'});
-		this.dfsIndicator = new Indicator(this, 150, 275,'dfsInd',true);	
+
+		if (this.level.bgKey === 'bg3')	this.dfsIndicator = new Indicator(this, 150, 200,'dfsInd',true);
+		else this.dfsIndicator = new Indicator(this, 150, 275,'dfsInd',true);	
+
 		// Input
 		this.keyboardInput = new KeyboardInput(this);
 
